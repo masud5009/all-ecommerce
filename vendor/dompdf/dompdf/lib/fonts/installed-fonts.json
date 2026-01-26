@@ -1,0 +1,36 @@
+{
+    "open sans": {
+        "normal": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/open_sans_normal_3760d4dc48428d77234c57aacbf4be3d",
+        "bold": "open_sans_bold_76cc12ba903c653efae07dd0b62d46cf"
+    },
+    "inter": {
+        "100_italic": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_100_italic_61b0101814be92c5b313d724c804305d",
+        "200_italic": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_200_italic_1f34f274628874e025ffef8b0515adf3",
+        "300_italic": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_300_italic_c94dd721f137ca10d717a99e77e28de9",
+        "italic": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_italic_fd1c1c48b68e64aeca4181a7bc558cfc",
+        "500_italic": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_500_italic_582a90e74bc2ab0e729ef07a60aef624",
+        "600_italic": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_600_italic_fcb64cba359e7f8600e099d0d9e52915",
+        "bold_italic": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_bold_italic_b196ee153480c9f3ed400e26e73a63f2",
+        "800_italic": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_800_italic_3d05b5fd55ff4d62e32531351fa8b2b3",
+        "900_italic": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_900_italic_5c53b9688b1b37f9d90e405b0ddd7221",
+        "100": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_100_e82efd582b2707329d7db98534462978",
+        "200": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_200_028ea6c251b673ea32ae8a9e29b7ecf2",
+        "300": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_300_5a4c9c8fe9dbd54be8e4d766ecaa0038",
+        "normal": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_normal_43098e1f9093546fdbc88d8bba522601",
+        "500": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_500_c238edf6a9a37c12ff82b0f74b777ced",
+        "600": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_600_fcba0bcc2aca8a07478c3be1ea986a39",
+        "bold": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_bold_c3e7579535a2ccb6dddffc61b785676c",
+        "800": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/inter_800_ccb099fc556f50ea7441d2ab459702bc",
+        "900": "inter_900_f4f1d437aa6512ee08e5c086e3ec2d63"
+    },
+    "sora": {
+        "100": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/sora_100_ebb7b6f65a3827f93b11ac7f3e7d6610",
+        "200": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/sora_200_a6c85f7028c826873e33578605ea8bb4",
+        "300": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/sora_300_6d0d173df009f2cc76ea7d08f85461b9",
+        "normal": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/sora_normal_f1c29a1f990e70ed520f340f91f9f37d",
+        "500": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/sora_500_5f6051389110562a416c0917e7a20d27",
+        "600": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/sora_600_229c966b29528d914076304b692d1edf",
+        "bold": "C:\\laragon\\www\\vendor_dashboard\\vendor\\dompdf\\dompdf\/lib\/fonts\/sora_bold_e78c891e3ca63f858980d7cbfdb91d18",
+        "800": "sora_800_2c2a53c7b785dd0771d821303bff8dc0"
+    }
+}

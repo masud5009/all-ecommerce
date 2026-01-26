@@ -1,0 +1,251 @@
+:root {
+    --border-color: 1px solid rgba(181, 181, 181, .1) !important;
+    --background-color: #001e42;
+    --card-color: #183153;
+    --white-color: #fff;
+}
+
+body[data-background-color="dark"] {
+    background-color: var(--background-color);
+    color: var(--white-color);
+}
+
+@media (min-width:768px) {
+    body[data-background-color="dark"] .sidebar-xs .sidebar-main.sidebar-dark .nav-sidebar>.nav-item:not(.nav-item-open):hover>.nav-link:not(.active):not(.disabled) {
+        color: var(--border-color) !important;
+        background-color: var(--card-color) !important;
+    }
+
+    body[data-background-color="dark"] .nav.nav-group-sub {
+        background-color: var(--card-color) !important;
+        border-left: 1px solid rgba(255, 255, 255, .1)
+    }
+}
+
+
+body[data-background-color="dark"] .sidebar-dark {
+    opacity: 75%;
+    color: var(--white-color);
+}
+
+body[data-background-color="dark"] .card {
+    background-color: var(--card-color);
+    box-shadow: none;
+    color: var(--white-color);
+    border: var(--border-color);
+}
+
+body[data-background-color="dark"] .card-body h5 {
+    opacity: 75%;
+}
+
+body[data-background-color="dark"] .settings-icon i {
+    color: var(--card-color);
+}
+
+body[data-background-color="dark"] .shadow {
+    box-shadow: none !important;
+}
+
+body[data-background-color="dark"] .modal-header,
+body[data-background-color="dark"] .card-header {
+    border-bottom: var(--border-color);
+}
+
+body[data-background-color="dark"] .modal-footer,
+body[data-background-color="dark"] .card-footer {
+    border-top: var(--border-color);
+}
+
+body[data-background-color="dark"] .modal-content {
+    background-color: var(--card-color);
+    color: var(--white-color);
+}
+
+body[data-background-color="dark"] .breadcrumb-item a {
+    color: var(--white-color);
+    opacity: 75%;
+}
+
+body[data-background-color="dark"] .table {
+    color: #dee2e6;
+}
+
+body[data-background-color="dark"] .card.card-body {
+    border: var(--border-color);
+}
+
+body[data-background-color="dark"] .offcanvas-body {
+    background-color: var(--card-color);
+    color: var(--white-color);
+}
+
+body[data-background-color="dark"] .offcanvas-body {
+    box-shadow: 0 0 3px rgba(181, 181, 181, .1);
+}
+
+body[data-background-color="dark"] .input-group-text,
+body[data-background-color="dark"] .selectgroup-button {
+    background-color: var(--card-color);
+    color: var(--white-color);
+    border: var(--border-color);
+}
+
+body[data-background-color="dark"] .offcanvas-body .selectgroup-item+.selectgroup-item {
+    background-color: #003366;
+}
+
+body[data-background-color="dark"] .jq-toast-heading,
+body[data-background-color="dark"] .jq-toast-single {
+    color: #000;
+    opacity: 75%;
+}
+
+body[data-background-color="dark"] .form-control.is-invalid,
+body[data-background-color="dark"] .form-select.is-invalid {
+    border: 1px solid #dc3545 !important;
+}
+
+body[data-background-color="dark"] .bg-nav {
+    background-color: var(--background-color);
+    box-shadow: 0 0 3px #000;
+}
+
+body[data-background-color="dark"] .sidebar-dark {
+    background-color: var(--card-color)
+}
+
+body[data-background-color="dark"] .sidebar-dark .nav-sidebar .nav-link,
+body[data-background-color="dark"] .sidebar-light .card[class*=bg-]:not(.bg-light):not(.bg-white):not(.bg-transparent) .nav-sidebar .nav-link {
+    color: var(--white-color);
+}
+
+body[data-background-color="dark"] .sidebar-dark .nav-sidebar .nav-link:not(.disabled):hover,
+body[data-background-color="dark"] .sidebar-light .card[class*=bg-]:not(.bg-light):not(.bg-white):not(.bg-transparent) .nav-sidebar .nav-link:not(.disabled):hover {
+    color: var(--white-color);
+    background-color: rgba(0, 0, 0, .15);
+}
+
+body[data-background-color="dark"] .sidebar-dark .nav-sidebar .nav-item>.nav-link.active,
+body[data-background-color="dark"] .sidebar-light .card[class*=bg-]:not(.bg-light):not(.bg-white):not(.bg-transparent) .nav-sidebar .nav-item>.nav-link.active {
+    background-color: rgba(0, 0, 0, .15);
+    color: var(--white-color)
+}
+
+body[data-background-color="dark"] .website-settings i {
+    color: var(--white-color);
+}
+
+body[data-background-color="dark"] .form-control,
+body[data-background-color="dark"] .form-select,
+body[data-background-color="dark"] .select2 {
+    background-color: var(--background-color);
+    color: var(--white-color);
+    border: 1px solid #2c4260;
+}
+
+body[data-background-color="dark"] select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: var(--background-color);
+    color: var(--white-color);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    position: relative;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+}
+
+body[data-background-color="dark"] select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+body[data-background-color="dark"] .edit-button span {
+    color: var(--white-color);
+}
+
+body[data-background-color="dark"] .card.shadow .bulk-delete-div {
+    color: var(--white-color);
+    background-color: var(--card-color);
+    box-shadow: 0 6px 30px var(--background-color);
+}
+
+body[data-background-color="dark"] .card.shadow .bulk-delete-div button {
+    color: var(--white-color);
+}
+
+body[data-background-color="dark"] .bootstrap-tagsinput {
+    background-color: var(--white-color) !important;
+}
+
+body[data-background-color="dark"] .dropzone {
+    border: dotted 2px var(--border-color);
+}
+
+body[data-background-color="dark"] #my-dropzone {
+    transition: background-color 0.3s ease;
+    background-color: var(--background-color);
+    border: dotted 2px #213b5d;
+}
+
+body[data-background-color="dark"] #my-dropzone:hover {
+    background-color: rgba(0, 0, 0, .15);
+}
+
+body[data-background-color="dark"] .thumb-preview {
+    border: dotted 2px var(--border-color);
+}
+
+body[data-background-color="dark"] table td {
+    color: #fff;
+}
+
+body[data-background-color="dark"] .repeater-child-list {
+    background-color: var(--background-color);
+}
+
+body[data-background-color="dark"] .repeater-child-list .form-control {
+    background-color: #183153 !important
+}
+
+body[data-background-color="dark"] .select2-container--default .select2-selection--single {
+    background-color: #183153 !important;
+}
+
+body[data-background-color="dark"] .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #fff !important;
+}
+body[data-background-color="dark"] .checkout-btn-div{
+    background-color: var(--background-color) !important;
+}
+body[data-background-color="dark"] .product-wraper small
+{
+    color:#fff;
+}
+
+body[data-background-color="dark"] #minorchangeModal .offcanvas-header {
+    background-color: #183153;
+    color: #fff;
+    box-shadow: 0 0 2px #183153;
+}
+body[data-background-color="dark"] .card .bulk-delete-div{
+    background-color: var(--background-color);
+    box-shadow: unset;
+}
+body[data-background-color="dark"] .card .bulk-delete-div button{
+    color: #fff;
+}
+body[data-background-color="dark"] .menu-item {
+    background: #001e42;
+    color: #fff;
+    border: var(--border-color);
+}
+body[data-background-color="dark"] #staticMenuList .list-group-item{
+    background: #001e42;
+    color: #fff;
+    border: var(--border-color);
+}

@@ -1,0 +1,55 @@
+.nav-sidebar .nav-link i {
+    margin-left: 1.25rem;
+    margin-right: 0 !important
+}
+
+
+.nav-item-submenu>.nav-link:after {
+    content: "\f053";
+    left: 1.25rem !important;
+    right: unset !important;
+}
+.nav-item-submenu > .nav-link{
+    padding-right: 1rem;
+}
+
+.sidebar-xs .sidebar-main .nav-sidebar>.nav-item-submenu>.nav-group-sub {
+    right: 3.5rem !important;
+}
+.nav-toggler-button{
+    margin-left: unset !important;
+    margin-right: 70px;
+}
+
+.modal-header .btn-close {
+    margin:unset !important
+}
+
+.profile-dropdown{
+    right: unset !important;
+    left: 0 !important;
+}
+
+.form-select{
+    background-position:left .75rem center!important;
+}
+
+.breadcrumb-item + .breadcrumb-item::before{
+    float:right !important;
+    padding-left:.5rem !important;
+}
+
+.general-settings .card-header i{
+    padding-left: 10px !important;
+    padding-right:unset !important
+}
+.float-left{
+    float: left !important;
+}
+
+.float-lg-end{
+    float: left !important;
+}
+.ms-2{
+    margin-right: .5rem !important;
+}

@@ -1,0 +1,587 @@
+@extends('frontend.layout')
+@section('pageHeading')
+    {{ __('Home') }}
+@endsection
+@section('metaKeywords')
+    {{ !empty($seoInfo) ? $seoInfo->meta_keyword_home : '' }}
+@endsection
+
+@section('metaDescription')
+    {{ !empty($seoInfo) ? $seoInfo->meta_description_home : '' }}
+@endsection
+@section('content')
+
+
+    <!-- HERO -->
+    <section class="hero-section" id="home">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7 text-center text-lg-start">
+                    <h1 class="title" data-aos="fade-up">Intelligent Business Idea Validator</h1>
+                    <p class="lead my-4" data-aos="fade-up" data-aos-delay="100">AI-powered validation for market fit,
+                        validation scoring, competitor & market insights, SWOT analysis, scenario simulations and custom
+                        alerts — turn ideas into investable plans.</p>
+                    <div class="d-flex gap-3 flex-wrap" data-aos="fade-up" data-aos-delay="200">
+                        <a href="pricing.html" class="btn btn-glass btn-lg hero-cta" id="getStarted">Validate an
+                            Idea</a>
+                    </div>
+                    <div class="mt-4 d-flex gap-4 stats">
+                        <div class="text-center  " data-aos="fade-up" data-aos-delay="300">
+                            <div class="h2 mb-0" id="counter-ideas">0</div>
+                            <small>Ideas Validated</small>
+                        </div>
+                        <div class="text-center  " data-aos="fade-up" data-aos-delay="350">
+                            <div class="h2 mb-0" id="counter-predictions">0</div>
+                            <small>Risk Predictions</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 d-none d-lg-block text-center" data-aos="zoom-in">
+                    <div class="hero-shape position-relative">
+                        <img src="assets/images/hero-image.png" class="img-fluid" alt="">
+                        <!-- Decorative Elements -->
+                        <!-- Floating Badge -->
+                        <div class="floating-badge" data-aos="fade-left" data-aos-delay="400">
+                            <i class="fa-solid fa-check-circle"></i>
+                            <span>AI Validated</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- smooth scroll-down icon -->
+    <div class="scroll-down-wrap">
+        <a href="#features" class="scroll-down" aria-label="Scroll down">
+            <span class="chev"></span>
+            <span class="chev"></span>
+            <span class="chev"></span>
+        </a>
+    </div>
+
+    <!-- FEATURES -->
+    <section id="features" class="feature-section mt-5">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="title">Powerful features to validate, refine and grow</h2>
+                <p class="subtitle">Everything you need to turn an idea into an actionable opportunity.</p>
+            </div>
+            <div class="row g-4">
+                <!-- feature cards looped manually -->
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="50">
+                    <div class="feature-card p-4 h-100">
+                        <div class="icon mb-3 text-primary"><i class="fa-solid fa-brain fa-2x"></i></div>
+                        <h5>Smart Idea Analysis</h5>
+                        <p class="feature-item-title">AI-driven scoring and actionable insights to evaluate potential.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="80">
+                    <div class="feature-card p-4 h-100">
+                        <div class="icon mb-3 text-success"><i class="fa-solid fa-chart-pie fa-2x"></i></div>
+                        <h5>Validation Score & Risk Assessment</h5>
+                        <p class="feature-item-title">Color-coded charts and badges show your score and risk categories.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="110">
+                    <div class="feature-card p-4 h-100">
+                        <div class="icon mb-3 text-danger"><i class="fa-solid fa-search fa-2x"></i></div>
+                        <h5>Competitor & Market Insights</h5>
+                        <p class="feature-item-title">Understand competitors and market fit at a glance.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="140">
+                    <div class="feature-card p-4 h-100">
+                        <div class="icon mb-3 text-warning"><i class="fa-solid fa-clipboard-list fa-2x"></i></div>
+                        <h5>SWOT Analysis</h5>
+                        <p class="feature-item-title">Auto-generated strengths, weaknesses, opportunities, and threats.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="170">
+                    <div class="feature-card p-4 h-100">
+                        <div class="icon mb-3 text-info"><i class="fa-solid fa-lightbulb fa-2x"></i></div>
+                        <h5>Idea Refinement Suggestions</h5>
+                        <p class="feature-item-title">Practical suggestions to make an idea more viable.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card p-4 h-100">
+                        <div class="icon mb-3 text-secondary"><i class="fa-solid fa-globe fa-2x"></i></div>
+                        <h5>Industry & Region Specific Analysis</h5>
+                        <p class="feature-item-title">Tailor insights by industry and geography.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="230">
+                    <div class="feature-card p-4 h-100">
+                        <div class="icon mb-3 text-primary"><i class="fa-solid fa-flask fa-2x"></i></div>
+                        <h5>Scenario Simulation</h5>
+                        <p class="feature-item-title">Simulate outcomes across assumptions and scenarios.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="260">
+                    <div class="feature-card p-4 h-100">
+                        <div class="icon mb-3 text-success"><i class="fa-solid fa-bell fa-2x"></i></div>
+                        <h5>Custom Alerts & Notifications</h5>
+                        <p class="feature-item-title">Stay informed with tailored alerts and thresholds.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- THEME SECTION -->
+    <section id="themes" class="theme-section">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="title">Themes</h2>
+                <p class="subtitle">Pick a look and feel for your workspace — these are just samples.</p>
+            </div>
+            <div class="row g-4 themes">
+                <div class="col-sm-6 col-md-4" data-aos="fade-up" data-aos-delay="50">
+                    <div class="theme-card"
+                        style="background-image:url('https://images.unsplash.com/photo-1508921912186-1d1a45ebb3c1?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=3b8e9b7f1a5b2b0a9f063e7d1c1c6f8d');">
+                        <div class="theme-overlay"></div>
+                        <div class="theme-meta">
+                            <h5 class="mb-0">Neon Gradient</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4" data-aos="fade-up" data-aos-delay="80">
+                    <div class="theme-card"
+                        style="background-image:url('https://images.unsplash.com/photo-1519337265831-281ec6cc8514?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=0f0c3f6f4b4b5c5a6f6a6f0d0c9d2a6b');">
+                        <div class="theme-overlay"></div>
+                        <div class="theme-meta">
+                            <h5 class="mb-0">Midnight Blue</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4" data-aos="fade-up" data-aos-delay="110">
+                    <div class="theme-card"
+                        style="background-image:url('https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d');">
+                        <div class="theme-overlay"></div>
+                        <div class="theme-meta">
+                            <h5 class="mb-0">Frosted Tech</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing" class="pricing-section mt-5 pt-5 mb-5 pb-5">
+        <div class="container">
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="heading text-center mb-5" data-aos="fade-up">
+                        <h2 class="title  ">Choose Your Perfect Plan</h2>
+                        <p class="  submit">Select the best plan that fits your needs. All plans include a
+                            14-day free
+                            trial.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mb-4" data-aos="fade-up">
+                <nav class="pricing-tabs">
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link" id="monthly-tab" data-bs-toggle="tab" data-bs-target="#monthly"
+                            type="button" role="tab" aria-controls="monthly" aria-selected="true">Monthly</button>
+                        <button class="nav-link active" id="yearly-tab" data-bs-toggle="tab" data-bs-target="#yearly"
+                            type="button" role="tab" aria-controls="yearly" aria-selected="false">Yearly</button>
+                        <button class="nav-link" id="lifetime-tab" data-bs-toggle="tab" data-bs-target="#lifetime"
+                            type="button" role="tab" aria-controls="lifetime" aria-selected="false">Lifetime</button>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="tab-content" id="nav-tabContent">
+
+                <!-- ================= Monthly Plans ================= -->
+                <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab">
+                    <div class="row g-4">
+
+                        <!-- Starter -->
+                        <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="50">
+                            <div class="card h-100 pricing-card">
+                                <div class="card-body text-center p-4">
+                                    <h5 class="card-title">Starter</h5>
+                                    <div class="price my-3">
+                                        <span class="currency">$</span><span class="amount">29</span>
+                                        <small class=" ">/month</small>
+                                    </div>
+                                    <ul class="list-unstyled mt-3 mb-4 text-start">
+                                        <li><i class="fas fa-check"></i> 5 Projects</li>
+                                        <li><i class="fas fa-check"></i> Basic Analytics</li>
+                                        <li><i class="fas fa-check"></i> Email Support</li>
+                                        <li><i class="fas fa-check"></i> Access to Community Forum</li>
+                                        <li><i class="fas fa-xmark"></i> Team Collaboration</li>
+                                        <li><i class="fas fa-xmark"></i> API Access</li>
+                                        <li><i class="fas fa-xmark"></i> Priority Support</li>
+                                    </ul>
+                                    <a href="#" class="btn btn-outline-primary">Choose Starter</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Growth -->
+                        <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="80">
+                            <div class="card h-100 pricing-card popular">
+                                <div class="ribbon">Most popular</div>
+                                <div class="card-body text-center p-4">
+                                    <h5 class="card-title">Growth</h5>
+                                    <div class="price my-3">
+                                        <span class="currency">$</span><span class="amount">79</span>
+                                        <small class=" ">/month</small>
+                                    </div>
+                                    <ul class="list-unstyled mt-3 mb-4 text-start">
+                                        <li><i class="fas fa-check"></i> 20 Projects</li>
+                                        <li><i class="fas fa-check"></i> Advanced Analytics</li>
+                                        <li><i class="fas fa-check"></i> Team Collaboration</li>
+                                        <li><i class="fas fa-check"></i> API Access</li>
+                                        <li><i class="fas fa-check"></i> Email + Chat Support</li>
+                                        <li><i class="fas fa-check"></i> Custom Integrations</li>
+                                        <li><i class="fas fa-xmark"></i> Dedicated Account Manager</li>
+                                    </ul>
+                                    <a href="#" class="btn btn-primary">Choose Growth</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Enterprise -->
+                        <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="110">
+                            <div class="card h-100 pricing-card">
+                                <div class="card-body text-center p-4">
+                                    <h5 class="card-title">Enterprise</h5>
+                                    <div class="price my-3">
+                                        <span class="currency">$</span><span class="amount">199</span>
+                                        <small class=" ">/month</small>
+                                    </div>
+                                    <ul class="list-unstyled mt-3 mb-4 text-start">
+                                        <li><i class="fas fa-check"></i> Unlimited Projects</li>
+                                        <li><i class="fas fa-check"></i> Enterprise-grade Security</li>
+                                        <li><i class="fas fa-check"></i> API & Developer Tools</li>
+                                        <li><i class="fas fa-check"></i> 24/7 Priority Support</li>
+                                        <li><i class="fas fa-check"></i> Dedicated Account Manager</li>
+                                        <li><i class="fas fa-check"></i> Custom Reports & Analytics</li>
+                                        <li><i class="fas fa-check"></i> White-label Branding</li>
+                                    </ul>
+                                    <a href="#" class="btn btn-outline-primary">Contact Sales</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ================= Yearly Plans ================= -->
+                <div class="tab-pane fade show active" id="yearly" role="tabpanel" aria-labelledby="yearly-tab">
+                    <div class="row g-4">
+
+                        <!-- Starter -->
+                        <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="50">
+                            <div class="card h-100 pricing-card">
+                                <div class="card-body text-center p-4">
+                                    <h5 class="card-title">Starter</h5>
+                                    <div class="price my-3">
+                                        <span class="currency">$</span><span class="amount">23</span>
+                                        <small class=" ">/year</small>
+                                    </div>
+                                    <ul class="list-unstyled mt-3 mb-4 text-start">
+                                        <li><i class="fas fa-check"></i> 10 Projects</li>
+                                        <li><i class="fas fa-check"></i> Basic Analytics</li>
+                                        <li><i class="fas fa-check"></i> Email Support</li>
+                                        <li><i class="fas fa-check"></i> Community Access</li>
+                                        <li><i class="fas fa-xmark"></i> API Access</li>
+                                        <li><i class="fas fa-xmark"></i> Custom Branding</li>
+                                        <li><i class="fas fa-xmark"></i> Priority Support</li>
+                                    </ul>
+                                    <a href="#" class="btn btn-outline-primary">Choose Starter</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Growth -->
+                        <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="80">
+                            <div class="card h-100 pricing-card popular">
+                                <div class="ribbon">Most popular</div>
+                                <div class="card-body text-center p-4">
+                                    <h5 class="card-title">Growth</h5>
+                                    <div class="price my-3">
+                                        <span class="currency">$</span><span class="amount">63</span>
+                                        <small class=" ">/year</small>
+                                    </div>
+                                    <ul class="list-unstyled mt-3 mb-4 text-start">
+                                        <li><i class="fas fa-check"></i> 50 Projects</li>
+                                        <li><i class="fas fa-check"></i> Advanced Analytics</li>
+                                        <li><i class="fas fa-check"></i> Team Collaboration</li>
+                                        <li><i class="fas fa-check"></i> API Access</li>
+                                        <li><i class="fas fa-check"></i> Email + Chat Support</li>
+                                        <li><i class="fas fa-check"></i> Integration with 3rd-party Tools</li>
+                                        <li><i class="fas fa-xmark"></i> Dedicated Manager</li>
+                                    </ul>
+                                    <a href="#" class="btn btn-primary">Choose Growth</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Enterprise -->
+                        <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="110">
+                            <div class="card h-100 pricing-card">
+                                <div class="card-body text-center p-4">
+                                    <h5 class="card-title">Enterprise</h5>
+                                    <div class="price my-3">
+                                        <span class="currency">$</span><span class="amount">159</span>
+                                        <small class=" ">/year</small>
+                                    </div>
+                                    <ul class="list-unstyled mt-3 mb-4 text-start">
+                                        <li><i class="fas fa-check"></i> Unlimited Projects</li>
+                                        <li><i class="fas fa-check"></i> Enterprise-grade Security</li>
+                                        <li><i class="fas fa-check"></i> API & Developer Tools</li>
+                                        <li><i class="fas fa-check"></i> 24/7 Priority Support</li>
+                                        <li><i class="fas fa-check"></i> Custom Reports & Dashboards</li>
+                                        <li><i class="fas fa-check"></i> Dedicated Account Manager</li>
+                                        <li><i class="fas fa-check"></i> White-label Branding</li>
+                                    </ul>
+                                    <a href="#" class="btn btn-outline-primary">Contact Sales</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ================= Lifetime Plans ================= -->
+                <div class="tab-pane fade" id="lifetime" role="tabpanel" aria-labelledby="lifetime-tab">
+                    <div class="row g-4">
+
+                        <!-- Starter -->
+                        <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="50">
+                            <div class="card h-100 pricing-card">
+                                <div class="card-body text-center p-4">
+                                    <h5 class="card-title">Starter</h5>
+                                    <div class="price my-3">
+                                        <span class="currency">$</span><span class="amount">99</span>
+                                    </div>
+                                    <ul class="list-unstyled mt-3 mb-4 text-start">
+                                        <li><i class="fas fa-check"></i> Lifetime Access</li>
+                                        <li><i class="fas fa-check"></i> All Basic Features</li>
+                                        <li><i class="fas fa-check"></i> Free Updates</li>
+                                        <li><i class="fas fa-xmark"></i> Team Access</li>
+                                        <li><i class="fas fa-xmark"></i> API Access</li>
+                                        <li><i class="fas fa-xmark"></i> Advanced Analytics</li>
+                                        <li><i class="fas fa-xmark"></i> Priority Support</li>
+                                    </ul>
+                                    <a href="#" class="btn btn-outline-primary">Choose Starter</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Growth -->
+                        <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="80">
+                            <div class="card h-100 pricing-card popular">
+                                <div class="ribbon">Most popular</div>
+                                <div class="card-body text-center p-4">
+                                    <h5 class="card-title">Growth</h5>
+                                    <div class="price my-3">
+                                        <span class="currency">$</span><span class="amount">199</span>
+                                    </div>
+                                    <ul class="list-unstyled mt-3 mb-4 text-start">
+                                        <li><i class="fas fa-check"></i> Lifetime Access</li>
+                                        <li><i class="fas fa-check"></i> Advanced Analytics</li>
+                                        <li><i class="fas fa-check"></i> Team Collaboration</li>
+                                        <li><i class="fas fa-check"></i> API Access</li>
+                                        <li><i class="fas fa-check"></i> Lifetime Updates</li>
+                                        <li><i class="fas fa-check"></i> Priority Email Support</li>
+                                        <li><i class="fas fa-xmark"></i> White-label Branding</li>
+                                    </ul>
+                                    <a href="#" class="btn btn-primary">Choose Growth</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Enterprise -->
+                        <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="110">
+                            <div class="card h-100 pricing-card">
+                                <div class="card-body text-center p-4">
+                                    <h5 class="card-title">Enterprise</h5>
+                                    <div class="price my-3">
+                                        <span class="currency">$</span><span class="amount">399</span>
+                                    </div>
+                                    <ul class="list-unstyled mt-3 mb-4 text-start">
+                                        <li><i class="fas fa-check"></i> Lifetime Access</li>
+                                        <li><i class="fas fa-check"></i> Unlimited Projects</li>
+                                        <li><i class="fas fa-check"></i> All Future Updates</li>
+                                        <li><i class="fas fa-check"></i> Dedicated Account Manager</li>
+                                        <li><i class="fas fa-check"></i> 24/7 Priority Support</li>
+                                        <li><i class="fas fa-check"></i> White-label Branding</li>
+                                        <li><i class="fas fa-check"></i> Custom Integration</li>
+                                    </ul>
+                                    <a href="#" class="btn btn-outline-primary">Contact Sales</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS (upgraded premium design) -->
+    <section id="testimonials" class="testimonial-section">
+        <div class="container">
+            <div class="text-center mb-4" data-aos="fade-up">
+                <h2 class="title">What users say</h2>
+                <p class="mt-2 mb-2">This tool turned our vague idea into a focused plan. The
+                    validation score was spot on and helped us raise a seed round.
+                </p>
+            </div>
+
+            <div id="testimonialCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel"
+                data-aos="fade-up">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="testimonial-card p-4 mx-auto shadow-lg">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <img src="https://i.pravatar.cc/72?img=12" class="avatar img-fluid" alt="Aisha K.">
+                                <div>
+                                    <h6 class="mb-0  ">Aisha K.</h6>
+                                    <small class=" ">Founder, HealthTech</small>
+                                </div>
+                                <div class="ms-auto rating text-warning" aria-hidden="true">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star-half-stroke"></i>
+                                </div>
+                            </div>
+                            <div class="quote-mark">"</div>
+                            <p class="mt-2 mb-0  -75">This tool turned our vague idea into a focused plan. The
+                                validation score was spot on and helped us raise a seed round.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="testimonial-card p-4 mx-auto shadow-lg">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <img src="https://i.pravatar.cc/72?img=32" class="avatar img-fluid" alt="Marc R.">
+                                <div>
+                                    <h6 class="mb-0  ">Marc R.</h6>
+                                    <small class=" ">Product Lead, FinServ</small>
+                                </div>
+                                <div class="ms-auto rating text-warning" aria-hidden="true">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="quote-mark">"</div>
+                            <p class="mt-2 mb-0  -75">This tool turned our vague idea into a focused plan. The
+                                validation score was spot on and helped us raise a seed round.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="testimonial-card p-4 mx-auto shadow-lg">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <img src="https://i.pravatar.cc/72?img=45" class="avatar img-fluid" alt="Sarah L.">
+                                <div>
+                                    <h6 class="mb-0">Sarah L.</h6>
+                                    <small class="">CEO, Tech Startup</small>
+                                </div>
+                                <div class="ms-auto rating text-warning" aria-hidden="true">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="quote-mark">"</div>
+                            <p class="mt-2 mb-0  -75">The AI insights helped us pivot early and save resources.
+                                Best investment we made in our early startup phase.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="testimonial-card p-4 mx-auto shadow-lg">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <img src="https://i.pravatar.cc/72?img=68" class="avatar img-fluid" alt="John D.">
+                                <div>
+                                    <h6 class="mb-0">John D.</h6>
+                                    <small class="">Entrepreneur</small>
+                                </div>
+                                <div class="ms-auto rating text-warning" aria-hidden="true">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                            <div class="quote-mark">"</div>
+                            <p class="mt-2 mb-0  -75">Impressive market analysis and competitor insights.
+                                The validation process is thorough and gave us confidence in our direction.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="carousel-control-prev custom" type="button" data-bs-target="#testimonialCarousel"
+                    data-bs-slide="prev">
+                    <span class="custom-control-prev-icon" aria-hidden="true"><i
+                            class="fa-solid fa-chevron-left"></i></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next custom" type="button" data-bs-target="#testimonialCarousel"
+                    data-bs-slide="next">
+                    <span class="custom-control-next-icon" aria-hidden="true"><i
+                            class="fa-solid fa-chevron-right"></i></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- decorative soft glow shapes -->
+        <div class="testimonial-glow glow-left"></div>
+        <div class="testimonial-glow glow-right"></div>
+    </section>
+
+    <!-- CTA -->
+    <section id="cta" class="call-section text-center  ">
+        <div class="container">
+            <div class="cta-inner mx-auto" data-aos="zoom-in">
+                <h2 class="fw-bold lead  -75 mb-3">Start Validating Your Ideas Now</h2>
+                <p class="mb-4 lead  -75">Join thousands who validate smarter, faster, and with confidence.</p>
+                <div class="d-flex justify-content-center">
+                    <form action="">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Enter your email address">
+                            <button class="btn-primary">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+@endsection

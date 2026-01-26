@@ -1,0 +1,52 @@
+.product-card {
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.table-card {
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.table-card:hover {
+    transform: scale(1.05);
+}
+
+.clickable {
+    user-select: none;
+}
+
+#cartItems::-webkit-scrollbar {
+    width: 6px;
+}
+
+#cartItems::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+.receipt {
+    font-family: 'Courier New', monospace;
+}
+
+.toast {
+    min-width: 250px;
+}
+
+.sticky-top {
+    position: sticky;
+    z-index: 1020;
+}
+
+.order-history-item {
+    transition: 0.2s;
+}
+
+.order-history-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}

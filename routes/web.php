@@ -1,0 +1,89 @@
+<?php
+
+use App\Http\Controllers\FrontEnd\CheckoutController;
+use App\Http\Controllers\FrontEnd\HomeController;
+use App\Http\Controllers\FrontEnd\UserController;
+use Illuminate\Support\Facades\Route;
+
+$domain = env('WEBSITE_HOST');
+
+if (!app()->runningInConsole()) {
+    if (substr($_SERVER['HTTP_HOST'], 0, 4) === 'www.') {
+        $domain = 'www.' . env('WEBSITE_HOST');
+    }
+}
+
+Route::fallback(function () {
+    return view('errors.404');
+});
+
+/*
+|--------------------------------------------------------------------------
+| admin frontend route
+|--------------------------------------------------------------------------
+*/
+Route::domain($domain)->group(function () {
+
+    Route::prefix('/admin')->middleware('guest:admin')->group(function () {
+        // admin redirect to login page route
+        Route::get('/', 'Admin\AdminController@login')->name('admin.login');
+        // admin login attempt route
+        Route::post('/auth', 'Admin\AdminController@authentication')->name('admin.auth');
+        // admin forget password route
+        Route::get('/forget-password', 'Admin\AdminController@forgetPassword')->name('admin.forget_password');
+    });
+    Route::prefix('/')->controller(HomeController::class)->group(function () {
+        Route::get('', 'index')->name('frontend.index');
+        Route::get('/contact', 'contact')->name('frontend.contact');
+        Route::get('/blog', 'blog')->name('frontend.blog');
+        Route::get('/about', 'about')->name('frontend.about');
+        Route::get('/change-language/{code}', 'changeLanguage')->name('frontend.change_language');
+    });
+
+    /*============================
+      membership purchase routes
+     =============================*/
+    Route::controller(CheckoutController::class)->group(function () {
+        Route::get('/pricing', 'pricing')->name('frontend.pricing');
+        Route::get('/registration/{id}', 'registrationPage')->name('frontend.register.view');
+        Route::post('/check-registration', 'checkRegistration')->name('frontend.register.validate_check');
+        Route::get('/checkout', 'checkoutPage')->name('frontend.checkout.view');
+        Route::post('/checkout-submit', 'checkoutSubmit')->name('frontend.checkout.submit');
+        Route::get('/membership-payment/cancel', 'paymentCancel')->name('frontend.checkout.payment_cancel');
+        Route::get('/membership-payment/success', 'paymentSuccess')->name('frontend.checkout.payment_success');
+
+        Route::get('/payment-success', 'successPage')->name('frontend.payment_success.view');
+        Route::get('/payment-cancel', 'cancelPage')->name('frontend.payment_cancel.view');
+    });
+    /*============================
+      user auth route
+     =============================*/
+    Route::prefix('user')->middleware('guest:web')->controller(UserController::class)->group(function () {
+        // Signup
+        Route::get('/signup', 'signup')->name('user.signup');
+        Route::post('/store/user', 'signup_submit')->name('user.signup_submit');
+        Route::get('/register/mode/verify/{token}', 'verifyEmail')
+            ->name('user.signup_verify')
+            ->middleware('throttle:6,1');
+
+        // Login
+        Route::get('/login', 'login')->name('user.login');
+        Route::post('/login/submit', 'loginSubmit')->name('user.login_submit');
+
+        // Forgot password
+        Route::get('/forget-password', 'forgetPassword')->name('user.forget_password');
+        Route::get('/reset-password', 'resetPassword')->name('user.reset_password_form');
+        Route::post('/forget-password/send', 'forgetNow')->name('user.forget_password.send_email');
+        Route::post('/reset-password/submit', 'resetPasswordSubmit')->name('user.reset_password');
+    });
+
+    Route::prefix('user')->middleware('auth:web')->group(function () {
+        Route::get('/logout', 'FrontEnd\UserController@logout')->name('user.logout');
+    });
+
+
+    // Route::middleware('web')->group(function(){
+    //     Route::get('registration/final-step');
+    // });
+
+});
