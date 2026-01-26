@@ -22,7 +22,7 @@ class HomeController extends Controller
     {
         //packages
         $data['packages'] = Package::where('status', 1)->get();
-        return view('frontend.home.index', $data);
+        return view('front.home.index', $data);
     }
 
     public function contact()
