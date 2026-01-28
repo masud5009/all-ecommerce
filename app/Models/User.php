@@ -65,28 +65,4 @@ class User extends Authenticatable
                 ->where('expire_date', '>=', Carbon::now());
         });
     }
-
-    /**
-     * UserSetting relationship
-     */
-    public function settings()
-    {
-        return $this->hasOne(UserSetting::class);
-    }
-
-    /**
-     * Get dashboard current language
-     */
-    public function currentLanguage()
-    {
-        return $this->hasOne(UserLanguage::class)->where('dashboard_default', 1);
-    }
-
-    /**
-     * Get user all languages
-     */
-    public function languages()
-    {
-        return $this->hasMany(UserLanguage::class);
-    }
 }

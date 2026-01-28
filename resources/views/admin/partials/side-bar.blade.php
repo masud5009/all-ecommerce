@@ -63,6 +63,16 @@
                         <span>{{ __('Menu Builder') }}</span>
                     </a>
                 </li>
+                <!-- home section -->
+                <li class="nav-item">
+                    <a href="{{ route('admin.home_section', ['language' => $defaultLang->code]) }}"
+                        class="nav-link
+                        @if (request()->routeIs('admin.home_section')) active @endif
+                        ">
+                        <i class="fas fa-home"></i>
+                        <span>{{ __('Home Section') }}</span>
+                    </a>
+                </li>
                 <!-- user managment -->
                 <li
                     class="nav-item nav-item-submenu
@@ -119,16 +129,6 @@
                         ">
                         <i class="fas fa-sliders-h"></i>
                         <span>{{ __('Settings') }}</span>
-                    </a>
-                </li>
-                <!-- pos managment -->
-                <li class="nav-item">
-                    <a href="{{ route('admin.pos_mangment', ['language' => $defaultLang->code]) }}"
-                        class="nav-link
-                        @if (request()->routeIs('admin.pos_mangment')) active @endif
-                        ">
-                        <i class="fas fa-shopping-basket"></i>
-                        <span>{{ __('POS') }}</span>
                     </a>
                 </li>
                 <!-- Shipping Charge -->

@@ -8,19 +8,20 @@
             <div class="modal-body">
                 <form id="ajaxForm" action="{{ route('admin.product.category_store') }}" method="post">
                     @csrf
-                    <x-TextInput col="12" placeholder="Select a Language" name="language_id" type="select"
+
+                    <x-text-input col="12" placeholder="Select a Language" name="language_id" type="select"
                         label="Language" required="*" :dataInfo="$languages" action="store" />
 
-                    <x-TextInput col="12" placeholder="Enter category name" name="name" type="text"
+                    <x-text-input col="12" placeholder="Enter category name" name="name" type="text"
                         label="Name" required="*" action="store" />
 
                     @php
                         $options = ['1' => 'Active', '0' => 'Dactive'];
                     @endphp
-                    <x-TextInput col="12" placeholder="Select a Status" name="status" type="custom-select"
+                    <x-text-input col="12" placeholder="Select a Status" name="status" type="custom-select"
                         label="Status" required="*" :dataInfo="$options" action="store" />
 
-                    <x-TextInput col="12" placeholder="Serial Number" name="serial_number" type="text"
+                    <x-text-input col="12" placeholder="Serial Number" name="serial_number" type="text"
                         label="Serial Number" required="*" action="store" />
                 </form>
             </div>

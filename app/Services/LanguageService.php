@@ -43,8 +43,6 @@ class LanguageService
 
 
             //create a new langauge
-            $customer_keywords = Language::where('is_default', 1)->value('customer_keywords');
-            $in['customer_keywords'] = $customer_keywords;
             $in['name'] = $request['name'];
             $in['code'] = $request['code'];
             $in['direction'] = $request['direction'];
@@ -55,40 +53,6 @@ class LanguageService
             }
             $lang = Language::create($in);
 
-            //store user language
-            if ($lang) {
-                $users = User::withActiveMembership()->get();
-
-                if ($users->isNotEmpty()) {
-                    foreach ($users as $user) {
-                        // Check if user already has this language
-                        $existingLang = UserLanguage::where('user_id', $user->id)
-                            ->where('code', $lang->code)
-                            ->first();
-
-                        if ($existingLang) {
-                            // Update existing language
-                            $existingLang->update([
-                                'created_by' => 'admin',
-                                'name' => $lang->name,
-                                'direction' => $lang->direction,
-                                'keywords' => $customer_keywords
-                            ]);
-                        } else {
-                            // Create new language entry
-                            UserLanguage::create([
-                                'user_id' => $user->id,
-                                'created_by' => 'admin',
-                                'name' => $lang->name,
-                                'code' => $lang->code,
-                                'is_default' => 0,
-                                'direction' => $lang->direction,
-                                'keywords' => $customer_keywords
-                            ]);
-                        }
-                    }
-                }
-            }
 
             // define the path for the language folder
             $langFolderPath = resource_path('lang/' . $lang->code);
@@ -267,9 +231,6 @@ class LanguageService
             $newKeys = config('dashboard-validation');
             $this->updateValidationAttribute($newKeys, $content, $validationFilePath);
             file_put_contents(resource_path('lang/') . 'user_' . $language->code . '.json', $content);
-        } elseif ($request['userType'] == 'user_frontend') {
-            $language->customer_keywords = json_encode($request['keys']);
-            $language->save();
         } else {
             // Load validation attributes
             $validationFilePath = resource_path('lang/' . $lang->code . '/validation.php');

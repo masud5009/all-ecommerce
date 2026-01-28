@@ -71,6 +71,12 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
     });
 
     /*============================
+      home section route
+     =============================*/
+    Route::get('home-section', 'Admin\HomeSecController@index')->name('admin.home_section');
+    Route::post('home-section/update', 'Admin\HomeSecController@update')->name('admin.home.section.update');
+
+    /*============================
       user managment route
      =============================*/
     Route::prefix('user-managment')->controller(UserController::class)->group(function () {
@@ -252,17 +258,6 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
             Route::post('/delete', 'Admin\Product\CouponController@delete')->name('admin.product.coupon_delete');
             Route::post('/bulk_delete', 'Admin\Product\CouponController@bulkdelete')->name('admin.product.coupon_bulk_delete');
         });
-    });
-
-    Route::prefix('pos')->group(function () {
-        Route::get('', 'Admin\PosController@index')->name('admin.pos_mangment');
-        Route::get('search', 'Admin\PosController@itemSearch')->name('admin.pos_mangment.itemSearch');
-        Route::get('add-product', 'Admin\PosController@addProduct')->name('admin.pos_mangment.add_product');
-        Route::get('get/variation', 'Admin\PosController@getVariation')->name('admin.pos_mangment.get_variation');
-        Route::get('add/variation-product', 'Admin\PosController@addVariationProduct')->name('admin.pos_mangment.add_variation_product');
-        Route::get('apply-coupon', 'Admin\PosController@applyCoupon')->name('admin.pos_mangment.applyCoupon');
-        Route::post('checkout', 'Admin\CheckoutController@checkout')->name('admin.pos_mangment.checkout');
-        Route::post('add-billing', 'Admin\CheckoutController@addBilling')->name('admin.pos_mangment.add_billing');
     });
 
     Route::prefix('sales-management')->group(function () {

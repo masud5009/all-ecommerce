@@ -4,6 +4,7 @@
 
 use App\Models\ProductVariation;
 use App\Models\Setting;
+use App\Models\HomeSectionSetting;
 use Illuminate\Routing\Route;
 
 if (!function_exists('truncateString')) {
@@ -218,5 +219,12 @@ if (!function_exists('getTableStatusBadgeClass')) {
         ];
 
         return $classes[$status] ?? 'bg-secondary';
+    }
+}
+if (!function_exists('home_setting')) {
+    function home_setting($key, $default = null) {
+        static $cache = null;
+        $cache ??= HomeSectionSetting::pluck('value', 'key')->toArray();
+        return $cache[$key] ?? $default;
     }
 }
