@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 28, 2025 at 06:19 PM
+-- Generation Time: Jan 29, 2026 at 06:30 PM
 -- Server version: 8.0.30
--- PHP Version: 8.1.10
+-- PHP Version: 8.3.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `sass-dashboard`
+-- Database: `grocery`
 --
 
 -- --------------------------------------------------------
@@ -68,13 +68,6 @@ CREATE TABLE `blogs` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `blogs`
---
-
-INSERT INTO `blogs` (`id`, `image`, `serial_number`, `status`, `created_at`, `updated_at`) VALUES
-(12, '67795c71c33f5.png', 1, 1, '2025-01-04 10:06:09', '2025-10-30 12:18:18');
 
 -- --------------------------------------------------------
 
@@ -197,6 +190,22 @@ INSERT INTO `footers` (`id`, `copyright`, `content`, `created_at`, `updated_at`)
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `home_section_settings`
+--
+
+CREATE TABLE `home_section_settings` (
+  `id` bigint UNSIGNED NOT NULL,
+  `section` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` longtext COLLATE utf8mb4_unicode_ci,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `jobs`
 --
 
@@ -223,7 +232,6 @@ CREATE TABLE `languages` (
   `is_default` tinyint NOT NULL DEFAULT '0',
   `dashboard_default` tinyint NOT NULL DEFAULT '0',
   `direction` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `customer_keywords` longtext COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -232,9 +240,9 @@ CREATE TABLE `languages` (
 -- Dumping data for table `languages`
 --
 
-INSERT INTO `languages` (`id`, `name`, `code`, `is_default`, `dashboard_default`, `direction`, `customer_keywords`, `created_at`, `updated_at`) VALUES
-(1, 'English', 'en', 1, 1, 'LTR', '{\"Inactive\":\"Inactive\",\"Active\":\"Active\",\"completed\":\"completed\",\"Order Code\":\"Order Code\",\"Customer\":\"Customer\",\"Actions\":\"Actions\",\"Order Status\":\"Order Status\",\"Payment Status\":\"Payment Status\",\"Payment method\":\"Payment method\",\"Monthly Orders\":\"Monthly Orders\",\"Monthly Sale\":\"Monthly Sale\",\"Filter\":\"Filter\",\"Total Earning on\":\"Total Earning on\",\"Total Sales on\":\"Total Sales on\",\"Total Earning\":\"Total Earning\",\"Today\'s Sales\":\"Today\'s Sales\",\"Today\'s Pending\":\"Today\'s Pending\",\"Add or select a customer to include billing details\":\"Add or select a customer to include billing details\",\"Inventory Management\":\"Inventory Management\",\"Select a customer\":\"Select a customer\",\"Add Customer\":\"Add Customer\",\"ADD PRODUCT\":\"ADD PRODUCT\",\"Tax Amount\":\"Tax Amount\",\"Discount Amount\":\"Discount Amount\",\"Shipping Amount\":\"Shipping Amount\",\"Deactive\":\"Deactive\",\"Status\":\"Status\",\"Config Email Setting\":\"Config Email Setting\",\"Common\":\"Common\",\"Edit Admin Keyword\":\"Edit Admin Keyword\",\"Keywords of\":\"Keywords of\",\"Back\":\"Back\",\"Favicon\":\"Favicon\",\"Logo\":\"Logo\",\"Select Currency Position\":\"Select Currency Position\",\"Left\":\"Left\",\"Right\":\"Right\",\"Save Changes\":\"Save Changes\",\"Currency Symbol Position\":\"Currency Symbol Position\",\"Currency Text Position\":\"Currency Text Position\",\"Currency Symbol\":\"Currency Symbol\",\"Currency Text\":\"Currency Text\",\"Currency Rate\":\"Currency Rate\",\"Websit Color\":\"Websit Color\",\"Currency Information\":\"Currency Information\",\"Website Appearance\":\"Website Appearance\",\"Timezone\":\"Timezone\",\"Website Title\":\"Website Title\",\"Website Information\":\"Website Information\",\"Close\":\"Close\",\"Save\":\"Save\",\"NO PRODUCT FOUND\":\"NO PRODUCT FOUND\",\"Enable or disable maintenance mode and configure settings for site updates\":\"Enable or disable maintenance mode and configure settings for site updates\",\"View and update plugin setting\":\"View and update plugin setting\",\"Manage and configure payment gateway settings\":\"Manage and configure payment gateway settings\",\"Email templates using HTML & system variables\":\"Email templates using HTML & system variables\",\"View and update your email settings and email templates\":\"View and update your email settings and email templates\",\"View and update your general settings and activate license\":\"View and update your general settings and activate license\",\"Page Heading\":\"Page Heading\",\"Payment Gateway\":\"Payment Gateway\",\"Plugins\":\"Plugins\",\"Maintenance Mode\":\"Maintenance Mode\",\"Email Templates\":\"Email Templates\",\"Registered Users\":\"Registered Users\",\"Language\":\"Language\",\"User Management\":\"User Management\",\"Language Management\":\"Language Management\",\"Packages\":\"Packages\",\"Package Management\":\"Package Management\",\"All Admins\":\"All Admins\",\"Role & Permission\":\"Role & Permission\",\"Role Management\":\"Role Management\",\"Vendors\":\"Vendors\",\"Vendor Management\":\"Vendor Management\",\"Posts\":\"Posts\",\"Blog Management\":\"Blog Management\",\"Products\":\"Products\",\"Coupons\":\"Coupons\",\"Categories\":\"Categories\",\"Product Management\":\"Product Management\",\"Reports\":\"Reports\",\"All Sales\":\"All Sales\",\"Sales Management\":\"Sales Management\",\"POS\":\"POS\",\"Email Settings\":\"Email Settings\",\"General Settings\":\"General Settings\",\"Dashboard\":\"Dashboard\",\"Settings\":\"Settings\",\"Rejected Orders\":\"Rejected Orders\",\"Pending Orders\":\"Pending Orders\",\"Completed Orders\":\"Completed Orders\",\"Total Sales\":\"Total Sales\",\"Today\'s Earning\":\"Today\'s Earning\"}\n', '2024-12-05 09:48:56', '2025-11-25 10:44:06'),
-(3, 'عربي', 'ar', 0, 0, 'RTL', '{\"Inactive\":\"Inactive\",\"Active\":\"Active\",\"completed\":\"completed\",\"Order Code\":\"Order Code\",\"Customer\":\"Customer\",\"Actions\":\"Actions\",\"Order Status\":\"Order Status\",\"Payment Status\":\"Payment Status\",\"Payment method\":\"Payment method\",\"Monthly Orders\":\"Monthly Orders\",\"Monthly Sale\":\"Monthly Sale\",\"Filter\":\"Filter\",\"Total Earning on\":\"Total Earning on\",\"Total Sales on\":\"Total Sales on\",\"Total Earning\":\"Total Earning\",\"Today\'s Sales\":\"Today\'s Sales\",\"Today\'s Pending\":\"Today\'s Pending\",\"Add or select a customer to include billing details\":\"Add or select a customer to include billing details\",\"Inventory Management\":\"Inventory Management\",\"Select a customer\":\"Select a customer\",\"Add Customer\":\"Add Customer\",\"ADD PRODUCT\":\"ADD PRODUCT\",\"Tax Amount\":\"Tax Amount\",\"Discount Amount\":\"Discount Amount\",\"Shipping Amount\":\"Shipping Amount\",\"Deactive\":\"Deactive\",\"Status\":\"Status\",\"Config Email Setting\":\"Config Email Setting\",\"Common\":\"Common\",\"Edit Admin Keyword\":\"Edit Admin Keyword\",\"Keywords of\":\"Keywords of\",\"Back\":\"Back\",\"Favicon\":\"Favicon\",\"Logo\":\"Logo\",\"Select Currency Position\":\"Select Currency Position\",\"Left\":\"Left\",\"Right\":\"Right\",\"Save Changes\":\"Save Changes\",\"Currency Symbol Position\":\"Currency Symbol Position\",\"Currency Text Position\":\"Currency Text Position\",\"Currency Symbol\":\"Currency Symbol\",\"Currency Text\":\"Currency Text\",\"Currency Rate\":\"Currency Rate\",\"Websit Color\":\"Websit Color\",\"Currency Information\":\"Currency Information\",\"Website Appearance\":\"Website Appearance\",\"Timezone\":\"Timezone\",\"Website Title\":\"Website Title\",\"Website Information\":\"Website Information\",\"Close\":\"Close\",\"Save\":\"Save\",\"NO PRODUCT FOUND\":\"NO PRODUCT FOUND\",\"Enable or disable maintenance mode and configure settings for site updates\":\"Enable or disable maintenance mode and configure settings for site updates\",\"View and update plugin setting\":\"View and update plugin setting\",\"Manage and configure payment gateway settings\":\"Manage and configure payment gateway settings\",\"Email templates using HTML & system variables\":\"Email templates using HTML & system variables\",\"View and update your email settings and email templates\":\"View and update your email settings and email templates\",\"View and update your general settings and activate license\":\"View and update your general settings and activate license\",\"Page Heading\":\"Page Heading\",\"Payment Gateway\":\"Payment Gateway\",\"Plugins\":\"Plugins\",\"Maintenance Mode\":\"Maintenance Mode\",\"Email Templates\":\"Email Templates\",\"Registered Users\":\"Registered Users\",\"Language\":\"Language\",\"User Management\":\"User Management\",\"Language Management\":\"Language Management\",\"Packages\":\"Packages\",\"Package Management\":\"Package Management\",\"All Admins\":\"All Admins\",\"Role & Permission\":\"Role & Permission\",\"Role Management\":\"Role Management\",\"Vendors\":\"Vendors\",\"Vendor Management\":\"Vendor Management\",\"Posts\":\"Posts\",\"Blog Management\":\"Blog Management\",\"Products\":\"Products\",\"Coupons\":\"Coupons\",\"Categories\":\"Categories\",\"Product Management\":\"Product Management\",\"Reports\":\"Reports\",\"All Sales\":\"All Sales\",\"Sales Management\":\"Sales Management\",\"POS\":\"POS\",\"Email Settings\":\"Email Settings\",\"General Settings\":\"General Settings\",\"Dashboard\":\"Dashboard\",\"Settings\":\"Settings\",\"Rejected Orders\":\"Rejected Orders\",\"Pending Orders\":\"Pending Orders\",\"Completed Orders\":\"Completed Orders\",\"Total Sales\":\"Total Sales\",\"Today\'s Earning\":\"Today\'s Earning\"}\n', '2025-01-23 08:09:21', '2025-11-21 07:03:41');
+INSERT INTO `languages` (`id`, `name`, `code`, `is_default`, `dashboard_default`, `direction`, `created_at`, `updated_at`) VALUES
+(6, 'English', 'en', 1, 1, 'ltr', '2026-01-26 17:23:11', '2026-01-29 11:42:45'),
+(7, 'বাংলা', 'bn', 0, 0, 'LTR', '2026-01-28 12:09:55', '2026-01-28 12:09:55');
 
 -- --------------------------------------------------------
 
@@ -273,8 +281,8 @@ CREATE TABLE `memberships` (
   `price` double DEFAULT NULL,
   `currency_text` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `currency_symbol` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `currency_text_position` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `currency_symbol_position` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `currency_text_position` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `currency_symbol_position` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `payment_method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `transaction_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` tinyint DEFAULT '0',
@@ -285,8 +293,8 @@ CREATE TABLE `memberships` (
   `settings` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `package_id` bigint DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
-  `start_date` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `expire_date` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `start_date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `expire_date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `modified` tinyint DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -308,7 +316,7 @@ INSERT INTO `memberships` (`id`, `discount`, `coupon_code`, `price`, `currency_t
 CREATE TABLE `menu_builders` (
   `id` bigint UNSIGNED NOT NULL,
   `language_id` bigint DEFAULT NULL,
-  `menu` text COLLATE utf8mb4_unicode_ci,
+  `menu` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -318,7 +326,7 @@ CREATE TABLE `menu_builders` (
 --
 
 INSERT INTO `menu_builders` (`id`, `language_id`, `menu`, `created_at`, `updated_at`) VALUES
-(3, 1, '[{\"title\":\"Home\",\"url\":\"\\/\",\"target\":\"_self\",\"type\":null},{\"title\":\"Pricing\",\"url\":\"\\/pricing\",\"target\":\"_self\",\"type\":null},{\"title\":\"Contact\",\"url\":\"\\/contact\",\"target\":\"_self\",\"type\":null},{\"title\":\"Pages\",\"url\":\"\\/\",\"target\":\"_self\",\"type\":null,\"children\":[{\"title\":\"Blog\",\"url\":\"\\/blog\",\"target\":\"_self\",\"type\":null},{\"title\":\"About\",\"url\":\"\\/about\",\"target\":\"_self\",\"type\":null}]}]', '2025-11-09 13:16:55', '2025-11-10 12:46:54');
+(3, 6, '[{\"title\":\"Home\",\"url\":\"\\/\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"About\",\"url\":\"\\/about\",\"target\":\"_self\",\"type\":\"prebuilt\"}]', '2025-11-09 13:16:55', '2026-01-29 12:06:41');
 
 -- --------------------------------------------------------
 
@@ -375,7 +383,15 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (47, '2025_11_21_112622_create_user_settings_table', 25),
 (48, '2025_11_21_132302_create_product_categories_table', 26),
 (49, '2025_11_21_151955_add_order_columns_to_tables', 27),
-(53, '2025_11_26_141408_create_tables_table', 28);
+(53, '2025_11_26_141408_create_tables_table', 28),
+(54, '2026_01_26_175909_create_home_section_settings_table', 29),
+(55, '2026_01_28_185002_create_product_attribute_contents_table', 30),
+(56, '2026_01_28_185238_create_product_attribute_values_table', 31),
+(57, '2026_01_28_185448_create_product_attribute_value_contents_table', 32),
+(58, '2026_01_28_185632_create_product_variants_table', 33),
+(59, '2026_01_28_190041_create_product_variant_values_table', 34),
+(60, '2026_01_29_000001_create_product_variation_normalized_tables', 35),
+(61, '2026_01_29_000002_migrate_product_variations_to_normalized', 35);
 
 -- --------------------------------------------------------
 
@@ -616,7 +632,6 @@ CREATE TABLE `personal_access_tokens` (
 
 CREATE TABLE `products` (
   `id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint DEFAULT NULL,
   `stock` int DEFAULT NULL,
   `last_restock_qty` bigint DEFAULT NULL,
   `sku` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -632,17 +647,16 @@ CREATE TABLE `products` (
   `rating` smallint DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `order` int NOT NULL DEFAULT '0'
+  `order` int NOT NULL DEFAULT '0',
+  `has_variants` tinyint NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `user_id`, `stock`, `last_restock_qty`, `sku`, `thumbnail`, `current_price`, `previous_price`, `type`, `file_type`, `download_link`, `download_file`, `status`, `featured`, `rating`, `created_at`, `updated_at`, `order`) VALUES
-(5, 59, -29, 18, '1234567', '6797c96602c0b.jpg', 299.99, 399.99, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2025-01-27 11:59:02', '2025-02-15 03:55:28', 0),
-(6, 59, 1991, 10, '34678954', '6797c9c9a16f4.jpg', 99.99, 120.99, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2025-01-27 12:00:41', '2025-10-30 12:39:06', 0),
-(7, 59, 0, 0, 'ASDFASDFASD', '679912375ca9c.png', 234.00, 443.00, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2025-01-28 11:21:59', '2025-11-21 09:01:08', 0);
+INSERT INTO `products` (`id`, `stock`, `last_restock_qty`, `sku`, `thumbnail`, `current_price`, `previous_price`, `type`, `file_type`, `download_link`, `download_file`, `status`, `featured`, `rating`, `created_at`, `updated_at`, `order`, `has_variants`) VALUES
+(13, 11, 11, '121212', '697ba00969d98.png', 111.00, 111.00, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-01-29 11:59:37', '2026-01-29 11:59:37', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -652,7 +666,6 @@ INSERT INTO `products` (`id`, `user_id`, `stock`, `last_restock_qty`, `sku`, `th
 
 CREATE TABLE `product_categories` (
   `id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint DEFAULT NULL,
   `language_id` bigint DEFAULT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -666,10 +679,12 @@ CREATE TABLE `product_categories` (
 -- Dumping data for table `product_categories`
 --
 
-INSERT INTO `product_categories` (`id`, `user_id`, `language_id`, `name`, `slug`, `serial_number`, `status`, `created_at`, `updated_at`) VALUES
-(10, 59, 5, 'Beverages', 'beverages', 1, 1, '2025-01-27 11:52:27', '2025-11-28 11:58:14'),
-(11, 59, 5, 'Desserts', 'desserts', 2, 1, '2025-01-27 11:52:42', '2025-11-28 11:58:22'),
-(13, 59, 5, 'Main Course', 'main-course', 3, 1, '2025-11-28 11:58:32', '2025-11-28 11:58:32');
+INSERT INTO `product_categories` (`id`, `language_id`, `name`, `slug`, `serial_number`, `status`, `created_at`, `updated_at`) VALUES
+(10, 5, 'Beverages', 'beverages', 1, 1, '2025-01-27 11:52:27', '2025-11-28 11:58:14'),
+(11, 5, 'Desserts', 'desserts', 2, 1, '2025-01-27 11:52:42', '2025-11-28 11:58:22'),
+(13, 5, 'Main Course', 'main-course', 3, 1, '2025-11-28 11:58:32', '2025-11-28 11:58:32'),
+(14, 6, 'Meat', 'meat', 1, 1, '2026-01-28 12:40:49', '2026-01-28 12:40:56'),
+(15, 6, 'Shoe', 'shoe', 2, 1, '2026-01-29 11:41:33', '2026-01-29 11:41:33');
 
 -- --------------------------------------------------------
 
@@ -679,7 +694,6 @@ INSERT INTO `product_categories` (`id`, `user_id`, `language_id`, `name`, `slug`
 
 CREATE TABLE `product_contents` (
   `id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint DEFAULT NULL,
   `language_id` bigint DEFAULT NULL,
   `product_id` bigint DEFAULT NULL,
   `category_id` bigint DEFAULT NULL,
@@ -697,10 +711,8 @@ CREATE TABLE `product_contents` (
 -- Dumping data for table `product_contents`
 --
 
-INSERT INTO `product_contents` (`id`, `user_id`, `language_id`, `product_id`, `category_id`, `title`, `slug`, `summary`, `description`, `meta_keyword`, `meta_description`, `created_at`, `updated_at`) VALUES
-(6, 59, 5, 5, 10, 'product 1', 'product-1', NULL, '<p>product 1</p>', '\"null\"', NULL, '2025-01-27 11:59:02', '2025-01-27 12:15:23'),
-(7, 59, 5, 6, 11, 'product 2', 'product-2', NULL, '<p>product 2</p>', '\"&quot;null&quot;\"', NULL, '2025-01-27 12:00:41', '2025-01-28 11:17:30'),
-(8, 59, 5, 7, 10, 'product 3', 'product-3', 'product 3', '<p>product 3</p>', 'null', NULL, '2025-01-28 11:21:59', '2025-01-28 11:21:59');
+INSERT INTO `product_contents` (`id`, `language_id`, `product_id`, `category_id`, `title`, `slug`, `summary`, `description`, `meta_keyword`, `meta_description`, `created_at`, `updated_at`) VALUES
+(18, 6, 13, 15, 'ssssssssssssssssssss', 'ssssssssssssssssssss', 'sssssssssssss', '<p>ssssssssssssssssssss</p>', 'null', NULL, '2026-01-29 11:59:37', '2026-01-29 11:59:37');
 
 -- --------------------------------------------------------
 
@@ -764,18 +776,8 @@ CREATE TABLE `product_variations` (
 --
 
 INSERT INTO `product_variations` (`id`, `product_id`, `language_id`, `variant_name`, `option_name`, `option_price`, `option_stock`, `indx`, `created_at`, `updated_at`) VALUES
-(43, 2, 1, 'new', '[\"sdfsdf\"]', '[\"4\"]', '[3]', 0, '2025-01-08 09:45:25', '2025-01-24 07:22:50'),
-(44, 2, 2, 'new', '[\"sdfsdf\"]', '[\"4\"]', '[3]', 0, '2025-01-08 09:45:25', '2025-01-24 07:22:50'),
-(57, 3, 1, 'Color', '[\"white\",\"black\"]', '[\"10\",\"9\"]', '[\"0\",1]', 0, '2025-01-22 12:56:50', '2025-01-24 07:23:05'),
-(58, 3, 2, 'Color', '[\"white\",\"kala\"]', '[\"10\",\"9\"]', '[\"0\",1]', 0, '2025-01-22 12:56:50', '2025-01-24 07:23:05'),
-(59, 3, 1, 'Size', '[\"M\",\"L\"]', '[\"11\",\"12\"]', '[0,3]', 1, '2025-01-22 12:56:50', '2025-01-24 07:23:05'),
-(60, 3, 2, 'Size', '[\"M\",\"L\"]', '[\"11\",\"12\"]', '[0,3]', 1, '2025-01-22 12:56:50', '2025-01-24 07:23:05'),
-(89, 8, 1, 'RAM', '[\"8 GB\",\"16 GB\"]', '[\"0\",\"0\"]', '[\"0\",\"0\"]', 0, '2025-01-29 09:59:30', '2025-01-29 09:59:30'),
-(90, 8, 3, 'RAM', '[\"8 GB\",\"16 GB\"]', '[\"0\",\"0\"]', '[\"0\",\"0\"]', 0, '2025-01-29 09:59:30', '2025-01-29 09:59:30'),
-(91, 8, 1, 'ROM', '[\"32 GB\",\"64 GB\"]', '[\"0\",\"0\"]', '[\"0\",\"0\"]', 1, '2025-01-29 09:59:30', '2025-01-29 09:59:30'),
-(92, 8, 3, 'ROM', '[\"32 GB\",\"64 GB\"]', '[\"0\",\"0\"]', '[\"0\",\"0\"]', 1, '2025-01-29 09:59:30', '2025-01-29 09:59:30'),
-(97, 7, 5, 'Nostrum dolor volupt', '[\"Et mollit veniam qu\"]', '[\"87\"]', '[\"72\"]', 0, '2025-11-21 09:06:58', '2025-11-21 09:06:58'),
-(98, 7, 6, 'Iusto porro in labor', '[\"Exercitationem Nam f\"]', '[\"87\"]', '[\"72\"]', 0, '2025-11-21 09:06:58', '2025-11-21 09:06:58');
+(99, 13, 6, 'Perspiciatis except', '[\"Illo ad nostrum veni\"]', '[\"30\"]', '[\"95\"]', 0, '2026-01-29 12:30:31', '2026-01-29 12:30:31'),
+(100, 13, 7, 'In beatae facilis es', '[\"Quo voluptates nostr\"]', '[\"30\"]', '[\"95\"]', 0, '2026-01-29 12:30:31', '2026-01-29 12:30:31');
 
 -- --------------------------------------------------------
 
@@ -904,7 +906,8 @@ INSERT INTO `slider_images` (`id`, `item_id`, `item_type`, `image`, `created_at`
 (101, 5, 'product', '6797c8b7061f3.jpg', '2025-01-27 11:56:07', '2025-01-27 11:59:02'),
 (102, 6, 'product', '6797c9a7952d9.jpg', '2025-01-27 12:00:07', '2025-01-27 12:00:41'),
 (103, 7, 'product', '679911b7176b9.jpg', '2025-01-28 11:19:51', '2025-01-28 11:21:59'),
-(118, 9, 'product', '6920767363c2d.jpg', '2025-11-21 08:25:55', '2025-11-21 08:30:55');
+(118, 9, 'product', '6920767363c2d.jpg', '2025-11-21 08:25:55', '2025-11-21 08:30:55'),
+(129, 13, 'product', '697b9ff76d139.png', '2026-01-29 11:59:19', '2026-01-29 11:59:37');
 
 -- --------------------------------------------------------
 
@@ -916,27 +919,27 @@ CREATE TABLE `tables` (
   `id` bigint UNSIGNED NOT NULL,
   `user_id` bigint NOT NULL,
   `language_id` bigint NOT NULL,
-  `table_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `table_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `capacity` int NOT NULL DEFAULT '1',
-  `status` enum('available','occupied','reserved','cleaning','unavailable') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'available',
-  `qr_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` enum('available','occupied','reserved','cleaning','unavailable') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'available',
+  `qr_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `serial_number` int NOT NULL DEFAULT '1',
-  `color` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '#000000',
+  `color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '#000000',
   `size` int NOT NULL DEFAULT '300',
   `margin` int NOT NULL DEFAULT '1',
-  `style` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'square',
-  `eye_style` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'square',
-  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'default',
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `style` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'square',
+  `eye_style` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'square',
+  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'default',
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image_size` int NOT NULL DEFAULT '10',
   `image_x` int NOT NULL DEFAULT '50',
   `image_y` int NOT NULL DEFAULT '50',
-  `text` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `text_color` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '#000000',
+  `text` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `text_color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '#000000',
   `text_size` int NOT NULL DEFAULT '5',
   `text_x` int NOT NULL DEFAULT '50',
   `text_y` int NOT NULL DEFAULT '50',
-  `qr_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `qr_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1051,7 +1054,7 @@ INSERT INTO `transactions` (`id`, `transaction_id`, `pre_balance`, `actual_total
 CREATE TABLE `users` (
   `id` bigint UNSIGNED NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `company_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `company_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1065,9 +1068,9 @@ CREATE TABLE `users` (
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `database_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `database_username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `database_password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `database_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `database_username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `database_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `qr_menu_enabled` tinyint(1) NOT NULL DEFAULT '1'
@@ -1079,65 +1082,6 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `company_name`, `username`, `email`, `image`, `status`, `phone`, `country`, `city`, `state`, `zip_code`, `address`, `email_verified_at`, `password`, `remember_token`, `database_name`, `database_username`, `database_password`, `created_at`, `updated_at`, `qr_menu_enabled`) VALUES
 (59, NULL, 'Ballard and Sawyer Traders', 'vysidexud', 'dehat@mailinator.com', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-21 06:24:12', '$2y$12$RpYAqen.fCBNSFbY34jomOEWl.SFvnQOlzwMQWK0sM0rK80zTUfT.', 'ahVDR4CCllzUT9QMpI2srGHDzdaYl1KVzVnSzLqn26YXlgPxJU1nPvw2xzRI', NULL, NULL, NULL, '2025-11-21 06:24:12', '2025-11-25 10:46:09', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user_languages`
---
-
-CREATE TABLE `user_languages` (
-  `id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `is_default` tinyint(1) NOT NULL DEFAULT '0',
-  `dashboard_default` tinyint(1) NOT NULL DEFAULT '0',
-  `direction` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_by` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'admin',
-  `keywords` longtext COLLATE utf8mb4_unicode_ci,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `user_languages`
---
-
-INSERT INTO `user_languages` (`id`, `user_id`, `name`, `code`, `is_default`, `dashboard_default`, `direction`, `created_by`, `keywords`, `created_at`, `updated_at`) VALUES
-(5, 59, 'English', 'en', 0, 1, 'LTR', 'admin', '{\"Inactive\":\"Inactive\",\"Active\":\"Active\",\"completed\":\"completed\",\"Order Code\":\"Order Code\",\"Customer\":\"Customer\",\"Actions\":\"Actions\",\"Order Status\":\"Order Status\",\"Payment Status\":\"Payment Status\",\"Payment method\":\"Payment method\",\"Monthly Orders\":\"Monthly Orders\",\"Monthly Sale\":\"Monthly Sale\",\"Filter\":\"Filter\",\"Total Earning on\":\"Total Earning on\",\"Total Sales on\":\"Total Sales on\",\"Total Earning\":\"Total Earning\",\"Today\'s Sales\":\"Today\'s Sales\",\"Today\'s Pending\":\"Today\'s Pending\",\"Add or select a customer to include billing details\":\"Add or select a customer to include billing details\",\"Inventory Management\":\"Inventory Management\",\"Select a customer\":\"Select a customer\",\"Add Customer\":\"Add Customer\",\"ADD PRODUCT\":\"ADD PRODUCT\",\"Tax Amount\":\"Tax Amount\",\"Discount Amount\":\"Discount Amount\",\"Shipping Amount\":\"Shipping Amount\",\"Deactive\":\"Deactive\",\"Status\":\"Status\",\"Config Email Setting\":\"Config Email Setting\",\"Common\":\"Common\",\"Edit Admin Keyword\":\"Edit Admin Keyword\",\"Keywords of\":\"Keywords of\",\"Back\":\"Back\",\"Favicon\":\"Favicon\",\"Logo\":\"Logo\",\"Select Currency Position\":\"Select Currency Position\",\"Left\":\"Left\",\"Right\":\"Right\",\"Save Changes\":\"Save Changes\",\"Currency Symbol Position\":\"Currency Symbol Position\",\"Currency Text Position\":\"Currency Text Position\",\"Currency Symbol\":\"Currency Symbol\",\"Currency Text\":\"Currency Text\",\"Currency Rate\":\"Currency Rate\",\"Websit Color\":\"Websit Color\",\"Currency Information\":\"Currency Information\",\"Website Appearance\":\"Website Appearance\",\"Timezone\":\"Timezone\",\"Website Title\":\"Website Title\",\"Website Information\":\"Website Information\",\"Close\":\"Close\",\"Save\":\"Save\",\"NO PRODUCT FOUND\":\"NO PRODUCT FOUND\",\"Enable or disable maintenance mode and configure settings for site updates\":\"Enable or disable maintenance mode and configure settings for site updates\",\"View and update plugin setting\":\"View and update plugin setting\",\"Manage and configure payment gateway settings\":\"Manage and configure payment gateway settings\",\"Email templates using HTML & system variables\":\"Email templates using HTML & system variables\",\"View and update your email settings and email templates\":\"View and update your email settings and email templates\",\"View and update your general settings and activate license\":\"View and update your general settings and activate license\",\"Page Heading\":\"Page Heading\",\"Payment Gateway\":\"Payment Gateway\",\"Plugins\":\"Plugins\",\"Maintenance Mode\":\"Maintenance Mode\",\"Email Templates\":\"Email Templates\",\"Registered Users\":\"Registered Users\",\"Language\":\"Language\",\"User Management\":\"User Management\",\"Language Management\":\"Language Management\",\"Packages\":\"Packages\",\"Package Management\":\"Package Management\",\"All Admins\":\"All Admins\",\"Role & Permission\":\"Role & Permission\",\"Role Management\":\"Role Management\",\"Vendors\":\"Vendors\",\"Vendor Management\":\"Vendor Management\",\"Posts\":\"Posts\",\"Blog Management\":\"Blog Management\",\"Products\":\"Products\",\"Coupons\":\"Coupons\",\"Categories\":\"Categories\",\"Product Management\":\"Product Management\",\"Reports\":\"Reports\",\"All Sales\":\"All Sales\",\"Sales Management\":\"Sales Management\",\"POS\":\"POS\",\"Email Settings\":\"Email Settings\",\"General Settings\":\"General Settings\",\"Dashboard\":\"Dashboard\",\"Settings\":\"Settings\",\"Rejected Orders\":\"Rejected Orders\",\"Pending Orders\":\"Pending Orders\",\"Completed Orders\":\"Completed Orders\",\"Total Sales\":\"Total Sales\",\"Today\'s Earning\":\"Today\'s Earning\"}\n', '2025-11-21 06:24:12', '2025-11-25 10:44:02'),
-(6, 59, 'عربي', 'ar', 1, 0, 'RTL', 'admin', '{\"Inactive\":\"Inactive\",\"Active\":\"Active\",\"completed\":\"completed\",\"Order Code\":\"Order Code\",\"Customer\":\"Customer\",\"Actions\":\"Actions\",\"Order Status\":\"Order Status\",\"Payment Status\":\"Payment Status\",\"Payment method\":\"Payment method\",\"Monthly Orders\":\"Monthly Orders\",\"Monthly Sale\":\"Monthly Sale\",\"Filter\":\"Filter\",\"Total Earning on\":\"Total Earning on\",\"Total Sales on\":\"Total Sales on\",\"Total Earning\":\"Total Earning\",\"Today\'s Sales\":\"Today\'s Sales\",\"Today\'s Pending\":\"Today\'s Pending\",\"Add or select a customer to include billing details\":\"Add or select a customer to include billing details\",\"Inventory Management\":\"Inventory Management\",\"Select a customer\":\"Select a customer\",\"Add Customer\":\"Add Customer\",\"ADD PRODUCT\":\"ADD PRODUCT\",\"Tax Amount\":\"Tax Amount\",\"Discount Amount\":\"Discount Amount\",\"Shipping Amount\":\"Shipping Amount\",\"Deactive\":\"Deactive\",\"Status\":\"Status\",\"Config Email Setting\":\"Config Email Setting\",\"Common\":\"Common\",\"Edit Admin Keyword\":\"Edit Admin Keyword\",\"Keywords of\":\"Keywords of\",\"Back\":\"Back\",\"Favicon\":\"Favicon\",\"Logo\":\"Logo\",\"Select Currency Position\":\"Select Currency Position\",\"Left\":\"Left\",\"Right\":\"Right\",\"Save Changes\":\"Save Changes\",\"Currency Symbol Position\":\"Currency Symbol Position\",\"Currency Text Position\":\"Currency Text Position\",\"Currency Symbol\":\"Currency Symbol\",\"Currency Text\":\"Currency Text\",\"Currency Rate\":\"Currency Rate\",\"Websit Color\":\"Websit Color\",\"Currency Information\":\"Currency Information\",\"Website Appearance\":\"Website Appearance\",\"Timezone\":\"Timezone\",\"Website Title\":\"Website Title\",\"Website Information\":\"Website Information\",\"Close\":\"Close\",\"Save\":\"Save\",\"NO PRODUCT FOUND\":\"NO PRODUCT FOUND\",\"Enable or disable maintenance mode and configure settings for site updates\":\"Enable or disable maintenance mode and configure settings for site updates\",\"View and update plugin setting\":\"View and update plugin setting\",\"Manage and configure payment gateway settings\":\"Manage and configure payment gateway settings\",\"Email templates using HTML & system variables\":\"Email templates using HTML & system variables\",\"View and update your email settings and email templates\":\"View and update your email settings and email templates\",\"View and update your general settings and activate license\":\"View and update your general settings and activate license\",\"Page Heading\":\"Page Heading\",\"Payment Gateway\":\"Payment Gateway\",\"Plugins\":\"Plugins\",\"Maintenance Mode\":\"Maintenance Mode\",\"Email Templates\":\"Email Templates\",\"Registered Users\":\"Registered Users\",\"Language\":\"Language\",\"User Management\":\"User Management\",\"Language Management\":\"Language Management\",\"Packages\":\"Packages\",\"Package Management\":\"Package Management\",\"All Admins\":\"All Admins\",\"Role & Permission\":\"Role & Permission\",\"Role Management\":\"Role Management\",\"Vendors\":\"Vendors\",\"Vendor Management\":\"Vendor Management\",\"Posts\":\"Posts\",\"Blog Management\":\"Blog Management\",\"Products\":\"Products\",\"Coupons\":\"Coupons\",\"Categories\":\"Categories\",\"Product Management\":\"Product Management\",\"Reports\":\"Reports\",\"All Sales\":\"All Sales\",\"Sales Management\":\"Sales Management\",\"POS\":\"POS\",\"Email Settings\":\"Email Settings\",\"General Settings\":\"General Settings\",\"Dashboard\":\"Dashboard\",\"Settings\":\"Settings\",\"Rejected Orders\":\"Rejected Orders\",\"Pending Orders\":\"Pending Orders\",\"Completed Orders\":\"Completed Orders\",\"Total Sales\":\"Total Sales\",\"Today\'s Earning\":\"Today\'s Earning\"}\n', '2025-11-21 06:24:12', '2025-11-21 06:24:12');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user_settings`
---
-
-CREATE TABLE `user_settings` (
-  `id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint NOT NULL,
-  `website_logo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `favicon` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `footer_logo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `website_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `website_color` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `timezone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `currency_symbol` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `currency_symbol_position` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `currency_text` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `currency_text_position` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `currency_rate` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `user_settings`
---
-
-INSERT INTO `user_settings` (`id`, `user_id`, `website_logo`, `favicon`, `footer_logo`, `website_title`, `website_color`, `timezone`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `currency_rate`, `created_at`, `updated_at`) VALUES
-(3, 59, NULL, NULL, NULL, 'Business Validator', '#FF0000FF', 'Europe/Andorra', '$', 'left', 'USD', 'left', '1', '2025-11-21 06:24:12', '2025-11-21 06:24:12');
 
 -- --------------------------------------------------------
 
@@ -1242,6 +1186,14 @@ ALTER TABLE `failed_jobs`
 --
 ALTER TABLE `footers`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `home_section_settings`
+--
+ALTER TABLE `home_section_settings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `home_section_settings_key_unique` (`key`),
+  ADD KEY `home_section_settings_section_index` (`section`);
 
 --
 -- Indexes for table `jobs`
@@ -1406,18 +1358,6 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
--- Indexes for table `user_languages`
---
-ALTER TABLE `user_languages`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `user_settings`
---
-ALTER TABLE `user_settings`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `vendors`
 --
 ALTER TABLE `vendors`
@@ -1476,6 +1416,12 @@ ALTER TABLE `footers`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `home_section_settings`
+--
+ALTER TABLE `home_section_settings`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
@@ -1485,7 +1431,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `languages`
 --
 ALTER TABLE `languages`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `mail_templates`
@@ -1509,7 +1455,7 @@ ALTER TABLE `menu_builders`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -1551,19 +1497,19 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `product_categories`
 --
 ALTER TABLE `product_categories`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `product_contents`
 --
 ALTER TABLE `product_contents`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `product_coupons`
@@ -1581,7 +1527,7 @@ ALTER TABLE `product_settings`
 -- AUTO_INCREMENT for table `product_variations`
 --
 ALTER TABLE `product_variations`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -1605,7 +1551,7 @@ ALTER TABLE `shipping_charges`
 -- AUTO_INCREMENT for table `slider_images`
 --
 ALTER TABLE `slider_images`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
 
 --
 -- AUTO_INCREMENT for table `tables`
@@ -1624,18 +1570,6 @@ ALTER TABLE `transactions`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
-
---
--- AUTO_INCREMENT for table `user_languages`
---
-ALTER TABLE `user_languages`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `user_settings`
---
-ALTER TABLE `user_settings`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `vendors`
