@@ -16,11 +16,21 @@ class Product extends Model
     }
     public function sliderImage()
     {
-        return $this->hasMany(SliderImage::class,'item_id','id')->where('item_type','product');
+        return $this->hasMany(SliderImage::class, 'item_id', 'id')->where('item_type', 'product');
     }
 
-    public function variations()
+    // public function variations()
+    // {
+    //     return $this->hasMany(ProductVariation::class,'product_id','id');
+    // }
+
+    public function options()
     {
-        return $this->hasMany(ProductVariation::class,'product_id','id');
+        return $this->hasMany(\App\Models\ProductOption::class);
+    }
+
+    public function variants()
+    {
+        return $this->hasMany(\App\Models\ProductVariant::class);
     }
 }
