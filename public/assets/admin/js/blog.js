@@ -58,10 +58,21 @@ $('#blogSubmit').on('click', function (e) {
         },
         error: function (error) {
             let errors = ``;
+            const response = error.responseJSON || {};
 
-            for (let x in error.responseJSON.errors) {
+            if (response.errors) {
+                for (let x in response.errors) {
+                    errors += `<li>
+                      <p class="text-danger mb-0">${response.errors[x][0]}</p>
+                    </li>`;
+                }
+            } else if (response.message) {
                 errors += `<li>
-                  <p class="text-danger mb-0">${error.responseJSON.errors[x][0]}</p>
+                  <p class="text-danger mb-0">${response.message}</p>
+                </li>`;
+            } else {
+                errors += `<li>
+                  <p class="text-danger mb-0">Something went wrong. Please try again.</p>
                 </li>`;
             }
 

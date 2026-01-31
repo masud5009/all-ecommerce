@@ -16,7 +16,7 @@
 
     <div class="col-lg-12">
         <div class="card">
-            <x-bulk-delete :url="route('admin.product.category_bulk_delete')" itemTextName="products" />
+            <x-bulk-delete :url="route('admin.product.bulk_delete')" itemTextName="products" />
             <div class="card-header">
                 <div class="row">
                     <div class="col-lg-4 col-sm-6">
@@ -27,7 +27,7 @@
                     <div class="col-lg-8 col-sm-6">
                         <div class="info-header-content">
                             <button class="btn btn-danger btn-sm  d-none bulk-delete"
-                                data-href="{{ route('admin.blog.bulk_delete') }}">
+                                data-href="{{ route('admin.product.bulk_delete') }}">
                                 <i class="fas fa-trash"></i> {{ __('Delete') }}
                             </button>
                             <div class="dropdown">
@@ -104,9 +104,9 @@
                                                         <span class="fas fa-edit"></span>
                                                     </a>
                                                     <form class="deleteForm d-inline-block"
-                                                        action="{{ route('admin.blog.delete') }}" method="post">
+                                                        action="{{ route('admin.product.delete') }}" method="post">
                                                         @csrf
-                                                        <input type="hidden" value="{{ $product->id }}" name="blog_id">
+                                                        <input type="hidden" value="{{ $product->id }}" name="product_id">
                                                         <button class="btn btn-sm deleteBtn delete-button" type="button">
                                                             <span class="fas fa-trash"></span>
                                                         </button>

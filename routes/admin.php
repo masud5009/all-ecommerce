@@ -238,10 +238,12 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
             Route::post('/slider/remove', 'Admin\Product\ProductController@imageremove')->name('admin.product.slider-remove');
             Route::post('/db/slider/remove', 'Admin\Product\ProductController@dbSliderRemove')->name('admin.product.db-slider-remove');
 
-            Route::post('/product-store', 'Admin\Product\ProductController@store')->name('admin.product.store');
-            Route::get('/product-edit/{id}', 'Admin\Product\ProductController@edit')->name('admin.product.edit');
-            Route::post('/product-update/{id}', 'Admin\Product\ProductController@update')->name('admin.product.update');
-            Route::post('/changeStatus', 'Admin\Product\ProductController@changeStatus')->name('admin.product.status_change');
+        Route::post('/product-store', 'Admin\Product\ProductController@store')->name('admin.product.store');
+        Route::get('/product-edit/{id}', 'Admin\Product\ProductController@edit')->name('admin.product.edit');
+        Route::post('/product-update/{id}', 'Admin\Product\ProductController@update')->name('admin.product.update');
+        Route::post('/product-delete', 'Admin\Product\ProductController@delete')->name('admin.product.delete');
+        Route::post('/product-bulk-delete', 'Admin\Product\ProductController@bulkDelete')->name('admin.product.bulk_delete');
+        Route::post('/changeStatus', 'Admin\Product\ProductController@changeStatus')->name('admin.product.status_change');
 
 
             Route::prefix('variants')->group(function () {

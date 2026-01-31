@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 29, 2026 at 06:30 PM
+-- Generation Time: Jan 31, 2026 at 04:40 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.29
 
@@ -241,7 +241,7 @@ CREATE TABLE `languages` (
 --
 
 INSERT INTO `languages` (`id`, `name`, `code`, `is_default`, `dashboard_default`, `direction`, `created_at`, `updated_at`) VALUES
-(6, 'English', 'en', 1, 1, 'ltr', '2026-01-26 17:23:11', '2026-01-29 11:42:45'),
+(6, 'English', 'en', 1, 1, 'ltr', '2026-01-26 17:23:11', '2026-01-31 10:12:09'),
 (7, 'বাংলা', 'bn', 0, 0, 'LTR', '2026-01-28 12:09:55', '2026-01-28 12:09:55');
 
 -- --------------------------------------------------------
@@ -391,7 +391,11 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (58, '2026_01_28_185632_create_product_variants_table', 33),
 (59, '2026_01_28_190041_create_product_variant_values_table', 34),
 (60, '2026_01_29_000001_create_product_variation_normalized_tables', 35),
-(61, '2026_01_29_000002_migrate_product_variations_to_normalized', 35);
+(61, '2026_01_29_000002_migrate_product_variations_to_normalized', 35),
+(62, '2026_01_30_055454_create_product_options_table', 36),
+(63, '2026_01_30_055507_create_product_option_values_table', 36),
+(64, '2026_01_30_055519_create_product_variants_table', 36),
+(65, '2026_01_30_055531_create_product_variant_values_table', 36);
 
 -- --------------------------------------------------------
 
@@ -651,13 +655,6 @@ CREATE TABLE `products` (
   `has_variants` tinyint NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `products`
---
-
-INSERT INTO `products` (`id`, `stock`, `last_restock_qty`, `sku`, `thumbnail`, `current_price`, `previous_price`, `type`, `file_type`, `download_link`, `download_file`, `status`, `featured`, `rating`, `created_at`, `updated_at`, `order`, `has_variants`) VALUES
-(13, 11, 11, '121212', '697ba00969d98.png', 111.00, 111.00, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-01-29 11:59:37', '2026-01-29 11:59:37', 0, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -683,7 +680,7 @@ INSERT INTO `product_categories` (`id`, `language_id`, `name`, `slug`, `serial_n
 (10, 5, 'Beverages', 'beverages', 1, 1, '2025-01-27 11:52:27', '2025-11-28 11:58:14'),
 (11, 5, 'Desserts', 'desserts', 2, 1, '2025-01-27 11:52:42', '2025-11-28 11:58:22'),
 (13, 5, 'Main Course', 'main-course', 3, 1, '2025-11-28 11:58:32', '2025-11-28 11:58:32'),
-(14, 6, 'Meat', 'meat', 1, 1, '2026-01-28 12:40:49', '2026-01-28 12:40:56'),
+(14, 6, 'Meat', 'meat', 1, 1, '2026-01-28 12:40:49', '2026-01-31 10:28:11'),
 (15, 6, 'Shoe', 'shoe', 2, 1, '2026-01-29 11:41:33', '2026-01-29 11:41:33');
 
 -- --------------------------------------------------------
@@ -706,13 +703,6 @@ CREATE TABLE `product_contents` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `product_contents`
---
-
-INSERT INTO `product_contents` (`id`, `language_id`, `product_id`, `category_id`, `title`, `slug`, `summary`, `description`, `meta_keyword`, `meta_description`, `created_at`, `updated_at`) VALUES
-(18, 6, 13, 15, 'ssssssssssssssssssss', 'ssssssssssssssssssss', 'sssssssssssss', '<p>ssssssssssssssssssss</p>', 'null', NULL, '2026-01-29 11:59:37', '2026-01-29 11:59:37');
 
 -- --------------------------------------------------------
 
@@ -743,11 +733,72 @@ INSERT INTO `product_coupons` (`id`, `name`, `code`, `type`, `value`, `start_dat
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `product_options`
+--
+
+CREATE TABLE `product_options` (
+  `id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `position` int UNSIGNED NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_option_values`
+--
+
+CREATE TABLE `product_option_values` (
+  `id` bigint UNSIGNED NOT NULL,
+  `product_option_id` bigint UNSIGNED NOT NULL,
+  `value` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `position` int UNSIGNED NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `product_settings`
 --
 
 CREATE TABLE `product_settings` (
   `id` bigint UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_variants`
+--
+
+CREATE TABLE `product_variants` (
+  `id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `sku` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price` decimal(8,2) DEFAULT NULL,
+  `stock` int NOT NULL DEFAULT '0',
+  `status` tinyint NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_variant_values`
+--
+
+CREATE TABLE `product_variant_values` (
+  `id` bigint UNSIGNED NOT NULL,
+  `variant_id` bigint UNSIGNED NOT NULL,
+  `option_value_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -907,7 +958,7 @@ INSERT INTO `slider_images` (`id`, `item_id`, `item_type`, `image`, `created_at`
 (102, 6, 'product', '6797c9a7952d9.jpg', '2025-01-27 12:00:07', '2025-01-27 12:00:41'),
 (103, 7, 'product', '679911b7176b9.jpg', '2025-01-28 11:19:51', '2025-01-28 11:21:59'),
 (118, 9, 'product', '6920767363c2d.jpg', '2025-11-21 08:25:55', '2025-11-21 08:30:55'),
-(129, 13, 'product', '697b9ff76d139.png', '2026-01-29 11:59:19', '2026-01-29 11:59:37');
+(130, NULL, 'product', '697c4b713313c.png', '2026-01-30 00:10:57', '2026-01-30 00:10:57');
 
 -- --------------------------------------------------------
 
@@ -1302,10 +1353,39 @@ ALTER TABLE `product_coupons`
   ADD UNIQUE KEY `product_coupons_code_unique` (`code`);
 
 --
+-- Indexes for table `product_options`
+--
+ALTER TABLE `product_options`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `product_option_values`
+--
+ALTER TABLE `product_option_values`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_option_values_product_option_id_value_index` (`product_option_id`,`value`);
+
+--
 -- Indexes for table `product_settings`
 --
 ALTER TABLE `product_settings`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `product_variants`
+--
+ALTER TABLE `product_variants`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `product_variants_product_id_sku_unique` (`product_id`,`sku`),
+  ADD KEY `product_variants_product_id_status_index` (`product_id`,`status`);
+
+--
+-- Indexes for table `product_variant_values`
+--
+ALTER TABLE `product_variant_values`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `product_variant_values_variant_id_option_value_id_unique` (`variant_id`,`option_value_id`),
+  ADD KEY `product_variant_values_option_value_id_index` (`option_value_id`);
 
 --
 -- Indexes for table `product_variations`
@@ -1455,7 +1535,7 @@ ALTER TABLE `menu_builders`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -1497,7 +1577,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `product_categories`
@@ -1509,7 +1589,7 @@ ALTER TABLE `product_categories`
 -- AUTO_INCREMENT for table `product_contents`
 --
 ALTER TABLE `product_contents`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `product_coupons`
@@ -1518,10 +1598,34 @@ ALTER TABLE `product_coupons`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `product_options`
+--
+ALTER TABLE `product_options`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `product_option_values`
+--
+ALTER TABLE `product_option_values`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
 -- AUTO_INCREMENT for table `product_settings`
 --
 ALTER TABLE `product_settings`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `product_variants`
+--
+ALTER TABLE `product_variants`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT for table `product_variant_values`
+--
+ALTER TABLE `product_variant_values`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `product_variations`
@@ -1551,7 +1655,7 @@ ALTER TABLE `shipping_charges`
 -- AUTO_INCREMENT for table `slider_images`
 --
 ALTER TABLE `slider_images`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=143;
 
 --
 -- AUTO_INCREMENT for table `tables`

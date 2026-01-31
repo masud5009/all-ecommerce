@@ -452,4 +452,83 @@ class ProductController extends Controller
         Product::where('id', $request->id)->update(['status' => $request->status]);
         return 'success';
     }
+
+    private function deleteProductData(Product $product): void
+    {
+        // remove thumbnail
+        if (!empty($product->thumbnail)) {
+            @unlink(public_path('assets/img/product/') . $product->thumbnail);
+        }
+
+        // remove downloadable file
+        if (!empty($product->download_file)) {
+            @unlink(public_path('assets/img/product/file/') . $product->download_file);
+        }
+
+        // remove gallery images
+        $sliderImages = SliderImage::where('item_id', $product->id)->where('item_type', 'product')->get();
+        foreach ($sliderImages as $sliderImage) {
+            if (!empty($sliderImage->image)) {
+                @unlink(public_path('assets/img/product/gallery/') . $sliderImage->image);
+            }
+        }
+        SliderImage::where('item_id', $product->id)->where('item_type', 'product')->delete();
+
+        // remove contents
+        ProductContent::where('product_id', $product->id)->delete();
+
+        // remove variants
+        $variantIds = ProductVariant::where('product_id', $product->id)->pluck('id');
+        if ($variantIds->isNotEmpty()) {
+            ProductVariantValue::whereIn('variant_id', $variantIds)->delete();
+        }
+        ProductVariant::where('product_id', $product->id)->delete();
+
+        // remove options
+        $optionIds = ProductOption::where('product_id', $product->id)->pluck('id');
+        if ($optionIds->isNotEmpty()) {
+            ProductOptionValue::whereIn('product_option_id', $optionIds)->delete();
+        }
+        ProductOption::where('product_id', $product->id)->delete();
+
+        // finally remove product
+        $product->delete();
+    }
+
+    public function delete(Request $request)
+    {
+        $productId = $request->product_id;
+        $product = Product::findOrFail($productId);
+
+        DB::beginTransaction();
+        try {
+            $this->deleteProductData($product);
+            DB::commit();
+            return redirect()->back()->with('success', __('Product deleted successfully'));
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', __('Failed to delete product'));
+        }
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->ids ?? [];
+
+        DB::beginTransaction();
+        try {
+            foreach ($ids as $id) {
+                $product = Product::find($id);
+                if ($product) {
+                    $this->deleteProductData($product);
+                }
+            }
+            DB::commit();
+            session()->flash('success', __('Products deleted successfully'));
+            return response()->json(['status' => 'success'], 200);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return response()->json(['status' => 'error'], 500);
+        }
+    }
 }
