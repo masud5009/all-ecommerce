@@ -254,7 +254,47 @@ class ProductController extends Controller
     {
         $languages = app('languages');
 
-        $product = Product::with('sliderImage')->findOrFail($id);
+        $product = Product::with([
+            'sliderImage',
+            'options.values',
+            'variants.variantValues.optionValue.option',
+        ])->findOrFail($id);
+
+        $variantOptions = $product->options
+            ->sortBy('position')
+            ->values()
+            ->map(function ($option) {
+                $values = $option->values
+                    ->sortBy('position')
+                    ->pluck('value')
+                    ->implode(', ');
+
+                return [
+                    'name' => $option->name,
+                    'values' => $values,
+                ];
+            });
+
+        $variantsData = $product->variants
+            ->map(function ($variant) {
+                $map = [];
+                foreach ($variant->variantValues as $variantValue) {
+                    $optionValue = $variantValue->optionValue;
+                    if (!$optionValue || !$optionValue->option) {
+                        continue;
+                    }
+                    $map[$optionValue->option->name] = $optionValue->value;
+                }
+
+                return [
+                    'sku' => $variant->sku,
+                    'price' => $variant->price,
+                    'stock' => $variant->stock,
+                    'status' => $variant->status,
+                    'map' => $map,
+                ];
+            })
+            ->values();
         $languages->map(function ($language) use ($product) {
             $language->content = $product->content->where('language_id', $language->id)->first();
             $language->categories = ProductCategory::where([['status', 1], ['language_id', $language->id]])
@@ -264,6 +304,8 @@ class ProductController extends Controller
         });
         $data['languages'] = $languages;
         $data['product'] = $product;
+        $data['variantOptions'] = $variantOptions;
+        $data['variantsData'] = $variantsData;
 
         return view('admin.product.edit', $data);
     }

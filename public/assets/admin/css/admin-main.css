@@ -84,7 +84,10 @@ table.dataTable>thead>tr>td {
     height: 70px;
     padding: 10px 0px;
 }
-
+.slider-images img.thumb-preview{
+     width: 200px !important;
+    height: 200px !important;
+}
 .table>tbody {
     vertical-align: middle;
 }
@@ -1037,6 +1040,7 @@ div.dt-container .dt-paging .dt-paging-button {
 /*dropzone css */
 .dropzone {
     border: dotted 2px #ced4da;
+    min-height: 250px !important;
 }
 
 #my-dropzone {
