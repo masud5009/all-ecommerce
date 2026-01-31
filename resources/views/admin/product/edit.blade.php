@@ -207,55 +207,53 @@
                         </div>
                     </div>
 
-                    <div class="card border-0 shadow-sm language-card">
-                        <div class="card-body">
-                            <div class="row language-div">
-                                @include('admin.include.languages', ['languages' => $languages])
+                    <div class="form-group language-card">
+                        <div class="row language-div">
+                            @include('admin.include.languages', ['languages' => $languages])
 
-                                @foreach ($languages as $lang)
-                                    @php
-                                        $code = $lang->code;
-                                        $content = $lang->content;
-                                    @endphp
-                                    <div class="row language-content {{ $lang->id == $defaultLang->id || $lang->id == @$content->language_id ? '' : 'd-none' }}"
-                                        id="language_{{ $lang->id }}">
+                            @foreach ($languages as $lang)
+                                @php
+                                    $code = $lang->code;
+                                    $content = $lang->content;
+                                @endphp
+                                <div class="language-content {{ $lang->id == $defaultLang->id || $lang->id == @$content->language_id ? '' : 'd-none' }}"
+                                    id="language_{{ $lang->id }}">
 
-                                        <x-text-input col="12" placeholder="Enter product title"
-                                            name="{{ $lang->code }}_title" type="text" label="Title"
-                                            required="*" language="{{ $lang->code }}"
-                                            value="{{ @$content->title }}" />
+                                    <x-text-input col="12" placeholder="Enter product title"
+                                        name="{{ $lang->code }}_title" type="text" label="Title"
+                                        required="*" language="{{ $lang->code }}"
+                                        value="{{ @$content->title }}" />
 
-                                        <x-text-input col="12" placeholder="Select a Category"
-                                            name="{{ $lang->code }}_category_id" type="select" label="Category"
-                                            required="*" language="{{ $lang->code }}" :dataInfo="$lang->categories"
-                                            value="{{ @$content->category_id }}" />
+                                    <x-text-input col="12" placeholder="Select a Category"
+                                        name="{{ $lang->code }}_category_id" type="select" label="Category"
+                                        required="*" language="{{ $lang->code }}" :dataInfo="$lang->categories"
+                                        value="{{ @$content->category_id }}" />
 
-                                        <x-text-input col="12" placeholder="Enter summary text"
-                                            name="{{ $lang->code }}_summary" type="textarea" label="Summary"
-                                            language="{{ $lang->code }}" value="{!! @$content->summary !!}" />
+                                    <x-text-input col="12" placeholder="Enter summary text"
+                                        name="{{ $lang->code }}_summary" type="textarea" label="Summary"
+                                        language="{{ $lang->code }}" value="{!! @$content->summary !!}" />
 
-                                        <x-text-input col="12" placeholder="Enter description"
-                                            name="{{ $lang->code }}_description" type="editor" label="Text"
-                                            required="*" language="{{ $lang->code }}"
-                                            value="{!! @$content->description !!}" />
+                                    <x-text-input col="12" placeholder="Enter description"
+                                        name="{{ $lang->code }}_description" type="editor" label="Text"
+                                        required="*" language="{{ $lang->code }}"
+                                        value="{!! @$content->description !!}" />
 
-                                        <x-text-input col="12" placeholder="Enter meta keyword"
-                                            name="{{ $lang->code }}_meta_keyword" type="tagsinput"
-                                            label="Meta Keyword" language="{{ $lang->code }}"
-                                            value="{{ @$content->meta_keyword }}" />
+                                    <x-text-input col="12" placeholder="Enter meta keyword"
+                                        name="{{ $lang->code }}_meta_keyword" type="tagsinput"
+                                        label="Meta Keyword" language="{{ $lang->code }}"
+                                        value="{{ @$content->meta_keyword }}" />
 
-                                        <x-text-input col="12" placeholder="Enter meta description"
-                                            name="{{ $lang->code }}_meta_description" type="textarea"
-                                            label="Meta Description" language="{{ $lang->code }}"
-                                            value="{!! @$content->meta_description !!}" />
-                                    </div>
-                                @endforeach
-                            </div>
+                                    <x-text-input col="12" placeholder="Enter meta description"
+                                        name="{{ $lang->code }}_meta_description" type="textarea"
+                                        label="Meta Description" language="{{ $lang->code }}"
+                                        value="{!! @$content->meta_description !!}" />
+                                </div>
+                            @endforeach
                         </div>
+                    </div>
 
-                        <div class="card-footer">
-                            <button class="btn btn-success" id="blogSubmit" type="button">{{ __('Update') }}</button>
-                        </div>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-success" id="blogSubmit" type="button">{{ __('Update') }}</button>
                     </div>
                 </form>
             </div>

@@ -1318,39 +1318,52 @@ div.dt-container .dt-paging .dt-paging-button {
 /**inpage create css**/
 .language-header {
     background-color: #5e72e4;
-    border-radius: 6px;
     color: #fff;
+    border: 1px solid #5e72e4;
+    padding: 10px 12px;
+}
+
+.language-header .form-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
 }
 
 .language-header .form-group label {
-    padding: 8px 16px;
+    padding: 6px 14px;
     cursor: pointer;
     background-color: #fff;
-    color: #5e72e4;
-    border-radius: 20px;
+    color: #2d3b8f;
+    border-radius: 999px;
     font-weight: 600;
-    transition: all 0.3s ease;
+    font-size: 14px;
+    border: 1px solid #fff;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
 }
 
 .language-content:not(.active) {
-    border-color: #5e72e4;
-    background-color: #f1f4ff;
+    border-color: #dbe3ff;
+    background-color: #f4f7ff;
 }
 
-
 .language-header .form-group label:hover {
-    background-color: #324cdd;
-    color: #fff;
+    background-color: #e7edff;
+    color: #2d3b8f;
+    border-color: #e7edff;
 }
 
 .language-header .form-group input[type="checkbox"] {
-    margin-right: 8px;
-    transform: scale(1.1);
-    accent-color: #324cdd;
+    margin: 0;
+    width: 14px;
+    height: 14px;
+    accent-color: #2d3b8f;
 }
 .language-content {
     border: 1px solid #dee2e6;
-    border-radius: 8px;
     padding: 20px;
     margin-bottom: 25px;
     background-color: #f9f9fb;

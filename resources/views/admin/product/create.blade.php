@@ -41,9 +41,7 @@
                     <ul></ul>
                 </div>
 
-                <div class="mb-4">
-                    <x-slider-image noteText="Recommended image size: 800x800" label="Gallery Images" />
-                </div>
+                <x-slider-image noteText="Recommended image size: 800x800" label="Gallery Images" />
 
                 <form id="blogForm" action="{{ route('admin.product.store') }}" method="post"
                     enctype="multipart/form-data">
@@ -52,131 +50,129 @@
                     <div class="row mb-4">
                         <div class="col-lg-9">
                             <div class="row g-3">
-                                        <div class="col-12">
-                                            <div id="sliders"></div>
+                                <div class="col-12">
+                                    <div id="sliders"></div>
+                                </div>
+
+                                @if (request()->type == 'physical')
+                                    <x-text-input col="6" placeholder="Enter stock" name="stock" type="text"
+                                        label="Stock" required="*" />
+                                @endif
+
+                                <x-text-input col="6" placeholder="Enter current price" name="current_price"
+                                    type="text" label="Current Price" required="*" />
+
+                                <x-text-input col="6" placeholder="Enter previous price" name="previous_price"
+                                    type="text" label="Previous Price" />
+
+                                <x-text-input col="6" placeholder="Enter product sku" name="sku" type="text"
+                                    label="SKU" required="*" />
+
+                                @php
+                                    $options = ['1' => 'Show', '0' => 'Hide'];
+                                @endphp
+                                <x-text-input col="6" placeholder="Select a Status" name="status"
+                                    type="custom-select" label="Status" required="*" :dataInfo="$options" />
+
+                                <x-text-input value="{{ ucfirst(request()->input('type')) }}" col="6" name="type"
+                                    type="text" label="Type" required="*" attribute="readonly" />
+
+                                {{-- File Type --}}
+                                @if (request()->type == 'digital')
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="">{{ __('Type') . ' **' }} </label>
+                                            <select class="form-select" id="fileType" name="file_type">
+                                                <option value="upload" selected>{{ __('File Upload') }}</option>
+                                                <option value="link">{{ __('File Download Link') }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div id="downloadFile" class="form-group">
+                                            <label for="">{{ __('Downloadable File') . ' **' }} </label>
+                                            <input type="file" class="form-control" id="customFile"
+                                                name="download_file" />
+                                            <p class="mb-0 text-warning">{{ __('Only zip file is allowed') }}</p>
                                         </div>
 
-                                        @if (request()->type == 'physical')
-                                            <x-text-input col="6" placeholder="Enter stock" name="stock" type="text"
-                                                label="Stock" required="*" />
-                                        @endif
+                                        <div id="downloadLink" class="form-group d-none">
+                                            <label>{{ __('Downloadable Link') . ' **' }} </label>
+                                            <input name="download_link" type="text" value="" class="form-control">
+                                            <p id="errdownload_link" class="mb-0 text-danger em"></p>
+                                        </div>
+                                    </div>
+                                @endif
 
-                                        <x-text-input col="6" placeholder="Enter current price" name="current_price"
-                                            type="text" label="Current Price" required="*" />
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="cursor-pointer">
+                                                <input type="checkbox" id="has_variants" name="has_variants"
+                                                    value="1">
+                                                {{ __('Has Variants') }}
+                                            </label>
+                                        </div>
+                                        <small class="text-muted">
+                                            {{ __('If enabled, stock/price will be handled per-variant.') }}
+                                        </small>
+                                    </div>
+                                </div>
 
-                                        <x-text-input col="6" placeholder="Enter previous price" name="previous_price"
-                                            type="text" label="Previous Price" />
+                                <div class="col-12 d-none border" id="variationsWrap">
+                                    <div class="col-lg-12">
+                                        <div class="form-group d-flex justify-content-between align-item-center">
+                                            <h6 class="pb-1">{{ __('Variations') }}</h6>
+                                            <button type="button" class="btn btn-sm btn-primary float-left"
+                                                id="addOptionBtn">
+                                                + {{ __('Add Option') }}
+                                            </button>
+                                        </div>
+                                    </div>
 
-                                        <x-text-input col="6" placeholder="Enter product sku" name="sku" type="text"
-                                            label="SKU" required="*" />
+                                    {{-- Options list --}}
+                                    <div id="optionsList"></div>
 
-                                        @php
-                                            $options = ['1' => 'Show', '0' => 'Hide'];
-                                        @endphp
-                                        <x-text-input col="6" placeholder="Select a Status" name="status"
-                                            type="custom-select" label="Status" required="*" :dataInfo="$options" />
-
-                                        <x-text-input value="{{ ucfirst(request()->input('type')) }}" col="6" name="type"
-                                            type="text" label="Type" required="*" attribute="readonly" />
-
-                                        {{-- File Type --}}
-                                        @if (request()->type == 'digital')
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label for="">{{ __('Type') . ' **' }} </label>
-                                                    <select class="form-select" id="fileType" name="file_type">
-                                                        <option value="upload" selected>{{ __('File Upload') }}</option>
-                                                        <option value="link">{{ __('File Download Link') }}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-6">
-                                                <div id="downloadFile" class="form-group">
-                                                    <label for="">{{ __('Downloadable File') . ' **' }} </label>
-                                                    <input type="file" class="form-control" id="customFile"
-                                                        name="download_file" />
-                                                    <p class="mb-0 text-warning">{{ __('Only zip file is allowed') }}</p>
-                                                </div>
-
-                                                <div id="downloadLink" class="form-group d-none">
-                                                    <label>{{ __('Downloadable Link') . ' **' }} </label>
-                                                    <input name="download_link" type="text" value=""
-                                                        class="form-control">
-                                                    <p id="errdownload_link" class="mb-0 text-danger em"></p>
-                                                </div>
-                                            </div>
-                                        @endif
-
-                                        {{-- HAS VARIANTS TOGGLE --}}
-                                        <div class="col-12">
-                                            <div class="form-group mt-2">
-                                                <label class="mb-1">{{ __('Has Variants?') }}</label>
-                                                <div>
-                                                    <label class="cursor-pointer">
-                                                        <input type="checkbox" id="has_variants" name="has_variants"
-                                                            value="1">
-                                                        {{ __('This product has variants') }}
-                                                    </label>
-                                                </div>
-                                                <small class="text-muted">
-                                                    {{ __('If enabled, stock/price will be handled per-variant.') }}
-                                                </small>
+                                    <!-- generate button -->
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <div class="d-flex gap-2 flex-wrap">
+                                                <button type="button" class="btn btn-outline-primary"
+                                                    id="generateVariantsBtn">
+                                                    {{ __('Generate Variants') }}
+                                                </button>
+                                                <button type="button" class="btn btn-outline-danger d-none"
+                                                    id="clearVariantsBtn">
+                                                    {{ __('Clear Variants') }}
+                                                </button>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        {{-- VARIATIONS UI --}}
-                                        <div class="col-12 d-none" id="variationsWrap">
-                                            <div class="card mt-3">
-                                                <div class="card-header d-flex justify-content-between align-items-center">
-                                                    <h6 class="mb-0">{{ __('Variations') }}</h6>
-                                                    <button type="button" class="btn btn-sm btn-primary"
-                                                        id="addOptionBtn">
-                                                        + {{ __('Add Option') }}
-                                                    </button>
-                                                </div>
+                                    {{-- Variants grid --}}
+                                    <div class="mt-2 d-none" id="variantsGridWrap">
 
-                                                <div class="card-body">
-                                                    {{-- Options list --}}
-                                                    <div id="optionsList"></div>
-
-                                                    <div class="mt-3 d-flex gap-2 flex-wrap">
-                                                        <button type="button" class="btn btn-outline-primary"
-                                                            id="generateVariantsBtn">
-                                                            {{ __('Generate Variants') }}
-                                                        </button>
-                                                        <button type="button" class="btn btn-outline-danger d-none"
-                                                            id="clearVariantsBtn">
-                                                            {{ __('Clear Variants') }}
-                                                        </button>
-                                                    </div>
-
-                                                    {{-- Variants grid --}}
-                                                    <div class="mt-4 d-none" id="variantsGridWrap">
-                                                        <h6 class="mb-2">{{ __('Variants') }}</h6>
-
-                                                        <div class="table-responsive">
-                                                            <table class="table table-bordered">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th style="min-width: 220px">{{ __('Variant') }}</th>
-                                                                        <th style="min-width: 160px">{{ __('SKU') }}</th>
-                                                                        <th style="min-width: 120px">{{ __('Price') }}</th>
-                                                                        <th style="min-width: 120px">{{ __('Stock') }}</th>
-                                                                        <th style="min-width: 120px">{{ __('Status') }}</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody id="variantsTbody"></tbody>
-                                                            </table>
-                                                        </div>
-
-                                                        {{-- Hidden inputs will be appended here --}}
-                                                        <div id="variantsHiddenInputs"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="min-width: 220px">{{ __('Variant') }}</th>
+                                                        <th style="min-width: 160px">{{ __('SKU') }}</th>
+                                                        <th style="min-width: 120px">{{ __('Price') }}</th>
+                                                        <th style="min-width: 120px">{{ __('Stock') }}</th>
+                                                        <th style="min-width: 120px">{{ __('Status') }}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="variantsTbody"></tbody>
+                                            </table>
                                         </div>
-                                        {{-- END VARIATIONS UI --}}
+
+                                        <!-- Hidden inputs will be appended here-->
+                                        <div id="variantsHiddenInputs"></div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
 
@@ -197,51 +193,44 @@
                         </div>
                     </div>
 
-                    <div class="card border-0 shadow-sm language-card">
-                        <div class="card-body">
-                            <div class="row language-div">
-                                @include('admin.include.languages')
+                    <div class="form-group language-card">
+                        <div class="row language-div">
+                            @include('admin.include.languages')
 
-                                @foreach ($languages as $lang)
-                                    @php
-                                        $code = $lang->code;
-                                        $blogInfo = App\Models\BlogContent::where([['language_id', $lang->id]])->first();
-                                    @endphp
+                            @foreach ($languages as $lang)
+                                @php
+                                    $code = $lang->code;
+                                    $blogInfo = App\Models\BlogContent::where([['language_id', $lang->id]])->first();
+                                @endphp
 
-                                    <div class="row language-content {{ $lang->id == $defaultLang->id ? '' : 'd-none' }}"
-                                        id="language_{{ $lang->id }}">
+                                <div class="language-content {{ $lang->id == $defaultLang->id ? '' : 'd-none' }}"
+                                    id="language_{{ $lang->id }}">
 
-                                        <x-text-input col="12" placeholder="Enter product title"
-                                            name="{{ $lang->code }}_title" type="text" label="Title" required="*"
-                                            language="{{ $lang->code }}" />
+                                    <x-text-input col="12" placeholder="Enter product title"
+                                        name="{{ $lang->code }}_title" type="text" label="Title" required="*"
+                                        language="{{ $lang->code }}" />
 
-                                        <x-text-input col="12" placeholder="Select a Category"
-                                            name="{{ $lang->code }}_category_id" type="select" label="Category"
-                                            required="*" language="{{ $lang->code }}"
-                                            :dataInfo="$lang->categories" />
+                                    <x-text-input col="12" placeholder="Select a Category"
+                                        name="{{ $lang->code }}_category_id" type="select" label="Category"
+                                        required="*" language="{{ $lang->code }}" :dataInfo="$lang->categories" />
 
-                                        <x-text-input col="12" placeholder="Enter summary text"
-                                            name="{{ $lang->code }}_summary" type="textarea" label="Summary"
-                                            language="{{ $lang->code }}" />
+                                    <x-text-input col="12" placeholder="Enter summary text"
+                                        name="{{ $lang->code }}_summary" type="textarea" label="Summary"
+                                        language="{{ $lang->code }}" />
 
-                                        <x-text-input col="12" placeholder="Enter description"
-                                            name="{{ $lang->code }}_description" type="editor" label="Text"
-                                            required="*" language="{{ $lang->code }}" />
+                                    <x-text-input col="12" placeholder="Enter description"
+                                        name="{{ $lang->code }}_description" type="editor" label="Text"
+                                        required="*" language="{{ $lang->code }}" />
 
-                                        <x-text-input col="12" placeholder="Enter meta keyword"
-                                            name="{{ $lang->code }}_meta_keyword" type="tagsinput"
-                                            label="Meta Keyword" language="{{ $lang->code }}" />
+                                    <x-text-input col="12" placeholder="Enter meta keyword"
+                                        name="{{ $lang->code }}_meta_keyword" type="tagsinput" label="Meta Keyword"
+                                        language="{{ $lang->code }}" />
 
-                                        <x-text-input col="12" placeholder="Enter meta description"
-                                            name="{{ $lang->code }}_meta_description" type="textarea"
-                                            label="Meta Description" language="{{ $lang->code }}" />
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        <div class="card-footer">
-                            <button class="btn btn-success" id="blogSubmit" type="button">Submit</button>
+                                    <x-text-input col="12" placeholder="Enter meta description"
+                                        name="{{ $lang->code }}_meta_description" type="textarea"
+                                        label="Meta Description" language="{{ $lang->code }}" />
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 </form>
@@ -271,7 +260,9 @@
                 const res = [];
                 acc.forEach(a => curr.forEach(b => res.push(a.concat([b]))));
                 return res;
-            }, [[]]);
+            }, [
+                []
+            ]);
         }
 
         // ---- Elements ----
