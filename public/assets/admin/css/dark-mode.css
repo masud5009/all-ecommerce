@@ -1,7 +1,9 @@
 :root {
     --border-color: 1px solid rgba(181, 181, 181, .1) !important;
-    --background-color: #001e42;
-    --card-color: #183153;
+    /* --background-color: #001e42; */
+    --background-color: #1e2936;
+    /* --card-color: #183153; */
+    --card-color: #222f3e;
     --white-color: #fff;
 }
 
@@ -141,7 +143,7 @@ body[data-background-color="dark"] .form-select,
 body[data-background-color="dark"] .select2 {
     background-color: var(--background-color);
     color: var(--white-color);
-    border: 1px solid #2c4260;
+    border: 1px solid #2f3e52;
 }
 
 body[data-background-color="dark"] select {
@@ -180,6 +182,13 @@ body[data-background-color="dark"] .card.shadow .bulk-delete-div button {
 
 body[data-background-color="dark"] .bootstrap-tagsinput {
     background-color: var(--background-color) !important;
+    border: 1px solid #2f3e52;
+}
+body[data-background-color="dark"] .tox-tinymce{
+   border: 1px solid #2f3e52 !important; 
+}
+body[data-background-color="dark"]  ::placeholder {
+  color: rgba(255, 255, 255, 0.45);
 }
 
 body[data-background-color="dark"] .dropzone {

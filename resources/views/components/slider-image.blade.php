@@ -1,5 +1,15 @@
 <div class="form-group">
-    <label for="" class="mb-2">{{ __($label) }} *</label>
+    <label for="" class="mb-2">{{ __($label) }} <span class="text-danger">**</span></label>
+    <form id="my-dropzone" enctype="multipart/form-data" class="dropzone create">
+        @csrf
+        <div class="dz-message d-flex flex-column align-items-center">
+            <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+            <span>{{ __('Drag & Drop your files here or click to upload') }}</span>
+        </div>
+    </form>
+    <p class="text-warning mb-0">
+        {{ __($noteText) }}
+    </p>
 
     @if (!is_null($sliders))
         <div class="col-12">
@@ -20,17 +30,5 @@
             </table>
         </div>
     @endif
-
-
-    <form id="my-dropzone" enctype="multipart/form-data" class="dropzone create">
-        @csrf
-        <div class="dz-message d-flex flex-column align-items-center">
-            <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
-            <span>{{ __('Drag & Drop your files here or click to upload') }}</span>
-        </div>
-    </form>
-    <p class="text-warning">
-        {{ __($noteText) }}
-    </p>
 
 </div>

@@ -83,7 +83,7 @@
                                                     @csrf
                                                     <input type="hidden" value="{{ $category->id }}" name="category_id">
                                                     <button class="btn btn-sm deleteBtn delete-button" type="button">
-                                                        <span class="fas fa-trash"></span>
+                                                        <span class="fas fa-trash"></span> 
                                                     </button>
                                                 </form>
                                             </td>

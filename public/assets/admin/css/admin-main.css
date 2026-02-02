@@ -2,6 +2,27 @@
     color: #183153;
 }
 
+.form-control {
+    padding: .5rem .75rem !important;
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+    background-color: #19232f !important;
+    color: rgba(255, 255, 255, 0.35) !important;
+    border-color: rgba(255, 255, 255, 0.04) !important;
+    cursor: not-allowed !important;
+}
+
+input[readonly],
+textarea[readonly] {
+    background-color: #202c3a !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    cursor: default !important;
+}
+
 .text-success {
     color: #71dd37 !important;
 }
@@ -84,10 +105,12 @@ table.dataTable>thead>tr>td {
     height: 70px;
     padding: 10px 0px;
 }
-.slider-images img.thumb-preview{
-     width: 200px !important;
+
+.slider-images img.thumb-preview {
+    width: 200px !important;
     height: 200px !important;
 }
+
 .table>tbody {
     vertical-align: middle;
 }
@@ -118,14 +141,14 @@ table.dataTable td.dt-type-date {
     position: absolute;
     top: 0px;
     right: 0px;
-    color: #ff3737;
-    background: #fff;
-    border-radius: 50%;
+    color: #fff;
+    background: #ff3737;
+    top: 10px;
     border: none;
-    font-size: 15px;
+    font-size: 17px;
     cursor: pointer;
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     justify-content: center;
     display: flex;
     align-items: center;
@@ -169,14 +192,17 @@ div.dt-container.dt-empty-footer tbody>tr:last-child>* {
 
 .form-group label {
     margin-bottom: 8px;
+    font-weight: 500;
 }
 
 .form-select {
     cursor: pointer;
 }
-select.status-select{
+
+select.status-select {
     max-width: 120px !important;
 }
+
 .form-select:focus {
     outline: none;
     box-shadow: none;
@@ -923,22 +949,6 @@ div.dt-container .dt-paging .dt-paging-button {
     margin-right: 8px;
 }
 
-.language-header .form-group {
-    background-color: #5e72e4;
-    color: #fff;
-}
-
-.language-header .form-group label {
-    padding: 0 15px;
-    cursor: pointer;
-    margin: 0 !important;
-    font-weight: 600 !important;
-}
-
-.language-header .form-group input {
-    margin: 10px !important;
-}
-
 .website-settings {
     padding: 0 15px;
     font-size: 22px;
@@ -1040,7 +1050,7 @@ div.dt-container .dt-paging .dt-paging-button {
 /*dropzone css */
 .dropzone {
     border: dotted 2px #ced4da;
-    min-height: 250px !important;
+    min-height: 180px !important;
 }
 
 #my-dropzone {
@@ -1316,18 +1326,12 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 /**inpage create css**/
-.language-header {
-    background-color: #5e72e4;
-    color: #fff;
-    border: 1px solid #5e72e4;
-    padding: 10px 12px;
-}
 
 .language-header .form-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 0;
+    gap: 8px !important;
+    margin: 0 !important;
+    background-color: #5e72e4 !important;
+    color: #fff !important;
 }
 
 .language-header .form-group label {
@@ -1343,6 +1347,10 @@ div.dt-container .dt-paging .dt-paging-button {
     align-items: center;
     gap: 6px;
     transition: all 0.2s ease;
+}
+
+.language-header .form-group input {
+    margin: 10px !important;
 }
 
 .language-content:not(.active) {
@@ -1362,6 +1370,7 @@ div.dt-container .dt-paging .dt-paging-button {
     height: 14px;
     accent-color: #2d3b8f;
 }
+
 .language-content {
     border: 1px solid #dee2e6;
     padding: 20px;

@@ -41,45 +41,60 @@
                     <ul></ul>
                 </div>
 
-                <x-slider-image noteText="Recommended image size: 800x800" label="Gallery Images" />
+                <div class="row">
+                    <div class="col-10">
+                        <x-slider-image noteText="Recommended image size: 800x800" label="Gallery Images" />
+                    </div>
+                    <!-- featured image -->
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="">{{ __('Thumbnail Image') }} <span class="text-danger">**</span></label>
+                            <br>
+                            <div class="thumb-preview mb-3">
+                                <img src="{{ asset('assets/admin/noimage.jpg') }}" alt="..." class="uploaded-img">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
 
                 <form id="blogForm" action="{{ route('admin.product.store') }}" method="post"
                     enctype="multipart/form-data">
                     @csrf
-
+                    <input type="file" class="img-input" name="thumbnail" id="thumbnailInput">
                     <div class="row mb-4">
-                        <div class="col-lg-9">
+                        <div class="col-lg-12">
                             <div class="row g-3">
                                 <div class="col-12">
                                     <div id="sliders"></div>
                                 </div>
 
                                 @if (request()->type == 'physical')
-                                    <x-text-input col="6" placeholder="Enter stock" name="stock" type="text"
-                                        label="Stock" required="*" />
+                                    <x-text-input col="4" placeholder="Enter stock" name="stock" type="text"
+                                        label="Stock" required="**" />
                                 @endif
 
-                                <x-text-input col="6" placeholder="Enter current price" name="current_price"
-                                    type="text" label="Current Price" required="*" />
+                                <x-text-input col="4" placeholder="Enter current price" name="current_price"
+                                    type="text" label="Current Price" required="**" />
 
-                                <x-text-input col="6" placeholder="Enter previous price" name="previous_price"
+                                <x-text-input col="4" placeholder="Enter previous price" name="previous_price"
                                     type="text" label="Previous Price" />
 
-                                <x-text-input col="6" placeholder="Enter product sku" name="sku" type="text"
-                                    label="SKU" required="*" />
+                                <x-text-input col="4" placeholder="Enter product sku" name="sku" type="text"
+                                    label="SKU" required="**" />
 
                                 @php
                                     $options = ['1' => 'Show', '0' => 'Hide'];
                                 @endphp
-                                <x-text-input col="6" placeholder="Select a Status" name="status"
-                                    type="custom-select" label="Status" required="*" :dataInfo="$options" />
+                                <x-text-input col="4" placeholder="Select a Status" name="status"
+                                    type="custom-select" label="Status" required="**" :dataInfo="$options" />
 
-                                <x-text-input value="{{ ucfirst(request()->input('type')) }}" col="6" name="type"
-                                    type="text" label="Type" required="*" attribute="readonly" />
+                                <x-text-input value="{{ ucfirst(request()->input('type')) }}" col="4" name="type"
+                                    type="text" label="Type" required="**" attribute="readonly" />
 
                                 {{-- File Type --}}
                                 @if (request()->type == 'digital')
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="">{{ __('Type') . ' **' }} </label>
                                             <select class="form-select" id="fileType" name="file_type">
@@ -89,7 +104,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-4">
                                         <div id="downloadFile" class="form-group">
                                             <label for="">{{ __('Downloadable File') . ' **' }} </label>
                                             <input type="file" class="form-control" id="customFile"
@@ -99,7 +114,8 @@
 
                                         <div id="downloadLink" class="form-group d-none">
                                             <label>{{ __('Downloadable Link') . ' **' }} </label>
-                                            <input name="download_link" type="text" value="" class="form-control">
+                                            <input name="download_link" type="text" value=""
+                                                class="form-control">
                                             <p id="errdownload_link" class="mb-0 text-danger em"></p>
                                         </div>
                                     </div>
@@ -126,7 +142,7 @@
                                             <h6 class="pb-1">{{ __('Variations') }}</h6>
                                             <button type="button" class="btn btn-sm btn-primary float-left"
                                                 id="addOptionBtn">
-                                                + {{ __('Add Option') }}
+                                                <i class="fas fa-plus"></i> {{ __('Add Option') }}
                                             </button>
                                         </div>
                                     </div>
@@ -176,7 +192,7 @@
                             </div>
                         </div>
 
-                        <!-- featured image -->
+                        {{-- <!-- featured image -->
                         <div class="col-lg-3">
                             <div class="card upload-card h-100">
                                 <div class="card-body">
@@ -190,10 +206,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
-                    <div class="form-group language-card">
+                    <div class="language-card">
                         <div class="row language-div">
                             @include('admin.include.languages')
 
@@ -207,23 +223,23 @@
                                     id="language_{{ $lang->id }}">
 
                                     <x-text-input col="12" placeholder="Enter product title"
-                                        name="{{ $lang->code }}_title" type="text" label="Title" required="*"
+                                        name="{{ $lang->code }}_title" type="text" label="Title" required="**"
                                         language="{{ $lang->code }}" />
 
                                     <x-text-input col="12" placeholder="Select a Category"
                                         name="{{ $lang->code }}_category_id" type="select" label="Category"
-                                        required="*" language="{{ $lang->code }}" :dataInfo="$lang->categories" />
+                                        required="**" language="{{ $lang->code }}" :dataInfo="$lang->categories" />
 
                                     <x-text-input col="12" placeholder="Enter summary text"
                                         name="{{ $lang->code }}_summary" type="textarea" label="Summary"
                                         language="{{ $lang->code }}" />
 
                                     <x-text-input col="12" placeholder="Enter description"
-                                        name="{{ $lang->code }}_description" type="editor" label="Text"
-                                        required="*" language="{{ $lang->code }}" />
+                                        name="{{ $lang->code }}_description" type="editor" label="Description"
+                                        required="**" language="{{ $lang->code }}" />
 
-                                    <x-text-input col="12" placeholder="Enter meta keyword"
-                                        name="{{ $lang->code }}_meta_keyword" type="tagsinput" label="Meta Keyword"
+                                    <x-text-input col="12" placeholder="Enter meta keywords"
+                                        name="{{ $lang->code }}_meta_keyword" type="tagsinput" label="Meta Keywords"
                                         language="{{ $lang->code }}" />
 
                                     <x-text-input col="12" placeholder="Enter meta description"

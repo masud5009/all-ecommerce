@@ -41,7 +41,24 @@
                     <ul></ul>
                 </div>
 
-                <x-slider-image noteText="Recommended image size: 800x800" label="Gallery Images" :sliders="$product->sliderImage" />
+                <div class="row">
+                    <div class="col-10">
+                        <x-slider-image noteText="Recommended image size: 800x800" label="Gallery Images"
+                            :sliders="$product->sliderImage" />
+                    </div>
+
+                    <!-- featured image -->
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="">{{ __('Thumbnail Image') }} <span class="text-danger">**</span></label>
+                            <br>
+                            <div class="thumb-preview mb-3">
+                                <img src="{{ $product->thumbnail ? asset('assets/img/product/' . $product->thumbnail) : asset('assets/admin/noimage.jpg') }}"
+                                    alt="..." class="uploaded-img">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <form id="blogForm" action="{{ route('admin.product.update', ['id' => $product->id]) }}" method="post"
                     enctype="multipart/form-data">
@@ -50,36 +67,35 @@
                         $productType = strtolower((string) $product->type);
                         $displayType = $productType ? ucfirst($productType) : $product->type;
                     @endphp
-
+                    <input type="file" class="img-input" name="thumbnail" id="thumbnailInput">
                     <div class="row mb-4">
-                        <div class="col-lg-9">
+                        <div class="col-lg-12">
                             <div class="row g-3">
-                                <div class="col-12">
-                                    <div id="sliders"></div>
-                                </div>
+                                <div id="sliders"></div>
+
 
                                 @if ($productType === 'physical')
-                                    <x-text-input col="6" placeholder="Enter stock" name="stock" type="text"
+                                    <x-text-input col="4" placeholder="Enter stock" name="stock" type="text"
                                         label="Stock" required="*" value="{{ $product->stock }}" />
                                 @endif
 
-                                <x-text-input col="6" placeholder="Enter current price" name="current_price"
+                                <x-text-input col="4" placeholder="Enter current price" name="current_price"
                                     type="text" label="Current Price" required="*"
                                     value="{{ $product->current_price }}" />
-                                <x-text-input col="6" placeholder="Enter previous price" name="previous_price"
+                                <x-text-input col="4" placeholder="Enter previous price" name="previous_price"
                                     type="text" label="Previous Price" value="{{ $product->previous_price }}" />
 
-                                <x-text-input col="6" placeholder="Enter product sku" name="sku" type="text"
+                                <x-text-input col="4" placeholder="Enter product sku" name="sku" type="text"
                                     label="SKU" required="*" value="{{ $product->sku }}" />
 
                                 @php
                                     $options = ['1' => 'Show', '0' => 'Hide'];
                                 @endphp
-                                <x-text-input col="6" placeholder="Select a Status" name="status"
+                                <x-text-input col="4" placeholder="Select a Status" name="status"
                                     type="custom-select" label="Status" required="*" :dataInfo="$options"
                                     value="{{ $product->status }}" />
 
-                                <x-text-input col="6" name="type" type="text" label="Type" required="*"
+                                <x-text-input col="4" name="type" type="text" label="Type" required="*"
                                     attribute="readonly" value="{{ $displayType }}" />
 
                                 {{-- File Type --}}
@@ -189,22 +205,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- featured image -->
-                        <div class="col-lg-3">
-                            <div class="card upload-card h-100">
-                                <div class="card-body">
-                                    <div class="form-group text-center">
-                                        <label class="d-block mb-2">{{ __('Thumbnail') }}*</label>
-                                        <div class="thumb-preview mb-3">
-                                            <img src="{{ $product->thumbnail ? asset('assets/img/product/' . $product->thumbnail) : asset('assets/admin/noimage.jpg') }}"
-                                                alt="..." class="uploaded-img">
-                                        </div>
-                                        <input type="file" class="img-input" name="thumbnail" id="thumbnailInput">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="form-group language-card">
@@ -220,9 +220,8 @@
                                     id="language_{{ $lang->id }}">
 
                                     <x-text-input col="12" placeholder="Enter product title"
-                                        name="{{ $lang->code }}_title" type="text" label="Title"
-                                        required="*" language="{{ $lang->code }}"
-                                        value="{{ @$content->title }}" />
+                                        name="{{ $lang->code }}_title" type="text" label="Title" required="*"
+                                        language="{{ $lang->code }}" value="{{ @$content->title }}" />
 
                                     <x-text-input col="12" placeholder="Select a Category"
                                         name="{{ $lang->code }}_category_id" type="select" label="Category"
@@ -234,14 +233,12 @@
                                         language="{{ $lang->code }}" value="{!! @$content->summary !!}" />
 
                                     <x-text-input col="12" placeholder="Enter description"
-                                        name="{{ $lang->code }}_description" type="editor" label="Text"
-                                        required="*" language="{{ $lang->code }}"
-                                        value="{!! @$content->description !!}" />
+                                        name="{{ $lang->code }}_description" type="editor" label="Description"
+                                        required="*" language="{{ $lang->code }}" value="{!! @$content->description !!}" />
 
-                                    <x-text-input col="12" placeholder="Enter meta keyword"
-                                        name="{{ $lang->code }}_meta_keyword" type="tagsinput"
-                                        label="Meta Keyword" language="{{ $lang->code }}"
-                                        value="{{ @$content->meta_keyword }}" />
+                                    <x-text-input col="12" placeholder="Enter meta keywords"
+                                        name="{{ $lang->code }}_meta_keyword" type="tagsinput" label="Meta Keywords"
+                                        language="{{ $lang->code }}" value="{{ @$content->meta_keyword }}" />
 
                                     <x-text-input col="12" placeholder="Enter meta description"
                                         name="{{ $lang->code }}_meta_description" type="textarea"
@@ -264,8 +261,7 @@
     <div id="productPageConfig" data-upload-slider-image="{{ route('admin.product.slider') }}"
         data-rmv-slider-image="{{ route('admin.product.slider-remove') }}"
         data-rmv-db-slider-image="{{ route('admin.product.db-slider-remove') }}"
-        data-existing-options='@json($variantOptions ?? [])'
-        data-existing-variants='@json($variantsData ?? [])'></div>
+        data-existing-options='@json($variantOptions ?? [])' data-existing-variants='@json($variantsData ?? [])'></div>
     <script src="{{ asset('assets/admin/js/product.js') }}"></script>
     <script src="{{ asset('assets/admin/js/dropzone-slider.js') }}"></script>
     <script src="{{ asset('assets/admin/js/blog.js') }}"></script>

@@ -1,4 +1,4 @@
-<div class="language-header mt-3">
+<div class="language-header">
     <div class="form-group">
         @foreach ($languages as $lang)
             <label>

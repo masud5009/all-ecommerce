@@ -69,15 +69,18 @@
 
     function toggleBaseFields(disabled) {
         if (stockInput) stockInput.disabled = disabled;
+
         if (priceInput) {
-            priceInput.readOnly = disabled;
+            priceInput.disabled = disabled;
             priceInput.classList.toggle('bg-light', disabled);
         }
+
         if (skuInput) {
-            skuInput.readOnly = disabled;
+            skuInput.disabled = disabled;
             skuInput.classList.toggle('bg-light', disabled);
         }
     }
+
 
     function resetVariations() {
         optionsList.innerHTML = '';
@@ -100,7 +103,7 @@
         wrapper.dataset.index = optionIndex;
 
         wrapper.innerHTML = `
-            <div class="col-lg-4">
+            <div class="col-lg-5">
                 <div class="form-group">
                     <label>Option Name</label>
                     <input type="text" class="form-control"
@@ -109,7 +112,7 @@
                     <small class="text-muted d-block invisible">Spacer</small>
                 </div>
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-7">
                 <div class="form-group">
                     <label>Values</label>
                     <div class="input-group w-100">
