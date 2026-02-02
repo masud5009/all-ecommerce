@@ -184,6 +184,11 @@
 
                     <ul class="nav nav-group-sub" data-submenu-title="{{ __('Product Management') }}">
                         <li class="nav-item">
+                            <a href="{{ route('admin.product.settings') }}"
+                                class="nav-link {{ request()->routeIs('admin.product.settings') ? 'active' : '' }}">
+                                {{ __('Settings') }}</a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('admin.product.category', ['language' => $defaultLang->code]) }}"
                                 class="nav-link {{ request()->routeIs('admin.product.category') ? 'active' : '' }}">
                                 {{ __('Categories') }}</a>

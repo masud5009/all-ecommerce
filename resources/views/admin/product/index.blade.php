@@ -30,20 +30,39 @@
                                 data-href="{{ route('admin.product.bulk_delete') }}">
                                 <i class="fas fa-trash"></i> {{ __('Delete') }}
                             </button>
-                            <div class="dropdown">
-                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="productType"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-plus"></i> {{ __('Add Proudct') }}
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="productType">
-                                    <a class="dropdown-item"
-                                        href="{{ route('admin.product.create', ['type' => 'digital']) }}">
-                                        {{ __('Digital Product') }}</a>
-                                    <a class="dropdown-item"
-                                        href="{{ route('admin.product.create', ['type' => 'physical']) }}">
-                                        {{ __('Physical Product') }}</a>
+
+                            @if ($product_setting->physical_product == 1 && $product_setting->digital_product == 1)
+                                <!-- Both enabled: show dropdown -->
+                                <div class="dropdown">
+                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="productType"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-plus"></i> {{ __('Add Product') }}
+                                    </button>
+
+                                    <div class="dropdown-menu" aria-labelledby="productType">
+                                        <a class="dropdown-item"
+                                            href="{{ route('admin.product.create', ['type' => 'physical']) }}">
+                                            {{ __('Physical Product') }}
+                                        </a>
+                                        <a class="dropdown-item"
+                                            href="{{ route('admin.product.create', ['type' => 'digital']) }}">
+                                            {{ __('Digital Product') }}
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
+                            @elseif ($product_setting->physical_product == 1 || $product_setting->digital_product == 1)
+                                <!-- Only one enabled: direct button -->
+                                <a href="{{ route('admin.product.create', [
+                                    'type' => $product_setting->physical_product == 1 ? 'physical' : 'digital',
+                                ]) }}"
+                                    class="btn btn-primary btn-sm">
+                                    <i class="fas fa-plus"></i> {{ __('Add Product') }}
+                                </a>
+                            @else
+                                <!-- Both disabled: no button -->
+                            @endif
+
+
                         </div>
                     </div>
                 </div>
@@ -106,7 +125,8 @@
                                                     <form class="deleteForm d-inline-block"
                                                         action="{{ route('admin.product.delete') }}" method="post">
                                                         @csrf
-                                                        <input type="hidden" value="{{ $product->id }}" name="product_id">
+                                                        <input type="hidden" value="{{ $product->id }}"
+                                                            name="product_id">
                                                         <button class="btn btn-sm deleteBtn delete-button" type="button">
                                                             <span class="fas fa-trash"></span>
                                                         </button>

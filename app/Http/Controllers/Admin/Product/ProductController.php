@@ -2,24 +2,23 @@
 
 namespace App\Http\Controllers\Admin\Product;
 
-use App\Http\Controllers\Controller;
-use App\Http\Helpers\ImageUpload;
-use App\Http\Requests\Product\UpdateRequest;
-use App\Http\Requests\Product\StoreRequest;
-use App\Models\Admin\Language;
 use App\Models\Product;
-use App\Models\ProductCategory;
-use App\Models\ProductContent;
 use App\Models\SliderImage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
-
-// ✅ Variations models (ensure these exist)
 use App\Models\ProductOption;
-use App\Models\ProductOptionValue;
+use App\Models\Admin\Language;
+use App\Models\ProductContent;
+use App\Models\ProductSetting;
 use App\Models\ProductVariant;
+use App\Models\ProductCategory;
+use App\Http\Helpers\ImageUpload;
+use App\Models\ProductOptionValue;
+use Illuminate\Support\Facades\DB;
 use App\Models\ProductVariantValue;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
+use App\Http\Requests\Product\StoreRequest;
+use App\Http\Requests\Product\UpdateRequest;
 
 class ProductController extends Controller
 {
@@ -35,12 +34,27 @@ class ProductController extends Controller
             ->orderBy('products.created_at', 'desc')
             ->get();
 
+        $data['product_setting'] = ProductSetting::first();
+
         return view('admin.product.index', $data);
     }
 
     public function create(Request $request)
     {
         $default_language = app('defaultLang');
+
+        $productSetting = ProductSetting::first();
+        $type = request('type');
+
+        /* both disabled */
+        if (!$productSetting->physical_product && !$productSetting->digital_product) {
+            return redirect()->back();
+        }
+
+        /* type-wise restriction */
+        if (($type === 'physical' && !$productSetting->physical_product) || ($type === 'digital' && !$productSetting->digital_product)) {
+            return redirect()->back();
+        }
 
         // UI sends 'physical'/'digital' lowercase
         if ($request->type != 'physical' && $request->type != 'digital') {

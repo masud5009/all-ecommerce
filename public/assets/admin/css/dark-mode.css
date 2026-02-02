@@ -179,7 +179,7 @@ body[data-background-color="dark"] .card.shadow .bulk-delete-div button {
 }
 
 body[data-background-color="dark"] .bootstrap-tagsinput {
-    background-color: var(--white-color) !important;
+    background-color: var(--background-color) !important;
 }
 
 body[data-background-color="dark"] .dropzone {
@@ -219,12 +219,13 @@ body[data-background-color="dark"] .select2-container--default .select2-selectio
 body[data-background-color="dark"] .select2-container--default .select2-selection--single .select2-selection__rendered {
     color: #fff !important;
 }
-body[data-background-color="dark"] .checkout-btn-div{
+
+body[data-background-color="dark"] .checkout-btn-div {
     background-color: var(--background-color) !important;
 }
-body[data-background-color="dark"] .product-wraper small
-{
-    color:#fff;
+
+body[data-background-color="dark"] .product-wraper small {
+    color: #fff;
 }
 
 body[data-background-color="dark"] #minorchangeModal .offcanvas-header {
@@ -232,20 +233,32 @@ body[data-background-color="dark"] #minorchangeModal .offcanvas-header {
     color: #fff;
     box-shadow: 0 0 2px #183153;
 }
-body[data-background-color="dark"] .card .bulk-delete-div{
+
+body[data-background-color="dark"] .card .bulk-delete-div {
     background-color: var(--background-color);
     box-shadow: unset;
 }
-body[data-background-color="dark"] .card .bulk-delete-div button{
+
+body[data-background-color="dark"] .card .bulk-delete-div button {
     color: #fff;
 }
+
 body[data-background-color="dark"] .menu-item {
     background: #001e42;
     color: #fff;
     border: var(--border-color);
 }
-body[data-background-color="dark"] #staticMenuList .list-group-item{
+
+body[data-background-color="dark"] #staticMenuList .list-group-item {
     background: #001e42;
     color: #fff;
     border: var(--border-color);
+}
+
+body[data-background-color="dark"] .language-content {
+    border-color: var(--card-color);
+    background-color: var(--card-color) !important;
+}
+body[data-background-color="dark"] .bootstrap-tagsinput input{
+    color: #fff !important;
 }

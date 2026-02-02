@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.3
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 31, 2026 at 04:40 PM
+-- Generation Time: Feb 02, 2026 at 12:46 PM
 -- Server version: 8.0.30
--- PHP Version: 8.3.29
+-- PHP Version: 8.3.22
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -195,10 +195,10 @@ INSERT INTO `footers` (`id`, `copyright`, `content`, `created_at`, `updated_at`)
 
 CREATE TABLE `home_section_settings` (
   `id` bigint UNSIGNED NOT NULL,
-  `section` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` longtext COLLATE utf8mb4_unicode_ci,
-  `type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `section` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -241,7 +241,7 @@ CREATE TABLE `languages` (
 --
 
 INSERT INTO `languages` (`id`, `name`, `code`, `is_default`, `dashboard_default`, `direction`, `created_at`, `updated_at`) VALUES
-(6, 'English', 'en', 1, 1, 'ltr', '2026-01-26 17:23:11', '2026-01-31 10:12:09'),
+(6, 'English', 'en', 1, 1, 'ltr', '2026-01-26 17:23:11', '2026-02-02 06:41:27'),
 (7, 'বাংলা', 'bn', 0, 0, 'LTR', '2026-01-28 12:09:55', '2026-01-28 12:09:55');
 
 -- --------------------------------------------------------
@@ -437,28 +437,28 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `order_number`, `billing_name`, `billing_email`, `billing_phone`, `billing_address`, `billing_city`, `shipping_address`, `payment_method`, `gateway`, `cart_total`, `pay_amount`, `discount_amount`, `tax`, `shipping_charge`, `invoice_number`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `payment_status`, `order_status`, `receipt`, `delivery_date`, `created_at`, `updated_at`) VALUES
-(131, 'JNAGIML7', 'Vielka Gomez', 'masud.cst0@gmail.com', '+1 (501) 993-6871', 'Hic quia et enim eos', NULL, 'unknown', 'Cash Payment', 'Offline', 558.99, 559, 0.00, 0.00, NULL, 'BOs11739555845.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 11:57:25', '2025-02-14 11:57:25'),
-(132, 'G7QN0BGL', 'Pamela Kaufman', 'masud.cst0@gmail.com', '+1 (226) 491-1486', 'Officia modi sint re', NULL, 'unknown', 'Cash Payment', 'Offline', 399.98, 400, 0.00, 0.00, NULL, 'BWY61739556119.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:00:01', '2025-02-14 12:01:59'),
-(133, 'B6BISCZL', 'Ezra Tanner', 'masud.cst0@gmail.com', '+1 (254) 644-7323', 'Voluptatem blanditi', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'aQ311739556120.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:00:56', '2025-02-14 12:02:00'),
-(134, 'U9Q2PAMQ', 'Debra Becker', 'masud.cst0@gmail.com', '+1 (232) 318-6752', 'Non sed nemo ut eius', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'mEPm1739556458.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:07:35', '2025-02-14 12:07:38'),
-(135, 'PHJ116YG', 'Clayton Ingram', 'masud.cst0@gmail.com', '+1 (318) 537-2701', 'Magnam in voluptatem', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'AVxD1739556989.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:10:00', '2025-02-14 12:16:29'),
-(136, '2EKVK9TQ', 'Shelby Cross', 'masud.cst0@gmail.com', '+1 (521) 164-4707', 'Debitis sint officia', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'BTvT1739557362.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:22:42', '2025-02-14 12:22:43'),
-(137, 'IZLTFVA2', 'Nissim Blevins', 'masud.cst0@gmail.com', '+1 (412) 186-8622', 'Dolore esse ex labo', NULL, 'unknown', 'Cash Payment', 'Offline', 558.99, 559, 0.00, 0.00, NULL, 'UIUs1739557801.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:28:54', '2025-02-14 12:30:01'),
-(138, 'Y8FACDZL', 'Zahir Porter', 'masud.cst0@gmail.com', '+1 (909) 988-4108', 'Voluptas recusandae', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'cluV1739557909.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:31:49', '2025-02-14 12:33:03'),
-(139, 'TQOPGCAV', 'Buckminster Wise', 'masud.cst0@gmail.com', '+1 (156) 511-5113', 'Anim eius harum dist', NULL, 'unknown', 'Cash Payment', 'Offline', 399.98, 400, 0.00, 0.00, NULL, 'fue41739558057.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:34:17', '2025-02-14 12:35:26'),
-(140, '2CMNMEC3', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'bAeB1739602976.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:00:17', '2025-02-15 01:03:00'),
-(141, '2S8LHS63', 'Hanae Chaney', 'syxegunap@mailinator.com', '+1 (341) 367-8332', 'Sapiente velit numqu', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'WmSz1739602980.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:01:40', '2025-02-15 01:03:00'),
-(142, 'A41V83DY', 'Hanae Chaney', 'syxegunap@mailinator.com', '+1 (341) 367-8332', 'Sapiente velit numqu', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'Osc01739603104.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:05:03', '2025-02-15 01:05:04'),
-(143, 'N8TAU16P', 'Hanae Chaney', 'syxegunap@mailinator.com', '+1 (341) 367-8332', 'Sapiente velit numqu', NULL, 'unknown', 'Cash Payment', 'Offline', 99.99, 100, 0.00, 0.00, NULL, 'gSoI1739603170.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:06:07', '2025-02-15 01:06:10'),
-(144, 'TDNEMYYS', 'Hanae Chaney', 'syxegunap@mailinator.com', '+1 (341) 367-8332', 'Sapiente velit numqu', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'oC3v1739603211.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:06:50', '2025-02-15 01:06:52'),
-(145, 'AHLJNGV2', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'wTx91739603220.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:06:59', '2025-02-15 01:07:00'),
-(146, '2TON346J', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, '0gp61739612934.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:48:51', '2025-02-15 03:48:55'),
-(147, '6AKW8LR6', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'KI1P1739613050.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:50:50', '2025-02-15 03:50:50'),
-(148, '5OVCYHMM', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'iGOu1739613225.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:53:44', '2025-02-15 03:53:46'),
-(149, 'A9UEWQAG', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'wevC1739613292.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:54:50', '2025-02-15 03:54:52'),
-(150, 'ESLBDTWW', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 99.99, 100, 0.00, 0.00, NULL, '9Frw1739613317.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:55:16', '2025-02-15 03:55:17'),
-(151, 'A76RQHZK', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'Oieg1739613329.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:55:28', '2025-02-15 03:55:29'),
-(152, '6KDDMTF2', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 99.99, 100, 0.00, 0.00, NULL, NULL, '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-10-30 12:39:06', '2025-10-30 12:39:06');
+(131, 'JNAGIML7', 'Vielka Gomez', 'masud.cst0@gmail.com', '+1 (501) 993-6871', 'Hic quia et enim eos', NULL, 'unknown', 'Cash Payment', 'Offline', '558.99', '559', '0.00', '0.00', NULL, 'BOs11739555845.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 11:57:25', '2025-02-14 11:57:25'),
+(132, 'G7QN0BGL', 'Pamela Kaufman', 'masud.cst0@gmail.com', '+1 (226) 491-1486', 'Officia modi sint re', NULL, 'unknown', 'Cash Payment', 'Offline', '399.98', '400', '0.00', '0.00', NULL, 'BWY61739556119.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:00:01', '2025-02-14 12:01:59'),
+(133, 'B6BISCZL', 'Ezra Tanner', 'masud.cst0@gmail.com', '+1 (254) 644-7323', 'Voluptatem blanditi', NULL, 'unknown', 'Cash Payment', 'Offline', '299.99', '300', '0.00', '0.00', NULL, 'aQ311739556120.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:00:56', '2025-02-14 12:02:00'),
+(134, 'U9Q2PAMQ', 'Debra Becker', 'masud.cst0@gmail.com', '+1 (232) 318-6752', 'Non sed nemo ut eius', NULL, 'unknown', 'Cash Payment', 'Offline', '299.99', '300', '0.00', '0.00', NULL, 'mEPm1739556458.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:07:35', '2025-02-14 12:07:38'),
+(135, 'PHJ116YG', 'Clayton Ingram', 'masud.cst0@gmail.com', '+1 (318) 537-2701', 'Magnam in voluptatem', NULL, 'unknown', 'Cash Payment', 'Offline', '299.99', '300', '0.00', '0.00', NULL, 'AVxD1739556989.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:10:00', '2025-02-14 12:16:29'),
+(136, '2EKVK9TQ', 'Shelby Cross', 'masud.cst0@gmail.com', '+1 (521) 164-4707', 'Debitis sint officia', NULL, 'unknown', 'Cash Payment', 'Offline', '299.99', '300', '0.00', '0.00', NULL, 'BTvT1739557362.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:22:42', '2025-02-14 12:22:43'),
+(137, 'IZLTFVA2', 'Nissim Blevins', 'masud.cst0@gmail.com', '+1 (412) 186-8622', 'Dolore esse ex labo', NULL, 'unknown', 'Cash Payment', 'Offline', '558.99', '559', '0.00', '0.00', NULL, 'UIUs1739557801.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:28:54', '2025-02-14 12:30:01'),
+(138, 'Y8FACDZL', 'Zahir Porter', 'masud.cst0@gmail.com', '+1 (909) 988-4108', 'Voluptas recusandae', NULL, 'unknown', 'Cash Payment', 'Offline', '299.99', '300', '0.00', '0.00', NULL, 'cluV1739557909.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:31:49', '2025-02-14 12:33:03'),
+(139, 'TQOPGCAV', 'Buckminster Wise', 'masud.cst0@gmail.com', '+1 (156) 511-5113', 'Anim eius harum dist', NULL, 'unknown', 'Cash Payment', 'Offline', '399.98', '400', '0.00', '0.00', NULL, 'fue41739558057.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:34:17', '2025-02-14 12:35:26'),
+(140, '2CMNMEC3', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', '299.99', '300', '0.00', '0.00', NULL, 'bAeB1739602976.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:00:17', '2025-02-15 01:03:00'),
+(141, '2S8LHS63', 'Hanae Chaney', 'syxegunap@mailinator.com', '+1 (341) 367-8332', 'Sapiente velit numqu', NULL, 'unknown', 'Cash Payment', 'Offline', '299.99', '300', '0.00', '0.00', NULL, 'WmSz1739602980.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:01:40', '2025-02-15 01:03:00'),
+(142, 'A41V83DY', 'Hanae Chaney', 'syxegunap@mailinator.com', '+1 (341) 367-8332', 'Sapiente velit numqu', NULL, 'unknown', 'Cash Payment', 'Offline', '299.99', '300', '0.00', '0.00', NULL, 'Osc01739603104.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:05:03', '2025-02-15 01:05:04'),
+(143, 'N8TAU16P', 'Hanae Chaney', 'syxegunap@mailinator.com', '+1 (341) 367-8332', 'Sapiente velit numqu', NULL, 'unknown', 'Cash Payment', 'Offline', '99.99', '100', '0.00', '0.00', NULL, 'gSoI1739603170.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:06:07', '2025-02-15 01:06:10'),
+(144, 'TDNEMYYS', 'Hanae Chaney', 'syxegunap@mailinator.com', '+1 (341) 367-8332', 'Sapiente velit numqu', NULL, 'unknown', 'Cash Payment', 'Offline', '299.99', '300', '0.00', '0.00', NULL, 'oC3v1739603211.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:06:50', '2025-02-15 01:06:52'),
+(145, 'AHLJNGV2', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', '299.99', '300', '0.00', '0.00', NULL, 'wTx91739603220.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:06:59', '2025-02-15 01:07:00'),
+(146, '2TON346J', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', '299.99', '300', '0.00', '0.00', NULL, '0gp61739612934.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:48:51', '2025-02-15 03:48:55'),
+(147, '6AKW8LR6', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', '299.99', '300', '0.00', '0.00', NULL, 'KI1P1739613050.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:50:50', '2025-02-15 03:50:50'),
+(148, '5OVCYHMM', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', '299.99', '300', '0.00', '0.00', NULL, 'iGOu1739613225.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:53:44', '2025-02-15 03:53:46'),
+(149, 'A9UEWQAG', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', '299.99', '300', '0.00', '0.00', NULL, 'wevC1739613292.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:54:50', '2025-02-15 03:54:52'),
+(150, 'ESLBDTWW', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', '99.99', '100', '0.00', '0.00', NULL, '9Frw1739613317.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:55:16', '2025-02-15 03:55:17'),
+(151, 'A76RQHZK', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', '299.99', '300', '0.00', '0.00', NULL, 'Oieg1739613329.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:55:28', '2025-02-15 03:55:29'),
+(152, '6KDDMTF2', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', '99.99', '100', '0.00', '0.00', NULL, NULL, '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-10-30 12:39:06', '2025-10-30 12:39:06');
 
 -- --------------------------------------------------------
 
@@ -483,32 +483,32 @@ CREATE TABLE `order_items` (
 --
 
 INSERT INTO `order_items` (`id`, `order_id`, `customer_id`, `product_id`, `product_price`, `qty`, `variations`, `created_at`, `updated_at`) VALUES
-(150, 131, NULL, 7, 234, 1, '[{\"product_id\":7,\"variation_id\":85,\"variation_name\":\"Color\",\"option_name\":\"Black\",\"price\":\"20\",\"option_key\":\"1\",\"qty\":1},{\"product_id\":7,\"variation_id\":87,\"variation_name\":\"Size\",\"option_name\":\"M\",\"price\":\"5\",\"option_key\":\"0\",\"qty\":1}]', '2025-02-14 11:57:25', '2025-02-14 11:57:25'),
-(151, 131, NULL, 5, 300, 1, '[]', '2025-02-14 11:57:25', '2025-02-14 11:57:25'),
-(152, 132, NULL, 5, 300, 1, '[]', '2025-02-14 12:00:01', '2025-02-14 12:00:01'),
-(153, 132, NULL, 6, 100, 1, '[]', '2025-02-14 12:00:01', '2025-02-14 12:00:01'),
-(154, 133, NULL, 5, 300, 1, '[]', '2025-02-14 12:00:56', '2025-02-14 12:00:56'),
-(155, 134, NULL, 5, 300, 1, '[]', '2025-02-14 12:07:35', '2025-02-14 12:07:35'),
-(156, 135, NULL, 5, 300, 1, '[]', '2025-02-14 12:10:00', '2025-02-14 12:10:00'),
-(157, 136, NULL, 5, 300, 1, '[]', '2025-02-14 12:22:42', '2025-02-14 12:22:42'),
-(158, 137, NULL, 7, 234, 1, '[{\"product_id\":7,\"variation_id\":85,\"variation_name\":\"Color\",\"option_name\":\"Black\",\"price\":\"20\",\"option_key\":\"1\",\"qty\":1},{\"product_id\":7,\"variation_id\":87,\"variation_name\":\"Size\",\"option_name\":\"M\",\"price\":\"5\",\"option_key\":\"0\",\"qty\":1}]', '2025-02-14 12:28:54', '2025-02-14 12:28:54'),
-(159, 137, NULL, 5, 300, 1, '[]', '2025-02-14 12:28:54', '2025-02-14 12:28:54'),
-(160, 138, NULL, 5, 300, 1, '[]', '2025-02-14 12:31:49', '2025-02-14 12:31:49'),
-(161, 139, NULL, 5, 300, 1, '[]', '2025-02-14 12:34:17', '2025-02-14 12:34:17'),
-(162, 139, NULL, 6, 100, 1, '[]', '2025-02-14 12:34:17', '2025-02-14 12:34:17'),
-(163, 140, NULL, 5, 300, 1, '[]', '2025-02-15 01:00:17', '2025-02-15 01:00:17'),
-(164, 141, NULL, 5, 300, 1, '[]', '2025-02-15 01:01:40', '2025-02-15 01:01:40'),
-(165, 142, NULL, 5, 300, 1, '[]', '2025-02-15 01:05:03', '2025-02-15 01:05:03'),
-(166, 143, NULL, 6, 100, 1, '[]', '2025-02-15 01:06:07', '2025-02-15 01:06:07'),
-(167, 144, NULL, 5, 300, 1, '[]', '2025-02-15 01:06:50', '2025-02-15 01:06:50'),
-(168, 145, NULL, 5, 300, 1, '[]', '2025-02-15 01:06:59', '2025-02-15 01:06:59'),
-(169, 146, NULL, 5, 300, 1, '[]', '2025-02-15 03:48:52', '2025-02-15 03:48:52'),
-(170, 147, NULL, 5, 300, 1, '[]', '2025-02-15 03:50:50', '2025-02-15 03:50:50'),
-(171, 148, NULL, 5, 300, 1, '[]', '2025-02-15 03:53:44', '2025-02-15 03:53:44'),
-(172, 149, NULL, 5, 300, 1, '[]', '2025-02-15 03:54:50', '2025-02-15 03:54:50'),
-(173, 150, NULL, 6, 100, 1, '[]', '2025-02-15 03:55:16', '2025-02-15 03:55:16'),
-(174, 151, NULL, 5, 300, 1, '[]', '2025-02-15 03:55:28', '2025-02-15 03:55:28'),
-(175, 152, NULL, 6, 100, 1, '[]', '2025-10-30 12:39:06', '2025-10-30 12:39:06');
+(150, 131, NULL, 7, '234', 1, '[{\"product_id\":7,\"variation_id\":85,\"variation_name\":\"Color\",\"option_name\":\"Black\",\"price\":\"20\",\"option_key\":\"1\",\"qty\":1},{\"product_id\":7,\"variation_id\":87,\"variation_name\":\"Size\",\"option_name\":\"M\",\"price\":\"5\",\"option_key\":\"0\",\"qty\":1}]', '2025-02-14 11:57:25', '2025-02-14 11:57:25'),
+(151, 131, NULL, 5, '300', 1, '[]', '2025-02-14 11:57:25', '2025-02-14 11:57:25'),
+(152, 132, NULL, 5, '300', 1, '[]', '2025-02-14 12:00:01', '2025-02-14 12:00:01'),
+(153, 132, NULL, 6, '100', 1, '[]', '2025-02-14 12:00:01', '2025-02-14 12:00:01'),
+(154, 133, NULL, 5, '300', 1, '[]', '2025-02-14 12:00:56', '2025-02-14 12:00:56'),
+(155, 134, NULL, 5, '300', 1, '[]', '2025-02-14 12:07:35', '2025-02-14 12:07:35'),
+(156, 135, NULL, 5, '300', 1, '[]', '2025-02-14 12:10:00', '2025-02-14 12:10:00'),
+(157, 136, NULL, 5, '300', 1, '[]', '2025-02-14 12:22:42', '2025-02-14 12:22:42'),
+(158, 137, NULL, 7, '234', 1, '[{\"product_id\":7,\"variation_id\":85,\"variation_name\":\"Color\",\"option_name\":\"Black\",\"price\":\"20\",\"option_key\":\"1\",\"qty\":1},{\"product_id\":7,\"variation_id\":87,\"variation_name\":\"Size\",\"option_name\":\"M\",\"price\":\"5\",\"option_key\":\"0\",\"qty\":1}]', '2025-02-14 12:28:54', '2025-02-14 12:28:54'),
+(159, 137, NULL, 5, '300', 1, '[]', '2025-02-14 12:28:54', '2025-02-14 12:28:54'),
+(160, 138, NULL, 5, '300', 1, '[]', '2025-02-14 12:31:49', '2025-02-14 12:31:49'),
+(161, 139, NULL, 5, '300', 1, '[]', '2025-02-14 12:34:17', '2025-02-14 12:34:17'),
+(162, 139, NULL, 6, '100', 1, '[]', '2025-02-14 12:34:17', '2025-02-14 12:34:17'),
+(163, 140, NULL, 5, '300', 1, '[]', '2025-02-15 01:00:17', '2025-02-15 01:00:17'),
+(164, 141, NULL, 5, '300', 1, '[]', '2025-02-15 01:01:40', '2025-02-15 01:01:40'),
+(165, 142, NULL, 5, '300', 1, '[]', '2025-02-15 01:05:03', '2025-02-15 01:05:03'),
+(166, 143, NULL, 6, '100', 1, '[]', '2025-02-15 01:06:07', '2025-02-15 01:06:07'),
+(167, 144, NULL, 5, '300', 1, '[]', '2025-02-15 01:06:50', '2025-02-15 01:06:50'),
+(168, 145, NULL, 5, '300', 1, '[]', '2025-02-15 01:06:59', '2025-02-15 01:06:59'),
+(169, 146, NULL, 5, '300', 1, '[]', '2025-02-15 03:48:52', '2025-02-15 03:48:52'),
+(170, 147, NULL, 5, '300', 1, '[]', '2025-02-15 03:50:50', '2025-02-15 03:50:50'),
+(171, 148, NULL, 5, '300', 1, '[]', '2025-02-15 03:53:44', '2025-02-15 03:53:44'),
+(172, 149, NULL, 5, '300', 1, '[]', '2025-02-15 03:54:50', '2025-02-15 03:54:50'),
+(173, 150, NULL, 6, '100', 1, '[]', '2025-02-15 03:55:16', '2025-02-15 03:55:16'),
+(174, 151, NULL, 5, '300', 1, '[]', '2025-02-15 03:55:28', '2025-02-15 03:55:28'),
+(175, 152, NULL, 6, '100', 1, '[]', '2025-10-30 12:39:06', '2025-10-30 12:39:06');
 
 -- --------------------------------------------------------
 
@@ -539,16 +539,16 @@ CREATE TABLE `packages` (
 --
 
 INSERT INTO `packages` (`id`, `icon`, `title`, `slug`, `price`, `term`, `trial_days`, `is_trial`, `status`, `recomended`, `is_featured`, `features`, `custom_feature`, `created_at`, `updated_at`) VALUES
-(13, 'fas fa-star', 'Basic', 'basic', 9.00, 'monthly', NULL, 0, 1, 0, 0, '[\"Custom Domain\"]', NULL, '2025-11-11 10:30:38', '2025-11-11 10:30:38'),
-(14, 'fas fa-star', 'Standard', 'standard', 90.00, 'monthly', NULL, 0, 1, 1, 0, '[\"Hostel Management\"]', NULL, '2025-11-11 10:31:02', '2025-11-11 10:48:50'),
-(15, 'fas fa-star', 'Premium', 'premium', 199.00, 'monthly', NULL, 0, 1, 0, 0, '[\"Hostel Management\",\"Course Management\",\"Student Management\"]', NULL, '2025-11-11 10:31:20', '2025-11-11 10:49:07'),
-(16, 'fas fa-star', 'Basic', 'basic', 99.00, 'yearly', NULL, 0, 1, 0, 0, 'null', NULL, '2025-11-11 10:54:00', '2025-11-11 10:54:00'),
-(17, 'fas fa-star', 'Standard', 'standard', 199.00, 'yearly', NULL, 0, 1, 1, 0, '[\"Custom Domain\"]', NULL, '2025-11-11 10:54:33', '2025-11-11 10:54:33'),
-(18, 'fas fa-star', 'Premium', 'premium', 299.00, 'yearly', NULL, 0, 1, 0, 0, '[\"Custom Domain\",\"Subdomain\",\"Custom Page\"]', NULL, '2025-11-11 10:54:51', '2025-11-11 10:54:51'),
-(19, 'fas fa-star', 'Basic', 'basic', 299.00, 'lifetime', NULL, 0, 1, 0, 0, '[\"Custom Domain\"]', NULL, '2025-11-11 10:56:02', '2025-11-11 10:56:02'),
-(20, 'fas fa-star', 'Standard', 'standard', 299.00, 'lifetime', NULL, 0, 1, 1, 0, '[\"Custom Domain\",\"Subdomain\"]', NULL, '2025-11-11 10:56:30', '2025-11-11 10:56:30'),
-(21, 'fas fa-star', 'Premium', 'premium', 499.00, 'lifetime', NULL, 0, 1, 0, 0, '[\"Custom Domain\",\"Subdomain\",\"Custom Page\"]', NULL, '2025-11-11 10:56:50', '2025-11-14 06:58:08'),
-(24, NULL, 'Free', 'free', 0.00, 'yearly', 10, 1, 1, 0, 0, 'null', NULL, '2025-11-14 07:47:58', '2025-11-14 07:53:32');
+(13, 'fas fa-star', 'Basic', 'basic', '9.00', 'monthly', NULL, 0, 1, 0, 0, '[\"Custom Domain\"]', NULL, '2025-11-11 10:30:38', '2025-11-11 10:30:38'),
+(14, 'fas fa-star', 'Standard', 'standard', '90.00', 'monthly', NULL, 0, 1, 1, 0, '[\"Hostel Management\"]', NULL, '2025-11-11 10:31:02', '2025-11-11 10:48:50'),
+(15, 'fas fa-star', 'Premium', 'premium', '199.00', 'monthly', NULL, 0, 1, 0, 0, '[\"Hostel Management\",\"Course Management\",\"Student Management\"]', NULL, '2025-11-11 10:31:20', '2025-11-11 10:49:07'),
+(16, 'fas fa-star', 'Basic', 'basic', '99.00', 'yearly', NULL, 0, 1, 0, 0, 'null', NULL, '2025-11-11 10:54:00', '2025-11-11 10:54:00'),
+(17, 'fas fa-star', 'Standard', 'standard', '199.00', 'yearly', NULL, 0, 1, 1, 0, '[\"Custom Domain\"]', NULL, '2025-11-11 10:54:33', '2025-11-11 10:54:33'),
+(18, 'fas fa-star', 'Premium', 'premium', '299.00', 'yearly', NULL, 0, 1, 0, 0, '[\"Custom Domain\",\"Subdomain\",\"Custom Page\"]', NULL, '2025-11-11 10:54:51', '2025-11-11 10:54:51'),
+(19, 'fas fa-star', 'Basic', 'basic', '299.00', 'lifetime', NULL, 0, 1, 0, 0, '[\"Custom Domain\"]', NULL, '2025-11-11 10:56:02', '2025-11-11 10:56:02'),
+(20, 'fas fa-star', 'Standard', 'standard', '299.00', 'lifetime', NULL, 0, 1, 1, 0, '[\"Custom Domain\",\"Subdomain\"]', NULL, '2025-11-11 10:56:30', '2025-11-11 10:56:30'),
+(21, 'fas fa-star', 'Premium', 'premium', '499.00', 'lifetime', NULL, 0, 1, 0, 0, '[\"Custom Domain\",\"Subdomain\",\"Custom Page\"]', NULL, '2025-11-11 10:56:50', '2025-11-14 06:58:08'),
+(24, NULL, 'Free', 'free', '0.00', 'yearly', 10, 1, 1, 0, 0, 'null', NULL, '2025-11-14 07:47:58', '2025-11-14 07:53:32');
 
 -- --------------------------------------------------------
 
@@ -728,7 +728,7 @@ CREATE TABLE `product_coupons` (
 --
 
 INSERT INTO `product_coupons` (`id`, `name`, `code`, `type`, `value`, `start_date`, `end_date`, `amount_spend`, `created_at`, `updated_at`) VALUES
-(3, 'OFFER99', 'OFFER99', 'fixed', 100.00, '2025-01-16', '2025-01-31', 200.00, '2025-01-15 13:00:43', '2025-01-15 13:00:43');
+(3, 'OFFER99', 'OFFER99', 'fixed', '100.00', '2025-01-16', '2025-01-31', '200.00', '2025-01-15 13:00:43', '2025-01-15 13:00:43');
 
 -- --------------------------------------------------------
 
@@ -739,7 +739,7 @@ INSERT INTO `product_coupons` (`id`, `name`, `code`, `type`, `value`, `start_dat
 CREATE TABLE `product_options` (
   `id` bigint UNSIGNED NOT NULL,
   `product_id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `position` int UNSIGNED NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -754,7 +754,7 @@ CREATE TABLE `product_options` (
 CREATE TABLE `product_option_values` (
   `id` bigint UNSIGNED NOT NULL,
   `product_option_id` bigint UNSIGNED NOT NULL,
-  `value` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `position` int UNSIGNED NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -768,9 +768,18 @@ CREATE TABLE `product_option_values` (
 
 CREATE TABLE `product_settings` (
   `id` bigint UNSIGNED NOT NULL,
+  `digital_product` tinyint NOT NULL DEFAULT '0',
+  `physical_product` tinyint NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `product_settings`
+--
+
+INSERT INTO `product_settings` (`id`, `digital_product`, `physical_product`, `created_at`, `updated_at`) VALUES
+(1, 0, 1, '2026-02-02 06:18:53', '2026-02-02 06:30:07');
 
 -- --------------------------------------------------------
 
@@ -781,7 +790,7 @@ CREATE TABLE `product_settings` (
 CREATE TABLE `product_variants` (
   `id` bigint UNSIGNED NOT NULL,
   `product_id` bigint UNSIGNED NOT NULL,
-  `sku` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sku` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` decimal(8,2) DEFAULT NULL,
   `stock` int NOT NULL DEFAULT '0',
   `status` tinyint NOT NULL DEFAULT '1',
@@ -906,7 +915,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `uniqid`, `website_logo`, `logo_two`, `footer_logo`, `favicon`, `website_title`, `email_address`, `contact_number`, `address`, `smtp_host`, `smtp_port`, `smtp_username`, `smtp_password`, `encryption`, `sender_mail`, `sender_name`, `smtp_status`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `currency_rate`, `timezone`, `website_color`, `maintenance_image`, `maintenance_status`, `maintenance_message`, `bypass_token`, `package_expire_day`, `admin_approval`, `email_verification_approval`, `admin_approval_notice`, `pusher_app_id`, `pusher_status`, `pusher_app_key`, `pusher_app_secret`, `pusher_app_cluster`, `created_at`, `updated_at`) VALUES
-(1, 1234, '6792620a5426d.png', NULL, '6623f11a26d49.png', '6792620a5379d.png', 'Business Validator', NULL, NULL, NULL, 'smtp.gmail.com', '587', 'airdrop446646@gmail.com', 'lwee cjer feik pdof', 'TLS', 'airdrop446646@gmail.com', 'Myapp', 1, '$', 'left', 'USD', 'right', 1, 'Europe/Andorra', '#FF0000FF', '6706bc36b9811.jpg', 0, '<p>Maintenance MessageMaintenance Message</p>', '-1', 4, 1, 1, 'You need to permission from admin to access this panel', '1942636', 1, 'e58380d6ebb048e6feb4', '24a208922bc018ef9b37', 'ap2', NULL, '2024-12-09 11:41:33');
+(1, 1234, '6792620a5426d.png', NULL, '6623f11a26d49.png', '6792620a5379d.png', 'Business Validator', NULL, NULL, NULL, 'smtp.gmail.com', '587', 'airdrop446646@gmail.com', 'lwee cjer feik pdof', 'TLS', 'airdrop446646@gmail.com', 'Myapp', 1, '$', 'left', 'USD', 'right', '1', 'Europe/Andorra', '#FF0000FF', '6706bc36b9811.jpg', 0, '<p>Maintenance MessageMaintenance Message</p>', '-1', 4, 1, 1, 'You need to permission from admin to access this panel', '1942636', 1, 'e58380d6ebb048e6feb4', '24a208922bc018ef9b37', 'ap2', NULL, '2024-12-09 11:41:33');
 
 -- --------------------------------------------------------
 
@@ -1033,68 +1042,68 @@ CREATE TABLE `transactions` (
 --
 
 INSERT INTO `transactions` (`id`, `transaction_id`, `pre_balance`, `actual_total`, `after_balance`, `currency_symbol`, `currency_symbol_position`, `payment_status`, `payment_method`, `transaction_type`, `created_at`, `updated_at`) VALUES
-(1, 'eiZegNVj7z', 0.00, 12.00, 12.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 03:41:49', '2025-01-24 03:41:49'),
-(2, 'vkHJu3OZEW', 12.00, 141.00, 153.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 03:44:07', '2025-01-24 03:44:07'),
-(3, 'c1uKwQWHxB', 153.00, 12.00, 165.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 03:45:08', '2025-01-24 03:45:08'),
-(4, 'iBnbmQKprE', 165.00, 152.00, 317.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:22:36', '2025-01-24 07:22:36'),
-(5, 'HR1wy13DzT', 317.00, 4549.00, 4866.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:22:50', '2025-01-24 07:22:50'),
-(6, 'ipq4Xw6fIz', 4866.00, 152.00, 5018.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:23:05', '2025-01-24 07:23:05'),
-(7, 'f5Hj32QQG4', 5018.00, 12.00, 5030.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:23:15', '2025-01-24 07:23:15'),
-(8, 'o2RLvQwJSt', 5030.00, 12.00, 5042.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:25:01', '2025-01-24 07:25:01'),
-(9, 't14gle3FgS', 5042.00, 399.98, 5441.98, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-27 12:02:51', '2025-01-27 12:02:51'),
-(10, 'ubh7kRpSC8', 5441.98, 299.97, 5741.95, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-27 12:15:39', '2025-01-27 12:15:39'),
-(11, 'AMD3D5Z0', 5741.95, 99.99, 5841.94, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 12:56:07', '2025-01-27 12:56:07'),
-(12, 'QYZ8AAOW', 5841.94, 399.98, 6241.92, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 13:03:38', '2025-01-27 13:03:38'),
-(13, '0PIHS2R2', 6241.92, 299.99, 6541.91, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 13:05:11', '2025-01-27 13:05:11'),
-(14, '9PJ5N8ZQ', 6541.91, 99.99, 6641.90, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 13:06:13', '2025-01-27 13:06:13'),
-(15, '45X32O2B', 6641.90, 79.00, 6720.90, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-31 01:01:07', '2025-01-31 01:01:07'),
-(16, 'TDPPCEB7', 6720.90, 319.20, 7040.10, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-02 11:05:48', '2025-02-02 11:05:48'),
-(17, 'OXPSJN1G', 7040.10, 358.99, 7399.09, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-02 12:16:11', '2025-02-02 12:16:11'),
-(18, 'A4X2IHZO', 7399.09, 259.00, 7658.09, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 02:48:48', '2025-02-14 02:48:48'),
-(19, 'N6N8XA4V', 7658.09, 650.98, 8309.07, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 07:56:29', '2025-02-14 07:56:29'),
-(20, 'V77CNFTM', 8309.07, 673.08, 8982.15, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 07:58:50', '2025-02-14 07:58:50'),
-(21, 'ISU9M8Q9', 8982.15, 658.98, 9641.13, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 08:34:37', '2025-02-14 08:34:37'),
-(22, 'KNASWBSR', 9641.13, 299.99, 9941.12, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:06:59', '2025-02-14 09:06:59'),
-(23, 'XTNSU6DO', 9941.12, 558.99, 10500.11, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:20:24', '2025-02-14 09:20:24'),
-(24, '4260IO95', 10500.11, 299.99, 10800.10, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:22:26', '2025-02-14 09:22:26'),
-(25, 'PDFLJO3D', 10800.10, 299.99, 11100.09, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:26:52', '2025-02-14 09:26:52'),
-(26, '7KSMGOU1', 11100.09, 251.00, 11351.09, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:30:24', '2025-02-14 09:30:24'),
-(27, 'TOBFESWA', 11351.09, 299.99, 11651.08, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:33:28', '2025-02-14 09:33:28'),
-(28, 'LMVQS0TO', 11651.08, 299.99, 11951.07, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:36:34', '2025-02-14 09:36:34'),
-(29, '0Q9G2QMA', 11951.07, 299.99, 12251.06, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:44:03', '2025-02-14 09:44:03'),
-(30, 'M6N9SXL8', 12251.06, 299.99, 12551.05, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:46:02', '2025-02-14 09:46:02'),
-(31, 'E60O3XHO', 12551.05, 299.99, 12851.04, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:50:34', '2025-02-14 09:50:34'),
-(32, 'C1288N59', 12851.04, 299.99, 13151.03, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:56:12', '2025-02-14 09:56:12'),
-(33, '8X4FD2J2', 13151.03, 299.99, 13451.02, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:58:46', '2025-02-14 09:58:46'),
-(34, '6VYZKETT', 13451.02, 299.99, 13751.01, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 10:00:07', '2025-02-14 10:00:07'),
-(35, 'AFG34V7O', 13751.01, 299.99, 14051.00, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 10:04:08', '2025-02-14 10:04:08'),
-(36, 'Y0WIKIFC', 14051.00, 299.99, 14350.99, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 10:06:04', '2025-02-14 10:06:04'),
-(37, '4EUQ9CVL', 14350.99, 299.99, 14650.98, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:19:07', '2025-02-14 11:19:07'),
-(38, '2K4M5CCZ', 14650.98, 299.99, 14950.97, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:30:10', '2025-02-14 11:30:10'),
-(39, '1AYCOS9H', 14950.97, 299.99, 15250.96, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:37:11', '2025-02-14 11:37:11'),
-(40, '9AUPZOK1', 15250.96, 299.99, 15550.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:47:05', '2025-02-14 11:47:05'),
-(41, 'O0KX6I0D', 15550.95, 300.00, 15850.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:55:54', '2025-02-14 11:55:54'),
-(42, 'JNAGIML7', 15850.95, 559.00, 16409.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:57:25', '2025-02-14 11:57:25'),
-(43, 'G7QN0BGL', 16409.95, 400.00, 16809.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:01:59', '2025-02-14 12:01:59'),
-(44, 'B6BISCZL', 16809.95, 300.00, 17109.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:02:00', '2025-02-14 12:02:00'),
-(45, 'U9Q2PAMQ', 17109.95, 300.00, 17409.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:07:38', '2025-02-14 12:07:38'),
-(46, 'PHJ116YG', 17409.95, 300.00, 17709.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:16:29', '2025-02-14 12:16:29'),
-(47, '2EKVK9TQ', 17709.95, 300.00, 18009.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:22:42', '2025-02-14 12:22:42'),
-(48, 'IZLTFVA2', 18009.95, 559.00, 18568.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:30:01', '2025-02-14 12:30:01'),
-(49, 'Y8FACDZL', 18568.95, 300.00, 18868.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:33:04', '2025-02-14 12:33:04'),
-(50, 'TQOPGCAV', 18868.95, 400.00, 19268.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:34:17', '2025-02-14 12:34:17'),
-(51, '2CMNMEC3', 19268.95, 300.00, 19568.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:02:56', '2025-02-15 01:02:56'),
-(52, '2S8LHS63', 19568.95, 300.00, 19868.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:03:00', '2025-02-15 01:03:00'),
-(53, 'A41V83DY', 19868.95, 300.00, 20168.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:05:04', '2025-02-15 01:05:04'),
-(54, 'N8TAU16P', 20168.95, 100.00, 20268.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:06:10', '2025-02-15 01:06:10'),
-(55, 'TDNEMYYS', 20268.95, 300.00, 20568.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:06:51', '2025-02-15 01:06:51'),
-(56, 'AHLJNGV2', 20568.95, 300.00, 20868.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:07:00', '2025-02-15 01:07:00'),
-(57, '2TON346J', 20868.95, 300.00, 21168.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:48:54', '2025-02-15 03:48:54'),
-(58, '6AKW8LR6', 21168.95, 300.00, 21468.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:50:50', '2025-02-15 03:50:50'),
-(59, '5OVCYHMM', 21468.95, 300.00, 21768.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:53:45', '2025-02-15 03:53:45'),
-(60, 'A9UEWQAG', 21768.95, 300.00, 22068.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:54:52', '2025-02-15 03:54:52'),
-(61, 'ESLBDTWW', 22068.95, 100.00, 22168.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:55:17', '2025-02-15 03:55:17'),
-(62, 'A76RQHZK', 22168.95, 300.00, 22468.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:55:29', '2025-02-15 03:55:29');
+(1, 'eiZegNVj7z', '0.00', '12.00', '12.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 03:41:49', '2025-01-24 03:41:49'),
+(2, 'vkHJu3OZEW', '12.00', '141.00', '153.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 03:44:07', '2025-01-24 03:44:07'),
+(3, 'c1uKwQWHxB', '153.00', '12.00', '165.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 03:45:08', '2025-01-24 03:45:08'),
+(4, 'iBnbmQKprE', '165.00', '152.00', '317.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:22:36', '2025-01-24 07:22:36'),
+(5, 'HR1wy13DzT', '317.00', '4549.00', '4866.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:22:50', '2025-01-24 07:22:50'),
+(6, 'ipq4Xw6fIz', '4866.00', '152.00', '5018.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:23:05', '2025-01-24 07:23:05'),
+(7, 'f5Hj32QQG4', '5018.00', '12.00', '5030.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:23:15', '2025-01-24 07:23:15'),
+(8, 'o2RLvQwJSt', '5030.00', '12.00', '5042.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:25:01', '2025-01-24 07:25:01'),
+(9, 't14gle3FgS', '5042.00', '399.98', '5441.98', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-27 12:02:51', '2025-01-27 12:02:51'),
+(10, 'ubh7kRpSC8', '5441.98', '299.97', '5741.95', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-27 12:15:39', '2025-01-27 12:15:39'),
+(11, 'AMD3D5Z0', '5741.95', '99.99', '5841.94', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 12:56:07', '2025-01-27 12:56:07'),
+(12, 'QYZ8AAOW', '5841.94', '399.98', '6241.92', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 13:03:38', '2025-01-27 13:03:38'),
+(13, '0PIHS2R2', '6241.92', '299.99', '6541.91', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 13:05:11', '2025-01-27 13:05:11'),
+(14, '9PJ5N8ZQ', '6541.91', '99.99', '6641.90', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 13:06:13', '2025-01-27 13:06:13'),
+(15, '45X32O2B', '6641.90', '79.00', '6720.90', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-31 01:01:07', '2025-01-31 01:01:07'),
+(16, 'TDPPCEB7', '6720.90', '319.20', '7040.10', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-02 11:05:48', '2025-02-02 11:05:48'),
+(17, 'OXPSJN1G', '7040.10', '358.99', '7399.09', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-02 12:16:11', '2025-02-02 12:16:11'),
+(18, 'A4X2IHZO', '7399.09', '259.00', '7658.09', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 02:48:48', '2025-02-14 02:48:48'),
+(19, 'N6N8XA4V', '7658.09', '650.98', '8309.07', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 07:56:29', '2025-02-14 07:56:29'),
+(20, 'V77CNFTM', '8309.07', '673.08', '8982.15', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 07:58:50', '2025-02-14 07:58:50'),
+(21, 'ISU9M8Q9', '8982.15', '658.98', '9641.13', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 08:34:37', '2025-02-14 08:34:37'),
+(22, 'KNASWBSR', '9641.13', '299.99', '9941.12', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:06:59', '2025-02-14 09:06:59'),
+(23, 'XTNSU6DO', '9941.12', '558.99', '10500.11', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:20:24', '2025-02-14 09:20:24'),
+(24, '4260IO95', '10500.11', '299.99', '10800.10', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:22:26', '2025-02-14 09:22:26'),
+(25, 'PDFLJO3D', '10800.10', '299.99', '11100.09', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:26:52', '2025-02-14 09:26:52'),
+(26, '7KSMGOU1', '11100.09', '251.00', '11351.09', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:30:24', '2025-02-14 09:30:24'),
+(27, 'TOBFESWA', '11351.09', '299.99', '11651.08', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:33:28', '2025-02-14 09:33:28'),
+(28, 'LMVQS0TO', '11651.08', '299.99', '11951.07', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:36:34', '2025-02-14 09:36:34'),
+(29, '0Q9G2QMA', '11951.07', '299.99', '12251.06', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:44:03', '2025-02-14 09:44:03'),
+(30, 'M6N9SXL8', '12251.06', '299.99', '12551.05', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:46:02', '2025-02-14 09:46:02'),
+(31, 'E60O3XHO', '12551.05', '299.99', '12851.04', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:50:34', '2025-02-14 09:50:34'),
+(32, 'C1288N59', '12851.04', '299.99', '13151.03', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:56:12', '2025-02-14 09:56:12'),
+(33, '8X4FD2J2', '13151.03', '299.99', '13451.02', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:58:46', '2025-02-14 09:58:46'),
+(34, '6VYZKETT', '13451.02', '299.99', '13751.01', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 10:00:07', '2025-02-14 10:00:07'),
+(35, 'AFG34V7O', '13751.01', '299.99', '14051.00', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 10:04:08', '2025-02-14 10:04:08'),
+(36, 'Y0WIKIFC', '14051.00', '299.99', '14350.99', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 10:06:04', '2025-02-14 10:06:04'),
+(37, '4EUQ9CVL', '14350.99', '299.99', '14650.98', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:19:07', '2025-02-14 11:19:07'),
+(38, '2K4M5CCZ', '14650.98', '299.99', '14950.97', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:30:10', '2025-02-14 11:30:10'),
+(39, '1AYCOS9H', '14950.97', '299.99', '15250.96', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:37:11', '2025-02-14 11:37:11'),
+(40, '9AUPZOK1', '15250.96', '299.99', '15550.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:47:05', '2025-02-14 11:47:05'),
+(41, 'O0KX6I0D', '15550.95', '300.00', '15850.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:55:54', '2025-02-14 11:55:54'),
+(42, 'JNAGIML7', '15850.95', '559.00', '16409.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:57:25', '2025-02-14 11:57:25'),
+(43, 'G7QN0BGL', '16409.95', '400.00', '16809.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:01:59', '2025-02-14 12:01:59'),
+(44, 'B6BISCZL', '16809.95', '300.00', '17109.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:02:00', '2025-02-14 12:02:00'),
+(45, 'U9Q2PAMQ', '17109.95', '300.00', '17409.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:07:38', '2025-02-14 12:07:38'),
+(46, 'PHJ116YG', '17409.95', '300.00', '17709.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:16:29', '2025-02-14 12:16:29'),
+(47, '2EKVK9TQ', '17709.95', '300.00', '18009.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:22:42', '2025-02-14 12:22:42'),
+(48, 'IZLTFVA2', '18009.95', '559.00', '18568.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:30:01', '2025-02-14 12:30:01'),
+(49, 'Y8FACDZL', '18568.95', '300.00', '18868.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:33:04', '2025-02-14 12:33:04'),
+(50, 'TQOPGCAV', '18868.95', '400.00', '19268.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:34:17', '2025-02-14 12:34:17'),
+(51, '2CMNMEC3', '19268.95', '300.00', '19568.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:02:56', '2025-02-15 01:02:56'),
+(52, '2S8LHS63', '19568.95', '300.00', '19868.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:03:00', '2025-02-15 01:03:00'),
+(53, 'A41V83DY', '19868.95', '300.00', '20168.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:05:04', '2025-02-15 01:05:04'),
+(54, 'N8TAU16P', '20168.95', '100.00', '20268.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:06:10', '2025-02-15 01:06:10'),
+(55, 'TDNEMYYS', '20268.95', '300.00', '20568.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:06:51', '2025-02-15 01:06:51'),
+(56, 'AHLJNGV2', '20568.95', '300.00', '20868.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:07:00', '2025-02-15 01:07:00'),
+(57, '2TON346J', '20868.95', '300.00', '21168.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:48:54', '2025-02-15 03:48:54'),
+(58, '6AKW8LR6', '21168.95', '300.00', '21468.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:50:50', '2025-02-15 03:50:50'),
+(59, '5OVCYHMM', '21468.95', '300.00', '21768.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:53:45', '2025-02-15 03:53:45'),
+(60, 'A9UEWQAG', '21768.95', '300.00', '22068.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:54:52', '2025-02-15 03:54:52'),
+(61, 'ESLBDTWW', '22068.95', '100.00', '22168.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:55:17', '2025-02-15 03:55:17'),
+(62, 'A76RQHZK', '22168.95', '300.00', '22468.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:55:29', '2025-02-15 03:55:29');
 
 -- --------------------------------------------------------
 
@@ -1613,7 +1622,7 @@ ALTER TABLE `product_option_values`
 -- AUTO_INCREMENT for table `product_settings`
 --
 ALTER TABLE `product_settings`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `product_variants`

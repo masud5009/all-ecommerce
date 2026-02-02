@@ -1,11 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\MailConfigController;
 use App\Http\Controllers\Admin\MenuBuilderController;
-use App\Http\Controllers\Admin\PackageController;
-use App\Http\Controllers\Admin\UserController;
-use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(function () {
     Route::post('/translate', 'Admin\LanguageController@translateText')->name('admin.translate');
@@ -220,6 +220,8 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
     });
 
     Route::prefix('product-management')->group(function () {
+        Route::get('/settings', 'Admin\Product\SettingController@settings')->name('admin.product.settings');
+        Route::post('/settings/update', 'Admin\Product\SettingController@settingsUpdate')->name('admin.product.settings_update');
         //product category route
         Route::prefix('category')->group(function () {
             Route::get('/', 'Admin\Product\CategoryController@index')->name('admin.product.category');

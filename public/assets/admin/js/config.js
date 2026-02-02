@@ -256,6 +256,8 @@ $("#updateBtn").on('click', function (e) {
 });
 
 /*===================  Initialize tinymce ================*/
+const isDarkMode = $('body').attr('data-background-color') === 'dark';
+
 $(".editor").each(function (i) {
 
     tinymce.init({
@@ -268,10 +270,14 @@ $(".editor").each(function (i) {
         mergetags_list: [
             { value: 'First.Name', title: 'First Name' },
             { value: 'Email', title: 'Email' },
-        ]
+        ],
+        skin: isDarkMode ? 'oxide-dark' : 'oxide',
+        content_css: isDarkMode ? 'dark' : 'default',
+        toolbar_mode: 'sliding'
     });
 
 });
+
 /*===================  data-tables ================*/
 $(document).ready(function () {
     let table = new DataTable('#myTable', {
