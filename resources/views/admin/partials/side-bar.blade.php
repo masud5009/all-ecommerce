@@ -204,7 +204,6 @@
                                             @if (request()->routeIs('admin.product')) active @endif
                                             @if (request()->routeIs('admin.product.create')) active @endif
                                             @if (request()->routeIs('admin.product.edit')) active @endif
-                                            @if (request()->routeIs('admin.product.variant')) active @endif
                                             ">
                                 {{ __('Products') }}</a>
                         </li>

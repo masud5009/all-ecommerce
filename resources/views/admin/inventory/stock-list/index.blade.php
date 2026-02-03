@@ -121,7 +121,7 @@
                                             </td>
                                             <td>{{ currency_symbol($product->current_price) }}</td>
                                             <td>{{ currency_symbol($product->previous_price) }}</td>
-                                            <td>
+                                            {{-- <td>
                                                 <div class="action-buttons">
                                                     @if ($totalVariation > 0)
                                                         <a href="{{ route('admin.product.variant', ['product_id' => $product->id, 'language' => $currentLang->code]) }}"
@@ -139,7 +139,7 @@
                                                         </a>
                                                     @endif
                                                 </div>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                         @if (!empty($variations))
                                             <div class="modal fade"

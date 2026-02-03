@@ -80,7 +80,6 @@
                                     </th>
                                     <th scope="col">{{ __('Image') }}</th>
                                     <th scope="col">{{ __('Title') }}</th>
-                                    <th scope="col">{{ __('Variations') }}</th>
                                     <th scope="col">{{ __('Category') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Action') }}</th>
@@ -97,11 +96,7 @@
                                             </td>
                                             <td>
                                                 {{ truncateString($product->title, 20) }}</td>
-                                            <td>
-                                                <a href="{{ route('admin.product.variant', ['product_id' => $product->id, 'language' => request()->input('language')]) }}"
-                                                    class="btn btn-sm btn-primary"><i
-                                                        class="fas fa-edit"></i>{{ __('Manage') }}</a>
-                                            </td>
+                                         
                                             <td>
                                                 {{ $product->categoryName }}
                                             </td>
