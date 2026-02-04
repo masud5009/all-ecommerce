@@ -1353,11 +1353,6 @@ div.dt-container .dt-paging .dt-paging-button {
     margin: 10px !important;
 }
 
-.language-content:not(.active) {
-    border-color: #dbe3ff;
-    background-color: #f4f7ff;
-}
-
 .language-header .form-group label:hover {
     background-color: #e7edff;
     color: #2d3b8f;
@@ -1369,13 +1364,4 @@ div.dt-container .dt-paging .dt-paging-button {
     width: 14px;
     height: 14px;
     accent-color: #2d3b8f;
-}
-
-.language-content {
-    border: 1px solid #dee2e6;
-    padding: 20px;
-    margin-bottom: 25px;
-    background-color: #f9f9fb;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
-    transition: all 0.3s ease-in-out;
 }
