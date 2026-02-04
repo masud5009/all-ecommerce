@@ -9,6 +9,8 @@ use App\Models\ProductOption;
 use App\Models\ProductOptionValue;
 use App\Models\ProductVariant;
 use App\Models\ProductVariantValue;
+use App\Models\ProductVariantSerialBatch;
+use App\Models\ProductVariantSoldSerial;
 use App\Models\SliderImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -221,6 +223,8 @@ class ProductService
         if (!$hasVariants) {
             // if product has no variants, clear any previous variant data
             ProductVariantValue::whereIn('variant_id', ProductVariant::where('product_id', $product->id)->pluck('id'))->delete();
+            ProductVariantSerialBatch::whereIn('variant_id', ProductVariant::where('product_id', $product->id)->pluck('id'))->delete();
+            ProductVariantSoldSerial::whereIn('variant_id', ProductVariant::where('product_id', $product->id)->pluck('id'))->delete();
             ProductVariant::where('product_id', $product->id)->delete();
 
             ProductOptionValue::whereIn('product_option_id', ProductOption::where('product_id', $product->id)->pluck('id'))->delete();
@@ -241,6 +245,8 @@ class ProductService
 
         //delete existing first
         ProductVariantValue::whereIn('variant_id', ProductVariant::where('product_id', $product->id)->pluck('id'))->delete();
+        ProductVariantSerialBatch::whereIn('variant_id', ProductVariant::where('product_id', $product->id)->pluck('id'))->delete();
+        ProductVariantSoldSerial::whereIn('variant_id', ProductVariant::where('product_id', $product->id)->pluck('id'))->delete();
         ProductVariant::where('product_id', $product->id)->delete();
 
         ProductOptionValue::whereIn('product_option_id', ProductOption::where('product_id', $product->id)->pluck('id'))->delete();
@@ -282,6 +288,16 @@ class ProductService
             $price  = $v['price'] ?? null;
             $stock  = (int)($v['stock'] ?? 0);
             $status = (int)($v['status'] ?? 1);
+            $serialStart = trim((string)($v['serial_start'] ?? ''));
+            $serialEnd = trim((string)($v['serial_end'] ?? ''));
+
+            $trackSerial = ($serialStart !== '' || $serialEnd !== '');
+            if ($trackSerial && ($serialStart === '' || $serialEnd === '')) {
+                throw new \Exception('Serial start and end are required when tracking serials.');
+            }
+            if ($trackSerial && $stock > 0) {
+                self::assertSerialRangeHasStock($serialStart, $serialEnd, $stock);
+            }
 
             $variant = ProductVariant::create([
                 'product_id' => $product->id,
@@ -289,6 +305,9 @@ class ProductService
                 'price'      => ($price === '' || $price === null) ? null : (float)$price,
                 'stock'      => $stock,
                 'status'     => $status,
+                'track_serial' => $trackSerial ? 1 : 0,
+                'serial_start' => $trackSerial ? $serialStart : null,
+                'serial_end'   => $trackSerial ? $serialEnd : null,
             ]);
 
             $map = json_decode($v['map'] ?? '{}', true) ?: [];
@@ -302,6 +321,86 @@ class ProductService
                     ]);
                 }
             }
+            if ($trackSerial && $stock > 0) {
+                $batchNo = 'INIT-' . $variant->id . '-' . now()->format('YmdHis');
+                ProductVariantSerialBatch::create([
+                    'variant_id' => $variant->id,
+                    'batch_no' => $batchNo,
+                    'serial_start' => $serialStart,
+                    'serial_end' => $serialEnd,
+                    'qty' => $stock,
+                    'sold_qty' => 0,
+                ]);
+            }
         }
+    }
+
+    private static function assertSerialRangeHasStock(string $start, string $end, int $count): void
+    {
+        if ($count <= 0) {
+            return;
+        }
+
+        if (!preg_match('/^\d+$/', $start) || !preg_match('/^\d+$/', $end)) {
+            throw new \Exception('Serial start/end must be numeric.');
+        }
+
+        if (self::compareNumericStrings($start, $end) > 0) {
+            throw new \Exception('Serial end must be greater than or equal to start.');
+        }
+
+        $width = max(strlen($start), strlen($end));
+        $last = self::addNumericString($start, $count - 1, $width);
+        if (self::compareNumericStrings($last, $end) > 0) {
+            throw new \Exception('Serial range is smaller than stock.');
+        }
+    }
+
+    private static function compareNumericStrings(string $a, string $b): int
+    {
+        $aTrim = ltrim($a, '0');
+        $bTrim = ltrim($b, '0');
+        $aNorm = $aTrim === '' ? '0' : $aTrim;
+        $bNorm = $bTrim === '' ? '0' : $bTrim;
+
+        if (strlen($aNorm) > strlen($bNorm)) return 1;
+        if (strlen($aNorm) < strlen($bNorm)) return -1;
+        return strcmp($aNorm, $bNorm);
+    }
+
+    private static function addNumericString(string $base, int $offset, int $width): string
+    {
+        $offsetStr = (string)max(0, $offset);
+        $sum = self::addNumericStrings($base, $offsetStr);
+        return str_pad($sum, $width, '0', STR_PAD_LEFT);
+    }
+
+    private static function addNumericStrings(string $a, string $b): string
+    {
+        $a = ltrim($a, '0');
+        $b = ltrim($b, '0');
+        $a = $a === '' ? '0' : $a;
+        $b = $b === '' ? '0' : $b;
+
+        $i = strlen($a) - 1;
+        $j = strlen($b) - 1;
+        $carry = 0;
+        $result = '';
+
+        while ($i >= 0 || $j >= 0 || $carry > 0) {
+            $digit = $carry;
+            if ($i >= 0) {
+                $digit += (int)$a[$i];
+                $i--;
+            }
+            if ($j >= 0) {
+                $digit += (int)$b[$j];
+                $j--;
+            }
+            $carry = intdiv($digit, 10);
+            $result = (string)($digit % 10) . $result;
+        }
+
+        return ltrim($result, '0') === '' ? '0' : ltrim($result, '0');
     }
 }

@@ -56,6 +56,8 @@ class UpdateRequest extends FormRequest
             $ruleArray['variants.*.map'] = 'required|string';
             $ruleArray['variants.*.sku'] = 'nullable|string|max:255';
             $ruleArray['variants.*.price'] = 'nullable|numeric|min:0';
+            $ruleArray['variants.*.serial_start'] = 'nullable|string|max:255';
+            $ruleArray['variants.*.serial_end'] = 'nullable|string|max:255';
         }
 
         // Default language always required

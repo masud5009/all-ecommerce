@@ -8,7 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class ProductVariant extends Model
 {
     use HasFactory;
-      protected $fillable = ['product_id', 'sku', 'price', 'stock', 'status'];
+      protected $fillable = [
+        'product_id',
+        'sku',
+        'price',
+        'stock',
+        'status',
+        'track_serial',
+        'serial_start',
+        'serial_end',
+      ];
 
   public function product() {
     return $this->belongsTo(Product::class);
@@ -16,5 +25,13 @@ class ProductVariant extends Model
 
   public function variantValues() {
     return $this->hasMany(ProductVariantValue::class, 'variant_id');
+  }
+
+  public function serialBatches() {
+    return $this->hasMany(ProductVariantSerialBatch::class, 'variant_id');
+  }
+
+  public function soldSerials() {
+    return $this->hasMany(ProductVariantSoldSerial::class, 'variant_id');
   }
 }

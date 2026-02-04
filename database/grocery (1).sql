@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 03, 2026 at 06:37 PM
+-- Generation Time: Feb 04, 2026 at 06:24 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.29
 
@@ -241,8 +241,8 @@ CREATE TABLE `languages` (
 --
 
 INSERT INTO `languages` (`id`, `name`, `code`, `is_default`, `dashboard_default`, `direction`, `created_at`, `updated_at`) VALUES
-(6, 'English', 'en', 1, 1, 'ltr', '2026-01-26 17:23:11', '2026-02-03 12:00:29'),
-(7, 'বাংলা', 'bn', 0, 0, 'LTR', '2026-01-28 12:09:55', '2026-01-28 12:09:55');
+(6, 'English', 'en', 1, 1, 'ltr', '2026-01-26 17:23:11', '2026-02-04 09:21:30'),
+(7, 'বাংলা', 'bn', 0, 0, 'LTR', '2026-01-28 12:09:55', '2026-02-04 09:21:30');
 
 -- --------------------------------------------------------
 
@@ -395,7 +395,11 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (62, '2026_01_30_055454_create_product_options_table', 36),
 (63, '2026_01_30_055507_create_product_option_values_table', 36),
 (64, '2026_01_30_055519_create_product_variants_table', 36),
-(65, '2026_01_30_055531_create_product_variant_values_table', 36);
+(65, '2026_01_30_055531_create_product_variant_values_table', 36),
+(66, '2026_02_04_000001_add_serial_fields_to_product_variants_table', 37),
+(67, '2026_02_04_000002_create_variant_serials_table', 37),
+(68, '2026_02_04_000003_create_variant_serial_batches_table', 38),
+(69, '2026_02_04_000004_create_variant_sold_serials_table', 38);
 
 -- --------------------------------------------------------
 
@@ -660,7 +664,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `stock`, `last_restock_qty`, `sku`, `thumbnail`, `current_price`, `previous_price`, `type`, `file_type`, `download_link`, `download_file`, `status`, `featured`, `rating`, `created_at`, `updated_at`, `order`, `has_variants`) VALUES
-(20, 0, 0, NULL, '6980e67242555.png', 2000.00, 10000.00, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-02-02 12:01:22', '2026-02-02 12:42:12', 0, 1);
+(33, 0, 0, NULL, '6983878b743d0.png', 0.00, NULL, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-02-04 11:53:15', '2026-02-04 11:53:19', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -688,7 +692,8 @@ INSERT INTO `product_categories` (`id`, `language_id`, `name`, `slug`, `serial_n
 (11, 5, 'Desserts', 'desserts', 2, 1, '2025-01-27 11:52:42', '2025-11-28 11:58:22'),
 (13, 5, 'Main Course', 'main-course', 3, 1, '2025-11-28 11:58:32', '2025-11-28 11:58:32'),
 (14, 6, 'Meat', 'meat', 1, 1, '2026-01-28 12:40:49', '2026-02-02 12:28:07'),
-(15, 6, 'Shoe', 'shoe', 2, 1, '2026-01-29 11:41:33', '2026-02-02 12:28:08');
+(15, 6, 'Shoe', 'shoe', 2, 1, '2026-01-29 11:41:33', '2026-02-02 12:28:08'),
+(16, 6, 'Keyboard', 'keyboard', 3, 1, '2026-02-04 10:19:54', '2026-02-04 10:19:54');
 
 -- --------------------------------------------------------
 
@@ -716,7 +721,7 @@ CREATE TABLE `product_contents` (
 --
 
 INSERT INTO `product_contents` (`id`, `language_id`, `product_id`, `category_id`, `title`, `slug`, `summary`, `description`, `meta_keyword`, `meta_description`, `created_at`, `updated_at`) VALUES
-(25, 6, 20, 15, '111111111111111111111', '111111111111111111111', '11111111111111111111', '<p>11111111111111111111111111111111</p>', NULL, NULL, '2026-02-02 12:01:22', '2026-02-03 12:36:05');
+(38, 6, 33, 16, 'fffffffffffffff', 'fffffffffffffff', 'ffffffffffffffffffff', '<p>ffffffffffffffff</p>', NULL, NULL, '2026-02-04 11:53:15', '2026-02-04 11:53:15');
 
 -- --------------------------------------------------------
 
@@ -764,7 +769,7 @@ CREATE TABLE `product_options` (
 --
 
 INSERT INTO `product_options` (`id`, `product_id`, `name`, `position`, `created_at`, `updated_at`) VALUES
-(15, 20, 'Size', 0, '2026-02-03 12:36:08', '2026-02-03 12:36:08');
+(31, 33, 'Size', 0, '2026-02-04 12:22:58', '2026-02-04 12:22:58');
 
 -- --------------------------------------------------------
 
@@ -786,8 +791,8 @@ CREATE TABLE `product_option_values` (
 --
 
 INSERT INTO `product_option_values` (`id`, `product_option_id`, `value`, `position`, `created_at`, `updated_at`) VALUES
-(35, 15, 'M', 0, '2026-02-03 12:36:08', '2026-02-03 12:36:08'),
-(36, 15, 'L', 1, '2026-02-03 12:36:08', '2026-02-03 12:36:08');
+(67, 31, 'M', 0, '2026-02-04 12:22:58', '2026-02-04 12:22:58'),
+(68, 31, 'L', 1, '2026-02-04 12:22:58', '2026-02-04 12:22:58');
 
 -- --------------------------------------------------------
 
@@ -823,6 +828,9 @@ CREATE TABLE `product_variants` (
   `price` decimal(8,2) DEFAULT NULL,
   `stock` int NOT NULL DEFAULT '0',
   `status` tinyint NOT NULL DEFAULT '1',
+  `track_serial` tinyint(1) NOT NULL DEFAULT '0',
+  `serial_start` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `serial_end` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -831,9 +839,9 @@ CREATE TABLE `product_variants` (
 -- Dumping data for table `product_variants`
 --
 
-INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `price`, `stock`, `status`, `created_at`, `updated_at`) VALUES
-(36, 20, '0000001', 10.00, 10, 1, '2026-02-03 12:36:08', '2026-02-03 12:36:08'),
-(37, 20, '0000002', 20.00, 50, 1, '2026-02-03 12:36:08', '2026-02-03 12:36:08');
+INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `price`, `stock`, `status`, `track_serial`, `serial_start`, `serial_end`, `created_at`, `updated_at`) VALUES
+(60, 33, 'MM-1', 100.00, 10, 1, 1, '1', '10', '2026-02-04 12:22:58', '2026-02-04 12:22:58'),
+(61, 33, 'NN-2', 200.00, 20, 1, 1, '1', '20', '2026-02-04 12:22:58', '2026-02-04 12:22:58');
 
 -- --------------------------------------------------------
 
@@ -854,8 +862,8 @@ CREATE TABLE `product_variant_values` (
 --
 
 INSERT INTO `product_variant_values` (`id`, `variant_id`, `option_value_id`, `created_at`, `updated_at`) VALUES
-(33, 36, 35, '2026-02-03 12:36:08', '2026-02-03 12:36:08'),
-(34, 37, 36, '2026-02-03 12:36:08', '2026-02-03 12:36:08');
+(71, 60, 67, '2026-02-04 12:22:58', '2026-02-04 12:22:58'),
+(72, 61, 68, '2026-02-04 12:22:58', '2026-02-04 12:22:58');
 
 -- --------------------------------------------------------
 
@@ -986,7 +994,8 @@ INSERT INTO `slider_images` (`id`, `item_id`, `item_type`, `image`, `created_at`
 (103, 7, 'product', '679911b7176b9.jpg', '2025-01-28 11:19:51', '2025-01-28 11:21:59'),
 (118, 9, 'product', '6920767363c2d.jpg', '2025-11-21 08:25:55', '2025-11-21 08:30:55'),
 (130, NULL, 'product', '697c4b713313c.png', '2026-01-30 00:10:57', '2026-01-30 00:10:57'),
-(147, 20, 'product', '6980e65f7c9f5.png', '2026-02-02 12:01:03', '2026-02-02 12:01:22');
+(150, NULL, 'product', '69838576ad53d.png', '2026-02-04 11:44:22', '2026-02-04 11:44:22'),
+(151, 33, 'product', '6983875f1cee8.png', '2026-02-04 11:52:31', '2026-02-04 11:53:15');
 
 -- --------------------------------------------------------
 
@@ -1161,6 +1170,100 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `company_name`, `username`, `email`, `image`, `status`, `phone`, `country`, `city`, `state`, `zip_code`, `address`, `email_verified_at`, `password`, `remember_token`, `database_name`, `database_username`, `database_password`, `created_at`, `updated_at`, `qr_menu_enabled`) VALUES
 (59, NULL, 'Ballard and Sawyer Traders', 'vysidexud', 'dehat@mailinator.com', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-21 06:24:12', '$2y$12$RpYAqen.fCBNSFbY34jomOEWl.SFvnQOlzwMQWK0sM0rK80zTUfT.', 'ahVDR4CCllzUT9QMpI2srGHDzdaYl1KVzVnSzLqn26YXlgPxJU1nPvw2xzRI', NULL, NULL, NULL, '2025-11-21 06:24:12', '2025-11-25 10:46:09', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `variant_serials`
+--
+
+CREATE TABLE `variant_serials` (
+  `id` bigint UNSIGNED NOT NULL,
+  `variant_id` bigint UNSIGNED NOT NULL,
+  `serial` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'in_stock',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `variant_serials`
+--
+
+INSERT INTO `variant_serials` (`id`, `variant_id`, `serial`, `status`, `created_at`, `updated_at`) VALUES
+(1, 58, '01', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(2, 58, '02', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(3, 58, '03', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(4, 58, '04', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(5, 58, '05', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(6, 58, '06', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(7, 58, '07', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(8, 58, '08', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(9, 58, '09', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(10, 58, '10', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(11, 59, '01', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(12, 59, '02', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(13, 59, '03', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(14, 59, '04', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(15, 59, '05', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(16, 59, '06', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(17, 59, '07', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(18, 59, '08', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(19, 59, '09', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(20, 59, '10', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(21, 59, '11', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(22, 59, '12', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(23, 59, '13', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(24, 59, '14', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(25, 59, '15', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(26, 59, '16', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(27, 59, '17', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(28, 59, '18', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(29, 59, '19', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
+(30, 59, '20', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `variant_serial_batches`
+--
+
+CREATE TABLE `variant_serial_batches` (
+  `id` bigint UNSIGNED NOT NULL,
+  `variant_id` bigint UNSIGNED NOT NULL,
+  `batch_no` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `serial_start` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `serial_end` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `qty` int NOT NULL,
+  `sold_qty` int NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `variant_serial_batches`
+--
+
+INSERT INTO `variant_serial_batches` (`id`, `variant_id`, `batch_no`, `serial_start`, `serial_end`, `qty`, `sold_qty`, `created_at`, `updated_at`) VALUES
+(1, 60, 'INIT-60-20260204182258', '1', '10', 10, 0, '2026-02-04 12:22:58', '2026-02-04 12:22:58'),
+(2, 61, 'INIT-61-20260204182258', '1', '20', 20, 0, '2026-02-04 12:22:58', '2026-02-04 12:22:58');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `variant_sold_serials`
+--
+
+CREATE TABLE `variant_sold_serials` (
+  `id` bigint UNSIGNED NOT NULL,
+  `order_item_id` bigint UNSIGNED NOT NULL,
+  `variant_id` bigint UNSIGNED NOT NULL,
+  `serial` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'sold',
+  `returned_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1460,6 +1563,30 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
+-- Indexes for table `variant_serials`
+--
+ALTER TABLE `variant_serials`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `variant_serials_variant_id_serial_unique` (`variant_id`,`serial`),
+  ADD KEY `variant_serials_variant_id_status_index` (`variant_id`,`status`);
+
+--
+-- Indexes for table `variant_serial_batches`
+--
+ALTER TABLE `variant_serial_batches`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `variant_serial_batches_variant_id_batch_no_unique` (`variant_id`,`batch_no`),
+  ADD KEY `variant_serial_batches_variant_id_created_at_index` (`variant_id`,`created_at`);
+
+--
+-- Indexes for table `variant_sold_serials`
+--
+ALTER TABLE `variant_sold_serials`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `variant_sold_serials_variant_id_serial_unique` (`variant_id`,`serial`),
+  ADD KEY `variant_sold_serials_variant_id_order_item_id_index` (`variant_id`,`order_item_id`);
+
+--
 -- Indexes for table `vendors`
 --
 ALTER TABLE `vendors`
@@ -1557,7 +1684,7 @@ ALTER TABLE `menu_builders`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -1599,19 +1726,19 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `product_categories`
 --
 ALTER TABLE `product_categories`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `product_contents`
 --
 ALTER TABLE `product_contents`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `product_coupons`
@@ -1623,13 +1750,13 @@ ALTER TABLE `product_coupons`
 -- AUTO_INCREMENT for table `product_options`
 --
 ALTER TABLE `product_options`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `product_option_values`
 --
 ALTER TABLE `product_option_values`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `product_settings`
@@ -1641,13 +1768,13 @@ ALTER TABLE `product_settings`
 -- AUTO_INCREMENT for table `product_variants`
 --
 ALTER TABLE `product_variants`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `product_variant_values`
 --
 ALTER TABLE `product_variant_values`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -1671,7 +1798,7 @@ ALTER TABLE `shipping_charges`
 -- AUTO_INCREMENT for table `slider_images`
 --
 ALTER TABLE `slider_images`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=148;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
 
 --
 -- AUTO_INCREMENT for table `tables`
@@ -1690,6 +1817,24 @@ ALTER TABLE `transactions`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+
+--
+-- AUTO_INCREMENT for table `variant_serials`
+--
+ALTER TABLE `variant_serials`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT for table `variant_serial_batches`
+--
+ALTER TABLE `variant_serial_batches`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `variant_sold_serials`
+--
+ALTER TABLE `variant_sold_serials`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `vendors`

@@ -150,29 +150,6 @@
                                     {{-- Options list --}}
                                     <div id="optionsList"></div>
 
-                                    <div class="col-lg-12">
-                                        <div class="row g-2">
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label>{{ __('SKU Start') }}</label>
-                                                    <input type="text" class="form-control" id="variantSkuStart"
-                                                        placeholder="000001" inputmode="numeric" pattern="[0-9]*"
-                                                        autocomplete="off">
-                                                    <small
-                                                        class="text-muted">{{ __('Optional: auto-fill SKU sequence') }}</small>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label>{{ __('SKU End') }}</label>
-                                                    <input type="text" class="form-control" id="variantSkuEnd"
-                                                        placeholder="000010" inputmode="numeric" pattern="[0-9]*"
-                                                        autocomplete="off">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <!-- generate button -->
                                     <div class="col-lg-12">
                                         <div class="form-group">
@@ -198,6 +175,8 @@
                                                     <tr>
                                                         <th style="min-width: 220px">{{ __('Variant') }}</th>
                                                         <th style="min-width: 160px">{{ __('SKU') }}</th>
+                                                        <th style="min-width: 140px">{{ __('Serial Start') }}</th>
+                                                        <th style="min-width: 140px">{{ __('Serial End') }}</th>
                                                         <th style="min-width: 120px">{{ __('Price') }}</th>
                                                         <th style="min-width: 120px">{{ __('Stock') }}</th>
                                                         <th style="min-width: 120px">{{ __('Status') }}</th>

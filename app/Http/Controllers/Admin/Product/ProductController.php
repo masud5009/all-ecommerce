@@ -90,8 +90,15 @@ class ProductController extends Controller
         $import = new ProductImport();
         Excel::import($import, $request->file('import_file'));
 
-        if ($import->inserted > 0) {
-            session()->flash('success', "Imported {$import->inserted} products.");
+        if ($import->inserted > 0 || $import->updated > 0) {
+            $messageParts = [];
+            if ($import->inserted > 0) {
+                $messageParts[] = "Imported {$import->inserted}";
+            }
+            if ($import->updated > 0) {
+                $messageParts[] = "Updated {$import->updated}";
+            }
+            session()->flash('success', implode(', ', $messageParts) . ' products.');
         }
 
         if ($import->skipped > 0) {
@@ -162,6 +169,8 @@ class ProductController extends Controller
                     'price' => $variant->price,
                     'stock' => $variant->stock,
                     'status' => $variant->status,
+                    'serial_start' => $variant->serial_start,
+                    'serial_end' => $variant->serial_end,
                     'map' => $map,
                 ];
             })
@@ -261,6 +270,8 @@ class ProductController extends Controller
         $variantIds = ProductVariant::where('product_id', $product->id)->pluck('id');
         if ($variantIds->isNotEmpty()) {
             ProductVariantValue::whereIn('variant_id', $variantIds)->delete();
+            \App\Models\ProductVariantSerialBatch::whereIn('variant_id', $variantIds)->delete();
+            \App\Models\ProductVariantSoldSerial::whereIn('variant_id', $variantIds)->delete();
         }
         ProductVariant::where('product_id', $product->id)->delete();
 
