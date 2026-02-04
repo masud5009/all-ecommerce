@@ -31,6 +31,10 @@
                                 <i class="fas fa-trash"></i> {{ __('Delete') }}
                             </button>
 
+                            <a href="{{ route('admin.product.import_form') }}" class="btn btn-success btn-sm me-2">
+                                <i class="fas fa-file-import"></i> {{ __('Import') }}
+                            </a>
+
                             @if ($product_setting->physical_product == 1 && $product_setting->digital_product == 1)
                                 <!-- Both enabled: show dropdown -->
                                 <div class="dropdown">

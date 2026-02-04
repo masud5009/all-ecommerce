@@ -11,12 +11,15 @@ use App\Models\ProductContent;
 use App\Models\ProductSetting;
 use App\Models\ProductVariant;
 use App\Models\ProductCategory;
+use App\Imports\ProductImport;
+use App\Exports\ProductImportTemplate;
 use App\Http\Helpers\ImageUpload;
 use App\Models\ProductOptionValue;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProductVariantValue;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\Product\StoreRequest;
 use App\Http\Requests\Product\UpdateRequest;
 use App\Services\Shop\ProductService;
@@ -71,6 +74,41 @@ class ProductController extends Controller
         $data['languages'] = $languages;
 
         return view('admin.product.create', $data);
+    }
+
+    public function importForm()
+    {
+        return view('admin.product.import');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'import_file' => 'required|file|mimes:csv,txt,xlsx,xls',
+        ]);
+
+        $import = new ProductImport();
+        Excel::import($import, $request->file('import_file'));
+
+        if ($import->inserted > 0) {
+            session()->flash('success', "Imported {$import->inserted} products.");
+        }
+
+        if ($import->skipped > 0) {
+            session()->flash('warning', "{$import->skipped} rows skipped. Please check the errors below.");
+        }
+
+        return redirect()->back()->with('import_errors', $import->errors);
+    }
+
+    public function importTemplate()
+    {
+        return Excel::download(new ProductImportTemplate(), 'product-import-template.csv');
+    }
+
+    public function importTemplateExcel()
+    {
+        return Excel::download(new ProductImportTemplate(), 'product-import-template.xlsx');
     }
 
 

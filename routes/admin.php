@@ -235,6 +235,10 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
         Route::prefix('products')->group(function () {
             Route::get('/', 'Admin\Product\ProductController@index')->name('admin.product');
             Route::get('/product-create', 'Admin\Product\ProductController@create')->name('admin.product.create');
+            Route::get('/product-import', 'Admin\Product\ProductController@importForm')->name('admin.product.import_form');
+            Route::post('/product-import', 'Admin\Product\ProductController@import')->name('admin.product.import');
+            Route::get('/product-import-template', 'Admin\Product\ProductController@importTemplate')->name('admin.product.import_template');
+            Route::get('/product-import-template-excel', 'Admin\Product\ProductController@importTemplateExcel')->name('admin.product.import_template_excel');
 
             Route::post('/slider', 'Admin\Product\ProductController@imagesstore')->name('admin.product.slider');
             Route::post('/slider/remove', 'Admin\Product\ProductController@imageremove')->name('admin.product.slider-remove');
