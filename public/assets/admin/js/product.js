@@ -45,12 +45,42 @@
         }, [[]]);
     }
 
+    function buildSkuSequence(startRaw, endRaw, count) {
+        const startStr = (startRaw || '').trim();
+        const endStr = (endRaw || '').trim();
+
+        if (!startStr && !endStr) return { list: null };
+        if (!startStr || !endStr) return { error: 'Please provide both SKU start and SKU end.' };
+        if (!/^\d+$/.test(startStr) || !/^\d+$/.test(endStr)) return { error: 'SKU range must be numeric.' };
+
+        const startNum = BigInt(startStr);
+        const endNum = BigInt(endStr);
+
+        if (endNum < startNum) return { error: 'SKU end must be greater than or equal to start.' };
+
+        const needed = BigInt(count);
+        const rangeSize = endNum - startNum + 1n;
+        if (rangeSize < needed) return { error: 'SKU range is smaller than the number of variants.' };
+
+        const width = Math.max(startStr.length, endStr.length);
+        const list = [];
+
+        for (let i = 0n; i < needed; i++) {
+            const sku = (startNum + i).toString().padStart(width, '0');
+            list.push(sku);
+        }
+
+        return { list };
+    }
+
     const hasVariantsEl = document.getElementById('has_variants');
     const variationsWrap = document.getElementById('variationsWrap');
 
     const stockInput = document.querySelector('[name="stock"]');
     const priceInput = document.querySelector('[name="current_price"]');
     const skuInput = document.querySelector('[name="sku"]');
+    const variantSkuStartInput = document.getElementById('variantSkuStart');
+    const variantSkuEndInput = document.getElementById('variantSkuEnd');
 
     const optionsList = document.getElementById('optionsList');
     const addOptionBtn = document.getElementById('addOptionBtn');
@@ -230,6 +260,18 @@
 
         const combos = cartesian(options.map(o => o.values));
 
+        let skuSequence = null;
+        const skuSequenceResult = buildSkuSequence(
+            variantSkuStartInput ? variantSkuStartInput.value : '',
+            variantSkuEndInput ? variantSkuEndInput.value : '',
+            combos.length
+        );
+        if (skuSequenceResult && skuSequenceResult.error) {
+            alert(skuSequenceResult.error);
+        } else if (skuSequenceResult && skuSequenceResult.list) {
+            skuSequence = skuSequenceResult.list;
+        }
+
         variantsTbody.innerHTML = '';
         variantsHiddenInputs.innerHTML = '';
 
@@ -239,10 +281,12 @@
             const map = {};
             options.forEach((opt, idx) => map[opt.name] = combo[idx]);
 
+            const skuValue = skuSequence ? skuSequence[i] : '';
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><strong>${label}</strong></td>
-                <td><input type="text" class="form-control" name="variants[${i}][sku]" placeholder="SKU (optional)"></td>
+                <td><input type="text" class="form-control" name="variants[${i}][sku]" value="${skuValue}" placeholder="SKU (optional)"></td>
                 <td><input type="text" class="form-control" name="variants[${i}][price]" placeholder="Price (optional)"></td>
                 <td><input type="number" class="form-control" name="variants[${i}][stock]" min="0" value="0" required></td>
                 <td>

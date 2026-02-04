@@ -150,6 +150,29 @@
                                     {{-- Options list --}}
                                     <div id="optionsList"></div>
 
+                                    <div class="col-lg-12">
+                                        <div class="row g-2">
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label>{{ __('SKU Start') }}</label>
+                                                    <input type="text" class="form-control" id="variantSkuStart"
+                                                        placeholder="000001" inputmode="numeric" pattern="[0-9]*"
+                                                        autocomplete="off">
+                                                    <small
+                                                        class="text-muted">{{ __('Optional: auto-fill SKU sequence') }}</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label>{{ __('SKU End') }}</label>
+                                                    <input type="text" class="form-control" id="variantSkuEnd"
+                                                        placeholder="000010" inputmode="numeric" pattern="[0-9]*"
+                                                        autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <!-- generate button -->
                                     <div class="col-lg-12">
                                         <div class="form-group">
