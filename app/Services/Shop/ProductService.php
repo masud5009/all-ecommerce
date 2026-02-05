@@ -30,7 +30,6 @@ class ProductService
                 $thumbnail = ImageUpload::store(public_path('assets/img/product/'), $request->file('thumbnail'));
             }
 
-            //download file
             if (strtolower((string)$request->type) === 'digital') {
                 if ($request->file_type === 'upload' && $request->hasFile('download_file')) {
                     $download_file = ImageUpload::store(public_path('assets/img/product/file/'), $request->file('download_file'));
@@ -40,15 +39,12 @@ class ProductService
             $product = new Product();
             $product->thumbnail = $thumbnail;
 
-            //if variants enabled, product stock becomes 0 (inventory is variant-level)
             $product->has_variants = $hasVariants ? 1 : 0;
             $product->stock = $hasVariants ? 0 : (int)($request->stock ?? 0);
             $product->last_restock_qty = $hasVariants ? 0 : (int)($request->stock ?? 0);
 
-            // base sku optional if variants
             $product->sku = $hasVariants ? ($request->sku ?? null) : $request->sku;
 
-            //when product has_variants, current_price won't come in request
             $product->current_price = $request->current_price ?? 0;
             $product->previous_price = $request->previous_price;
 
@@ -60,7 +56,7 @@ class ProductService
             $product->status = $request->status;
             $product->save();
 
-            //store slider image
+            // slider images
             $sliders = $request->slider_image;
             if ($sliders) {
                 $pis = SliderImage::findOrFail($sliders);
@@ -70,40 +66,11 @@ class ProductService
                 }
             }
 
-            //store language contents
-            $languages = app('languages');
-            foreach ($languages as $language) {
-                $code = $language->code;
+            // language contents
+            self::storeOrUpdateLanguageContents($product, $request);
 
-                if (
-                    $language->is_default == 1 ||
-                    $request->filled($code . '_title') ||
-                    $request->filled($code . '_category_id') ||
-                    $request->filled($code . '_summary') ||
-                    $request->filled($code . '_description') ||
-                    $request->filled($code . '_meta_keyword') ||
-                    $request->filled($code . '_meta_description')
-                ) {
-                    $metaKeywords = $request->input($code . '_meta_keyword');
-
-                    $content = new ProductContent();
-                    $content->language_id = $language->id;
-                    $content->product_id = $product->id;
-                    $content->category_id = $request->input($code . '_category_id');
-                    $content->title = $request->input($code . '_title');
-                    $content->slug = createSlug($request->input($code . '_title'));
-                    $content->summary = $request->input($code . '_summary');
-                    $content->description = $request->input($code . '_description');
-                    $content->meta_keyword = (is_array($metaKeywords) && count(array_filter($metaKeywords)))
-                        ? json_encode(array_values(array_filter($metaKeywords)))
-                        : null;
-                    $content->meta_description = $request->input($code . '_meta_description');
-                    $content->save();
-                }
-            }
-
-            //store variants/options
-            self::storeVariantsForProduct($product, $request);
+            // variants/options
+            self::storeVariantsForProduct($product, $request, 'create');
 
             DB::commit();
             return true;
@@ -121,13 +88,17 @@ class ProductService
         try {
             $product = Product::findOrFail($id);
 
-            //thumbnail
+            // thumbnail
             $thumbnail = $product->thumbnail;
             if ($request->hasFile('thumbnail')) {
-                $thumbnail = ImageUpload::update(public_path('assets/img/product/'), $request->file('thumbnail'), $product->thumbnail);
+                $thumbnail = ImageUpload::update(
+                    public_path('assets/img/product/'),
+                    $request->file('thumbnail'),
+                    $product->thumbnail
+                );
             }
 
-            //download file
+            // download file
             $download_file = $product->download_file;
             if (strtolower((string)$product->type) === 'digital') {
                 if ($request->file_type === 'upload' && $request->hasFile('download_file')) {
@@ -137,15 +108,12 @@ class ProductService
 
             $product->thumbnail = $thumbnail;
 
-            //if variants enabled, product stock becomes 0 (inventory is variant-level)
             $product->has_variants = $hasVariants ? 1 : 0;
             $product->stock = $hasVariants ? 0 : (int)($request->stock ?? 0);
             $product->last_restock_qty = $hasVariants ? 0 : (int)($request->stock ?? 0);
 
-            // base sku optional if variants
             $product->sku = $hasVariants ? ($request->sku ?? null) : $request->sku;
 
-            //when product has_variants, current_price won't come in request
             $product->current_price = $request->current_price ?? $product->current_price;
             $product->previous_price = $request->previous_price;
 
@@ -153,10 +121,11 @@ class ProductService
             $product->file_type = $request->file_type;
             $product->download_link = $request->download_link;
             $product->download_file = ($request->file_type == 'upload') ? $download_file : null;
+
             $product->status = $request->status;
             $product->save();
 
-            //store slider image
+            // slider images
             $sliders = $request->slider_image;
             if ($sliders) {
                 $pis = SliderImage::findOrFail($sliders);
@@ -166,47 +135,11 @@ class ProductService
                 }
             }
 
-            //update language contents
-            $languages = app('languages');
-            foreach ($languages as $language) {
-                $code = $language->code;
+            // language contents
+            self::storeOrUpdateLanguageContents($product, $request);
 
-                $content = ProductContent::where('product_id', $product->id)
-                    ->where('language_id', $language->id)
-                    ->first();
-
-                if (empty($content)) {
-                    $content = new ProductContent();
-                }
-
-                if (
-                    $language->is_default == 1 ||
-                    $request->filled($code . '_title') ||
-                    $request->filled($code . '_category_id') ||
-                    $request->filled($code . '_summary') ||
-                    $request->filled($code . '_description') ||
-                    $request->filled($code . '_meta_keyword') ||
-                    $request->filled($code . '_meta_description')
-                ) {
-                    $metaKeywords = $request->input($code . '_meta_keyword');
-
-                    $content->language_id = $language->id;
-                    $content->product_id = $product->id;
-                    $content->category_id = $request->input($code . '_category_id');
-                    $content->title = $request->input($code . '_title');
-                    $content->slug = createSlug($request->input($code . '_title'));
-                    $content->summary = $request->input($code . '_summary');
-                    $content->description = $request->input($code . '_description');
-                    $content->meta_keyword = (is_array($metaKeywords) && count(array_filter($metaKeywords)))
-                        ? json_encode(array_values(array_filter($metaKeywords)))
-                        : null;
-                    $content->meta_description = $request->input($code . '_meta_description');
-                    $content->save();
-                }
-            }
-
-            //update variants/options
-            self::storeVariantsForProduct($product, $request);
+            // variants/options (IMPORTANT: do NOT delete batches / sold serials)
+            self::storeVariantsForProduct($product, $request, 'update');
 
             DB::commit();
             return true;
@@ -216,23 +149,75 @@ class ProductService
         }
     }
 
-    public static function storeVariantsForProduct(Product $product, Request $request)
+    private static function storeOrUpdateLanguageContents(Product $product, Request $request): void
+    {
+        $languages = app('languages');
+        foreach ($languages as $language) {
+            $code = $language->code;
+
+            $content = ProductContent::where('product_id', $product->id)
+                ->where('language_id', $language->id)
+                ->first();
+
+            if (empty($content)) {
+                $content = new ProductContent();
+            }
+
+            if (
+                $language->is_default == 1 ||
+                $request->filled($code . '_title') ||
+                $request->filled($code . '_category_id') ||
+                $request->filled($code . '_summary') ||
+                $request->filled($code . '_description') ||
+                $request->filled($code . '_meta_keyword') ||
+                $request->filled($code . '_meta_description')
+            ) {
+                $metaKeywords = $request->input($code . '_meta_keyword');
+
+                $content->language_id = $language->id;
+                $content->product_id = $product->id;
+                $content->category_id = $request->input($code . '_category_id');
+                $content->title = $request->input($code . '_title');
+                $content->slug = createSlug($request->input($code . '_title'));
+                $content->summary = $request->input($code . '_summary');
+                $content->description = $request->input($code . '_description');
+                $content->meta_keyword = (is_array($metaKeywords) && count(array_filter($metaKeywords)))
+                    ? json_encode(array_values(array_filter($metaKeywords)))
+                    : null;
+                $content->meta_description = $request->input($code . '_meta_description');
+                $content->save();
+            }
+        }
+    }
+
+    /**
+     * Upsert variants/options:
+     * - create/update options and option values
+     * - create/update variants and variant values
+     * - create initial serial batch only when variant newly created and track_serial enabled
+     * - do NOT delete serial batches / sold serials
+     * - variants removed from request => mark inactive (status=0)
+     */
+    public static function storeVariantsForProduct(Product $product, Request $request, string $mode = 'update')
     {
         $hasVariants = $request->boolean('has_variants');
 
         if (!$hasVariants) {
-            // if product has no variants, clear any previous variant data
-            ProductVariantValue::whereIn('variant_id', ProductVariant::where('product_id', $product->id)->pluck('id'))->delete();
-            ProductVariantSerialBatch::whereIn('variant_id', ProductVariant::where('product_id', $product->id)->pluck('id'))->delete();
-            ProductVariantSoldSerial::whereIn('variant_id', ProductVariant::where('product_id', $product->id)->pluck('id'))->delete();
-            ProductVariant::where('product_id', $product->id)->delete();
+            // If switched to no-variants, we should not destroy serial history.
+            // Just deactivate existing variants & clear option mappings.
+            ProductVariant::where('product_id', $product->id)->update(['status' => 0]);
+
+            ProductVariantValue::whereIn(
+                'variant_id',
+                ProductVariant::where('product_id', $product->id)->pluck('id')
+            )->delete();
 
             ProductOptionValue::whereIn('product_option_id', ProductOption::where('product_id', $product->id)->pluck('id'))->delete();
             ProductOption::where('product_id', $product->id)->delete();
+
             return;
         }
 
-        //must have variants data
         $optionsInput  = $request->input('variant_options', []);
         $variantsInput = $request->input('variants', []);
 
@@ -243,16 +228,10 @@ class ProductService
             throw new \Exception('Variants are required. Please generate variants first.');
         }
 
-        //delete existing first
-        ProductVariantValue::whereIn('variant_id', ProductVariant::where('product_id', $product->id)->pluck('id'))->delete();
-        ProductVariantSerialBatch::whereIn('variant_id', ProductVariant::where('product_id', $product->id)->pluck('id'))->delete();
-        ProductVariantSoldSerial::whereIn('variant_id', ProductVariant::where('product_id', $product->id)->pluck('id'))->delete();
-        ProductVariant::where('product_id', $product->id)->delete();
-
+        // Rebuild options each time (safe) because they are definitions.
         ProductOptionValue::whereIn('product_option_id', ProductOption::where('product_id', $product->id)->pluck('id'))->delete();
         ProductOption::where('product_id', $product->id)->delete();
 
-        //create options + values and build a lookup map
         $valueIdMap = []; // ["Color"]["Red"] => option_value_id
 
         foreach ($optionsInput as $pos => $opt) {
@@ -282,64 +261,282 @@ class ProductService
             }
         }
 
-        //create variants + pivot mapping
+        // existing variants by a stable "signature"
+        $existing = ProductVariant::where('product_id', $product->id)->get();
+
+        // We'll match variants by map signature (option_value_ids sorted)
+        $existingBySig = [];
+        foreach ($existing as $ev) {
+            $sig = self::variantSignatureFromDb($ev->id);
+            if ($sig) $existingBySig[$sig] = $ev;
+        }
+
+        $seenVariantIds = [];
+
         foreach ($variantsInput as $v) {
-            $sku    = $v['sku'] ?? null;
+            $sku    = trim((string)($v['sku'] ?? ''));
             $price  = $v['price'] ?? null;
-            $stock  = (int)($v['stock'] ?? 0);
+            $stock  = (int)($v['stock'] ?? 0); // treat as "initial qty" on create; on update do NOT override historical stock
             $status = (int)($v['status'] ?? 1);
+
             $serialStart = trim((string)($v['serial_start'] ?? ''));
-            $serialEnd = trim((string)($v['serial_end'] ?? ''));
+            $serialEnd   = trim((string)($v['serial_end'] ?? ''));
 
             $trackSerial = ($serialStart !== '' || $serialEnd !== '');
             if ($trackSerial && ($serialStart === '' || $serialEnd === '')) {
                 throw new \Exception('Serial start and end are required when tracking serials.');
             }
-            if ($trackSerial && $stock > 0) {
-                self::assertSerialRangeHasStock($serialStart, $serialEnd, $stock);
-            }
 
-            $variant = ProductVariant::create([
-                'product_id' => $product->id,
-                'sku'        => ($sku === '' ? null : $sku),
-                'price'      => ($price === '' || $price === null) ? null : (float)$price,
-                'stock'      => $stock,
-                'status'     => $status,
-                'track_serial' => $trackSerial ? 1 : 0,
-                'serial_start' => $trackSerial ? $serialStart : null,
-                'serial_end'   => $trackSerial ? $serialEnd : null,
-            ]);
-
+            // map from request => option_value_ids
             $map = json_decode($v['map'] ?? '{}', true) ?: [];
+            $optionValueIds = [];
 
             foreach ($map as $optName => $optValue) {
                 $optionValueId = $valueIdMap[$optName][$optValue] ?? null;
-                if ($optionValueId) {
-                    ProductVariantValue::create([
-                        'variant_id'      => $variant->id,
-                        'option_value_id' => $optionValueId,
-                    ]);
-                }
+                if ($optionValueId) $optionValueIds[] = (int)$optionValueId;
             }
-            if ($trackSerial && $stock > 0) {
+
+            sort($optionValueIds);
+            $sig = implode('-', $optionValueIds);
+
+            $variant = $existingBySig[$sig] ?? null;
+            $isNew = false;
+
+            if (!$variant) {
+                // create new variant
+                $variant = ProductVariant::create([
+                    'product_id'    => $product->id,
+                    'sku'           => ($sku === '' ? null : $sku),
+                    'price'         => ($price === '' || $price === null) ? null : (float)$price,
+                    'stock'         => $stock, // initial stock only
+                    'status'        => $status,
+                    'track_serial'  => $trackSerial ? 1 : 0,
+                    'serial_start'  => $trackSerial ? $serialStart : null,
+                    'serial_end'    => $trackSerial ? $serialEnd : null,
+                ]);
+                $isNew = true;
+            } else {
+                // update existing variant safely (do NOT wipe batches/sold)
+                $variant->sku = ($sku === '' ? $variant->sku : $sku);
+                $variant->price = ($price === '' || $price === null) ? $variant->price : (float)$price;
+                $variant->status = $status;
+
+                // Allow toggling track_serial ON only if no sold serial yet (safety)
+                if ($trackSerial) {
+                    $hasSold = ProductVariantSoldSerial::where('variant_id', $variant->id)->exists();
+                    if ($hasSold) {
+                        // Keep existing serial config; don't allow changing ranges when already sold
+                        $variant->track_serial = $variant->track_serial;
+                    } else {
+                        $variant->track_serial = 1;
+                        $variant->serial_start = $serialStart;
+                        $variant->serial_end   = $serialEnd;
+                    }
+                } else {
+                    // turning off serial tracking is allowed, but we keep old data untouched
+                    $variant->track_serial = 0;
+                }
+
+                // IMPORTANT: we do not overwrite stock here (use batches for real stock)
+                $variant->save();
+            }
+
+            $seenVariantIds[] = $variant->id;
+
+            // refresh pivot mapping: delete old values for this variant and re-insert
+            ProductVariantValue::where('variant_id', $variant->id)->delete();
+
+            foreach ($optionValueIds as $ovId) {
+                ProductVariantValue::create([
+                    'variant_id'      => $variant->id,
+                    'option_value_id' => $ovId,
+                ]);
+            }
+
+            // Initial batch create only on NEW variant and trackSerial enabled
+            if ($isNew && $trackSerial && $stock > 0) {
+                self::assertSerialRangeHasStock($serialStart, $serialEnd, $stock);
+                self::ensureNoBatchOverlap($variant->id, $serialStart, $serialEnd);
+
                 $batchNo = 'INIT-' . $variant->id . '-' . now()->format('YmdHis');
                 ProductVariantSerialBatch::create([
-                    'variant_id' => $variant->id,
-                    'batch_no' => $batchNo,
-                    'serial_start' => $serialStart,
-                    'serial_end' => $serialEnd,
-                    'qty' => $stock,
-                    'sold_qty' => 0,
+                    'variant_id'    => $variant->id,
+                    'batch_no'      => $batchNo,
+                    'serial_start'  => $serialStart,
+                    'serial_end'    => $serialEnd,
+                    'qty'           => $stock,
+                    'sold_qty'      => 0,
                 ]);
             }
         }
+
+        // variants not present in request => deactivate
+        ProductVariant::where('product_id', $product->id)
+            ->whereNotIn('id', $seenVariantIds)
+            ->update(['status' => 0]);
+    }
+
+    /**
+     * RESTOCK: add a new serial batch to an existing variant.
+     * Use this instead of editing variant stock directly.
+     */
+    public static function restockVariantWithBatch(
+        int $variantId,
+        string $serialStart,
+        string $serialEnd,
+        int $qty,
+        ?string $batchNo = null
+    ): void {
+        if ($qty <= 0) {
+            throw new \Exception('Restock qty must be greater than 0.');
+        }
+
+        $variant = ProductVariant::findOrFail($variantId);
+        if ((int)$variant->track_serial !== 1) {
+            throw new \Exception('This variant is not configured for serial tracking.');
+        }
+
+        self::assertSerialRangeHasStock($serialStart, $serialEnd, $qty);
+        self::ensureNoBatchOverlap($variantId, $serialStart, $serialEnd);
+
+        ProductVariantSerialBatch::create([
+            'variant_id'   => $variantId,
+            'batch_no'     => $batchNo ?: ('RST-' . $variantId . '-' . now()->format('YmdHis')),
+            'serial_start' => $serialStart,
+            'serial_end'   => $serialEnd,
+            'qty'          => $qty,
+            'sold_qty'     => 0,
+        ]);
+    }
+
+    /**
+     * Allocate serials on successful payment (FIFO batches).
+     * Stores ONLY sold serials (not all inventory).
+     */
+    public static function allocateSerialsForOrderItem(int $variantId, int $orderItemId, int $qty): array
+    {
+        if ($qty <= 0) return [];
+
+        return DB::transaction(function () use ($variantId, $orderItemId, $qty) {
+            $variant = ProductVariant::where('id', $variantId)->lockForUpdate()->firstOrFail();
+            if ((int)$variant->track_serial !== 1) {
+                throw new \Exception('Variant is not serial-tracked.');
+            }
+
+            $batches = ProductVariantSerialBatch::where('variant_id', $variantId)
+                ->whereRaw('sold_qty < qty')
+                ->orderBy('id')
+                ->lockForUpdate()
+                ->get();
+
+            $allocated = [];
+            $need = $qty;
+
+            foreach ($batches as $batch) {
+                if ($need <= 0) break;
+
+                $available = (int)$batch->qty - (int)$batch->sold_qty;
+                if ($available <= 0) continue;
+
+                $take = min($available, $need);
+
+                $width = max(strlen((string)$batch->serial_start), strlen((string)$batch->serial_end));
+                $firstSerial = self::addNumericString((string)$batch->serial_start, (int)$batch->sold_qty, $width);
+
+                // store sold serials (only sold, not all)
+                for ($i = 0; $i < $take; $i++) {
+                    $serial = self::addNumericString($firstSerial, $i, $width);
+
+                    ProductVariantSoldSerial::create([
+                        'variant_id'     => $variantId,
+                        'order_item_id'  => $orderItemId,
+                        'serial'         => $serial,
+                        'status'         => 'sold',
+                    ]);
+
+                    $allocated[] = $serial;
+                }
+
+                $batch->sold_qty = (int)$batch->sold_qty + $take;
+                $batch->save();
+
+                $need -= $take;
+            }
+
+            if ($need > 0) {
+                throw new \Exception('Not enough serial stock available.');
+            }
+
+            return $allocated;
+        });
+    }
+
+    /**
+     * Calculate available stock from batches (serial-tracked variants).
+     */
+    public static function getVariantAvailableStock(int $variantId): int
+    {
+        $sum = ProductVariantSerialBatch::where('variant_id', $variantId)
+            ->selectRaw('COALESCE(SUM(qty - sold_qty),0) as available')
+            ->value('available');
+
+        return (int)$sum;
+    }
+
+    /**
+     * Return serial (basic).
+     * You can expand it with a separate return log table if needed.
+     */
+    public static function markSerialReturned(int $variantId, int $orderItemId, string $serial): void
+    {
+        $row = ProductVariantSoldSerial::where('variant_id', $variantId)
+            ->where('order_item_id', $orderItemId)
+            ->where('serial', $serial)
+            ->lockForUpdate()
+            ->first();
+
+        if (!$row) {
+            throw new \Exception('Serial not found for this order item.');
+        }
+
+        $row->status = 'returned';
+        $row->save();
+    }
+
+    /**
+     * Prevent overlapping serial ranges per variant.
+     */
+    private static function ensureNoBatchOverlap(int $variantId, string $newStart, string $newEnd): void
+    {
+        // numeric-only ranges
+        if (!preg_match('/^\d+$/', $newStart) || !preg_match('/^\d+$/', $newEnd)) {
+            throw new \Exception('Serial start/end must be numeric.');
+        }
+
+        $overlap = ProductVariantSerialBatch::where('variant_id', $variantId)
+            ->where(function ($q) use ($newStart, $newEnd) {
+                // (new_start <= old_end) AND (new_end >= old_start)
+                $q->whereRaw('? <= serial_end', [$newStart])
+                  ->whereRaw('? >= serial_start', [$newEnd]);
+            })
+            ->exists();
+
+        if ($overlap) {
+            throw new \Exception('Serial range overlaps with existing batch for this variant.');
+        }
+    }
+
+    private static function variantSignatureFromDb(int $variantId): ?string
+    {
+        $ids = ProductVariantValue::where('variant_id', $variantId)->pluck('option_value_id')->toArray();
+        if (!$ids) return null;
+        sort($ids);
+        return implode('-', $ids);
     }
 
     private static function assertSerialRangeHasStock(string $start, string $end, int $count): void
     {
-        if ($count <= 0) {
-            return;
-        }
+        if ($count <= 0) return;
 
         if (!preg_match('/^\d+$/', $start) || !preg_match('/^\d+$/', $end)) {
             throw new \Exception('Serial start/end must be numeric.');
@@ -351,6 +548,7 @@ class ProductService
 
         $width = max(strlen($start), strlen($end));
         $last = self::addNumericString($start, $count - 1, $width);
+
         if (self::compareNumericStrings($last, $end) > 0) {
             throw new \Exception('Serial range is smaller than stock.');
         }
@@ -401,6 +599,7 @@ class ProductService
             $result = (string)($digit % 10) . $result;
         }
 
-        return ltrim($result, '0') === '' ? '0' : ltrim($result, '0');
+        $out = ltrim($result, '0');
+        return $out === '' ? '0' : $out;
     }
 }
