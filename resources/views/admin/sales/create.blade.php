@@ -277,7 +277,7 @@
                 $(select).select2({
                     width: '100%',
                     placeholder: "{{ __('Search product or SKU') }}",
-                    minimumInputLength: 1,
+                    minimumInputLength: 0,
                     ajax: {
                         url: searchUrl,
                         dataType: 'json',
@@ -298,6 +298,13 @@
                             };
                         },
                         cache: true
+                    }
+                });
+
+                $(select).on('select2:open', function () {
+                    var searchField = document.querySelector('.select2-container--open .select2-search__field');
+                    if (searchField && searchField.value === '') {
+                        searchField.dispatchEvent(new Event('input', { bubbles: true }));
                     }
                 });
 

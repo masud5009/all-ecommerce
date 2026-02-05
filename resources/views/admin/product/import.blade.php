@@ -78,22 +78,26 @@
                 <hr>
 
                 <div class="alert alert-info mb-0">
-                    <strong>{{ __('Notes') }}</strong>
-                    <div class="mt-2">
-                        {{ __('Use either category_id (preferred) or category_name from default language.') }}
-                    </div>
+                    <strong>{{ __('Quick Guide') }}</strong>
+                    <div class="mt-2">{{ __('Use either category_id (preferred) or category_name from default language.') }}</div>
                     <div>{{ __('row_type must be product or variant.') }}</div>
-                    <div>{{ __('Variants must reference a product via group_key. Add one product row per group_key.') }}</div>
                     <div>{{ __('Type must be physical or digital.') }}</div>
-                    <div>{{ __('For digital products, download_link is required.') }}</div>
+                    <div>{{ __('For digital products, download_link is required (product row or any variant row).') }}</div>
                     <div>{{ __('SKU with leading zeros should be saved as text in Excel.') }}</div>
-                    <div>{{ __('For variations, each row represents one variant. Use group_key + variant_map + variant_* columns.') }}</div>
-                    <div>{{ __('variant_map format: Size=S|Color=Red') }}</div>
-                    <div>{{ __('Variant rows need: group_key, variant_map, variant_sku, variant_stock, variant_status. Other product fields can be blank.') }}</div>
+
+                    <div class="mt-3"><strong>{{ __('How To Add Variants') }}</strong></div>
+                    <div>{{ __('Step 1: Add one product row and set a unique group_key.') }}</div>
+                    <div>{{ __('Step 2: Add one variant row per variant using the same group_key.') }}</div>
+                    <div>{{ __('Step 3: Fill variant_map using Option=Value format separated by |') }}</div>
+                    <div>{{ __('Example: Size=L|Color=Red') }}</div>
+                    <div>{{ __('All variant rows must use the same option keys (Size, Color, etc.).') }}</div>
+                    <div>{{ __('If product has no variants, leave group_key empty and do not add any variant rows.') }}</div>
+                    <div>{{ __('Variant rows required fields: group_key, variant_map, variant_sku, variant_stock, variant_status.') }}</div>
+                    <div>{{ __('Variant price is optional (blank will keep product price).') }}</div>
                 </div>
 
                 <div class="mt-4">
-                    <h6 class="mb-2">{{ __('Example Data (CSV/Excel)') }}</h6>
+                    <h6 class="mb-2">{{ __('Example Data (Simple + Variants)') }}</h6>
                     <div class="table-responsive">
                         <table class="table table-bordered table-sm mb-0">
                             <thead>

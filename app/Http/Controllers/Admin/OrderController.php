@@ -27,13 +27,6 @@ class OrderController extends Controller
         $page = max(1, (int)$request->input('page', 1));
         $perPage = 10;
 
-        if ($term === '') {
-            return response()->json([
-                'results' => [],
-                'pagination' => ['more' => false],
-            ]);
-        }
-
         $defaultLang = app('defaultLang');
 
         $productsQuery = Product::query()
@@ -42,12 +35,14 @@ class OrderController extends Controller
             }])
             ->where('status', 1)
             ->where('has_variants', 0)
-            ->where(function ($q) use ($term, $defaultLang) {
-                $q->where('sku', 'like', '%' . $term . '%')
-                    ->orWhereHas('content', function ($cq) use ($term, $defaultLang) {
-                        $cq->where('language_id', $defaultLang->id)
-                            ->where('title', 'like', '%' . $term . '%');
-                    });
+            ->when($term !== '', function ($q) use ($term, $defaultLang) {
+                $q->where(function ($sub) use ($term, $defaultLang) {
+                    $sub->where('sku', 'like', '%' . $term . '%')
+                        ->orWhereHas('content', function ($cq) use ($term, $defaultLang) {
+                            $cq->where('language_id', $defaultLang->id)
+                                ->where('title', 'like', '%' . $term . '%');
+                        });
+                });
             });
 
         $variantsQuery = ProductVariant::query()
@@ -61,15 +56,17 @@ class OrderController extends Controller
             ->whereHas('product', function ($q) {
                 $q->where('status', 1);
             })
-            ->where(function ($q) use ($term, $defaultLang) {
-                $q->where('sku', 'like', '%' . $term . '%')
-                    ->orWhereHas('product', function ($pq) use ($term, $defaultLang) {
-                        $pq->where('sku', 'like', '%' . $term . '%')
-                            ->orWhereHas('content', function ($cq) use ($term, $defaultLang) {
-                                $cq->where('language_id', $defaultLang->id)
-                                    ->where('title', 'like', '%' . $term . '%');
-                            });
-                    });
+            ->when($term !== '', function ($q) use ($term, $defaultLang) {
+                $q->where(function ($sub) use ($term, $defaultLang) {
+                    $sub->where('sku', 'like', '%' . $term . '%')
+                        ->orWhereHas('product', function ($pq) use ($term, $defaultLang) {
+                            $pq->where('sku', 'like', '%' . $term . '%')
+                                ->orWhereHas('content', function ($cq) use ($term, $defaultLang) {
+                                    $cq->where('language_id', $defaultLang->id)
+                                        ->where('title', 'like', '%' . $term . '%');
+                                });
+                        });
+                });
             });
 
         $totalVariants = (clone $variantsQuery)->count();
