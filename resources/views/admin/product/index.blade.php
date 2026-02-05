@@ -31,6 +31,10 @@
                                 <i class="fas fa-trash"></i> {{ __('Delete') }}
                             </button>
 
+                            <a href="{{ route('admin.product.variant.restock') }}" class="btn btn-outline-primary btn-sm me-2">
+                                <i class="fas fa-boxes"></i> {{ __('Restock Variant') }}
+                            </a>
+
                             <a href="{{ route('admin.product.import_form') }}" class="btn btn-success btn-sm me-2">
                                 <i class="fas fa-file-import"></i> {{ __('Import') }}
                             </a>

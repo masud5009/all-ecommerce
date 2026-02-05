@@ -207,6 +207,11 @@
                                             ">
                                 {{ __('Products') }}</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.product.variant.restock') }}"
+                                class="nav-link {{ request()->routeIs('admin.product.variant.*') ? 'active' : '' }}">
+                                {{ __('Restock Variant') }}</a>
+                        </li>
                     </ul>
                 </li>
 

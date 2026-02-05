@@ -252,6 +252,12 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
             Route::post('/changeStatus', 'Admin\Product\ProductController@changeStatus')->name('admin.product.status_change');
         });
 
+        Route::prefix('variants')->group(function () {
+            Route::get('/restock', 'Admin\Product\VariantController@restockForm')->name('admin.product.variant.restock');
+            Route::post('/restock', 'Admin\Product\VariantController@restock')->name('admin.product.variant.restock_store');
+            Route::get('/{id}', 'Admin\Product\VariantController@show')->name('admin.product.variant.details');
+        });
+
         //product coupon route
         Route::prefix('coupon')->group(function () {
             Route::get('/', 'Admin\Product\CouponController@index')->name('admin.product.coupon');

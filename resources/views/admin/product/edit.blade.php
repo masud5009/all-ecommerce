@@ -1,4 +1,4 @@
-@extends('admin.layout')
+﻿@extends('admin.layout')
 @section('content')
     <nav aria-label="breadcrumb" class="breadcrumb">
         <ol class="breadcrumb">
@@ -255,6 +255,76 @@
                         <button class="btn btn-success" id="blogSubmit" type="button">{{ __('Update') }}</button>
                     </div>
                 </form>
+
+                @if ($product->has_variants && $product->variants->isNotEmpty())
+                    <hr>
+                    <div class="mt-3">
+                        <h6 class="mb-2">{{ __('Variant Details') }}</h6>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>{{ __('Variant') }}</th>
+                                        <th>{{ __('SKU') }}</th>
+                                        <th>{{ __('Status') }}</th>
+                                        <th>{{ __('Track Serial') }}</th>
+                                        <th>{{ __('Actions') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($product->variants as $variant)
+                                        @php
+                                            $variantParts = $variant->variantValues
+                                                ->sortBy(function ($variantValue) {
+                                                    return optional(optional($variantValue->optionValue)->option)->position ?? 0;
+                                                })
+                                                ->map(function ($variantValue) {
+                                                    $option = optional($variantValue->optionValue)->option;
+                                                    $value = optional($variantValue->optionValue)->value;
+
+                                                    if (!$option || $value === null) {
+                                                        return null;
+                                                    }
+
+                                                    return $option->name . ': ' . $value;
+                                                })
+                                                ->filter()
+                                                ->values();
+
+                                            $variantLabel = $variantParts->isNotEmpty()
+                                                ? $variantParts->implode(', ')
+                                                : __('Default');
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $variantLabel }}</td>
+                                            <td>{{ $variant->sku ?? 'N/A' }}</td>
+                                            <td>
+                                                @if ((int) $variant->status === 1)
+                                                    <span class="badge bg-success">{{ __('Active') }}</span>
+                                                @else
+                                                    <span class="badge bg-danger">{{ __('Inactive') }}</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ (int) $variant->track_serial === 1 ? __('Yes') : __('No') }}</td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <a href="{{ route('admin.product.variant.details', ['id' => $variant->id]) }}"
+                                                        class="btn btn-sm edit-button">
+                                                        <span class="fas fa-eye"></span>
+                                                    </a>
+                                                    <a href="{{ route('admin.product.variant.restock', ['variant_id' => $variant->id]) }}"
+                                                        class="btn btn-sm edit-button">
+                                                        <span class="fas fa-plus"></span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -269,3 +339,5 @@
     <script src="{{ asset('assets/admin/js/blog.js') }}"></script>
 @endsection
 @endsection
+
+
