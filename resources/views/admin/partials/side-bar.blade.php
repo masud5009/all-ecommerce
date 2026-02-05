@@ -161,6 +161,11 @@
                                 {{ __('All Sales') }}</a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('admin.sales.create') }}"
+                                class="nav-link {{ request()->routeIs('admin.sales.create') ? 'active' : '' }}">
+                                {{ __('Create Order') }}</a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('admin.sales.reports') }}"
                                 class="nav-link {{ request()->routeIs('admin.sales.reports') ? 'active' : '' }}">
                                 {{ __('Reports') }}</a>

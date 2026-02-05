@@ -25,9 +25,16 @@ class SalesController extends Controller
 
     public function details($id)
     {
+        $defaultLang = app('defaultLang');
         $data['order'] = Order::findOrFail($id);
-        $data['order_items'] = OrderItem::where('order_id', $id)->get();
-        $data['lang'] = app('defaultLang')->id;
+        $data['order_items'] = OrderItem::with([
+            'product.content' => function ($q) use ($defaultLang) {
+                $q->where('language_id', $defaultLang->id);
+            },
+            'variant.variantValues.optionValue.option',
+            'soldSerials',
+        ])->where('order_id', $id)->get();
+        $data['lang'] = $defaultLang->id;
         return view('admin.sales.details', $data);
     }
 

@@ -24,7 +24,10 @@
                             <h5>{{ __('All Sales') }}</h5>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-6">
+                    <div class="col-lg-4 col-sm-6 d-flex justify-content-end gap-2 align-items-center">
+                        <a href="{{ route('admin.sales.create') }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus"></i> {{ __('Create Order') }}
+                        </a>
                         {{ $orders->links() }}
                     </div>
                 </div>

@@ -50,7 +50,8 @@
                                         <strong>{{ __('Estimated Delivery Date') . ' :' }}</strong>
                                     </div>
 
-                                    <div class="col-lg-6">{{ date_format($order->delivery_date, 'jS M, Y') }}
+                                    <div class="col-lg-6">
+                                        {{ \Carbon\Carbon::parse($order->delivery_date)->format('jS M, Y') }}
                                     </div>
                                 </div>
                             @endif
@@ -59,7 +60,7 @@
                                     <strong>{{ __('Subtotal') . ' :' }}</strong>
                                 </div>
 
-                                <div class="col-lg-6">{{ currency_symbol_order($order->cart_total, $symbol, $position) }}
+                                <div class="col-lg-6">{{ currency_symbol_order($order->cart_total ?? 0, $symbol ?? '', $position ?? 'left') }}
                                 </div>
                             </div>
                             <div class="row mb-2">
@@ -68,7 +69,7 @@
                                 </div>
 
                                 <div class="col-lg-6">
-                                    {{ currency_symbol_order($order->shipping_charge, $symbol, $position) }}
+                                    {{ currency_symbol_order($order->shipping_charge ?? 0, $symbol ?? '', $position ?? 'left') }}
                                 </div>
                             </div>
                             <div class="row mb-2">
@@ -77,7 +78,7 @@
                                 </div>
 
                                 <div class="col-lg-6">
-                                    {{ currency_symbol_order($order->discount_amount, $symbol, $position) }}
+                                    {{ currency_symbol_order($order->discount_amount ?? 0, $symbol ?? '', $position ?? 'left') }}
                                 </div>
                             </div>
                             <div class="row mb-2">
@@ -85,7 +86,7 @@
                                     <strong>{{ __('Tax') . ' :' }}</strong>
                                 </div>
 
-                                <div class="col-lg-6">{{ currency_symbol_order($order->tax, $symbol, $position) }}
+                                <div class="col-lg-6">{{ currency_symbol_order($order->tax ?? 0, $symbol ?? '', $position ?? 'left') }}
                                 </div>
                             </div>
                             <div class="row mb-2">
@@ -93,7 +94,7 @@
                                     <strong>{{ __('Total Amount') . ' :' }}</strong>
                                 </div>
 
-                                <div class="col-lg-6">{{ currency_symbol_order($order->pay_amount, $symbol, $position) }}
+                                <div class="col-lg-6">{{ currency_symbol_order($order->pay_amount ?? 0, $symbol ?? '', $position ?? 'left') }}
                                 </div>
                             </div>
                             <div class="row mb-2">
@@ -219,20 +220,38 @@
                                         <tr>
                                             <th scope="col">{{ __('SL') }}</th>
                                             <th scope="col">{{ __('Product') }}</th>
+                                            <th scope="col">{{ __('Qty') }}</th>
                                             <th scope="col">{{ __('Price') }}</th>
+                                            <th scope="col">{{ __('Line Total') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
 
                                         @foreach ($order_items as $item)
                                             @php
-                                                $productTitle = App\Models\ProductContent::where([
-                                                    ['product_id', $item->product_id],
-                                                    ['language_id', $lang],
-                                                ])
-                                                    ->pluck('title')
-                                                    ->first();
+                                                $productTitle = optional($item->product->content->first())->title
+                                                    ?? __('Unknown Product');
                                                 $variations = json_decode($item->variations);
+                                                $variantLabel = null;
+                                                if ($item->variant) {
+                                                    $parts = $item->variant->variantValues
+                                                        ->sortBy(function ($variantValue) {
+                                                            return optional(optional($variantValue->optionValue)->option)->position ?? 0;
+                                                        })
+                                                        ->map(function ($variantValue) {
+                                                            $option = optional($variantValue->optionValue)->option;
+                                                            $value = optional($variantValue->optionValue)->value;
+                                                            if (!$option || $value === null) {
+                                                                return null;
+                                                            }
+                                                            return $option->name . ': ' . $value;
+                                                        })
+                                                        ->filter()
+                                                        ->values();
+                                                    $variantLabel = $parts->isNotEmpty() ? $parts->implode(', ') : __('Default');
+                                                }
+                                                $qty = (int) $item->qty;
+                                                $lineTotal = ($item->product_price ?? 0) * $qty;
                                             @endphp
                                             <tr>
                                                 <td>
@@ -240,7 +259,22 @@
                                                 </td>
                                                 <td>
                                                     {{ truncateString($productTitle, 25) }}
+                                                    @if ($item->variant)
+                                                        <div class="small text-muted">
+                                                            {{ __('Variant') }}: {{ $variantLabel }}
+                                                        </div>
+                                                        <div class="small text-muted">
+                                                            {{ __('SKU') }}: {{ $item->variant->sku ?? 'N/A' }}
+                                                        </div>
+                                                    @endif
+                                                    @if ($item->soldSerials->isNotEmpty())
+                                                        <div class="small text-muted">
+                                                            {{ __('Serials') }}:
+                                                            {{ $item->soldSerials->pluck('serial')->implode(', ') }}
+                                                        </div>
+                                                    @endif
                                                 </td>
+                                                <td>{{ $qty }}</td>
                                                 <td>
                                                     <div class="py-3">
                                                         <span>{{ __('Product Price') }}</span>:
@@ -259,6 +293,7 @@
                                                         @endif
                                                     </div>
                                                 </td>
+                                                <td>{{ currency_symbol_order($lineTotal ?? 0, $symbol ?? '', $position ?? 'left') }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

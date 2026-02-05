@@ -276,6 +276,9 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
         Route::post('sales/bulkDelete', 'Admin\SalesController@bulkDelete')->name('admin.sales.bulkDelete');
         Route::get('sale/details/{id}', 'Admin\SalesController@details')->name('admin.sales.details');
         Route::get('repors', 'Admin\SalesController@report')->name('admin.sales.reports');
+        Route::get('create', 'Admin\OrderController@create')->name('admin.sales.create');
+        Route::post('create', 'Admin\OrderController@store')->name('admin.sales.store');
+        Route::get('items', 'Admin\OrderController@searchItems')->name('admin.sales.items');
     });
 
     //transaction route

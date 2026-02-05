@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 04, 2026 at 06:24 PM
+-- Generation Time: Feb 05, 2026 at 05:32 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.29
 
@@ -241,7 +241,7 @@ CREATE TABLE `languages` (
 --
 
 INSERT INTO `languages` (`id`, `name`, `code`, `is_default`, `dashboard_default`, `direction`, `created_at`, `updated_at`) VALUES
-(6, 'English', 'en', 1, 1, 'ltr', '2026-01-26 17:23:11', '2026-02-04 09:21:30'),
+(6, 'English', 'en', 1, 1, 'ltr', '2026-01-26 17:23:11', '2026-02-05 10:32:58'),
 (7, 'বাংলা', 'bn', 0, 0, 'LTR', '2026-01-28 12:09:55', '2026-02-04 09:21:30');
 
 -- --------------------------------------------------------
@@ -436,34 +436,6 @@ CREATE TABLE `orders` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`id`, `order_number`, `billing_name`, `billing_email`, `billing_phone`, `billing_address`, `billing_city`, `shipping_address`, `payment_method`, `gateway`, `cart_total`, `pay_amount`, `discount_amount`, `tax`, `shipping_charge`, `invoice_number`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `payment_status`, `order_status`, `receipt`, `delivery_date`, `created_at`, `updated_at`) VALUES
-(131, 'JNAGIML7', 'Vielka Gomez', 'masud.cst0@gmail.com', '+1 (501) 993-6871', 'Hic quia et enim eos', NULL, 'unknown', 'Cash Payment', 'Offline', 558.99, 559, 0.00, 0.00, NULL, 'BOs11739555845.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 11:57:25', '2025-02-14 11:57:25'),
-(132, 'G7QN0BGL', 'Pamela Kaufman', 'masud.cst0@gmail.com', '+1 (226) 491-1486', 'Officia modi sint re', NULL, 'unknown', 'Cash Payment', 'Offline', 399.98, 400, 0.00, 0.00, NULL, 'BWY61739556119.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:00:01', '2025-02-14 12:01:59'),
-(133, 'B6BISCZL', 'Ezra Tanner', 'masud.cst0@gmail.com', '+1 (254) 644-7323', 'Voluptatem blanditi', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'aQ311739556120.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:00:56', '2025-02-14 12:02:00'),
-(134, 'U9Q2PAMQ', 'Debra Becker', 'masud.cst0@gmail.com', '+1 (232) 318-6752', 'Non sed nemo ut eius', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'mEPm1739556458.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:07:35', '2025-02-14 12:07:38'),
-(135, 'PHJ116YG', 'Clayton Ingram', 'masud.cst0@gmail.com', '+1 (318) 537-2701', 'Magnam in voluptatem', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'AVxD1739556989.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:10:00', '2025-02-14 12:16:29'),
-(136, '2EKVK9TQ', 'Shelby Cross', 'masud.cst0@gmail.com', '+1 (521) 164-4707', 'Debitis sint officia', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'BTvT1739557362.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:22:42', '2025-02-14 12:22:43'),
-(137, 'IZLTFVA2', 'Nissim Blevins', 'masud.cst0@gmail.com', '+1 (412) 186-8622', 'Dolore esse ex labo', NULL, 'unknown', 'Cash Payment', 'Offline', 558.99, 559, 0.00, 0.00, NULL, 'UIUs1739557801.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:28:54', '2025-02-14 12:30:01'),
-(138, 'Y8FACDZL', 'Zahir Porter', 'masud.cst0@gmail.com', '+1 (909) 988-4108', 'Voluptas recusandae', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'cluV1739557909.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:31:49', '2025-02-14 12:33:03'),
-(139, 'TQOPGCAV', 'Buckminster Wise', 'masud.cst0@gmail.com', '+1 (156) 511-5113', 'Anim eius harum dist', NULL, 'unknown', 'Cash Payment', 'Offline', 399.98, 400, 0.00, 0.00, NULL, 'fue41739558057.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-14 12:34:17', '2025-02-14 12:35:26'),
-(140, '2CMNMEC3', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'bAeB1739602976.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:00:17', '2025-02-15 01:03:00'),
-(141, '2S8LHS63', 'Hanae Chaney', 'syxegunap@mailinator.com', '+1 (341) 367-8332', 'Sapiente velit numqu', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'WmSz1739602980.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:01:40', '2025-02-15 01:03:00'),
-(142, 'A41V83DY', 'Hanae Chaney', 'syxegunap@mailinator.com', '+1 (341) 367-8332', 'Sapiente velit numqu', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'Osc01739603104.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:05:03', '2025-02-15 01:05:04'),
-(143, 'N8TAU16P', 'Hanae Chaney', 'syxegunap@mailinator.com', '+1 (341) 367-8332', 'Sapiente velit numqu', NULL, 'unknown', 'Cash Payment', 'Offline', 99.99, 100, 0.00, 0.00, NULL, 'gSoI1739603170.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:06:07', '2025-02-15 01:06:10'),
-(144, 'TDNEMYYS', 'Hanae Chaney', 'syxegunap@mailinator.com', '+1 (341) 367-8332', 'Sapiente velit numqu', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'oC3v1739603211.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:06:50', '2025-02-15 01:06:52'),
-(145, 'AHLJNGV2', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'wTx91739603220.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 01:06:59', '2025-02-15 01:07:00'),
-(146, '2TON346J', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, '0gp61739612934.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:48:51', '2025-02-15 03:48:55'),
-(147, '6AKW8LR6', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'KI1P1739613050.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:50:50', '2025-02-15 03:50:50'),
-(148, '5OVCYHMM', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'iGOu1739613225.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:53:44', '2025-02-15 03:53:46'),
-(149, 'A9UEWQAG', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'wevC1739613292.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:54:50', '2025-02-15 03:54:52'),
-(150, 'ESLBDTWW', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 99.99, 100, 0.00, 0.00, NULL, '9Frw1739613317.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:55:16', '2025-02-15 03:55:17'),
-(151, 'A76RQHZK', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 299.99, 300, 0.00, 0.00, NULL, 'Oieg1739613329.pdf', '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-02-15 03:55:28', '2025-02-15 03:55:29'),
-(152, '6KDDMTF2', 'unknown', 'unknown', 'unknown', 'unknown', NULL, 'unknown', 'Cash Payment', 'Offline', 99.99, 100, 0.00, 0.00, NULL, NULL, '$', 'left', 'USD', 'left', 'completed', 'completed', NULL, NULL, '2025-10-30 12:39:06', '2025-10-30 12:39:06');
-
 -- --------------------------------------------------------
 
 --
@@ -481,38 +453,6 @@ CREATE TABLE `order_items` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `order_items`
---
-
-INSERT INTO `order_items` (`id`, `order_id`, `customer_id`, `product_id`, `product_price`, `qty`, `variations`, `created_at`, `updated_at`) VALUES
-(150, 131, NULL, 7, 234, 1, '[{\"product_id\":7,\"variation_id\":85,\"variation_name\":\"Color\",\"option_name\":\"Black\",\"price\":\"20\",\"option_key\":\"1\",\"qty\":1},{\"product_id\":7,\"variation_id\":87,\"variation_name\":\"Size\",\"option_name\":\"M\",\"price\":\"5\",\"option_key\":\"0\",\"qty\":1}]', '2025-02-14 11:57:25', '2025-02-14 11:57:25'),
-(151, 131, NULL, 5, 300, 1, '[]', '2025-02-14 11:57:25', '2025-02-14 11:57:25'),
-(152, 132, NULL, 5, 300, 1, '[]', '2025-02-14 12:00:01', '2025-02-14 12:00:01'),
-(153, 132, NULL, 6, 100, 1, '[]', '2025-02-14 12:00:01', '2025-02-14 12:00:01'),
-(154, 133, NULL, 5, 300, 1, '[]', '2025-02-14 12:00:56', '2025-02-14 12:00:56'),
-(155, 134, NULL, 5, 300, 1, '[]', '2025-02-14 12:07:35', '2025-02-14 12:07:35'),
-(156, 135, NULL, 5, 300, 1, '[]', '2025-02-14 12:10:00', '2025-02-14 12:10:00'),
-(157, 136, NULL, 5, 300, 1, '[]', '2025-02-14 12:22:42', '2025-02-14 12:22:42'),
-(158, 137, NULL, 7, 234, 1, '[{\"product_id\":7,\"variation_id\":85,\"variation_name\":\"Color\",\"option_name\":\"Black\",\"price\":\"20\",\"option_key\":\"1\",\"qty\":1},{\"product_id\":7,\"variation_id\":87,\"variation_name\":\"Size\",\"option_name\":\"M\",\"price\":\"5\",\"option_key\":\"0\",\"qty\":1}]', '2025-02-14 12:28:54', '2025-02-14 12:28:54'),
-(159, 137, NULL, 5, 300, 1, '[]', '2025-02-14 12:28:54', '2025-02-14 12:28:54'),
-(160, 138, NULL, 5, 300, 1, '[]', '2025-02-14 12:31:49', '2025-02-14 12:31:49'),
-(161, 139, NULL, 5, 300, 1, '[]', '2025-02-14 12:34:17', '2025-02-14 12:34:17'),
-(162, 139, NULL, 6, 100, 1, '[]', '2025-02-14 12:34:17', '2025-02-14 12:34:17'),
-(163, 140, NULL, 5, 300, 1, '[]', '2025-02-15 01:00:17', '2025-02-15 01:00:17'),
-(164, 141, NULL, 5, 300, 1, '[]', '2025-02-15 01:01:40', '2025-02-15 01:01:40'),
-(165, 142, NULL, 5, 300, 1, '[]', '2025-02-15 01:05:03', '2025-02-15 01:05:03'),
-(166, 143, NULL, 6, 100, 1, '[]', '2025-02-15 01:06:07', '2025-02-15 01:06:07'),
-(167, 144, NULL, 5, 300, 1, '[]', '2025-02-15 01:06:50', '2025-02-15 01:06:50'),
-(168, 145, NULL, 5, 300, 1, '[]', '2025-02-15 01:06:59', '2025-02-15 01:06:59'),
-(169, 146, NULL, 5, 300, 1, '[]', '2025-02-15 03:48:52', '2025-02-15 03:48:52'),
-(170, 147, NULL, 5, 300, 1, '[]', '2025-02-15 03:50:50', '2025-02-15 03:50:50'),
-(171, 148, NULL, 5, 300, 1, '[]', '2025-02-15 03:53:44', '2025-02-15 03:53:44'),
-(172, 149, NULL, 5, 300, 1, '[]', '2025-02-15 03:54:50', '2025-02-15 03:54:50'),
-(173, 150, NULL, 6, 100, 1, '[]', '2025-02-15 03:55:16', '2025-02-15 03:55:16'),
-(174, 151, NULL, 5, 300, 1, '[]', '2025-02-15 03:55:28', '2025-02-15 03:55:28'),
-(175, 152, NULL, 6, 100, 1, '[]', '2025-10-30 12:39:06', '2025-10-30 12:39:06');
 
 -- --------------------------------------------------------
 
@@ -664,7 +604,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `stock`, `last_restock_qty`, `sku`, `thumbnail`, `current_price`, `previous_price`, `type`, `file_type`, `download_link`, `download_file`, `status`, `featured`, `rating`, `created_at`, `updated_at`, `order`, `has_variants`) VALUES
-(33, 0, 0, NULL, '6983878b743d0.png', 0.00, NULL, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-02-04 11:53:15', '2026-02-04 11:53:19', 0, 1);
+(34, 0, 0, NULL, '6984bdc3226bf.png', 0.00, NULL, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-02-05 09:56:51', '2026-02-05 10:23:59', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -721,7 +661,7 @@ CREATE TABLE `product_contents` (
 --
 
 INSERT INTO `product_contents` (`id`, `language_id`, `product_id`, `category_id`, `title`, `slug`, `summary`, `description`, `meta_keyword`, `meta_description`, `created_at`, `updated_at`) VALUES
-(38, 6, 33, 16, 'fffffffffffffff', 'fffffffffffffff', 'ffffffffffffffffffff', '<p>ffffffffffffffff</p>', NULL, NULL, '2026-02-04 11:53:15', '2026-02-04 11:53:15');
+(39, 6, 34, 16, 'test product', 'test-product', 'test product', '<p>test product</p>', NULL, NULL, '2026-02-05 09:56:51', '2026-02-05 09:56:51');
 
 -- --------------------------------------------------------
 
@@ -769,7 +709,7 @@ CREATE TABLE `product_options` (
 --
 
 INSERT INTO `product_options` (`id`, `product_id`, `name`, `position`, `created_at`, `updated_at`) VALUES
-(31, 33, 'Size', 0, '2026-02-04 12:22:58', '2026-02-04 12:22:58');
+(32, 34, 'Size', 0, '2026-02-05 09:56:51', '2026-02-05 09:56:51');
 
 -- --------------------------------------------------------
 
@@ -791,8 +731,8 @@ CREATE TABLE `product_option_values` (
 --
 
 INSERT INTO `product_option_values` (`id`, `product_option_id`, `value`, `position`, `created_at`, `updated_at`) VALUES
-(67, 31, 'M', 0, '2026-02-04 12:22:58', '2026-02-04 12:22:58'),
-(68, 31, 'L', 1, '2026-02-04 12:22:58', '2026-02-04 12:22:58');
+(69, 32, 'M', 0, '2026-02-05 09:56:51', '2026-02-05 09:56:51'),
+(70, 32, 'L', 1, '2026-02-05 09:56:51', '2026-02-05 09:56:51');
 
 -- --------------------------------------------------------
 
@@ -840,8 +780,8 @@ CREATE TABLE `product_variants` (
 --
 
 INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `price`, `stock`, `status`, `track_serial`, `serial_start`, `serial_end`, `created_at`, `updated_at`) VALUES
-(60, 33, 'MM-1', 100.00, 10, 1, 1, '1', '10', '2026-02-04 12:22:58', '2026-02-04 12:22:58'),
-(61, 33, 'NN-2', 200.00, 20, 1, 1, '1', '20', '2026-02-04 12:22:58', '2026-02-04 12:22:58');
+(62, 34, 'masud-01', 50.00, 5, 1, 1, '1', '5', '2026-02-05 09:56:51', '2026-02-05 09:56:51'),
+(63, 34, 'masud-02', 30.00, 3, 1, 1, '1', '3', '2026-02-05 09:56:51', '2026-02-05 09:56:51');
 
 -- --------------------------------------------------------
 
@@ -862,8 +802,8 @@ CREATE TABLE `product_variant_values` (
 --
 
 INSERT INTO `product_variant_values` (`id`, `variant_id`, `option_value_id`, `created_at`, `updated_at`) VALUES
-(71, 60, 67, '2026-02-04 12:22:58', '2026-02-04 12:22:58'),
-(72, 61, 68, '2026-02-04 12:22:58', '2026-02-04 12:22:58');
+(73, 62, 69, '2026-02-05 09:56:51', '2026-02-05 09:56:51'),
+(74, 63, 70, '2026-02-05 09:56:51', '2026-02-05 09:56:51');
 
 -- --------------------------------------------------------
 
@@ -995,7 +935,7 @@ INSERT INTO `slider_images` (`id`, `item_id`, `item_type`, `image`, `created_at`
 (118, 9, 'product', '6920767363c2d.jpg', '2025-11-21 08:25:55', '2025-11-21 08:30:55'),
 (130, NULL, 'product', '697c4b713313c.png', '2026-01-30 00:10:57', '2026-01-30 00:10:57'),
 (150, NULL, 'product', '69838576ad53d.png', '2026-02-04 11:44:22', '2026-02-04 11:44:22'),
-(151, 33, 'product', '6983875f1cee8.png', '2026-02-04 11:52:31', '2026-02-04 11:53:15');
+(152, 34, 'product', '6984bd83c5d95.png', '2026-02-05 09:55:47', '2026-02-05 09:56:51');
 
 -- --------------------------------------------------------
 
@@ -1186,42 +1126,6 @@ CREATE TABLE `variant_serials` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `variant_serials`
---
-
-INSERT INTO `variant_serials` (`id`, `variant_id`, `serial`, `status`, `created_at`, `updated_at`) VALUES
-(1, 58, '01', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(2, 58, '02', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(3, 58, '03', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(4, 58, '04', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(5, 58, '05', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(6, 58, '06', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(7, 58, '07', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(8, 58, '08', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(9, 58, '09', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(10, 58, '10', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(11, 59, '01', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(12, 59, '02', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(13, 59, '03', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(14, 59, '04', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(15, 59, '05', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(16, 59, '06', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(17, 59, '07', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(18, 59, '08', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(19, 59, '09', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(20, 59, '10', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(21, 59, '11', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(22, 59, '12', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(23, 59, '13', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(24, 59, '14', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(25, 59, '15', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(26, 59, '16', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(27, 59, '17', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(28, 59, '18', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(29, 59, '19', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15'),
-(30, 59, '20', 'in_stock', '2026-02-04 11:53:15', '2026-02-04 11:53:15');
-
 -- --------------------------------------------------------
 
 --
@@ -1245,8 +1149,9 @@ CREATE TABLE `variant_serial_batches` (
 --
 
 INSERT INTO `variant_serial_batches` (`id`, `variant_id`, `batch_no`, `serial_start`, `serial_end`, `qty`, `sold_qty`, `created_at`, `updated_at`) VALUES
-(1, 60, 'INIT-60-20260204182258', '1', '10', 10, 0, '2026-02-04 12:22:58', '2026-02-04 12:22:58'),
-(2, 61, 'INIT-61-20260204182258', '1', '20', 20, 0, '2026-02-04 12:22:58', '2026-02-04 12:22:58');
+(3, 62, 'INIT-62-20260205155651', '1', '5', 5, 0, '2026-02-05 09:56:51', '2026-02-05 09:56:51'),
+(4, 63, 'INIT-63-20260205155651', '1', '3', 3, 0, '2026-02-05 09:56:51', '2026-02-05 09:56:51'),
+(5, 63, 'RST-63-20260205170417', '4', '13', 10, 0, '2026-02-05 11:04:17', '2026-02-05 11:04:17');
 
 -- --------------------------------------------------------
 
@@ -1690,7 +1595,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
 
 --
 -- AUTO_INCREMENT for table `order_items`
@@ -1726,7 +1631,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `product_categories`
@@ -1738,7 +1643,7 @@ ALTER TABLE `product_categories`
 -- AUTO_INCREMENT for table `product_contents`
 --
 ALTER TABLE `product_contents`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `product_coupons`
@@ -1750,13 +1655,13 @@ ALTER TABLE `product_coupons`
 -- AUTO_INCREMENT for table `product_options`
 --
 ALTER TABLE `product_options`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `product_option_values`
 --
 ALTER TABLE `product_option_values`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `product_settings`
@@ -1768,13 +1673,13 @@ ALTER TABLE `product_settings`
 -- AUTO_INCREMENT for table `product_variants`
 --
 ALTER TABLE `product_variants`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `product_variant_values`
 --
 ALTER TABLE `product_variant_values`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -1798,7 +1703,7 @@ ALTER TABLE `shipping_charges`
 -- AUTO_INCREMENT for table `slider_images`
 --
 ALTER TABLE `slider_images`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
 
 --
 -- AUTO_INCREMENT for table `tables`
@@ -1828,7 +1733,7 @@ ALTER TABLE `variant_serials`
 -- AUTO_INCREMENT for table `variant_serial_batches`
 --
 ALTER TABLE `variant_serial_batches`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `variant_sold_serials`
