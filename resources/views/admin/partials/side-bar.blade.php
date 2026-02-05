@@ -215,37 +215,6 @@
                     </ul>
                 </li>
 
-                <!-- invendory managment -->
-                <li
-                    class="nav-item nav-item-submenu
-                {{ request()->routeIs('admin.inventory_managmement.*') ? 'nav-item-expanded nav-item-open' : '' }}
-                        ">
-                    <a href="#" class="nav-link"><i class="fas fa-clipboard-list"></i>
-                        <span>{{ __('Inventory Management') }}</span></a>
-
-                    <ul class="nav nav-group-sub" data-submenu-title="{{ __('Inventory Management') }}">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.inventory_managmement.stock_overview', ['language' => $defaultLang->code]) }}"
-                                class="nav-link
-                            @if (request()->routeIs('admin.inventory_managmement.stock_overview')) active @endif
-                            ">
-                                <span>{{ __('Stock Overview') }}</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.inventory_managmement.update_stock', ['language' => $defaultLang->code]) }}"
-                                class="nav-link
-                            @if (request()->routeIs('admin.inventory_managmement.update_stock')) active @endif
-                            ">
-                                <span>{{ __('Adjust Stock') }}</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-
-
-
                 <!-- blog managment -->
                 <li
                     class="nav-item nav-item-submenu

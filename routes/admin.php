@@ -280,13 +280,4 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
 
     //transaction route
     Route::get('transaction', 'Admin\TransactionController@index')->name('admin.transaction');
-
-    //inventory
-    Route::prefix('inventory-management')->group(function () {
-        Route::get('/stock-overview', 'Admin\InventoryController@stockOverview')->name('admin.inventory_managmement.stock_overview');
-        Route::get('/exportReport', 'Admin\InventoryController@exportReport')->name('admin.inventory_managmement.exportReport');
-        Route::get('/exportReportExcel', 'Admin\InventoryController@exportReportExcel')->name('admin.inventory_managmement.exportReportExcel');
-        Route::get('/update-stock', 'Admin\InventoryController@updateList')->name('admin.inventory_managmement.update_stock');
-        Route::post('/update-stock-submit', 'Admin\InventoryController@updateStock')->name('admin.inventory_managmement.update_stock_submit');
-    });
 });

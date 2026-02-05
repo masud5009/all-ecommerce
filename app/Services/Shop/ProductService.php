@@ -484,6 +484,19 @@ class ProductService
     }
 
     /**
+     * Suggest next serial start based on the last serial end.
+     */
+    public static function suggestNextSerialStart(string $serialEnd): ?string
+    {
+        if ($serialEnd === '' || !preg_match('/^\d+$/', $serialEnd)) {
+            return null;
+        }
+
+        $width = strlen($serialEnd);
+        return self::addNumericString($serialEnd, 1, $width);
+    }
+
+    /**
      * Return serial (basic).
      * You can expand it with a separate return log table if needed.
      */

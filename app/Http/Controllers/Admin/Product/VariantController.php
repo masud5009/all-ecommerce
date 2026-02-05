@@ -14,11 +14,46 @@ class VariantController extends Controller
     {
         $defaultLang = app('defaultLang');
         $variants = $this->getSerialTrackedVariants($defaultLang->id);
-        $selectedVariantId = $request->input('variant_id');
+        $selectedVariantId = old('variant_id', $request->input('variant_id'));
+
+        $selectedVariant = null;
+        $recentBatches = collect();
+        $lastSerialEnd = null;
+        $suggestedStart = null;
+        $selectedVariantLabel = null;
+
+        if ($selectedVariantId) {
+            $selectedVariant = ProductVariant::with([
+                'product.content' => function ($q) use ($defaultLang) {
+                    $q->where('language_id', $defaultLang->id);
+                },
+                'variantValues.optionValue.option',
+                'serialBatches' => function ($q) {
+                    $q->orderBy('id', 'desc');
+                },
+            ])->where('track_serial', 1)->find($selectedVariantId);
+
+            if ($selectedVariant) {
+                $recentBatches = $selectedVariant->serialBatches->take(10);
+                $lastBatch = $selectedVariant->serialBatches->first();
+
+                if ($lastBatch) {
+                    $lastSerialEnd = $lastBatch->serial_end;
+                    $suggestedStart = ProductService::suggestNextSerialStart($lastSerialEnd);
+                }
+
+                $selectedVariantLabel = $this->buildVariantLabel($selectedVariant);
+            }
+        }
 
         return view('admin.product.variant-restock', [
             'variants' => $variants,
             'selectedVariantId' => $selectedVariantId,
+            'selectedVariant' => $selectedVariant,
+            'selectedVariantLabel' => $selectedVariantLabel,
+            'recentBatches' => $recentBatches,
+            'lastSerialEnd' => $lastSerialEnd,
+            'suggestedStart' => $suggestedStart,
         ]);
     }
 
