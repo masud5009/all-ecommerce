@@ -12,6 +12,7 @@
         </ol>
     </nav>
 
+    @php($activeTab = old('active_plugin', session('active_plugin', 'pusher')))
     <div class="row px-3 payment-container">
         <div class="col-lg-3">
             <div class="card">
@@ -21,9 +22,15 @@
                 <div class="card-body">
                     <!-- pusher-->
                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                        <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pusher" type="button"
-                            role="tab" aria-selected="true">
+                        <button class="nav-link {{ $activeTab === 'pusher' ? 'active' : '' }}" data-bs-toggle="pill"
+                            data-bs-target="#pusher" type="button" role="tab"
+                            aria-selected="{{ $activeTab === 'pusher' ? 'true' : 'false' }}">
                             {{ __('Pusher') }}
+                        </button>
+                        <button class="nav-link {{ $activeTab === 'stedfast' ? 'active' : '' }}"
+                            data-bs-toggle="pill" data-bs-target="#stedfast" type="button" role="tab"
+                            aria-selected="{{ $activeTab === 'stedfast' ? 'true' : 'false' }}">
+                            {{ __('Stedfast') }}
                         </button>
                     </div>
                 </div>
@@ -34,7 +41,8 @@
         <div class="col-lg-9">
             <div class="tab-content">
                 <!-- pusher Tab Content -->
-                <div class="tab-pane fade show active" id="pusher" role="tabpanel">
+                <div class="tab-pane fade {{ $activeTab === 'pusher' ? 'show active' : '' }}" id="pusher"
+                    role="tabpanel">
                     <div class="card">
                         <div class="card-header">
                             <h5>{{ __('Pusher') }}</h5>
@@ -42,6 +50,7 @@
                         <div class="card-body">
                             <form action="{{ route('admin.plugin.pusher_update') }}" method="post" id="pusherForm">
                                 @csrf
+                                <input type="hidden" name="active_plugin" value="pusher">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="selectgroup w-100">
@@ -104,6 +113,63 @@
                         </div>
                         <div class="card-footer">
                             <button class="btn btn-success" form="pusherForm">{{ __('Save & Changes') }}</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- stedfast Tab Content -->
+                <div class="tab-pane fade {{ $activeTab === 'stedfast' ? 'show active' : '' }}" id="stedfast"
+                    role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>{{ __('Stedfast') }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <form action="{{ route('admin.plugin.stedfast_update') }}" method="post" id="stedfastForm">
+                                @csrf
+                                <input type="hidden" name="active_plugin" value="stedfast">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="selectgroup w-100">
+                                            <label class="selectgroup-item">
+                                                <input type="radio" name="stedfast_status" value="1"
+                                                    class="selectgroup-input" @checked($data->stedfast_status == 1)>
+                                                <span class="selectgroup-button">{{ __('Enable') }}</span>
+                                            </label>
+
+                                            <label class="selectgroup-item">
+                                                <input type="radio" name="stedfast_status" value="0"
+                                                    class="selectgroup-input" @checked($data->stedfast_status == 0)>
+                                                <span class="selectgroup-button">{{ __('Disable') }}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <input type="text" placeholder="{{ __('Enter stedfast api key') }}"
+                                            name="stedfast_api_key" value="{{ @$data->stedfast_api_key }}"
+                                            class="form-control {{ customValid('stedfast_api_key', $errors) }}">
+                                        @if ($errors->has('stedfast_api_key'))
+                                            <p class="mb-0 text-danger">{{ $errors->first('stedfast_api_key') }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <input type="text" placeholder="{{ __('Enter stedfast secret key') }}"
+                                            name="stedfast_secret_key" value="{{ @$data->stedfast_secret_key }}"
+                                            class="form-control {{ customValid('stedfast_secret_key', $errors) }}">
+                                        @if ($errors->has('stedfast_secret_key'))
+                                            <p class="mb-0 text-danger">{{ $errors->first('stedfast_secret_key') }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-success" form="stedfastForm">{{ __('Save & Changes') }}</button>
                         </div>
                     </div>
                 </div>

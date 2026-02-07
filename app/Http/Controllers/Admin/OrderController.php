@@ -10,6 +10,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Services\Shop\ProductService;
+use App\Services\Shipping\StedfastService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -201,6 +202,7 @@ class OrderController extends Controller
 
         DB::beginTransaction();
         try {
+            $hasPhysical = false;
             $order = Order::create([
                 'order_number' => generateOrderNumber(8),
                 'billing_name' => $request->billing_name,
@@ -233,6 +235,7 @@ class OrderController extends Controller
                 $price = (float)$item['price'];
                 $variant = null;
                 $variations = [];
+                $hasPhysical = $hasPhysical || strtolower((string)$product->type) === 'physical';
 
                 if (!empty($item['variant_id'])) {
                     $variant = ProductVariant::with('variantValues.optionValue.option')
@@ -313,9 +316,20 @@ class OrderController extends Controller
             TransactionController::product_purchase($order->fresh());
         }
 
-        return redirect()
+        $stedfastResult = StedfastService::createConsignment($order->fresh(), $hasPhysical);
+        $redirect = redirect()
             ->route('admin.sales.details', ['id' => $order->id])
             ->with('success', __('Order created successfully.'));
+
+        if (($stedfastResult['status'] ?? null) === 'error') {
+            $warning = __('Order created but Stedfast booking failed.');
+            if (!empty($stedfastResult['message'])) {
+                $warning .= ' ' . $stedfastResult['message'];
+            }
+            return $redirect->with('warning', $warning);
+        }
+
+        return $redirect;
     }
 
     private function buildVariationsPayload(int $productId, ProductVariant $variant, int $qty): array

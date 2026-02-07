@@ -10,7 +10,16 @@ class PluginController extends Controller
 {
     public function index()
     {
-        $data = Setting::select('pusher_app_id', 'pusher_app_key', 'pusher_app_secret', 'pusher_app_cluster', 'pusher_status')->first();
+        $data = Setting::select(
+            'pusher_app_id',
+            'pusher_app_key',
+            'pusher_app_secret',
+            'pusher_app_cluster',
+            'pusher_status',
+            'stedfast_api_key',
+            'stedfast_secret_key',
+            'stedfast_status'
+        )->first();
         return view('admin.settings.plugin', compact('data'));
     }
 
@@ -38,7 +47,31 @@ class PluginController extends Controller
             ]
         );
 
-        session()->flash('success',__('Pusher update successfully'));
-        return back();
+        session()->flash('success', __('Pusher update successfully'));
+        return back()->with('active_plugin', 'pusher');
+    }
+
+    /**
+     * stedfast_update
+     */
+    public function stedfast_update(Request $request)
+    {
+        $request->validate([
+            'stedfast_api_key' => 'required',
+            'stedfast_secret_key' => 'required',
+            'stedfast_status' => 'required'
+        ]);
+
+        Setting::updateOrInsert(
+            ['uniqid' => 1234],
+            [
+                'stedfast_api_key' => $request->stedfast_api_key,
+                'stedfast_secret_key' => $request->stedfast_secret_key,
+                'stedfast_status' => $request->stedfast_status
+            ]
+        );
+
+        session()->flash('success', __('Stedfast update successfully'));
+        return back()->with('active_plugin', 'stedfast');
     }
 }

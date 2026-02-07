@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 05, 2026 at 05:32 PM
+-- Generation Time: Feb 07, 2026 at 06:20 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.29
 
@@ -241,7 +241,7 @@ CREATE TABLE `languages` (
 --
 
 INSERT INTO `languages` (`id`, `name`, `code`, `is_default`, `dashboard_default`, `direction`, `created_at`, `updated_at`) VALUES
-(6, 'English', 'en', 1, 1, 'ltr', '2026-01-26 17:23:11', '2026-02-05 10:32:58'),
+(6, 'English', 'en', 1, 1, 'ltr', '2026-01-26 17:23:11', '2026-02-07 10:43:27'),
 (7, 'বাংলা', 'bn', 0, 0, 'LTR', '2026-01-28 12:09:55', '2026-02-04 09:21:30');
 
 -- --------------------------------------------------------
@@ -399,7 +399,13 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (66, '2026_02_04_000001_add_serial_fields_to_product_variants_table', 37),
 (67, '2026_02_04_000002_create_variant_serials_table', 37),
 (68, '2026_02_04_000003_create_variant_serial_batches_table', 38),
-(69, '2026_02_04_000004_create_variant_sold_serials_table', 38);
+(69, '2026_02_04_000004_create_variant_sold_serials_table', 38),
+(70, '2026_02_05_000001_create_orders_table', 39),
+(71, '2026_02_05_000002_create_order_items_table', 39),
+(72, '2026_02_05_000003_add_variant_id_to_order_items_table', 39),
+(73, '2026_02_07_000001_add_image_to_product_variants_table', 40),
+(74, '2026_02_07_000002_add_stedfast_fields_to_settings_table', 41),
+(75, '2026_02_07_000003_add_stedfast_fields_to_orders_table', 42);
 
 -- --------------------------------------------------------
 
@@ -432,9 +438,22 @@ CREATE TABLE `orders` (
   `order_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `receipt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `delivery_date` date DEFAULT NULL,
+  `stedfast_consignment_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stedfast_tracking_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stedfast_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stedfast_message` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stedfast_payload` longtext COLLATE utf8mb4_unicode_ci,
+  `stedfast_response` longtext COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `order_number`, `billing_name`, `billing_email`, `billing_phone`, `billing_address`, `billing_city`, `shipping_address`, `payment_method`, `gateway`, `cart_total`, `pay_amount`, `discount_amount`, `tax`, `shipping_charge`, `invoice_number`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `payment_status`, `order_status`, `receipt`, `delivery_date`, `stedfast_consignment_id`, `stedfast_tracking_code`, `stedfast_status`, `stedfast_message`, `stedfast_payload`, `stedfast_response`, `created_at`, `updated_at`) VALUES
+(156, 'NHTL472M', 'Masud Rana', 'masud@gmail.com', '01306084771', 'Pabna', 'pabna', 'Pabna', 'Cash Payment', 'Manual', 50.00, 120, 0.00, 0.00, 70, 'JIX51770312941.pdf', '$', 'left', 'USD', 'right', 'completed', 'completed', NULL, '2026-02-05', NULL, NULL, NULL, NULL, NULL, NULL, '2026-02-05 11:35:41', '2026-02-05 11:35:44');
 
 -- --------------------------------------------------------
 
@@ -447,12 +466,20 @@ CREATE TABLE `order_items` (
   `order_id` bigint DEFAULT NULL,
   `customer_id` bigint DEFAULT NULL,
   `product_id` bigint DEFAULT NULL,
+  `variant_id` bigint UNSIGNED DEFAULT NULL,
   `product_price` decimal(10,0) DEFAULT NULL,
   `qty` int DEFAULT NULL,
   `variations` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `customer_id`, `product_id`, `variant_id`, `product_price`, `qty`, `variations`, `created_at`, `updated_at`) VALUES
+(176, 156, NULL, 34, 62, 50, 1, '[{\"product_id\":34,\"variation_id\":69,\"variation_name\":\"Size\",\"option_name\":\"M\",\"price\":0,\"option_key\":0,\"qty\":1}]', '2026-02-05 11:35:41', '2026-02-05 11:35:41');
 
 -- --------------------------------------------------------
 
@@ -599,13 +626,6 @@ CREATE TABLE `products` (
   `has_variants` tinyint NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `products`
---
-
-INSERT INTO `products` (`id`, `stock`, `last_restock_qty`, `sku`, `thumbnail`, `current_price`, `previous_price`, `type`, `file_type`, `download_link`, `download_file`, `status`, `featured`, `rating`, `created_at`, `updated_at`, `order`, `has_variants`) VALUES
-(34, 0, 0, NULL, '6984bdc3226bf.png', 0.00, NULL, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-02-05 09:56:51', '2026-02-05 10:23:59', 0, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -631,9 +651,9 @@ INSERT INTO `product_categories` (`id`, `language_id`, `name`, `slug`, `serial_n
 (10, 5, 'Beverages', 'beverages', 1, 1, '2025-01-27 11:52:27', '2025-11-28 11:58:14'),
 (11, 5, 'Desserts', 'desserts', 2, 1, '2025-01-27 11:52:42', '2025-11-28 11:58:22'),
 (13, 5, 'Main Course', 'main-course', 3, 1, '2025-11-28 11:58:32', '2025-11-28 11:58:32'),
-(14, 6, 'Meat', 'meat', 1, 1, '2026-01-28 12:40:49', '2026-02-02 12:28:07'),
-(15, 6, 'Shoe', 'shoe', 2, 1, '2026-01-29 11:41:33', '2026-02-02 12:28:08'),
-(16, 6, 'Keyboard', 'keyboard', 3, 1, '2026-02-04 10:19:54', '2026-02-04 10:19:54');
+(20, 7, 'Electronics', 'electronics-bn', 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47'),
+(21, 7, 'Fashion', 'fashion-bn', 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47'),
+(22, 7, 'Grocery', 'grocery-bn', 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47');
 
 -- --------------------------------------------------------
 
@@ -656,13 +676,6 @@ CREATE TABLE `product_contents` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `product_contents`
---
-
-INSERT INTO `product_contents` (`id`, `language_id`, `product_id`, `category_id`, `title`, `slug`, `summary`, `description`, `meta_keyword`, `meta_description`, `created_at`, `updated_at`) VALUES
-(39, 6, 34, 16, 'test product', 'test-product', 'test product', '<p>test product</p>', NULL, NULL, '2026-02-05 09:56:51', '2026-02-05 09:56:51');
-
 -- --------------------------------------------------------
 
 --
@@ -682,13 +695,6 @@ CREATE TABLE `product_coupons` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `product_coupons`
---
-
-INSERT INTO `product_coupons` (`id`, `name`, `code`, `type`, `value`, `start_date`, `end_date`, `amount_spend`, `created_at`, `updated_at`) VALUES
-(3, 'OFFER99', 'OFFER99', 'fixed', 100.00, '2025-01-16', '2025-01-31', 200.00, '2025-01-15 13:00:43', '2025-01-15 13:00:43');
-
 -- --------------------------------------------------------
 
 --
@@ -704,13 +710,6 @@ CREATE TABLE `product_options` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `product_options`
---
-
-INSERT INTO `product_options` (`id`, `product_id`, `name`, `position`, `created_at`, `updated_at`) VALUES
-(32, 34, 'Size', 0, '2026-02-05 09:56:51', '2026-02-05 09:56:51');
-
 -- --------------------------------------------------------
 
 --
@@ -725,14 +724,6 @@ CREATE TABLE `product_option_values` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `product_option_values`
---
-
-INSERT INTO `product_option_values` (`id`, `product_option_id`, `value`, `position`, `created_at`, `updated_at`) VALUES
-(69, 32, 'M', 0, '2026-02-05 09:56:51', '2026-02-05 09:56:51'),
-(70, 32, 'L', 1, '2026-02-05 09:56:51', '2026-02-05 09:56:51');
 
 -- --------------------------------------------------------
 
@@ -753,7 +744,7 @@ CREATE TABLE `product_settings` (
 --
 
 INSERT INTO `product_settings` (`id`, `digital_product`, `physical_product`, `created_at`, `updated_at`) VALUES
-(1, 0, 1, '2026-02-02 06:18:53', '2026-02-02 06:30:07');
+(1, 0, 1, '2026-02-02 06:18:53', '2026-02-05 12:20:04');
 
 -- --------------------------------------------------------
 
@@ -765,6 +756,7 @@ CREATE TABLE `product_variants` (
   `id` bigint UNSIGNED NOT NULL,
   `product_id` bigint UNSIGNED NOT NULL,
   `sku` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` decimal(8,2) DEFAULT NULL,
   `stock` int NOT NULL DEFAULT '0',
   `status` tinyint NOT NULL DEFAULT '1',
@@ -774,14 +766,6 @@ CREATE TABLE `product_variants` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `product_variants`
---
-
-INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `price`, `stock`, `status`, `track_serial`, `serial_start`, `serial_end`, `created_at`, `updated_at`) VALUES
-(62, 34, 'masud-01', 50.00, 5, 1, 1, '1', '5', '2026-02-05 09:56:51', '2026-02-05 09:56:51'),
-(63, 34, 'masud-02', 30.00, 3, 1, 1, '1', '3', '2026-02-05 09:56:51', '2026-02-05 09:56:51');
 
 -- --------------------------------------------------------
 
@@ -796,14 +780,6 @@ CREATE TABLE `product_variant_values` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `product_variant_values`
---
-
-INSERT INTO `product_variant_values` (`id`, `variant_id`, `option_value_id`, `created_at`, `updated_at`) VALUES
-(73, 62, 69, '2026-02-05 09:56:51', '2026-02-05 09:56:51'),
-(74, 63, 70, '2026-02-05 09:56:51', '2026-02-05 09:56:51');
 
 -- --------------------------------------------------------
 
@@ -872,6 +848,9 @@ CREATE TABLE `settings` (
   `pusher_app_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `pusher_app_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `pusher_app_cluster` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stedfast_api_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stedfast_secret_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stedfast_status` tinyint NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -880,8 +859,8 @@ CREATE TABLE `settings` (
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `uniqid`, `website_logo`, `logo_two`, `footer_logo`, `favicon`, `website_title`, `email_address`, `contact_number`, `address`, `smtp_host`, `smtp_port`, `smtp_username`, `smtp_password`, `encryption`, `sender_mail`, `sender_name`, `smtp_status`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `currency_rate`, `timezone`, `website_color`, `maintenance_image`, `maintenance_status`, `maintenance_message`, `bypass_token`, `package_expire_day`, `admin_approval`, `email_verification_approval`, `admin_approval_notice`, `pusher_app_id`, `pusher_status`, `pusher_app_key`, `pusher_app_secret`, `pusher_app_cluster`, `created_at`, `updated_at`) VALUES
-(1, 1234, '6792620a5426d.png', NULL, '6623f11a26d49.png', '6792620a5379d.png', 'Business Validator', NULL, NULL, NULL, 'smtp.gmail.com', '587', 'airdrop446646@gmail.com', 'lwee cjer feik pdof', 'TLS', 'airdrop446646@gmail.com', 'Myapp', 1, '$', 'left', 'USD', 'right', 1, 'Europe/Andorra', '#FF0000FF', '6706bc36b9811.jpg', 0, '<p>Maintenance MessageMaintenance Message</p>', '-1', 4, 1, 1, 'You need to permission from admin to access this panel', '1942636', 1, 'e58380d6ebb048e6feb4', '24a208922bc018ef9b37', 'ap2', NULL, '2024-12-09 11:41:33');
+INSERT INTO `settings` (`id`, `uniqid`, `website_logo`, `logo_two`, `footer_logo`, `favicon`, `website_title`, `email_address`, `contact_number`, `address`, `smtp_host`, `smtp_port`, `smtp_username`, `smtp_password`, `encryption`, `sender_mail`, `sender_name`, `smtp_status`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `currency_rate`, `timezone`, `website_color`, `maintenance_image`, `maintenance_status`, `maintenance_message`, `bypass_token`, `package_expire_day`, `admin_approval`, `email_verification_approval`, `admin_approval_notice`, `pusher_app_id`, `pusher_status`, `pusher_app_key`, `pusher_app_secret`, `pusher_app_cluster`, `stedfast_api_key`, `stedfast_secret_key`, `stedfast_status`, `created_at`, `updated_at`) VALUES
+(1, 1234, '6792620a5426d.png', NULL, '6623f11a26d49.png', '6792620a5379d.png', 'Business Validator', NULL, NULL, NULL, 'smtp.gmail.com', '587', 'airdrop446646@gmail.com', 'lwee cjer feik pdof', 'TLS', 'airdrop446646@gmail.com', 'Myapp', 1, '$', 'left', 'USD', 'right', 1, 'Europe/Andorra', '#FF0000FF', '6706bc36b9811.jpg', 0, '<p>Maintenance MessageMaintenance Message</p>', '-1', 4, 1, 1, 'You need to permission from admin to access this panel', '1942636', 1, 'e58380d6ebb048e6feb4', '24a208922bc018ef9b37', 'ap2', 'xnwbyhhhyuycs6ckslp9v0qlylzwflps', 'dw8wwhnqcaiajhpk93lsfrms', 1, NULL, '2024-12-09 11:41:33');
 
 -- --------------------------------------------------------
 
@@ -915,27 +894,6 @@ CREATE TABLE `slider_images` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `slider_images`
---
-
-INSERT INTO `slider_images` (`id`, `item_id`, `item_type`, `image`, `created_at`, `updated_at`) VALUES
-(64, 1, 'product', '6777b4f1bea82.jpg', '2025-01-03 03:59:13', '2025-01-03 04:00:03'),
-(65, 1, 'product', '6777b4f1bf487.jpg', '2025-01-03 03:59:13', '2025-01-03 04:00:03'),
-(66, 2, 'product', '6777bad4ef71e.jpg', '2025-01-03 04:24:21', '2025-01-03 04:24:50'),
-(73, 1, 'product', '6777f941788d6.jpg', '2025-01-03 08:50:41', '2025-01-03 08:50:43'),
-(74, NULL, 'product', '677808f2ae73d.jpg', '2025-01-03 09:57:38', '2025-01-03 09:57:38'),
-(75, 3, 'product', '677809c323a63.jpg', '2025-01-03 10:01:07', '2025-01-03 10:02:26'),
-(81, NULL, 'product', '67794d4381f5a.jpg', '2025-01-04 09:01:23', '2025-01-04 09:01:23'),
-(98, 4, 'product', '6792613ea02e7.jpg', '2025-01-23 09:33:18', '2025-01-23 09:34:32'),
-(101, 5, 'product', '6797c8b7061f3.jpg', '2025-01-27 11:56:07', '2025-01-27 11:59:02'),
-(102, 6, 'product', '6797c9a7952d9.jpg', '2025-01-27 12:00:07', '2025-01-27 12:00:41'),
-(103, 7, 'product', '679911b7176b9.jpg', '2025-01-28 11:19:51', '2025-01-28 11:21:59'),
-(118, 9, 'product', '6920767363c2d.jpg', '2025-11-21 08:25:55', '2025-11-21 08:30:55'),
-(130, NULL, 'product', '697c4b713313c.png', '2026-01-30 00:10:57', '2026-01-30 00:10:57'),
-(150, NULL, 'product', '69838576ad53d.png', '2026-02-04 11:44:22', '2026-02-04 11:44:22'),
-(152, 34, 'product', '6984bd83c5d95.png', '2026-02-05 09:55:47', '2026-02-05 09:56:51');
 
 -- --------------------------------------------------------
 
@@ -1071,7 +1029,8 @@ INSERT INTO `transactions` (`id`, `transaction_id`, `pre_balance`, `actual_total
 (59, '5OVCYHMM', 21468.95, 300.00, 21768.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:53:45', '2025-02-15 03:53:45'),
 (60, 'A9UEWQAG', 21768.95, 300.00, 22068.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:54:52', '2025-02-15 03:54:52'),
 (61, 'ESLBDTWW', 22068.95, 100.00, 22168.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:55:17', '2025-02-15 03:55:17'),
-(62, 'A76RQHZK', 22168.95, 300.00, 22468.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:55:29', '2025-02-15 03:55:29');
+(62, 'A76RQHZK', 22168.95, 300.00, 22468.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:55:29', '2025-02-15 03:55:29'),
+(63, 'NHTL472M', 22468.95, 120.00, 22588.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2026-02-05 11:35:44', '2026-02-05 11:35:44');
 
 -- --------------------------------------------------------
 
@@ -1143,15 +1102,6 @@ CREATE TABLE `variant_serial_batches` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `variant_serial_batches`
---
-
-INSERT INTO `variant_serial_batches` (`id`, `variant_id`, `batch_no`, `serial_start`, `serial_end`, `qty`, `sold_qty`, `created_at`, `updated_at`) VALUES
-(3, 62, 'INIT-62-20260205155651', '1', '5', 5, 0, '2026-02-05 09:56:51', '2026-02-05 09:56:51'),
-(4, 63, 'INIT-63-20260205155651', '1', '3', 3, 0, '2026-02-05 09:56:51', '2026-02-05 09:56:51'),
-(5, 63, 'RST-63-20260205170417', '4', '13', 10, 0, '2026-02-05 11:04:17', '2026-02-05 11:04:17');
 
 -- --------------------------------------------------------
 
@@ -1329,7 +1279,8 @@ ALTER TABLE `orders`
 -- Indexes for table `order_items`
 --
 ALTER TABLE `order_items`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_items_variant_id_index` (`variant_id`);
 
 --
 -- Indexes for table `packages`
@@ -1589,19 +1540,19 @@ ALTER TABLE `menu_builders`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
 
 --
 -- AUTO_INCREMENT for table `packages`
@@ -1631,19 +1582,19 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `product_categories`
 --
 ALTER TABLE `product_categories`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `product_contents`
 --
 ALTER TABLE `product_contents`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `product_coupons`
@@ -1655,13 +1606,13 @@ ALTER TABLE `product_coupons`
 -- AUTO_INCREMENT for table `product_options`
 --
 ALTER TABLE `product_options`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `product_option_values`
 --
 ALTER TABLE `product_option_values`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
 
 --
 -- AUTO_INCREMENT for table `product_settings`
@@ -1673,13 +1624,13 @@ ALTER TABLE `product_settings`
 -- AUTO_INCREMENT for table `product_variants`
 --
 ALTER TABLE `product_variants`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT for table `product_variant_values`
 --
 ALTER TABLE `product_variant_values`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -1703,7 +1654,7 @@ ALTER TABLE `shipping_charges`
 -- AUTO_INCREMENT for table `slider_images`
 --
 ALTER TABLE `slider_images`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
 
 --
 -- AUTO_INCREMENT for table `tables`
@@ -1715,7 +1666,7 @@ ALTER TABLE `tables`
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -1733,13 +1684,13 @@ ALTER TABLE `variant_serials`
 -- AUTO_INCREMENT for table `variant_serial_batches`
 --
 ALTER TABLE `variant_serial_batches`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `variant_sold_serials`
 --
 ALTER TABLE `variant_sold_serials`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `vendors`

@@ -31,4 +31,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'stedfast' => [
+        'base_url' => env('STEADFAST_BASE_URL', 'https://portal.packzy.com/api/v1'),
+    ],
+
 ];
