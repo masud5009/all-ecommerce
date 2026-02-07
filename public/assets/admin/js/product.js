@@ -68,6 +68,86 @@
 
     let optionIndex = 0;
 
+    function updateVariantImagePreview(input) {
+        const file = input?.files?.[0];
+        const row = input.closest('tr');
+        if (!row) return;
+
+        const img = row.querySelector('.variant-image-preview');
+        const placeholder = row.querySelector('.variant-image-placeholder');
+        if (!img || !placeholder) return;
+
+        if (!file) {
+            img.classList.add('d-none');
+            img.src = '';
+            placeholder.classList.remove('d-none');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            img.src = e.target.result;
+            img.classList.remove('d-none');
+            placeholder.classList.add('d-none');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function ensureVariantImageModal() {
+        const existing = document.getElementById('variantImageModal');
+        if (existing) return existing;
+
+        const modal = document.createElement('div');
+        modal.id = 'variantImageModal';
+        modal.className = 'modal fade';
+        modal.tabIndex = -1;
+        modal.setAttribute('aria-hidden', 'true');
+        modal.innerHTML = `
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Variant Image</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img id="variantImageModalImg" src="" alt="Variant" style="max-width:100%;height:auto;">
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        return modal;
+    }
+
+    function openVariantImagePopup(src) {
+        if (!src) return;
+
+        const modalEl = ensureVariantImageModal();
+        const img = modalEl.querySelector('#variantImageModalImg');
+        if (img) img.src = src;
+
+        if (window.bootstrap && window.bootstrap.Modal) {
+            const modal = window.bootstrap.Modal.getOrCreateInstance(modalEl);
+            modal.show();
+        } else {
+            window.open(src, '_blank');
+        }
+    }
+
+    variantsTbody.addEventListener('change', function (e) {
+        const input = e.target;
+        if (input && input.matches('input[type="file"][name^="variants["]')) {
+            updateVariantImagePreview(input);
+        }
+    });
+
+    variantsTbody.addEventListener('click', function (e) {
+        const img = e.target.closest('.variant-image-preview');
+        if (!img || img.classList.contains('d-none')) return;
+        openVariantImagePopup(img.getAttribute('src'));
+    });
+
     function toggleBaseFields(disabled) {
         if (stockInput) stockInput.disabled = disabled;
 
@@ -155,26 +235,29 @@
             const status = typeof variant.status === 'undefined' ? 1 : variant.status;
             const serialStart = variant.serial_start ?? '';
             const serialEnd = variant.serial_end ?? '';
-            const imagePreview = imageUrl
-                ? `<img src="${imageUrl}" alt="Variant" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">`
-                : '<span class="text-muted">No image</span>';
+            const imagePreview = `
+                <img class="variant-image-preview ${imageUrl ? '' : 'd-none'}"
+                    src="${imageUrl || ''}" alt="Variant"
+                    style="width:40px;height:40px;object-fit:cover;border-radius:4px;">
+                <span class="variant-image-placeholder text-muted ${imageUrl ? 'd-none' : ''}">No image</span>
+            `;
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><strong>${label}</strong></td>
                 <td>
-                    <div class="d-flex align-items-center gap-2">
+                    <div class="variant-image-cell d-flex align-items-center gap-2">
                         ${imagePreview}
-                        <input type="file" class="form-control form-control-sm" name="variants[${i}][image]" accept="image/*">
+                        <input type="file" class="form-control form-control-sm variant-image-input" name="variants[${i}][image]" accept="image/*">
                     </div>
                 </td>
-                <td><input type="text" class="form-control" name="variants[${i}][sku]" value="${sku}" placeholder="SKU (optional)"></td>
-                <td><input type="text" class="form-control" name="variants[${i}][serial_start]" value="${serialStart}" placeholder="Serial start"></td>
-                <td><input type="text" class="form-control" name="variants[${i}][serial_end]" value="${serialEnd}" placeholder="Serial end"></td>
-                <td><input type="text" class="form-control" name="variants[${i}][price]" value="${price}" placeholder="Price (optional)"></td>
-                <td><input type="number" class="form-control" name="variants[${i}][stock]" min="0" value="${stock}" required></td>
+                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][sku]" value="${sku}" placeholder="SKU (optional)"></td>
+                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][serial_start]" value="${serialStart}" placeholder="Serial start"></td>
+                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][serial_end]" value="${serialEnd}" placeholder="Serial end"></td>
+                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][price]" value="${price}" placeholder="Price (optional)"></td>
+                <td><input type="number" class="form-control form-control-sm" name="variants[${i}][stock]" min="0" value="${stock}" required></td>
                 <td>
-                    <select class="form-select" name="variants[${i}][status]">
+                    <select class="form-select form-select-sm" name="variants[${i}][status]">
                         <option value="1" ${status == 1 ? 'selected' : ''}>Active</option>
                         <option value="0" ${status == 0 ? 'selected' : ''}>Inactive</option>
                     </select>
@@ -258,18 +341,20 @@
             tr.innerHTML = `
                 <td><strong>${label}</strong></td>
                 <td>
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="text-muted">No image</span>
-                        <input type="file" class="form-control form-control-sm" name="variants[${i}][image]" accept="image/*">
+                    <div class="variant-image-cell d-flex align-items-center gap-2">
+                        <img class="variant-image-preview d-none" src="" alt="Variant"
+                            style="width:40px;height:40px;object-fit:cover;border-radius:4px;">
+                        <span class="variant-image-placeholder text-muted">No image</span>
+                        <input type="file" class="form-control form-control-sm variant-image-input" name="variants[${i}][image]" accept="image/*">
                     </div>
                 </td>
-                <td><input type="text" class="form-control" name="variants[${i}][sku]" placeholder="SKU (optional)"></td>
-                <td><input type="text" class="form-control" name="variants[${i}][serial_start]" placeholder="Serial start"></td>
-                <td><input type="text" class="form-control" name="variants[${i}][serial_end]" placeholder="Serial end"></td>
-                <td><input type="text" class="form-control" name="variants[${i}][price]" placeholder="Price (optional)"></td>
-                <td><input type="number" class="form-control" name="variants[${i}][stock]" min="0" value="0" required></td>
+                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][sku]" placeholder="SKU (optional)"></td>
+                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][serial_start]" placeholder="Serial start"></td>
+                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][serial_end]" placeholder="Serial end"></td>
+                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][price]" placeholder="Price (optional)"></td>
+                <td><input type="number" class="form-control form-control-sm" name="variants[${i}][stock]" min="0" value="0" required></td>
                 <td>
-                    <select class="form-select" name="variants[${i}][status]">
+                    <select class="form-select form-select-sm" name="variants[${i}][status]">
                         <option value="1" selected>Active</option>
                         <option value="0">Inactive</option>
                     </select>

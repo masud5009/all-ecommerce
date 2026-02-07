@@ -181,10 +181,10 @@
 
 
                                     {{-- Variants grid --}}
-                                    <div class="mt-2 d-none" id="variantsGridWrap">
+                                    <div class="mt-2 d-none variants-grid" id="variantsGridWrap">
 
                                         <div class="table-responsive">
-                                            <table class="table table-bordered">
+                                            <table class="table table-bordered variants-table">
                                                 <thead>
                                                     <tr>
                                                         <th style="min-width: 220px">{{ __('Variant') }}</th>

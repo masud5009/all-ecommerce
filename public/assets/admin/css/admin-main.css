@@ -1365,3 +1365,65 @@ div.dt-container .dt-paging .dt-paging-button {
     height: 14px;
     accent-color: #2d3b8f;
 }
+
+/** Variants grid (product create/edit) **/
+.variants-grid .variants-table {
+    table-layout: fixed;
+}
+
+.variants-grid .variants-table thead th {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #a9b4c2;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.variants-grid .variants-table td,
+.variants-grid .variants-table th {
+    vertical-align: middle;
+    padding: 0.65rem 0.75rem;
+}
+
+.variants-grid .variants-table.table-bordered > :not(caption) > * > * {
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.variants-grid .variants-table tbody tr {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.variants-grid .variants-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.variants-grid .variant-image-cell {
+    gap: 8px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.variants-grid .variant-image-input {
+    max-width: 150px;
+}
+
+.variants-grid .variant-image-preview {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #131c2a;
+}
+
+.variants-grid .variant-image-placeholder {
+    width: 40px;
+    height: 40px;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    line-height: 1.1;
+    text-align: center;
+    color: #94a3b8;
+}
