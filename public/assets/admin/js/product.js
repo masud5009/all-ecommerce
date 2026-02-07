@@ -149,15 +149,25 @@
             const label = labelParts.length ? labelParts.join(' / ') : '-';
 
             const sku = variant.sku ?? '';
+            const imageUrl = variant.image_url ?? '';
             const price = variant.price ?? '';
             const stock = variant.stock ?? 0;
             const status = typeof variant.status === 'undefined' ? 1 : variant.status;
             const serialStart = variant.serial_start ?? '';
             const serialEnd = variant.serial_end ?? '';
+            const imagePreview = imageUrl
+                ? `<img src="${imageUrl}" alt="Variant" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">`
+                : '<span class="text-muted">No image</span>';
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><strong>${label}</strong></td>
+                <td>
+                    <div class="d-flex align-items-center gap-2">
+                        ${imagePreview}
+                        <input type="file" class="form-control form-control-sm" name="variants[${i}][image]" accept="image/*">
+                    </div>
+                </td>
                 <td><input type="text" class="form-control" name="variants[${i}][sku]" value="${sku}" placeholder="SKU (optional)"></td>
                 <td><input type="text" class="form-control" name="variants[${i}][serial_start]" value="${serialStart}" placeholder="Serial start"></td>
                 <td><input type="text" class="form-control" name="variants[${i}][serial_end]" value="${serialEnd}" placeholder="Serial end"></td>
@@ -247,6 +257,12 @@
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><strong>${label}</strong></td>
+                <td>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="text-muted">No image</span>
+                        <input type="file" class="form-control form-control-sm" name="variants[${i}][image]" accept="image/*">
+                    </div>
+                </td>
                 <td><input type="text" class="form-control" name="variants[${i}][sku]" placeholder="SKU (optional)"></td>
                 <td><input type="text" class="form-control" name="variants[${i}][serial_start]" placeholder="Serial start"></td>
                 <td><input type="text" class="form-control" name="variants[${i}][serial_end]" placeholder="Serial end"></td>

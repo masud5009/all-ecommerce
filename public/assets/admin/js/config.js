@@ -312,8 +312,18 @@ $('.icp-dd').iconpicker();
 
 /*===================  delete button ================*/
 
-$('.deleteBtn').on('click', function (e) {
+$(document).on('click', '.deleteBtn', function (e) {
     e.preventDefault();
+
+    const $form = $(this).closest(".deleteForm");
+    if (!$form.length) {
+        return;
+    }
+
+    if (typeof Swal === 'undefined') {
+        $form.submit();
+        return;
+    }
 
     Swal.fire({
         title: 'Are you sure?',
@@ -325,8 +335,8 @@ $('.deleteBtn').on('click', function (e) {
         confirmButtonText: 'Yes, delete it'
     }).then((result) => {
         if (result.isConfirmed) {
-            $(this).parent(".deleteForm").submit();
-        } else {
+            $form.submit();
+        } else if (typeof swal !== 'undefined') {
             swal.close();
         }
     });
@@ -613,4 +623,3 @@ $('body').on('click', '.changeStatusBtn', function () {
         }
     });
 });
-

@@ -166,6 +166,7 @@ class ProductController extends Controller
 
                 return [
                     'sku' => $variant->sku,
+                    'image_url' => $variant->image ? asset('assets/img/product/variant/' . $variant->image) : null,
                     'price' => $variant->price,
                     'stock' => $variant->stock,
                     'status' => $variant->status,
@@ -267,8 +268,14 @@ class ProductController extends Controller
         ProductContent::where('product_id', $product->id)->delete();
 
         // remove variants
-        $variantIds = ProductVariant::where('product_id', $product->id)->pluck('id');
+        $variants = ProductVariant::where('product_id', $product->id)->get(['id', 'image']);
+        $variantIds = $variants->pluck('id');
         if ($variantIds->isNotEmpty()) {
+            foreach ($variants as $variant) {
+                if (!empty($variant->image)) {
+                    @unlink(public_path('assets/img/product/variant/') . $variant->image);
+                }
+            }
             ProductVariantValue::whereIn('variant_id', $variantIds)->delete();
             \App\Models\ProductVariantSerialBatch::whereIn('variant_id', $variantIds)->delete();
             \App\Models\ProductVariantSoldSerial::whereIn('variant_id', $variantIds)->delete();

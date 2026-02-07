@@ -273,7 +273,9 @@ class ProductService
 
         $seenVariantIds = [];
 
-        foreach ($variantsInput as $v) {
+        $variantImageDir = public_path('assets/img/product/variant/');
+
+        foreach ($variantsInput as $i => $v) {
             $sku    = trim((string)($v['sku'] ?? ''));
             $price  = $v['price'] ?? null;
             $stock  = (int)($v['stock'] ?? 0); // treat as "initial qty" on create; on update do NOT override historical stock
@@ -351,6 +353,12 @@ class ProductService
                     'variant_id'      => $variant->id,
                     'option_value_id' => $ovId,
                 ]);
+            }
+
+            $imageFile = $request->file("variants.$i.image");
+            if ($imageFile) {
+                $variant->image = ImageUpload::update($variantImageDir, $imageFile, $variant->image);
+                $variant->save();
             }
 
             // Initial batch create only on NEW variant and trackSerial enabled

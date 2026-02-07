@@ -58,6 +58,7 @@ class UpdateRequest extends FormRequest
             $ruleArray['variants.*.price'] = 'nullable|numeric|min:0';
             $ruleArray['variants.*.serial_start'] = 'nullable|string|max:255';
             $ruleArray['variants.*.serial_end'] = 'nullable|string|max:255';
+            $ruleArray['variants.*.image'] = ['nullable', new ImageExtension()];
         }
 
         // Default language always required

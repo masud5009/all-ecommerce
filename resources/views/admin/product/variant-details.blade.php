@@ -38,6 +38,14 @@
                             <li><strong>{{ __('Product') }}:</strong> {{ $productTitle }}</li>
                             <li><strong>{{ __('Variant') }}:</strong> {{ $variantLabel }}</li>
                             <li><strong>{{ __('SKU') }}:</strong> {{ $variant->sku ?? 'N/A' }}</li>
+                            <li><strong>{{ __('Image') }}:</strong>
+                                @if ($variant->image)
+                                    <img src="{{ asset('assets/img/product/variant/' . $variant->image) }}"
+                                        alt="Variant" style="width:60px;height:60px;object-fit:cover;border-radius:4px;">
+                                @else
+                                    <span class="text-muted">N/A</span>
+                                @endif
+                            </li>
                             <li><strong>{{ __('Status') }}:</strong>
                                 @if ((int) $variant->status === 1)
                                     <span class="badge bg-success">{{ __('Active') }}</span>

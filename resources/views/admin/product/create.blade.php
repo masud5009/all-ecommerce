@@ -53,7 +53,7 @@
                             <div class="thumb-preview mb-3">
                                 <img src="{{ asset('assets/admin/noimage.jpg') }}" alt="..." class="uploaded-img">
                             </div>
-
+                            
                         </div>
                     </div>
                 </div>
@@ -174,6 +174,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th style="min-width: 220px">{{ __('Variant') }}</th>
+                                                        <th style="min-width: 200px">{{ __('Image') }}</th>
                                                         <th style="min-width: 160px">{{ __('SKU') }}</th>
                                                         <th style="min-width: 140px">{{ __('Serial Start') }}</th>
                                                         <th style="min-width: 140px">{{ __('Serial End') }}</th>

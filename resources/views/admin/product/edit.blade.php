@@ -188,6 +188,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th style="min-width: 220px">{{ __('Variant') }}</th>
+                                                        <th style="min-width: 200px">{{ __('Image') }}</th>
                                                         <th style="min-width: 160px">{{ __('SKU') }}</th>
                                                         <th style="min-width: 140px">{{ __('Serial Start') }}</th>
                                                         <th style="min-width: 140px">{{ __('Serial End') }}</th>
@@ -265,6 +266,7 @@
                                 <thead>
                                     <tr>
                                         <th>{{ __('Variant') }}</th>
+                                        <th>{{ __('Image') }}</th>
                                         <th>{{ __('SKU') }}</th>
                                         <th>{{ __('Status') }}</th>
                                         <th>{{ __('Track Serial') }}</th>
@@ -297,6 +299,14 @@
                                         @endphp
                                         <tr>
                                             <td>{{ $variantLabel }}</td>
+                                            <td>
+                                                @if ($variant->image)
+                                                    <img src="{{ asset('assets/img/product/variant/' . $variant->image) }}"
+                                                        alt="Variant" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">
+                                                @else
+                                                    <span class="text-muted">N/A</span>
+                                                @endif
+                                            </td>
                                             <td>{{ $variant->sku ?? 'N/A' }}</td>
                                             <td>
                                                 @if ((int) $variant->status === 1)
