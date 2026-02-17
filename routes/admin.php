@@ -117,6 +117,15 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
         Route::post('/bulk_delete', 'Admin\ShippingChargeController@bulkdelete')->name('admin.shop.shipping_charge_bulk_delete');
     });
 
+    // stedfast management route
+    Route::prefix('stedfast')->group(function () {
+        Route::get('/', 'Admin\StedfastController@index')->name('admin.stedfast.index');
+        Route::post('/balance', 'Admin\StedfastController@balance')->name('admin.stedfast.balance');
+        Route::post('/{id}/refresh', 'Admin\StedfastController@refresh')->name('admin.stedfast.refresh');
+        Route::post('/{id}/create', 'Admin\StedfastController@create')->name('admin.stedfast.create');
+        Route::get('/{id}', 'Admin\StedfastController@show')->name('admin.stedfast.show');
+    });
+
 
     //user managment route
     // Route::prefix('user-management')->group(function () {

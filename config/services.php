@@ -33,6 +33,7 @@ return [
 
     'stedfast' => [
         'base_url' => env('STEADFAST_BASE_URL', 'https://portal.packzy.com/api/v1'),
+        'status_url' => env('STEADFAST_STATUS_URL', 'https://middleware.podapp.com.au/passthrough/customerorderstatus'),
     ],
 
 ];

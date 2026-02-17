@@ -12,7 +12,7 @@
         </ol>
     </nav>
 
-    @php($activeTab = old('active_plugin', session('active_plugin', 'pusher')))
+    @php($activeTab = request('active_plugin', old('active_plugin', session('active_plugin', 'pusher'))))
     <div class="row px-3 payment-container">
         <div class="col-lg-3">
             <div class="card">

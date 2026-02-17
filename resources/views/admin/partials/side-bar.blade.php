@@ -143,6 +143,17 @@
                     </a>
                 </li>
 
+                <!-- Stedfast -->
+                <li class="nav-item">
+                    <a href="{{ route('admin.stedfast.index', ['language' => $defaultLang->code]) }}"
+                        class="nav-link
+                        @if (request()->routeIs('admin.stedfast.*')) active @endif
+                        ">
+                        <i class="fas fa-truck"></i>
+                        <span>{{ __('Shipping Charge') }}</span>
+                    </a>
+                </li>
+
                 <!-- sales managment -->
                 <li
                     class="nav-item nav-item-submenu
