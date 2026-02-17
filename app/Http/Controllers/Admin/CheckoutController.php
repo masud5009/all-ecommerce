@@ -11,6 +11,7 @@ use App\Models\Admin\MailTemplate;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Services\Shipping\StedfastService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,6 +42,20 @@ class CheckoutController extends Controller
             return redirect()->back();
         }
 
+        $hasPhysical = false;
+        $productIds = collect($cartData)
+            ->pluck('id')
+            ->filter()
+            ->unique()
+            ->values();
+        if ($productIds->isNotEmpty()) {
+            $hasPhysical = Product::whereIn('id', $productIds)
+                ->get(['type'])
+                ->contains(function ($product) {
+                    return strtolower((string)$product->type) === 'physical';
+                });
+        }
+
         $bs =  DB::table('settings')->select('currency_symbol', 'currency_text', 'currency_text_position', 'currency_symbol_position')->first();
 
         //if payment complete from pos
@@ -49,6 +64,7 @@ class CheckoutController extends Controller
             'billing_phone' => $billing_details ? $billing_details['billing_phone'] ?? 'unknown' : 'unknown',
             'billing_email' => $billing_details ? $billing_details['billing_email'] ?? 'unknown' : 'unknown',
             'billing_address' => $billing_details ? $billing_details['billing_address'] ?? 'unknown' : 'unknown',
+            'billing_city' => $billing_details ? $billing_details['billing_city'] ?? null : null,
             'shipping_address' => $billing_details ? $billing_details['shipping_address'] ?? 'unknown' : 'unknown',
             'payment_method' => 'Cash Payment',
             'gateway' => 'Offline',
@@ -64,13 +80,22 @@ class CheckoutController extends Controller
             'payment_status' => 'completed',
             'order_status' => 'completed',
             'receipt' => NULL,
-            'delivery_date' => $request->delivery_date,
+            'delivery_date' => $billing_details['delivery_date'] ?? $request->delivery_date,
             'invoice_number' => 'INV-' . strtoupper(Str::random(8)),
         ];
         //save order
         $orderInfo = self::saveOrder($arrData, $cartData);
 
         ProcessOrder::dispatch($orderInfo, $cartData);
+
+        $stedfastResult = StedfastService::createConsignment($orderInfo->fresh(), $hasPhysical);
+        if (($stedfastResult['status'] ?? null) === 'error') {
+            $warning = __('Order created but Stedfast booking failed.');
+            if (!empty($stedfastResult['message'])) {
+                $warning .= ' ' . $stedfastResult['message'];
+            }
+            session()->flash('warning', $warning);
+        }
 
         //after save data all session forget
         session()->forget('posProduct');
@@ -93,6 +118,7 @@ class CheckoutController extends Controller
             'billing_email' => $arrData['billing_email'],
             'billing_phone' => $arrData['billing_phone'],
             'billing_address' => $arrData['billing_address'],
+            'billing_city' => $arrData['billing_city'] ?? null,
             'shipping_address' => $arrData['shipping_address'],
             'payment_method' => $arrData['payment_method'],
             'gateway' => $arrData['gateway'],
@@ -100,6 +126,8 @@ class CheckoutController extends Controller
             'pay_amount' => $arrData['payAmount'],
             'discount_amount' => $arrData['discount_amount'],
             'tax' => $arrData['tax'],
+            'shipping_charge' => $arrData['shipping_charge'] ?? 0,
+            'invoice_number' => $arrData['invoice_number'] ?? null,
             'currency_symbol' => $arrData['currency_symbol'],
             'currency_symbol_position' => $arrData['currency_symbol_position'],
             'currency_text' => $arrData['currency_text'],
@@ -107,6 +135,7 @@ class CheckoutController extends Controller
             'payment_status' => $arrData['payment_status'],
             'order_status' => $arrData['order_status'],
             'receipt' => $arrData['receipt'],
+            'delivery_date' => $arrData['delivery_date'] ?? null,
         ]);
 
         foreach ($cartData as $item) {

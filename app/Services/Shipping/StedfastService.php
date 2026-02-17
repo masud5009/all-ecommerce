@@ -16,22 +16,46 @@ class StedfastService
             ->first();
 
         if (!$settings || (int)$settings->stedfast_status !== 1) {
+            self::persistStatus($order, 'skipped', 'disabled');
+            Log::info('Stedfast skipped', [
+                'order_id' => $order->id,
+                'reason' => 'disabled',
+            ]);
             return ['status' => 'skipped', 'message' => 'disabled'];
         }
 
         if (!$hasPhysical) {
+            self::persistStatus($order, 'skipped', 'no-physical-items');
+            Log::info('Stedfast skipped', [
+                'order_id' => $order->id,
+                'reason' => 'no-physical-items',
+            ]);
             return ['status' => 'skipped', 'message' => 'no-physical-items'];
         }
 
         if (strtolower((string)$order->order_status) === 'rejected') {
+            self::persistStatus($order, 'skipped', 'order-rejected');
+            Log::info('Stedfast skipped', [
+                'order_id' => $order->id,
+                'reason' => 'order-rejected',
+            ]);
             return ['status' => 'skipped', 'message' => 'order-rejected'];
         }
 
         if (!empty($order->stedfast_consignment_id) || !empty($order->stedfast_tracking_code)) {
+            self::persistStatus($order, 'skipped', 'already-created');
+            Log::info('Stedfast skipped', [
+                'order_id' => $order->id,
+                'reason' => 'already-created',
+            ]);
             return ['status' => 'skipped', 'message' => 'already-created'];
         }
 
         if (empty($settings->stedfast_api_key) || empty($settings->stedfast_secret_key)) {
+            self::persistStatus($order, 'error', 'missing-credentials');
+            Log::warning('Stedfast create order skipped: missing credentials', [
+                'order_id' => $order->id,
+            ]);
             return ['status' => 'error', 'message' => 'missing-credentials'];
         }
 
@@ -89,6 +113,12 @@ class StedfastService
             return ['status' => 'error', 'message' => is_string($message) ? $message : 'Request failed'];
         }
 
+        Log::info('Stedfast create order success', [
+            'order_id' => $order->id,
+            'consignment_id' => $consignmentId,
+            'tracking_code' => $trackingCode,
+        ]);
+
         return [
             'status' => 'success',
             'message' => is_string($message) ? $message : null,
@@ -137,6 +167,14 @@ class StedfastService
             'stedfast_tracking_code' => $trackingCode,
             'stedfast_payload' => self::encodeJson($payload),
             'stedfast_response' => self::encodeJson($response),
+        ]);
+    }
+
+    private static function persistStatus(Order $order, string $status, ?string $message): void
+    {
+        Order::where('id', $order->id)->update([
+            'stedfast_status' => $status,
+            'stedfast_message' => $message,
         ]);
     }
 
