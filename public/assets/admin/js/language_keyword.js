@@ -1,5 +1,9 @@
 "use strict";
 $(document).ready(function () {
+    const closeOverlayPanels = window.hideActiveOverlays || function () {
+        $('.modal.show').modal('hide');
+    };
+
     function handleKeywordSubmission(e, formId, btnId) {
         e.preventDefault();
         $('.request-loader').show();
@@ -22,7 +26,7 @@ $(document).ready(function () {
                 });
 
                 if (data.status == 'success') {
-                    $(".modal").modal('hide');
+                    closeOverlayPanels();
                     location.reload();
                 }
             },

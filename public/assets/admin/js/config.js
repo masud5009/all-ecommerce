@@ -4,6 +4,28 @@
 $("#ajaxEditForm").attr('onsubmit', 'return false');
 $("#ajaxForm").attr('onsubmit', 'return false');
 
+function hideActiveOverlays() {
+    $('.modal.show').each(function () {
+        if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+            const modalInstance = bootstrap.Modal.getInstance(this);
+            if (modalInstance) {
+                modalInstance.hide();
+                return;
+            }
+        }
+        $(this).modal('hide');
+    });
+
+    if (typeof bootstrap !== 'undefined' && bootstrap.Offcanvas) {
+        $('.offcanvas.show').each(function () {
+            const offcanvasInstance = bootstrap.Offcanvas.getInstance(this) || new bootstrap.Offcanvas(this);
+            offcanvasInstance.hide();
+        });
+    }
+}
+
+window.hideActiveOverlays = hideActiveOverlays;
+
 /*===================  Uploaded Image Preview Start ================*/
 document.querySelectorAll('.thumb-preview, .thumb-preview2').forEach((thumb) => {
     thumb.addEventListener('click', function () {
@@ -67,7 +89,7 @@ $("#submitBtn").on('click', function (e) {
             $('.request-loader').hide();
 
             if (data.status == 'success') {
-                $(".modal").modal('hide');
+                hideActiveOverlays();
                 location.reload();
             }
         },
@@ -155,7 +177,7 @@ $("#minorBtn").on('click', function (e) {
 
             //after succcessfully submit the form
             if (data.status == 'success') {
-                $(".modal").modal('hide');
+                hideActiveOverlays();
                 location.reload();
             }
 
@@ -218,7 +240,7 @@ $("#updateBtn").on('click', function (e) {
             });
 
             if (data.status == 'success') {
-                $(".modal").modal('hide');
+                hideActiveOverlays();
                 location.reload();
             }
         },
@@ -369,6 +391,23 @@ $(".editBtn").on('click', function () {
         } else if ($("#in_" + x).hasClass('select2')) {
             $("#in_" + x).val(datas[x]);
             $("#in_" + x).trigger('change');
+        } else if ($("#in_" + x).is('select')) {
+            const $input = $("#in_" + x);
+            const currentValue = datas[x];
+
+            $input.val(currentValue);
+            if ($input.val() === null && typeof currentValue === 'string') {
+                const upperValue = currentValue.toUpperCase();
+                const lowerValue = currentValue.toLowerCase();
+
+                if ($input.find('option[value="' + upperValue + '"]').length > 0) {
+                    $input.val(upperValue);
+                } else if ($input.find('option[value="' + lowerValue + '"]').length > 0) {
+                    $input.val(lowerValue);
+                }
+            }
+
+            $input.trigger('change');
         } else {
             $("#in_" + x).val(datas[x]);
 

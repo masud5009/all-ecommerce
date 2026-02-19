@@ -736,6 +736,30 @@ div.dt-container .dt-paging .dt-paging-button {
     margin-right: 4px;
 }
 
+.language-management-offcanvas {
+    width: min(560px, 92vw);
+}
+
+.language-management-offcanvas .offcanvas-body form {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.language-offcanvas-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid #dfe2eb;
+    background-color: #ffffff;
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+}
+
 @media (max-width: 767.98px) {
     .language-management-header {
         align-items: flex-start;
@@ -749,6 +773,18 @@ div.dt-container .dt-paging .dt-paging-button {
     .language-management-actions .language-action-btn {
         width: 100%;
         text-align: center;
+    }
+
+    .language-management-offcanvas {
+        width: 100%;
+    }
+
+    .language-offcanvas-actions {
+        justify-content: stretch;
+    }
+
+    .language-offcanvas-actions .btn {
+        flex: 1;
     }
 }
 

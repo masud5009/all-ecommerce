@@ -17,15 +17,15 @@
                     <h5 class="mb-0">{{ __('Language Management') }}</h5>
                 </div>
                 <div class="language-management-actions">
-                    <a href="#" class="btn btn-secondary btn-sm header-btn language-action-btn" data-bs-toggle="modal"
+                    <a href="#" class="btn btn-secondary btn-sm header-btn language-action-btn" data-bs-toggle="offcanvas"
                         data-bs-target="#keywordModal">
                         <i class="fas fa-plus"></i> {{ __('Add Frontend Keyword') }}
                     </a>
-                    <a href="#" class="btn btn-secondary btn-sm header-btn language-action-btn" data-bs-toggle="modal"
+                    <a href="#" class="btn btn-secondary btn-sm header-btn language-action-btn" data-bs-toggle="offcanvas"
                         data-bs-target="#AdminKeywordModal">
                         <i class="fas fa-plus"></i> {{ __('Add Admin Keyword') }}
                     </a>
-                    <a href="#" class="btn btn-primary btn-sm header-btn language-action-btn" data-bs-toggle="modal"
+                    <a href="#" class="btn btn-primary btn-sm header-btn language-action-btn" data-bs-toggle="offcanvas"
                         data-bs-target="#langModal">
                         <i class="fas fa-plus"></i> {{ __('Add Language') }}
                     </a>
@@ -95,10 +95,10 @@
                                                         Action
                                                     </button>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a href="javascript::void()" data-bs-toggle="modal"
+                                                        <a href="javascript::void()" data-bs-toggle="offcanvas"
                                                             data-bs-target="#langEditModal" data-name="{{ $lang->name }}"
                                                             data-code="{{ $lang->code }}"
-                                                            data-direction="{{ $lang->direction }}"
+                                                            data-direction="{{ strtoupper((string) $lang->direction) }}"
                                                             data-id="{{ $lang->id }}"
                                                             class="btn btn-sm editBtn dropdown-item">
                                                             Edit

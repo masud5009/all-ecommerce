@@ -337,6 +337,12 @@ body[data-background-color="dark"] .language-content {
     border-color: var(--card-color);
     background-color: var(--card-color) !important;
 }
+
+body[data-background-color="dark"] .language-offcanvas-actions {
+    background-color: #1a2035;
+    border-top-color: #2a3150;
+}
+
 body[data-background-color="dark"] .bootstrap-tagsinput input{
     color: #fff !important;
 }
