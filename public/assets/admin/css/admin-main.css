@@ -736,6 +736,30 @@ div.dt-container .dt-paging .dt-paging-button {
     margin-right: 4px;
 }
 
+.transactions-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.transactions-pagination .pagination {
+    float: none;
+    margin: 0 !important;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.transactions-table {
+    min-width: 980px;
+}
+
+.transactions-table td,
+.transactions-table th {
+    white-space: nowrap;
+}
+
 .language-management-offcanvas {
     width: min(560px, 92vw);
 }
@@ -773,6 +797,19 @@ div.dt-container .dt-paging .dt-paging-button {
     .language-management-actions .language-action-btn {
         width: 100%;
         text-align: center;
+    }
+
+    .transactions-card-header {
+        align-items: flex-start;
+    }
+
+    .transactions-pagination {
+        width: 100%;
+    }
+
+    .transactions-pagination .pagination {
+        justify-content: center;
+        row-gap: 8px;
     }
 
     .language-management-offcanvas {
