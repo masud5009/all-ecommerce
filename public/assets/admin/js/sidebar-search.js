@@ -71,6 +71,42 @@
         return parentIcon && parentIcon.className ? parentIcon.className : "fas fa-link";
     }
 
+    function createSidebarItem(title, parentLabel, href, iconClass) {
+        var cleanTitle = (title || "").replace(/\s+/g, " ").trim();
+        var cleanHref = (href || "").trim();
+        var cleanParent = (parentLabel || "").replace(/\s+/g, " ").trim();
+
+        if (!cleanTitle || !cleanHref || cleanHref === "#" || cleanHref.indexOf("javascript:") === 0) {
+            return null;
+        }
+
+        var item = {
+            title: cleanTitle,
+            titleNormalized: normalizeText(cleanTitle),
+            parentLabel: cleanParent,
+            parentNormalized: normalizeText(cleanParent),
+            href: cleanHref,
+            iconClass: iconClass || "fas fa-link"
+        };
+        item.searchText = normalizeText(cleanTitle + " " + cleanParent);
+
+        return item;
+    }
+
+    function addSidebarItem(item, seenSet) {
+        if (!item) {
+            return;
+        }
+
+        var uniqueKey = item.titleNormalized + "|" + item.href;
+        if (seenSet.has(uniqueKey)) {
+            return;
+        }
+
+        seenSet.add(uniqueKey);
+        sidebarItems.push(item);
+    }
+
     function buildSidebarIndex() {
         var links = document.querySelectorAll(".sidebar-main .nav-sidebar a.nav-link");
         var seen = new Set();
@@ -78,34 +114,18 @@
         sidebarItems = [];
 
         links.forEach(function (link) {
-            var href = (link.getAttribute("href") || "").trim();
-            if (!href || href === "#" || href.indexOf("javascript:") === 0) {
-                return;
-            }
+            var item = createSidebarItem(
+                getMenuLabel(link),
+                getParentLabel(link),
+                link.getAttribute("href"),
+                getIconClass(link)
+            );
+            addSidebarItem(item, seen);
+        });
 
-            var title = getMenuLabel(link);
-            if (!title) {
-                return;
-            }
-
-            var parentLabel = getParentLabel(link);
-            var item = {
-                title: title,
-                titleNormalized: normalizeText(title),
-                parentLabel: parentLabel,
-                parentNormalized: normalizeText(parentLabel),
-                href: href,
-                iconClass: getIconClass(link)
-            };
-            item.searchText = normalizeText(title + " " + parentLabel);
-
-            var uniqueKey = item.titleNormalized + "|" + item.href;
-            if (seen.has(uniqueKey)) {
-                return;
-            }
-
-            seen.add(uniqueKey);
-            sidebarItems.push(item);
+        var staticItems = Array.isArray(window.sidebarSearchStaticItems) ? window.sidebarSearchStaticItems : [];
+        staticItems.forEach(function (item) {
+            addSidebarItem(createSidebarItem(item.title, item.parentLabel, item.href, item.iconClass), seen);
         });
 
         sidebarItems.sort(function (a, b) {
@@ -124,7 +144,6 @@
         var link = document.createElement("a");
         link.className = "sidebar-search-item";
         link.href = item.href;
-        link.setAttribute("data-bs-dismiss", "modal");
 
         var leftSide = document.createElement("span");
         leftSide.className = "sidebar-search-item-main";

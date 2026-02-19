@@ -1,3 +1,50 @@
+@php
+    $sidebarSearchStaticItems = [
+        [
+            'title' => __('General Settings'),
+            'parentLabel' => __('Settings'),
+            'href' => route('admin.website_setting.general_setting'),
+            'iconClass' => 'fas fa-cog',
+        ],
+        [
+            'title' => __('Email Settings'),
+            'parentLabel' => __('Settings'),
+            'href' => route('admin.website_setting.config_email'),
+            'iconClass' => 'fas fa-envelope',
+        ],
+        [
+            'title' => __('Email Templates'),
+            'parentLabel' => __('Settings'),
+            'href' => route('admin.website_setting.mail_template'),
+            'iconClass' => 'fas fa-envelope-open-text',
+        ],
+        [
+            'title' => __('Plugins'),
+            'parentLabel' => __('Settings'),
+            'href' => route('admin.plugin'),
+            'iconClass' => 'fas fa-plug',
+        ],
+        [
+            'title' => __('Payment Gateway'),
+            'parentLabel' => __('Settings'),
+            'href' => route('admin.gateway'),
+            'iconClass' => 'fas fa-credit-card',
+        ],
+        [
+            'title' => __('Page Heading'),
+            'parentLabel' => __('Settings'),
+            'href' => route('admin.website_setting.page_heading'),
+            'iconClass' => 'fas fa-heading',
+        ],
+        [
+            'title' => __('Maintenance Mode'),
+            'parentLabel' => __('Settings'),
+            'href' => route('admin.maintenance'),
+            'iconClass' => 'fas fa-wrench',
+        ],
+    ];
+@endphp
+
 <script>
     let themeColor = "{{ session()->has('themeColor') ? session()->get('themeColor') : 'light' }}";
     let currency_symbol = "{{ $websiteInfo->currency_symbol }}";
@@ -7,6 +54,7 @@
     let Monthly_Orders = "{{ __('Monthly Orders') }}"
     let activeText = "{{ __('Active') }}";
     let InactiveText = "{{ __('Inactive') }}";
+    window.sidebarSearchStaticItems = @json($sidebarSearchStaticItems);
 </script>
 
 <!-- jquery cdn -->
