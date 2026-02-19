@@ -36,3 +36,49 @@
 .menu-item-actions .menu-action-btn.remove {
     color: #c23030;
 }
+
+.menu-builder-offcanvas {
+    width: min(520px, 92vw);
+}
+
+.menu-builder-offcanvas .offcanvas-body.menu-builder-offcanvas-body {
+    display: block;
+    overflow-y: auto;
+}
+
+.menu-builder-offcanvas .form-group {
+    margin-bottom: 14px;
+}
+
+.menu-builder-offcanvas .form-group:last-of-type {
+    margin-bottom: 0;
+}
+
+.menu-builder-offcanvas-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 16px;
+    border-top: 1px solid #dfe2eb;
+    background-color: #ffffff;
+}
+
+.menu-builder-offcanvas-footer .btn {
+    min-width: 96px;
+}
+
+@media (max-width: 767.98px) {
+    .menu-builder-offcanvas {
+        width: 100%;
+    }
+
+    .menu-builder-offcanvas-footer {
+        justify-content: stretch;
+    }
+
+    .menu-builder-offcanvas-footer .btn {
+        flex: 1;
+        min-width: 0;
+    }
+}

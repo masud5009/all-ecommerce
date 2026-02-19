@@ -29,7 +29,7 @@
                                     class="card-header bg-primary text-white  d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0">Menu Builder</h5>
                                     <div>
-                                        <button class="btn btn-secondary me-2 btn-sm" data-bs-toggle="modal"
+                                        <button class="btn btn-secondary me-2 btn-sm" data-bs-toggle="offcanvas"
                                             data-bs-target="#customMenuModal">
                                             <i class="fa fa-plus me-1"></i> Add Custom Menu
                                         </button>
@@ -51,10 +51,10 @@
                 </div>
 
 
-                <!-- Custom Menu Modal -->
+                <!-- Custom Menu Offcanvas -->
                 @include('admin.menu-builder.modal.custom-menu')
 
-                <!-- Edit Menu Modal -->
+                <!-- Edit Menu Offcanvas -->
                 @include('admin.menu-builder.modal.edit-menu')
             </div>
         </div>

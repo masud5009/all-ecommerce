@@ -1,4 +1,39 @@
 "use strict";
+
+function getBsOffcanvas(id) {
+    const panel = document.getElementById(id);
+    if (!panel || typeof bootstrap === 'undefined' || !bootstrap.Offcanvas) {
+        return null;
+    }
+    return bootstrap.Offcanvas.getOrCreateInstance(panel);
+}
+
+function showPanel(id) {
+    const offcanvas = getBsOffcanvas(id);
+    if (offcanvas) {
+        offcanvas.show();
+        return;
+    }
+
+    const panel = $('#' + id);
+    if (panel.length && typeof panel.modal === 'function') {
+        panel.modal('show');
+    }
+}
+
+function hidePanel(id) {
+    const offcanvas = getBsOffcanvas(id);
+    if (offcanvas) {
+        offcanvas.hide();
+        return;
+    }
+
+    const panel = $('#' + id);
+    if (panel.length && typeof panel.modal === 'function') {
+        panel.modal('hide');
+    }
+}
+
 function renderMenuItem(title, url, target, type) {
     const id = 'id_' + Math.random().toString(36).substr(2, 9);
     return `<li class="list-group-item menu-item rounded shadow-sm mb-2" data-type="${type}" data-title="${title}" data-url="${url}" data-target="${target}" id="${id}">
@@ -60,6 +95,9 @@ $(document).on('click', '.addToMenu', function () {
 $('#addCustomMenu').click(function () {
     const title = $('#menuTitle').val();
     const url = $('#menuUrl').val();
+
+    $('#err_menuTitle, #err_menuUrl').addClass('d-none').text('');
+
     if (!title) {
         $('#err_menuTitle').removeClass('d-none').text('The menu title field is required');
     }
@@ -70,7 +108,7 @@ $('#addCustomMenu').click(function () {
     if (title && url) {
         const $newItem = $(renderMenuItem(title, url, target, 'custom'));
         $('#menuBuilder').append($newItem);
-        $('#customMenuModal').modal('hide');
+        hidePanel('customMenuModal');
         $('#menuTitle, #menuUrl').val('');
         initSortable($newItem.find('ul.nested')[0]);
     }
@@ -83,11 +121,14 @@ $(document).on('click', '.remove', function () {
 $(document).on('click', '.edit', function () {
     const id = $(this).data('id');
     const item = $('#' + id);
+
+    $('#eerr_editTitle, #eerr_editUrl').addClass('d-none').text('');
+
     $('#editItemId').val(id);
     $('#editTitle').val(item.data('title'));
     $('#editUrl').val(item.data('url'));
     $('#editTarget').val(item.data('target'));
-    $('#editMenuModal').modal('show');
+    showPanel('editMenuModal');
 });
 
 $('#updateMenuItem').click(function () {
@@ -95,12 +136,14 @@ $('#updateMenuItem').click(function () {
     const title = $('#editTitle').val();
     const url = $('#editUrl').val();
 
+    $('#eerr_editTitle, #eerr_editUrl').addClass('d-none').text('');
+
     if (!title) {
-        $('#eerr_menuTitle').removeClass('d-none').text('The menu title field is required');
+        $('#eerr_editTitle').removeClass('d-none').text('The menu title field is required');
         return;
     }
     if (!url) {
-        $('#eerr_menuUrl').removeClass('d-none').text('The menu url field is required');
+        $('#eerr_editUrl').removeClass('d-none').text('The menu url field is required');
         return;
     }
 
@@ -110,7 +153,7 @@ $('#updateMenuItem').click(function () {
     item.attr('data-url', url);
     item.attr('data-target', target);
     item.find('.item-label').html(`${title} <small class="text-muted">(${target})</small>`);
-    $('#editMenuModal').modal('hide');
+    hidePanel('editMenuModal');
 });
 
 function buildMenuJson($list) {
