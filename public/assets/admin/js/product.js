@@ -135,10 +135,66 @@
         }
     }
 
+    function isSerialInput(input) {
+        if (!input) return false;
+        return input.matches('input[name$="[serial_start]"], input[name$="[serial_end]"]');
+    }
+
+    function syncVariantStockFromSerialRange(row) {
+        if (!row) return;
+
+        const serialStartInput = row.querySelector('input[name$="[serial_start]"]');
+        const serialEndInput = row.querySelector('input[name$="[serial_end]"]');
+        const stockInputEl = row.querySelector('input[name$="[stock]"]');
+
+        if (!serialStartInput || !serialEndInput || !stockInputEl) return;
+
+        const serialStart = (serialStartInput.value || '').trim();
+        const serialEnd = (serialEndInput.value || '').trim();
+
+        serialStartInput.setCustomValidity('');
+        serialEndInput.setCustomValidity('');
+
+        // Auto-calculate only when both serial fields are present.
+        if (!serialStart || !serialEnd) return;
+
+        const isStartNumeric = /^\d+$/.test(serialStart);
+        const isEndNumeric = /^\d+$/.test(serialEnd);
+
+        if (!isStartNumeric || !isEndNumeric) {
+            if (!isStartNumeric) {
+                serialStartInput.setCustomValidity('Serial start must be numeric.');
+            }
+            if (!isEndNumeric) {
+                serialEndInput.setCustomValidity('Serial end must be numeric.');
+            }
+            return;
+        }
+
+        const startValue = BigInt(serialStart);
+        const endValue = BigInt(serialEnd);
+
+        if (endValue < startValue) {
+            serialEndInput.setCustomValidity('Serial end must be greater than or equal to serial start.');
+            return;
+        }
+
+        const autoStock = (endValue - startValue + 1n).toString();
+        stockInputEl.value = autoStock;
+        stockInputEl.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
     variantsTbody.addEventListener('change', function (e) {
         const input = e.target;
         if (input && input.matches('input[type="file"][name^="variants["]')) {
             updateVariantImagePreview(input);
+        }
+    });
+
+    variantsTbody.addEventListener('input', function (e) {
+        const input = e.target;
+        if (isSerialInput(input)) {
+            syncVariantStockFromSerialRange(input.closest('tr'));
         }
     });
 

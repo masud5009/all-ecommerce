@@ -14,6 +14,10 @@
         </ol>
     </nav>
 
+    @php
+        $hasProductFilter = request()->filled('search') || request()->filled('status') || request()->filled('stock');
+    @endphp
+
     <div class="col-lg-12">
         <div class="card">
             <x-bulk-delete :url="route('admin.product.bulk_delete')" itemTextName="products" />
@@ -30,6 +34,20 @@
                                 data-href="{{ route('admin.product.bulk_delete') }}">
                                 <i class="fas fa-trash"></i> {{ __('Delete') }}
                             </button>
+
+                            <button type="button"
+                                class="btn btn-sm me-2 {{ $hasProductFilter ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                data-bs-toggle="offcanvas" data-bs-target="#productFilterOffcanvas"
+                                aria-controls="productFilterOffcanvas">
+                                <i class="fas fa-filter"></i>
+                            </button>
+
+                            @if ($hasProductFilter)
+                                <a href="{{ route('admin.product', ['language' => request('language', app('defaultLang')->code)]) }}"
+                                    class="btn btn-outline-secondary btn-sm me-2">
+                                    <i class="fas fa-times"></i> {{ __('Clear Filter') }}
+                                </a>
+                            @endif
 
                             <a href="{{ route('admin.product.variant.restock') }}" class="btn btn-outline-primary btn-sm me-2">
                                 <i class="fas fa-boxes"></i> {{ __('Restock Variant') }}
@@ -90,6 +108,7 @@
                                     <th scope="col">{{ __('Title') }}</th>
                                     <th scope="col">{{ __('Category') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
+                                    <th scope="col">{{ __('Stock') }}</th>
                                     <th scope="col">{{ __('Action') }}</th>
                                 </thead>
                                 <tbody>
@@ -104,7 +123,7 @@
                                             </td>
                                             <td>
                                                 {{ truncateString($product->title, 20) }}</td>
-                                         
+
                                             <td>
                                                 {{ $product->categoryName }}
                                             </td>
@@ -117,6 +136,13 @@
                                                     <span class="badge bg-danger changeStatusBtn"
                                                         data-id="{{ $product->id }}" data-value="{{ $product->status }}"
                                                         data-url="{{ route('admin.product.status_change') }}">{{ __('Inactive') }}</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ((int) $product->stock > 0)
+                                                    <span class="badge bg-primary">{{ (int) $product->stock }}</span>
+                                                @else
+                                                    <span class="badge bg-secondary">{{ __('Out of stock') }}</span>
                                                 @endif
                                             </td>
                                             <td>
@@ -148,4 +174,6 @@
             </div>
         </div>
     </div>
+
+@include('admin.product.search')
 @endsection

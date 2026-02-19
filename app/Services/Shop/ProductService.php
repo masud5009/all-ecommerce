@@ -2,18 +2,18 @@
 
 namespace App\Services\Shop;
 
-use App\Http\Helpers\ImageUpload;
 use App\Models\Product;
-use App\Models\ProductContent;
-use App\Models\ProductOption;
-use App\Models\ProductOptionValue;
-use App\Models\ProductVariant;
-use App\Models\ProductVariantValue;
-use App\Models\ProductVariantSerialBatch;
-use App\Models\ProductVariantSoldSerial;
 use App\Models\SliderImage;
 use Illuminate\Http\Request;
+use App\Models\ProductOption;
+use App\Models\ProductContent;
+use App\Models\ProductVariant;
+use App\Http\Helpers\ImageUpload;
+use App\Models\ProductOptionValue;
 use Illuminate\Support\Facades\DB;
+use App\Models\ProductVariantValue;
+use App\Models\ProductVariantSoldSerial;
+use App\Models\ProductVariantSerialBatch;
 
 class ProductService
 {
@@ -76,7 +76,7 @@ class ProductService
             return true;
         } catch (\Throwable $e) {
             DB::rollBack();
-            return false;
+            throw $e;
         }
     }
 
@@ -145,7 +145,7 @@ class ProductService
             return true;
         } catch (\Throwable $e) {
             DB::rollBack();
-            return false;
+            throw $e;
         }
     }
 
@@ -571,7 +571,7 @@ class ProductService
         $last = self::addNumericString($start, $count - 1, $width);
 
         if (self::compareNumericStrings($last, $end) > 0) {
-            throw new \Exception('Serial range is smaller than stock.');
+            throw new \Exception('Variants serial range is smaller than stock.');
         }
     }
 

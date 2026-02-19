@@ -29,16 +29,41 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $language_id = Language::where('code', $request->language)->pluck('id');
+        $search = trim((string) $request->input('search', ''));
+        $status = $request->input('status');
+        $stock = $request->input('stock');
 
-        $data['products'] = Product::join('product_contents', 'product_contents.product_id', 'products.id')
+        $productQuery = Product::join('product_contents', 'product_contents.product_id', 'products.id')
             ->join('product_categories', 'product_categories.id', 'product_contents.category_id')
             ->where('product_contents.language_id', $language_id)
-            ->where('product_categories.language_id', $language_id)
-            ->select('products.id', 'products.thumbnail', 'products.status', 'product_contents.title', 'product_categories.name as categoryName')
+            ->where('product_categories.language_id', $language_id);
+
+        if ($search !== '') {
+            $productQuery->where(function ($query) use ($search) {
+                $query->where('product_contents.title', 'LIKE', '%' . $search . '%')
+                    ->orWhere('product_categories.name', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        if (in_array((string) $status, ['0', '1'], true)) {
+            $productQuery->where('products.status', (int) $status);
+        }
+
+        if ($stock === 'in_stock') {
+            $productQuery->where('products.stock', '>', 0);
+        } elseif ($stock === 'out_of_stock') {
+            $productQuery->where('products.stock', '<=', 0);
+        } elseif ($stock === 'low_stock') {
+            $productQuery->whereBetween('products.stock', [1, 5]);
+        }
+
+        $data['products'] = $productQuery
+            ->select('products.id', 'products.thumbnail', 'products.status', 'products.stock', 'product_contents.title', 'product_categories.name as categoryName')
             ->orderBy('products.created_at', 'desc')
             ->get();
 
         $data['product_setting'] = ProductSetting::first();
+        $data['search'] = $search;
 
         return view('admin.product.index', $data);
     }
@@ -121,11 +146,16 @@ class ProductController extends Controller
 
     public function store(StoreRequest $request)
     {
-        $response = ProductService::store($request);
-        if ($response == true) {
+        try {
+            ProductService::store($request);
             Session::flash('success', __('Created Successfully'));
+
+            return 'success';
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => $e->getMessage() ?: __('Failed to create product'),
+            ], 422);
         }
-        return 'success';
     }
 
     public function edit($id)
@@ -193,11 +223,16 @@ class ProductController extends Controller
 
     public function update(UpdateRequest $request, $id)
     {
-        $response = ProductService::update($request, $id);
-        if ($response == true) {
+        try {
+            ProductService::update($request, $id);
             Session::flash('success', __('Updated Successfully'));
+
+            return 'success';
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => $e->getMessage() ?: __('Failed to update product'),
+            ], 422);
         }
-        return 'success';
     }
 
     //slider image store
