@@ -15,7 +15,11 @@
     </nav>
 
     @php
-        $hasProductFilter = request()->filled('search') || request()->filled('status') || request()->filled('stock');
+        $hasProductFilter = request()->filled('search') ||
+            request()->filled('status') ||
+            request()->filled('stock') ||
+            request()->filled('variant_type') ||
+            request()->filled('product_type');
     @endphp
 
     <div class="col-lg-12">
@@ -107,6 +111,7 @@
                                     <th scope="col">{{ __('Image') }}</th>
                                     <th scope="col">{{ __('Title') }}</th>
                                     <th scope="col">{{ __('Category') }}</th>
+                                    <th scope="col">{{ __('Variant Type') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Stock') }}</th>
                                     <th scope="col">{{ __('Action') }}</th>
@@ -122,10 +127,17 @@
                                                     alt="product">
                                             </td>
                                             <td>
-                                                {{ truncateString($product->title, 20) }}</td>
+                                                {{ truncateString($product->title, 55) }}</td>
 
                                             <td>
                                                 {{ $product->categoryName }}
+                                            </td>
+                                            <td>
+                                                @if ((int) $product->has_variants === 1)
+                                                    <span class="badge bg-info">{{ __('Yes') }}</span>
+                                                @else
+                                                    <span class="badge bg-secondary">{{ __('No') }}</span>
+                                                @endif
                                             </td>
                                             <td>
                                                 @if ($product->status == 1)
@@ -139,25 +151,31 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if ((int) $product->stock > 0)
-                                                    <span class="badge bg-primary">{{ (int) $product->stock }}</span>
+                                                @php
+                                                    $displayStock = (int) ($product->available_stock ?? $product->stock);
+                                                @endphp
+                                                @if ($displayStock > 0)
+                                                    <span class="badge bg-primary">{{ $displayStock }}</span>
                                                 @else
                                                     <span class="badge bg-secondary">{{ __('Out of stock') }}</span>
                                                 @endif
                                             </td>
                                             <td>
-                                                <div class="action-buttons">
+                                                <div class="action-buttons product-list-actions">
                                                     <a href="{{ route('admin.product.edit', ['id' => $product->id]) }}"
-                                                        class="btn btn-sm edit-button">
+                                                        class="btn btn-sm edit-button product-action-btn">
                                                         <span class="fas fa-edit"></span>
+                                                        <span class="product-action-label">{{ __('Edit') }}</span>
                                                     </a>
                                                     <form class="deleteForm d-inline-block"
                                                         action="{{ route('admin.product.delete') }}" method="post">
                                                         @csrf
                                                         <input type="hidden" value="{{ $product->id }}"
                                                             name="product_id">
-                                                        <button class="btn btn-sm deleteBtn delete-button" type="button">
+                                                        <button class="btn btn-sm deleteBtn delete-button product-action-btn"
+                                                            type="button">
                                                             <span class="fas fa-trash"></span>
+                                                            <span class="product-action-label">{{ __('Delete') }}</span>
                                                         </button>
                                                     </form>
                                                 </div>

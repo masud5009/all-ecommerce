@@ -223,6 +223,22 @@ body[data-background-color="dark"] .edit-button span {
     color: var(--white-color);
 }
 
+body[data-background-color="dark"] .product-list-actions .product-action-btn {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+body[data-background-color="dark"] .product-list-actions .product-action-btn:hover,
+body[data-background-color="dark"] .product-list-actions .product-action-btn:focus {
+    background-color: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.34);
+}
+
+body[data-background-color="dark"] .product-list-actions .delete-button {
+    color: #ff8e8e;
+}
+
 body[data-background-color="dark"] .card.shadow .bulk-delete-div {
     color: var(--white-color);
     background-color: var(--card-color);

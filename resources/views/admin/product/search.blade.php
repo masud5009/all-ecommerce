@@ -36,6 +36,32 @@
                         </option>
                     </select>
                 </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{{ __('Variant Type') }}</label>
+                    <select name="variant_type" class="form-control">
+                        <option value="">{{ __('All Products') }}</option>
+                        <option value="variant" @selected(request('variant_type') === 'variant')>
+                            {{ __('Variant Product') }}
+                        </option>
+                        <option value="non_variant" @selected(request('variant_type') === 'non_variant')>
+                            {{ __('Non Variant Product') }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{{ __('Product Type') }}</label>
+                    <select name="product_type" class="form-control">
+                        <option value="">{{ __('All Types') }}</option>
+                        <option value="physical" @selected(request('product_type') === 'physical')>
+                            {{ __('Physical') }}
+                        </option>
+                        <option value="digital" @selected(request('product_type') === 'digital')>
+                            {{ __('Digital') }}
+                        </option>
+                    </select>
+                </div>
             </div>
 
             <div class="border-top p-3 d-flex gap-2">

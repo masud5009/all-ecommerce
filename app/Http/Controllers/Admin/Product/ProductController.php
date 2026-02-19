@@ -10,6 +10,7 @@ use App\Models\Admin\Language;
 use App\Models\ProductContent;
 use App\Models\ProductSetting;
 use App\Models\ProductVariant;
+use App\Models\ProductVariantSerialBatch;
 use App\Models\ProductCategory;
 use App\Imports\ProductImport;
 use App\Exports\ProductImportTemplate;
@@ -32,6 +33,8 @@ class ProductController extends Controller
         $search = trim((string) $request->input('search', ''));
         $status = $request->input('status');
         $stock = $request->input('stock');
+        $variantType = $request->input('variant_type');
+        $productType = $request->input('product_type');
 
         $productQuery = Product::join('product_contents', 'product_contents.product_id', 'products.id')
             ->join('product_categories', 'product_categories.id', 'product_contents.category_id')
@@ -49,19 +52,94 @@ class ProductController extends Controller
             $productQuery->where('products.status', (int) $status);
         }
 
-        if ($stock === 'in_stock') {
-            $productQuery->where('products.stock', '>', 0);
-        } elseif ($stock === 'out_of_stock') {
-            $productQuery->where('products.stock', '<=', 0);
-        } elseif ($stock === 'low_stock') {
-            $productQuery->whereBetween('products.stock', [1, 5]);
+        if ($variantType === 'variant') {
+            $productQuery->where('products.has_variants', 1);
+        } elseif ($variantType === 'non_variant') {
+            $productQuery->where('products.has_variants', 0);
         }
 
-        $data['products'] = $productQuery
-            ->select('products.id', 'products.thumbnail', 'products.status', 'products.stock', 'product_contents.title', 'product_categories.name as categoryName')
+        if (in_array((string) $productType, ['physical', 'digital'], true)) {
+            $productQuery->where('products.type', $productType);
+        }
+
+        $products = $productQuery
+            ->select(
+                'products.id',
+                'products.thumbnail',
+                'products.status',
+                'products.stock',
+                'products.has_variants',
+                'product_contents.title',
+                'product_categories.name as categoryName'
+            )
             ->orderBy('products.created_at', 'desc')
             ->get();
 
+        $products->transform(function ($product) {
+            $product->available_stock = (int) $product->stock;
+            return $product;
+        });
+
+        $variantProductIds = $products
+            ->filter(function ($product) {
+                return (int) $product->has_variants === 1;
+            })
+            ->pluck('id')
+            ->all();
+
+        if (!empty($variantProductIds)) {
+            $variants = ProductVariant::whereIn('product_id', $variantProductIds)
+                ->where('status', 1)
+                ->get(['id', 'product_id', 'stock', 'track_serial']);
+
+            $variantIds = $variants->pluck('id')->all();
+            $serialStockByVariant = collect();
+
+            if (!empty($variantIds)) {
+                $serialStockByVariant = ProductVariantSerialBatch::whereIn('variant_id', $variantIds)
+                    ->selectRaw('variant_id, COALESCE(SUM(qty - sold_qty), 0) as available_stock')
+                    ->groupBy('variant_id')
+                    ->pluck('available_stock', 'variant_id');
+            }
+
+            $variantStockByProduct = [];
+
+            foreach ($variants as $variant) {
+                $availableStock = (int) $variant->stock;
+
+                if ((int) $variant->track_serial === 1) {
+                    $availableStock = (int) ($serialStockByVariant[$variant->id] ?? 0);
+                }
+
+                $variantStockByProduct[$variant->product_id] =
+                    ($variantStockByProduct[$variant->product_id] ?? 0) + max(0, $availableStock);
+            }
+
+            $products->transform(function ($product) use ($variantStockByProduct) {
+                if ((int) $product->has_variants === 1) {
+                    $product->available_stock = (int) ($variantStockByProduct[$product->id] ?? 0);
+                }
+
+                return $product;
+            });
+        }
+
+        if ($stock === 'in_stock') {
+            $products = $products->filter(function ($product) {
+                return (int) $product->available_stock > 0;
+            })->values();
+        } elseif ($stock === 'out_of_stock') {
+            $products = $products->filter(function ($product) {
+                return (int) $product->available_stock <= 0;
+            })->values();
+        } elseif ($stock === 'low_stock') {
+            $products = $products->filter(function ($product) {
+                $available = (int) $product->available_stock;
+                return $available >= 1 && $available <= 5;
+            })->values();
+        }
+
+        $data['products'] = $products;
         $data['product_setting'] = ProductSetting::first();
         $data['search'] = $search;
 
