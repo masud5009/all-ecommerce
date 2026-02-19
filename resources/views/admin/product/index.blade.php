@@ -114,7 +114,7 @@
                                     <th scope="col">{{ __('Variant Type') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Stock') }}</th>
-                                    <th scope="col">{{ __('Action') }}</th>
+                                    <th scope="col">{{ __('Actions') }}</th>
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $key => $product)

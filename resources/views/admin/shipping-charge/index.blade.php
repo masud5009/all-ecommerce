@@ -26,7 +26,7 @@
                         <div class="info-header-content">
                             <a href="#" class="btn btn-primary btn-sm float-lg-end float-left" data-bs-toggle="modal"
                                 data-bs-target="#createModal">
-                                <i class="fas fa-plus"></i> {{ __('Add') }}
+                                <i class="fas fa-plus"></i> {{ __('Add Charge') }}
                             </a>
                         </div>
                     </div>
@@ -35,7 +35,7 @@
             <div class="card-body">
                 <div class="col-lg-12 mx-auto">
                     @if (count($datas) == 0)
-                        <h5 class="text-center">{{ __('NO CATEGORY FOUND') . '!' }}</h5>
+                        <h5 class="text-center">{{ __('NO SHIPPING CHARGE FOUND') . '!' }}</h5>
                     @else
                         <div class="table-responsive">
                             <table id="myTable" class="table table-striped">
@@ -47,7 +47,7 @@
                                     <th scope="col">{{ __('Text') }}</th>
                                     <th scope="col">{{ __('Charge') }}</th>
                                     <th scope="col">{{ __('Serial Number') }}</th>
-                                    <th scope="col">{{ __('Action') }}</th>
+                                    <th scope="col">{{ __('Actions') }}</th>
                                 </thead>
                                 <tbody>
                                     @foreach ($datas as $data)
@@ -59,20 +59,25 @@
                                             <td>{{ $data->text }}</td>
                                             <td>{{ $data->charge }}</td>
                                             <td>{{ $data->serial_number }}</td>
-                                            <td class="action-buttons">
-                                                <a href="{{ route('admin.shop.shipping_charge_edit', ['id' => $data->id, 'language' => $language->code]) }}"
-                                                    class="btn btn-sm edit-button">
-                                                    <span class="fas fa-edit"></span>
-                                                </a>
-                                                <form class="deleteForm d-inline-block"
-                                                    action="{{ route('admin.shop.shipping_charge_delete') }}"
-                                                    method="post">
-                                                    @csrf
-                                                    <input type="hidden" value="{{ $data->id }}" name="charge_id">
-                                                    <button class="btn btn-sm deleteBtn delete-button" type="button">
-                                                        <span class="fas fa-trash"></span>
-                                                    </button>
-                                                </form>
+                                            <td>
+                                                <div class="action-buttons product-list-actions">
+                                                    <a href="{{ route('admin.shop.shipping_charge_edit', ['id' => $data->id, 'language' => $language->code]) }}"
+                                                        class="btn btn-sm edit-button product-action-btn">
+                                                        <span class="fas fa-edit"></span>
+                                                        <span class="product-action-label">{{ __('Edit') }}</span>
+                                                    </a>
+                                                    <form class="deleteForm d-inline-block"
+                                                        action="{{ route('admin.shop.shipping_charge_delete') }}"
+                                                        method="post">
+                                                        @csrf
+                                                        <input type="hidden" value="{{ $data->id }}" name="charge_id">
+                                                        <button class="btn btn-sm deleteBtn delete-button product-action-btn"
+                                                            type="button">
+                                                            <span class="fas fa-trash"></span>
+                                                            <span class="product-action-label">{{ __('Delete') }}</span>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

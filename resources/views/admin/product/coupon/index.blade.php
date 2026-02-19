@@ -29,7 +29,7 @@
                         <div class="info-header-content">
                             <a href="#" class="btn btn-primary btn-sm float-lg-end float-left" data-bs-toggle="modal"
                                 data-bs-target="#createModal">
-                                <i class="fas fa-plus"></i> {{ __('Add') }}
+                                <i class="fas fa-plus"></i> {{ __('Add Coupon') }}
                             </a>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                                     <th scope="col">{{ __('Discount') }}</th>
                                     <th scope="col">{{ __('Created') }}</th>
                                     <th scope="col">{{ __('Type') }}</th>
-                                    <th scope="col">{{ __('Action') }}</th>
+                                    <th scope="col">{{ __('Actions') }}</th>
                                 </thead>
                                 <tbody>
                                     @foreach ($coupons as $key => $coupon)
@@ -70,8 +70,8 @@
                                                     <span class="badge bg-danger">{{ __('Percentage') }}</span>
                                                 @endif
                                             </td>
-                                            <td class="action-buttons">
-                                                <a href="" class="btn btn-sm editBtn edit-button"
+                                            <td class="action-buttons product-list-actions">
+                                                <a href="" class="btn btn-sm edit-button product-action-btn"
                                                     data-bs-toggle="modal" data-bs-target="#editModal"
                                                     data-id="{{ $coupon->id }}" data-name="{{ $coupon->name }}"
                                                     data-code="{{ $coupon->code }}" data-type="{{ $coupon->type }}"
@@ -80,13 +80,15 @@
                                                     data-end_date="{{ $coupon->end_date }}"
                                                     data-amount_spend="{{ $coupon->amount_spend }}">
                                                     <span class="fas fa-edit"></span>
+                                                      <span class="product-action-label">{{ __('Edit') }}</span>
                                                 </a>
                                                 <form class="deleteForm d-inline-block"
                                                     action="{{ route('admin.product.coupon_delete') }}" method="post">
                                                     @csrf
                                                     <input type="hidden" value="{{ $coupon->id }}" name="coupon_id">
-                                                    <button class="btn btn-sm deleteBtn delete-button" type="button">
+                                                    <button class="btn btn-sm deleteBtn delete-button product-action-btn" type="button">
                                                         <span class="fas fa-trash"></span>
+                                                          <span class="product-action-label">{{ __('Delete') }}</span>
                                                     </button>
                                                 </form>
                                             </td>

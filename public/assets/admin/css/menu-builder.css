@@ -18,7 +18,21 @@
       padding-left: 1.5rem !important;
   }
 
-  .custom-menu-container {
-      height: 150px;
-      overflow: auto;
-  }
+.custom-menu-container {
+    height: 150px;
+    overflow: auto;
+}
+
+.menu-item-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.menu-item-actions .menu-action-btn {
+    color: #2b3f63;
+}
+
+.menu-item-actions .menu-action-btn.remove {
+    color: #c23030;
+}

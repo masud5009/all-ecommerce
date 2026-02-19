@@ -12,27 +12,23 @@
 
     <div class="col-lg-12">
         <div class="card">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-lg-4 col-sm-12">
-                        <div class="card-title">
-                            <h5>{{ __('Language Management') }}</h5>
-                        </div>
-                    </div>
-                    <div class="col-lg-8 col-sm-12">
-                        <a href="#" class="btn btn-secondary btn-sm header-btn" data-bs-toggle="modal"
-                            data-bs-target="#keywordModal">
-                            <i class="fas fa-plus"></i> {{ __('Add Frontend Keyword') }}
-                        </a>
-                        <a href="#" class="btn btn-secondary btn-sm header-btn" data-bs-toggle="modal"
-                            data-bs-target="#AdminKeywordModal">
-                            <i class="fas fa-plus"></i> {{ __('Add Admin Keyword') }}
-                        </a>
-                        <a href="#" class="btn btn-primary btn-sm header-btn" data-bs-toggle="modal"
-                            data-bs-target="#langModal">
-                            <i class="fas fa-plus"></i> {{ __('Add Language') }}
-                        </a>
-                    </div>
+            <div class="card-header language-management-header">
+                <div class="card-title mb-0">
+                    <h5 class="mb-0">{{ __('Language Management') }}</h5>
+                </div>
+                <div class="language-management-actions">
+                    <a href="#" class="btn btn-secondary btn-sm header-btn language-action-btn" data-bs-toggle="modal"
+                        data-bs-target="#keywordModal">
+                        <i class="fas fa-plus"></i> {{ __('Add Frontend Keyword') }}
+                    </a>
+                    <a href="#" class="btn btn-secondary btn-sm header-btn language-action-btn" data-bs-toggle="modal"
+                        data-bs-target="#AdminKeywordModal">
+                        <i class="fas fa-plus"></i> {{ __('Add Admin Keyword') }}
+                    </a>
+                    <a href="#" class="btn btn-primary btn-sm header-btn language-action-btn" data-bs-toggle="modal"
+                        data-bs-target="#langModal">
+                        <i class="fas fa-plus"></i> {{ __('Add Language') }}
+                    </a>
                 </div>
             </div>
             <div class="card-body">
@@ -40,97 +36,97 @@
                     @if (count($data) == 0)
                         <h5 class="text-center">{{ __('NO LANGUAGE FOUND') . '!' }}</h5>
                     @else
-                        <table class="table table-striped">
-                            <thead>
-                                <th scope="col">#</th>
-                                <th scope="col">{{ __('Name') }}</th>
-                                <th scope="col">{{ __('Code') }}</th>
-                                <th scope="col">{{ __('Default in Website') }}</th>
-                                <th scope="col">{{ __('Default in Dashboard') }}</th>
-                                <th scope="col">{{ __('Actions') }}</th>
-                            </thead>
-                            <tbody>
-                                @foreach ($data as $key => $lang)
-                                    <tr>
-                                        <td>{{ $key+1 }}</td>
-                                        <td>{{ $lang->name }}</td>
-                                        <td>{{ $lang->code }}</td>
-                                        <td>
-                                            @if ($lang->is_default == 1)
-                                                <span class="badge bg-success">{{ __('Default') }}</span>
-                                            @else
-                                                <form
-                                                    action="{{ route('admin.language.make_default', ['id' => $lang->id]) }}"
-                                                    method="post" id="searchForm_{{ $lang->id }}">
-                                                    @csrf
-                                                    <input type="hidden" name="is_default"
-                                                        value="{{ $lang->is_default }}">
-                                                    <div onclick="document.getElementById('searchForm_'+{{ $lang->id }}).submit()"
-                                                        class="is_default">
-                                                        <button
-                                                            class="btn btn-primary btn-sm">{{ __('Make Default') }}</button>
-                                                    </div>
-                                                </form>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if ($lang->dashboard_default == 1)
-                                                <span class="badge bg-success">{{ __('Default') }}</span>
-                                            @else
-                                                <form
-                                                    action="{{ route('admin.language.dashboardDefault', ['id' => $lang->id]) }}"
-                                                    method="post" id="dashboard_default_{{ $lang->id }}">
-                                                    @csrf
-                                                    <input type="hidden" name="dashboard_default"
-                                                        value="{{ $lang->dashboard_default }}">
-                                                    <div onclick="document.getElementById('dashboard_default_'+{{ $lang->id }}).submit()"
-                                                        class="dashboard_default">
-                                                        <button
-                                                            class="btn btn-primary btn-sm">{{ __('Make Default') }}</button>
-                                                    </div>
-                                                </form>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-info btn-sm dropdown-toggle" type="button"
-                                                    id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    Action
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a href="javascript::void()" data-bs-toggle="modal"
-                                                        data-bs-target="#langEditModal" data-name="{{ $lang->name }}"
-                                                        data-code="{{ $lang->code }}"
-                                                        data-direction="{{ $lang->direction }}"
-                                                        data-id="{{ $lang->id }}"
-                                                        class="btn btn-sm editBtn dropdown-item">
-                                                        Edit
-                                                    </a>
-                                                    <a href="{{ route('admin.language.edit_admin_keyword', $lang->id) }}"
-                                                        class="dropdown-item">
-                                                        {{ __('Edit Admin Keyword') }}
-                                                    </a>
-                                                    <a href="{{ route('admin.language.edit_keyword', $lang->id) }}"
-                                                        class="dropdown-item">
-                                                        {{ __('Edit Frontend Keyword') }}
-                                                    </a>
-                                                    <form class="deleteForm" action="{{ route('admin.language.delete') }}"
-                                                        method="post">
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle mb-0">
+                                <thead>
+                                    <th scope="col">#</th>
+                                    <th scope="col">{{ __('Name') }}</th>
+                                    <th scope="col">{{ __('Code') }}</th>
+                                    <th scope="col">{{ __('Default in Website') }}</th>
+                                    <th scope="col">{{ __('Default in Dashboard') }}</th>
+                                    <th scope="col" class="text-nowrap">{{ __('Actions') }}</th>
+                                </thead>
+                                <tbody>
+                                    @foreach ($data as $key => $lang)
+                                        <tr>
+                                            <td>{{ $key+1 }}</td>
+                                            <td>{{ $lang->name }}</td>
+                                            <td>{{ $lang->code }}</td>
+                                            <td>
+                                                @if ($lang->is_default == 1)
+                                                    <span class="badge bg-success">{{ __('Default') }}</span>
+                                                @else
+                                                    <form
+                                                        action="{{ route('admin.language.make_default', ['id' => $lang->id]) }}"
+                                                        method="post" id="searchForm_{{ $lang->id }}">
                                                         @csrf
-                                                        <input type="hidden" value="{{ $lang->id }}" name="lang_id">
-                                                        <button class="btn btn-sm deleteBtn" type="button">
-                                                            Delete
-                                                        </button>
+                                                        <input type="hidden" name="is_default"
+                                                            value="{{ $lang->is_default }}">
+                                                        <div onclick="document.getElementById('searchForm_'+{{ $lang->id }}).submit()"
+                                                            class="is_default">
+                                                            <button
+                                                                class="btn btn-primary btn-sm">{{ __('Make Default') }}</button>
+                                                        </div>
                                                     </form>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($lang->dashboard_default == 1)
+                                                    <span class="badge bg-success">{{ __('Default') }}</span>
+                                                @else
+                                                    <form
+                                                        action="{{ route('admin.language.dashboardDefault', ['id' => $lang->id]) }}"
+                                                        method="post" id="dashboard_default_{{ $lang->id }}">
+                                                        @csrf
+                                                        <input type="hidden" name="dashboard_default"
+                                                            value="{{ $lang->dashboard_default }}">
+                                                        <div onclick="document.getElementById('dashboard_default_'+{{ $lang->id }}).submit()"
+                                                            class="dashboard_default">
+                                                            <button
+                                                                class="btn btn-primary btn-sm">{{ __('Make Default') }}</button>
+                                                        </div>
+                                                    </form>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-info btn-sm dropdown-toggle" type="button"
+                                                        id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        Action
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a href="javascript::void()" data-bs-toggle="modal"
+                                                            data-bs-target="#langEditModal" data-name="{{ $lang->name }}"
+                                                            data-code="{{ $lang->code }}"
+                                                            data-direction="{{ $lang->direction }}"
+                                                            data-id="{{ $lang->id }}"
+                                                            class="btn btn-sm editBtn dropdown-item">
+                                                            Edit
+                                                        </a>
+                                                        <a href="{{ route('admin.language.edit_admin_keyword', $lang->id) }}"
+                                                            class="dropdown-item">
+                                                            {{ __('Edit Admin Keyword') }}
+                                                        </a>
+                                                        <a href="{{ route('admin.language.edit_keyword', $lang->id) }}"
+                                                            class="dropdown-item">
+                                                            {{ __('Edit Frontend Keyword') }}
+                                                        </a>
+                                                        <form class="deleteForm" action="{{ route('admin.language.delete') }}"
+                                                            method="post">
+                                                            @csrf
+                                                            <input type="hidden" value="{{ $lang->id }}" name="lang_id">
+                                                            <button class="btn btn-sm deleteBtn" type="button">
+                                                                Delete
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </div>
-                                            </div>
-
-
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     @endif
                 </div>
             </div>

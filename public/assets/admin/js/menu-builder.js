@@ -4,9 +4,13 @@ function renderMenuItem(title, url, target, type) {
     return `<li class="list-group-item menu-item rounded shadow-sm mb-2" data-type="${type}" data-title="${title}" data-url="${url}" data-target="${target}" id="${id}">
               <div class="d-flex justify-content-between align-items-center">
                 <span class="item-label fw-semibold">${title} <small class="text-muted">(${target})</small></span>
-                <div>
-                  <button class="btn btn-sm btn-outline-primary edit me-1" data-id="${id}" title="Edit"><i class="fa fa-pen"></i></button>
-                  <button class="btn btn-sm btn-outline-danger remove" title="Remove"><i class="fa fa-trash"></i></button>
+                <div class="menu-item-actions product-list-actions">
+                  <button type="button" class="btn btn-sm edit product-action-btn menu-action-btn" data-id="${id}" title="Edit">
+                    <i class="fa fa-pen"></i><span class="product-action-label">Edit</span>
+                  </button>
+                  <button type="button" class="btn btn-sm remove product-action-btn menu-action-btn" title="Delete">
+                    <i class="fa fa-trash"></i><span class="product-action-label">Delete</span>
+                  </button>
                 </div>
               </div>
               <ul class="nested list-group mt-2 ps-3"></ul>

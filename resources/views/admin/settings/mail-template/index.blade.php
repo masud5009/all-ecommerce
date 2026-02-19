@@ -40,7 +40,7 @@
                                     <th>#</th>
                                     <th>{{ __('Template') }}</th>
                                     <th>{{ __('Subject') }}</th>
-                                    <th>{{ __('Action') }}</th>
+                                    <th class="text-center">{{ __('Action') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,11 +51,14 @@
                                             @php $mailType = str_replace('_', ' ', $template->type); @endphp
                                             {{ $mailType }}</td>
                                         <td>{{ $template->subject }}</td>
-                                        <td>
-                                            <a href="{{ route('admin.website_setting.mail_template.edit', ['type' => $template->type]) }}"
-                                                class="btn btn-sm edit-button">
-                                                <span class="fas fa-edit"></span>
-                                            </a>
+                                        <td class="text-center">
+                                            <div class="action-buttons product-list-actions">
+                                                <a href="{{ route('admin.website_setting.mail_template.edit', ['type' => $template->type]) }}"
+                                                    class="btn btn-sm edit-button product-action-btn">
+                                                    <span class="fas fa-edit"></span>
+                                                    <span class="product-action-label">{{ __('Edit') }}</span>
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

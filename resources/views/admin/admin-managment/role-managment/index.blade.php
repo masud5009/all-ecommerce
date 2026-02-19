@@ -40,7 +40,7 @@
                                 <th scope="col">{{ __('#') }}</th>
                                 <th scope="col">{{ __('Name') }}</th>
                                 <th scope="col">{{ __('Permission') }}</th>
-                                <th scope="col">{{ __('Action') }}</th>
+                                <th scope="col">{{ __('Actions') }}</th>
                             </thead>
                             <tbody>
                                 @foreach ($data as $key => $role)
@@ -55,19 +55,25 @@
                                                 {{ __('Permission') }}
                                             </a>
                                         </td>
-                                        <td class="action-buttons">
-                                            <a href="" class="btn btn-sm editBtn edit-button" data-bs-toggle="modal"
-                                            data-bs-target="#editModal" data-id="{{$role->id}}" data-name="{{$role->name}}">
-                                                <span class="fas fa-edit"></span>
-                                            </a>
-                                            <form class="deleteForm d-inline-block"
-                                                action="{{ route('admin.role_managment.delete') }}" method="post">
-                                                @csrf
-                                                <input type="hidden" value="{{ $role->id }}" name="role_id">
-                                                <button class="btn btn-sm deleteBtn delete-button" type="button">
-                                                    <span class="fas fa-trash"></span>
-                                                </button>
-                                            </form>
+                                        <td>
+                                            <div class="action-buttons product-list-actions">
+                                                <a href="" class="btn btn-sm editBtn edit-button product-action-btn"
+                                                    data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ $role->id }}"
+                                                    data-name="{{ $role->name }}">
+                                                    <span class="fas fa-edit"></span>
+                                                    <span class="product-action-label">{{ __('Edit') }}</span>
+                                                </a>
+                                                <form class="deleteForm d-inline-block"
+                                                    action="{{ route('admin.role_managment.delete') }}" method="post">
+                                                    @csrf
+                                                    <input type="hidden" value="{{ $role->id }}" name="role_id">
+                                                    <button class="btn btn-sm deleteBtn delete-button product-action-btn"
+                                                        type="button">
+                                                        <span class="fas fa-trash"></span>
+                                                        <span class="product-action-label">{{ __('Delete') }}</span>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -29,7 +29,7 @@
                         <div class="info-header-content">
                             <a href="#" class="btn btn-primary btn-sm float-lg-end float-left" data-bs-toggle="modal"
                                 data-bs-target="#createModal">
-                                <i class="fas fa-plus"></i> {{ __('Add') }}
+                                <i class="fas fa-plus"></i> {{ __('Add Category') }}
                             </a>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Serial Number') }}</th>
-                                    <th scope="col">{{ __('Action') }}</th>
+                                    <th scope="col">{{ __('Actions') }}</th>
                                 </thead>
                                 <tbody>
                                     @foreach ($categories as $key => $category)
@@ -70,22 +70,27 @@
                                                 @endif
                                             </td>
                                             <td>{{ $category->serial_number }}</td>
-                                            <td class="action-buttons">
-                                                <a href="" class="btn btn-sm editBtn edit-button"
-                                                    data-bs-toggle="modal" data-bs-target="#editModal"
-                                                    data-id="{{ $category->id }}" data-name="{{ $category->name }}"
-                                                    data-serial_number="{{ $category->serial_number }}"
-                                                    data-status="{{ $category->status }}">
-                                                    <span class="fas fa-edit"></span>
-                                                </a>
-                                                <form class="deleteForm d-inline-block"
-                                                    action="{{ route('admin.product.category_delete') }}" method="post">
-                                                    @csrf
-                                                    <input type="hidden" value="{{ $category->id }}" name="category_id">
-                                                    <button class="btn btn-sm deleteBtn delete-button" type="button">
-                                                        <span class="fas fa-trash"></span> 
-                                                    </button>
-                                                </form>
+                                            <td>
+                                                <div class="action-buttons product-list-actions">
+                                                    <a href="" class="btn btn-sm editBtn edit-button product-action-btn"
+                                                        data-bs-toggle="modal" data-bs-target="#editModal"
+                                                        data-id="{{ $category->id }}" data-name="{{ $category->name }}"
+                                                        data-serial_number="{{ $category->serial_number }}"
+                                                        data-status="{{ $category->status }}">
+                                                        <span class="fas fa-edit"></span>
+                                                        <span class="product-action-label">{{ __('Edit') }}</span>
+                                                    </a>
+                                                    <form class="deleteForm d-inline-block"
+                                                        action="{{ route('admin.product.category_delete') }}" method="post">
+                                                        @csrf
+                                                        <input type="hidden" value="{{ $category->id }}" name="category_id">
+                                                        <button class="btn btn-sm deleteBtn delete-button product-action-btn"
+                                                            type="button">
+                                                            <span class="fas fa-trash"></span>
+                                                            <span class="product-action-label">{{ __('Delete') }}</span>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

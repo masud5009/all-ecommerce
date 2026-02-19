@@ -81,19 +81,24 @@
                                                         data-url="{{ route('admin.package.status_change') }}">{{ __('Inactive') }}</span>
                                                 @endif
                                             </td>
-                                            <td class="action-buttons">
-                                                <a href="{{ route('admin.package.edit', ['id' => $package->id]) }}"
-                                                    class="btn btn-sm edit-button">
-                                                    <span class="fas fa-edit"></span>
-                                                </a>
-                                                <form class="deleteForm" action="{{ route('admin.package.delete') }}"
-                                                    method="post">
-                                                    @csrf
-                                                    <input type="hidden" value="{{ $package->id }}" name="package_id">
-                                                    <button class="btn btn-sm deleteBtn delete-button" type="button">
-                                                        <span class="fas fa-trash"></span>
-                                                    </button>
-                                                </form>
+                                            <td>
+                                                <div class="action-buttons product-list-actions">
+                                                    <a href="{{ route('admin.package.edit', ['id' => $package->id]) }}"
+                                                        class="btn btn-sm edit-button product-action-btn">
+                                                        <span class="fas fa-edit"></span>
+                                                        <span class="product-action-label">{{ __('Edit') }}</span>
+                                                    </a>
+                                                    <form class="deleteForm d-inline-block"
+                                                        action="{{ route('admin.package.delete') }}" method="post">
+                                                        @csrf
+                                                        <input type="hidden" value="{{ $package->id }}" name="package_id">
+                                                        <button class="btn btn-sm deleteBtn delete-button product-action-btn"
+                                                            type="button">
+                                                            <span class="fas fa-trash"></span>
+                                                            <span class="product-action-label">{{ __('Delete') }}</span>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

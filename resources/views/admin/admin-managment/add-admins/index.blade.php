@@ -53,7 +53,7 @@
                                 <th scope="col">{{ __('Email') }}</th>
                                 <th scope="col">{{ __('Role') }}</th>
                                 <th scope="col">{{ __('Status') }}</th>
-                                <th scope="col">{{ __('Action') }}</th>
+                                <th scope="col">{{ __('Actions') }}</th>
                             </thead>
                             <tbody>
                                 @foreach ($admins as $key => $admin)
@@ -69,24 +69,29 @@
                                         <td>{{ $admin->email }}</td>
                                         <td>{{ $admin->adminRole->name }}</td>
                                         <td>{{ $admin->status }}</td>
-                                        <td class="action-buttons">
-                                            <a href="#" class="btn btn-sm editBtn edit-button" data-bs-toggle="modal"
-                                                data-bs-target="#editModal" data-id="{{ $admin->id }}"
-                                                data-email="{{ $admin->email }}"
-                                                data-first_name="{{ $admin->first_name }}"
-                                                data-last_name="{{ $admin->last_name }}"
-                                                data-image="{{ asset('assets/img/admins/' . $admin->image) }}"
-                                                data-role="{{ $admin->role }}" data-username="{{ $admin->username }}">
-                                                <span class="fas fa-edit"></span>
-                                            </a>
-                                            <form class="deleteForm d-inline-block"
-                                                action="{{ route('admin.all_admins.delete') }}" method="post">
-                                                @csrf
-                                                <input type="hidden" value="{{ $admin->id }}" name="admin_id">
-                                                <button class="btn btn-sm deleteBtn delete-button" type="button">
-                                                    <span class="fas fa-trash"></span>
-                                                </button>
-                                            </form>
+                                        <td>
+                                            <div class="action-buttons product-list-actions">
+                                                <a href="#" class="btn btn-sm editBtn edit-button product-action-btn"
+                                                    data-bs-toggle="modal" data-bs-target="#editModal"
+                                                    data-id="{{ $admin->id }}" data-email="{{ $admin->email }}"
+                                                    data-first_name="{{ $admin->first_name }}"
+                                                    data-last_name="{{ $admin->last_name }}"
+                                                    data-image="{{ asset('assets/img/admins/' . $admin->image) }}"
+                                                    data-role="{{ $admin->role }}" data-username="{{ $admin->username }}">
+                                                    <span class="fas fa-edit"></span>
+                                                    <span class="product-action-label">{{ __('Edit') }}</span>
+                                                </a>
+                                                <form class="deleteForm d-inline-block"
+                                                    action="{{ route('admin.all_admins.delete') }}" method="post">
+                                                    @csrf
+                                                    <input type="hidden" value="{{ $admin->id }}" name="admin_id">
+                                                    <button class="btn btn-sm deleteBtn delete-button product-action-btn"
+                                                        type="button">
+                                                        <span class="fas fa-trash"></span>
+                                                        <span class="product-action-label">{{ __('Delete') }}</span>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

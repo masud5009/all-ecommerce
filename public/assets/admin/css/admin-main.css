@@ -712,6 +712,46 @@ div.dt-container .dt-paging .dt-paging-button {
     margin: 0 5px;
 }
 
+.language-management-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.language-management-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.language-management-actions .header-btn {
+    margin: 0;
+}
+
+.language-management-actions .language-action-btn i {
+    margin-right: 4px;
+}
+
+@media (max-width: 767.98px) {
+    .language-management-header {
+        align-items: flex-start;
+    }
+
+    .language-management-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .language-management-actions .language-action-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
 .card-footer {
     background-color: transparent;
     display: flex;
