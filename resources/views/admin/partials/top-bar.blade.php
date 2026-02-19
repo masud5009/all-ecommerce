@@ -6,7 +6,11 @@
         </a>
     </div>
 
-    <div class="d-md-none">
+    <div class="d-md-none topbar-mobile-actions">
+        <a href="#" class="navbar-toggler sidebar-search-trigger sidebar-search-trigger-mobile" data-bs-toggle="modal"
+            data-bs-target="#sidebarSearchModal" aria-label="{{ __('Search sidebar menu') }}">
+            <i class="fas fa-search"></i>
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-mobile">
             <i class="fas fa-ellipsis-v"></i>
         </button>
@@ -16,7 +20,7 @@
     </div>
 
     <div class="collapse navbar-collapse" id="navbar-mobile">
-        <ul class="navbar-nav nav-toggler-button">
+        <ul class="navbar-nav nav-toggler-button d-none d-md-flex">
             <li class="nav-item">
                 <a href="#" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block">
                     <i class="fas fa-bars"></i>
@@ -24,8 +28,39 @@
             </li>
         </ul>
 
-        <span class="navbar-text ml-md-3 mr-md-auto"></span>
-        <ul class="navbar-nav left-nav">
+        <ul class="navbar-nav mobile-top-links d-md-none">
+            <li class="nav-item">
+                <a href="{{ route('admin.editProfile') }}" class="nav-link">
+                    <i class="fas fa-user"></i> {{ __('My profile') }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.chnage_password') }}" class="nav-link">
+                    <i class="fas fa-key"></i> {{ __('Change Password') }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-bs-toggle="offcanvas" data-bs-target="#minorchangeModal"
+                    aria-controls="minorchangeModal">
+                    <i class="fas fa-cog"></i> {{ __('Website Settings') }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.logout') }}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> {{ __('Logout') }}
+                </a>
+            </li>
+        </ul>
+
+        <div class="navbar-search-slot d-none d-md-flex">
+            <a href="#" class="navbar-nav-link sidebar-search-trigger sidebar-search-trigger-lg" data-bs-toggle="modal"
+                data-bs-target="#sidebarSearchModal" aria-label="{{ __('Search sidebar menu') }}">
+                <i class="fas fa-search"></i>
+                <span class="sidebar-search-trigger-label">{{ __('Search sidebar menu...') }}</span>
+                <span class="sidebar-search-trigger-shortcut">/</span>
+            </a>
+        </div>
+        <ul class="navbar-nav left-nav d-none d-md-flex">
             <li class="nav-item dropdown dropdown-user">
                 <a href="#" class="navbar-nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <img style="width: 38px; height:38px;"
@@ -53,6 +88,26 @@
     </div>
 </div>
 
+<div class="modal fade sidebar-search-modal" id="sidebarSearchModal" tabindex="-1"
+    aria-labelledby="sidebarSearchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h2 id="sidebarSearchModalLabel" class="visually-hidden">{{ __('Search sidebar menu') }}</h2>
+                <label for="sidebarSearchInput" class="visually-hidden">{{ __('Search sidebar menu') }}</label>
+                <div class="sidebar-search-input-wrap">
+                    <i class="fas fa-search sidebar-search-input-icon" aria-hidden="true"></i>
+                    <input id="sidebarSearchInput" class="form-control sidebar-search-input" type="search"
+                        placeholder="{{ __('Type to search sidebar menu...') }}" autocomplete="off">
+                </div>
+                <div class="sidebar-search-hint">{{ __('Sidebar menus') }}</div>
+                <div class="sidebar-search-results" id="sidebarSearchResults"
+                    data-empty-default="{{ __('No sidebar menu found.') }}"
+                    data-empty-noresult="{{ __('No sidebar menu matched your search.') }}"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

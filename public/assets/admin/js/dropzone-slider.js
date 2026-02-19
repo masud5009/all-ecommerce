@@ -50,7 +50,7 @@ function rmvImg(file_Id) {
                 icon: 'success',
                 allowToastClose: true,
                 position: 'top-right',
-                hideAfter: 5000,
+                hideAfter: 4000,
             });
         },
         error: function (e) {
@@ -90,7 +90,7 @@ $(document).on('click', '.rmvbtndb', function () {
                 icon: icon,
                 allowToastClose: true,
                 position: 'top-right',
-                hideAfter: 5000,
+                hideAfter: 4000,
             });
         }
     });

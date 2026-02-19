@@ -42,6 +42,7 @@
 <!-- main js-->
 <script src="{{ asset('assets/admin/js/app.js') }}"></script>
 <script src="{{ asset('assets/admin/js/config.js') }}"></script>
+<script src="{{ asset('assets/admin/js/sidebar-search.js') }}"></script>
 
 
 
@@ -54,7 +55,7 @@
             icon: 'success',
             allowToastClose: true,
             position: 'top-right',
-            hideAfter: 5000,
+            hideAfter: 4000,
             // hideAfter: false
         });
     </script>
@@ -68,7 +69,7 @@
             icon: 'error',
             allowToastClose: true,
             position: 'top-right',
-            hideAfter: 5000,
+            hideAfter: 4000,
             // hideAfter: false
         });
     </script>
@@ -82,7 +83,7 @@
             icon: 'warning',
             allowToastClose: true,
             position: 'top-right',
-            hideAfter: 5000,
+            hideAfter: 4000,
             // hideAfter: false
         });
     </script>

@@ -18,6 +18,7 @@
     <!-- custome after css -->
     <link href="{{ asset('assets/admin/css/admin-main.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('assets/admin/css/dark-mode.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/admin/css/sidebar-search.css') }}" rel="stylesheet" type="text/css">
     @if ($defaultLang->direction == 'RTL')
         <link href="{{ asset('assets/admin/css/admin-rtl.css') }}" rel="stylesheet" type="text/css">
     @endif

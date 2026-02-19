@@ -47,7 +47,7 @@ $('#blogSubmit').on('click', function (e) {
                     icon: 'warning',
                     allowToastClose: true,
                     position: 'top-right',
-                    hideAfter: 5000,
+                    hideAfter: 4000,
                 });
             }
             if (data == 'success') {
@@ -81,7 +81,7 @@ $('#blogSubmit').on('click', function (e) {
 
             $('.request-loader').removeClass('show');
 
-            document.getElementById('blog_errors').scrollIntoView({ behavior: 'smooth', block: 'start' });  
+            document.getElementById('blog_errors').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     });
     $(e.target).attr('disabled', false);

@@ -99,8 +99,61 @@ body[data-background-color="dark"] .offcanvas-body .selectgroup-item+.selectgrou
 
 body[data-background-color="dark"] .jq-toast-heading,
 body[data-background-color="dark"] .jq-toast-single {
-    color: #000;
-    opacity: 75%;
+    opacity: 1;
+}
+
+body[data-background-color="dark"] .jq-toast-single {
+    background-color: var(--card-color);
+    color: var(--white-color);
+    border: 1px solid #2f3e52;
+}
+
+body[data-background-color="dark"] .jq-icon-success {
+    background-color: rgba(22, 163, 74, 0.2);
+    border-color: rgba(74, 222, 128, 0.45);
+    color: #bbf7d0;
+}
+
+body[data-background-color="dark"] .jq-icon-success::before {
+    background-color: rgba(74, 222, 128, 0.2);
+    color: #bbf7d0;
+}
+
+body[data-background-color="dark"] .jq-icon-error {
+    background-color: rgba(220, 38, 38, 0.2);
+    border-color: rgba(252, 165, 165, 0.45);
+    color: #fecaca;
+}
+
+body[data-background-color="dark"] .jq-icon-error::before {
+    background-color: rgba(252, 165, 165, 0.2);
+    color: #fecaca;
+}
+
+body[data-background-color="dark"] .jq-icon-warning {
+    background-color: rgba(245, 158, 11, 0.2);
+    border-color: rgba(253, 224, 71, 0.45);
+    color: #fde68a;
+}
+
+body[data-background-color="dark"] .jq-icon-warning::before {
+    background-color: rgba(253, 224, 71, 0.2);
+    color: #fde68a;
+}
+
+body[data-background-color="dark"] .jq-icon-info {
+    background-color: rgba(59, 130, 246, 0.2);
+    border-color: rgba(147, 197, 253, 0.45);
+    color: #bfdbfe;
+}
+
+body[data-background-color="dark"] .jq-icon-info::before {
+    background-color: rgba(147, 197, 253, 0.2);
+    color: #bfdbfe;
+}
+
+body[data-background-color="dark"] .close-jq-toast-single {
+    background-color: rgba(255, 255, 255, 0.12);
 }
 
 body[data-background-color="dark"] .form-control.is-invalid,

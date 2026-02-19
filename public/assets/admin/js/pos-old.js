@@ -126,7 +126,7 @@ $(document).ready(function () {
                     icon: icon,
                     allowToastClose: true,
                     position: 'top-right',
-                    hideAfter: 5000,
+                    hideAfter: 4000,
                 });
             },
             error: function (xhr, status, error) {
