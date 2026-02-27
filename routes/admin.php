@@ -185,6 +185,7 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
         Route::get('/plugins', 'Admin\PluginController@index')->name('admin.plugin');
         Route::post('/plupusher_updategins', 'Admin\PluginController@pusher_update')->name('admin.plugin.pusher_update');
         Route::post('/stedfast/update', 'Admin\PluginController@stedfast_update')->name('admin.plugin.stedfast_update');
+        Route::post('/gemini_update/update', 'Admin\PluginController@gemini_update')->name('admin.plugin.gemini_update');
     });
 
     /*============================

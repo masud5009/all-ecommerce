@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class PluginController extends Controller
 {
@@ -18,7 +18,11 @@ class PluginController extends Controller
             'pusher_status',
             'stedfast_api_key',
             'stedfast_secret_key',
-            'stedfast_status'
+            'stedfast_status',
+            'gemini_status',
+            'gemini_api_key',
+            'gemini_image_model',
+            'gemini_text_model'
         )->first();
         return view('admin.settings.plugin', compact('data'));
     }
@@ -73,5 +77,29 @@ class PluginController extends Controller
 
         session()->flash('success', __('Stedfast update successfully'));
         return back()->with('active_plugin', 'stedfast');
+    }
+
+
+    /**
+     * stedfast_update
+     */
+    public function gemini_update(Request $request)
+    {
+        $request->validate([
+            'gemini_api_key' => 'required',
+        ]);
+
+        Setting::updateOrInsert(
+            ['uniqid' => 1234],
+            [
+                'gemini_status' => $request->gemini_status,
+                'gemini_api_key' => $request->gemini_api_key,
+                'gemini_image_model' => $request->gemini_image_model,
+                'gemini_text_model' => $request->gemini_text_model
+            ]
+        );
+
+        session()->flash('success', __('Gemini update successfully'));
+        return back()->with('active_plugin', 'gemini');
     }
 }

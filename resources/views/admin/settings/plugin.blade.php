@@ -27,10 +27,15 @@
                             aria-selected="{{ $activeTab === 'pusher' ? 'true' : 'false' }}">
                             {{ __('Pusher') }}
                         </button>
-                        <button class="nav-link {{ $activeTab === 'stedfast' ? 'active' : '' }}"
-                            data-bs-toggle="pill" data-bs-target="#stedfast" type="button" role="tab"
+                        <button class="nav-link {{ $activeTab === 'stedfast' ? 'active' : '' }}" data-bs-toggle="pill"
+                            data-bs-target="#stedfast" type="button" role="tab"
                             aria-selected="{{ $activeTab === 'stedfast' ? 'true' : 'false' }}">
                             {{ __('Stedfast') }}
+                        </button>
+                        <button class="nav-link {{ $activeTab === 'gemini' ? 'active' : '' }}" data-bs-toggle="pill"
+                            data-bs-target="#AI_Configuration" type="button" role="tab"
+                            aria-selected="{{ $activeTab === 'gemini' ? 'true' : 'false' }}">
+                            {{ __('AI Configuration') }}
                         </button>
                     </div>
                 </div>
@@ -170,6 +175,76 @@
                         </div>
                         <div class="card-footer">
                             <button class="btn btn-success" form="stedfastForm">{{ __('Save & Changes') }}</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- AI_Configuration Tab Content -->
+                <div class="tab-pane fade {{ $activeTab === 'gemini' ? 'show active' : '' }}" id="AI_Configuration"
+                    role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>{{ __('Gemini API Settings') }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <form action="{{ route('admin.plugin.gemini_update') }}" method="post" id="geminiForm">
+                                @csrf
+                                <input type="hidden" name="active_plugin" value="gemini">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="selectgroup w-100">
+                                            <label class="selectgroup-item">
+                                                <input type="radio" name="gemini_status" value="1"
+                                                    class="selectgroup-input" @checked($data->gemini_status == 1)>
+                                                <span class="selectgroup-button">{{ __('Enable') }}</span>
+                                            </label>
+
+                                            <label class="selectgroup-item">
+                                                <input type="radio" name="gemini_status" value="0"
+                                                    class="selectgroup-input" @checked($data->gemini_status == 0)>
+                                                <span class="selectgroup-button">{{ __('Disable') }}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="">{{ __('Gemini Text Model') }}</label>
+                                        <input type="text" placeholder="{{ __('Enter gemini text model name') }}"
+                                            name="gemini_text_model" value="{{ @$data->gemini_text_model }}"
+                                            class="form-control {{ customValid('gemini_text_model', $errors) }}">
+                                        @if ($errors->has('gemini_text_model'))
+                                            <p class="mb-0 text-danger">{{ $errors->first('gemini_text_model') }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="">{{ __('Gemini Image Model') }}</label>
+                                        <input type="text" placeholder="{{ __('Enter gemini image model') }}"
+                                            name="gemini_image_model" value="{{ @$data->gemini_image_model }}"
+                                            class="form-control {{ customValid('gemini_image_model', $errors) }}">
+                                        @if ($errors->has('gemini_image_model'))
+                                            <p class="mb-0 text-danger">{{ $errors->first('gemini_image_model') }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="">{{ __('Gemini API Key') }} <span
+                                                class="text-danger">**</span></label>
+                                        <input type="text" placeholder="{{ __('Enter gemini api key') }}"
+                                            name="gemini_api_key" value="{{ @$data->gemini_api_key }}"
+                                            class="form-control {{ customValid('gemini_api_key', $errors) }}">
+                                        @if ($errors->has('gemini_api_key'))
+                                            <p class="mb-0 text-danger">{{ $errors->first('gemini_api_key') }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-success" form="geminiForm">{{ __('Save & Changes') }}</button>
                         </div>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 07, 2026 at 06:20 PM
+-- Generation Time: Feb 27, 2026 at 05:34 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.29
 
@@ -438,12 +438,12 @@ CREATE TABLE `orders` (
   `order_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `receipt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `delivery_date` date DEFAULT NULL,
-  `stedfast_consignment_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `stedfast_tracking_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `stedfast_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `stedfast_message` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `stedfast_payload` longtext COLLATE utf8mb4_unicode_ci,
-  `stedfast_response` longtext COLLATE utf8mb4_unicode_ci,
+  `stedfast_consignment_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stedfast_tracking_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stedfast_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stedfast_message` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stedfast_payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `stedfast_response` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -626,6 +626,16 @@ CREATE TABLE `products` (
   `has_variants` tinyint NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `stock`, `last_restock_qty`, `sku`, `thumbnail`, `current_price`, `previous_price`, `type`, `file_type`, `download_link`, `download_file`, `status`, `featured`, `rating`, `created_at`, `updated_at`, `order`, `has_variants`) VALUES
+(50, 100, 100, '1111111', '69a1ced3db594.png', 99.99, 120.99, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-02-27 11:05:23', '2026-02-27 11:09:47', 0, 0),
+(51, 0, 0, NULL, '69a1cfd5bc6cc.png', 0.00, NULL, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-02-27 11:09:41', '2026-02-27 11:09:48', 0, 1),
+(52, 0, 0, NULL, '69a1d0e6b4237.png', 0.00, NULL, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-02-27 11:14:14', '2026-02-27 11:14:21', 0, 1),
+(53, 0, 0, NULL, '69a1d1bc06f73.png', 0.00, NULL, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-02-27 11:17:48', '2026-02-27 11:17:50', 0, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -653,7 +663,13 @@ INSERT INTO `product_categories` (`id`, `language_id`, `name`, `slug`, `serial_n
 (13, 5, 'Main Course', 'main-course', 3, 1, '2025-11-28 11:58:32', '2025-11-28 11:58:32'),
 (20, 7, 'Electronics', 'electronics-bn', 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47'),
 (21, 7, 'Fashion', 'fashion-bn', 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47'),
-(22, 7, 'Grocery', 'grocery-bn', 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47');
+(22, 7, 'Grocery', 'grocery-bn', 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47'),
+(23, 6, 'Tv & Audio', 'tv-&-audio', 1, 1, '2026-02-27 11:03:42', '2026-02-27 11:04:22'),
+(24, 6, 'Media Production', 'media-production', 2, 1, '2026-02-27 11:03:51', '2026-02-27 11:03:51'),
+(25, 6, 'Mobile Device', 'mobile-device', 3, 1, '2026-02-27 11:04:08', '2026-02-27 11:04:08'),
+(26, 6, 'Home Appliances', 'home-appliances', 4, 1, '2026-02-27 11:04:19', '2026-02-27 11:04:19'),
+(27, 6, 'Pure Spices', 'pure-spices', 5, 1, '2026-02-27 11:11:59', '2026-02-27 11:11:59'),
+(28, 6, 'Sportswear', 'sportswear', 6, 1, '2026-02-27 11:15:08', '2026-02-27 11:15:08');
 
 -- --------------------------------------------------------
 
@@ -676,6 +692,16 @@ CREATE TABLE `product_contents` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `product_contents`
+--
+
+INSERT INTO `product_contents` (`id`, `language_id`, `product_id`, `category_id`, `title`, `slug`, `summary`, `description`, `meta_keyword`, `meta_description`, `created_at`, `updated_at`) VALUES
+(66, 6, 50, 23, 'UltraVision Pro 27-Inch Full HD LED Monitor with Adaptive Sync and Eye-Care Technology', 'ultravision-pro-27-inch-full-hd-led-monitor-with-adaptive-sync-and-eye-care-technology', 'Transform your viewing experience with the UltraVision Pro 27-Inch Full HD LED Monitor. Featuring stunning visuals, adaptive sync, and eye-care technology, it delivers smooth, flicker-free performance—perfect for work, gaming, and entertainment.', '<p>Immerse yourself in crystal-clear visuals with the UltraVision Pro 27-Inch Full HD LED Monitor. Designed for ultimate performance, it offers vibrant colors, sharp details, and a 75Hz refresh rate, ensuring smooth motion and reduced lag. Adaptive Sync technology eliminates screen tearing, providing a seamless experience for gamers and creatives alike.</p>\r\n<p>The monitor\'s advanced Eye-Care technology reduces blue light emissions and flickering, minimizing eye strain during extended use. Its sleek, frameless design maximizes screen space, making it a stylish addition to any workspace or gaming setup. Multiple connectivity options, including HDMI and VGA ports, ensure compatibility with various devices.</p>', NULL, NULL, '2026-02-27 11:05:23', '2026-02-27 11:05:41'),
+(67, 6, 51, 23, '55\" 4K Smart LED TV with HDR and Voice Control', '55\"-4k-smart-led-tv-with-hdr-and-voice-control', 'A sleek 55\" 4K Smart LED TV featuring HDR technology and voice control. Enjoy stunning visuals, smart apps, and seamless streaming for an ultimate viewing experience.', '<div class=\"product-single-tab pt-70\">\r\n<div class=\"tab-content radius-lg\">\r\n<div id=\"desc\" class=\"tab-pane fade active show\">\r\n<div class=\"tab-description\">\r\n<div class=\"row align-items-center\">\r\n<div class=\"col-md-12\">\r\n<div class=\"content mb-30 tinymce-content\">\r\n<div class=\"tab-pane fade active show\">\r\n<div class=\"tab-description\">\r\n<div class=\"row align-items-center\">\r\n<div class=\"col-md-12\">\r\n<div class=\"content mb-30 summernote-content\">\r\n<div class=\"tab-pane fade active show\">\r\n<div class=\"tab-description\">\r\n<div class=\"row align-items-center\">\r\n<div class=\"col-md-12\">\r\n<div class=\"content mb-30 summernote-content\">\r\n<p>Experience true-to-life picture quality with the 55\" 4K Smart LED TV. Equipped with HDR technology, this TV delivers stunning contrast, vivid colors, and sharp detail, bringing your favorite movies and shows to life. The built-in smart platform gives you access to popular streaming apps like Netflix, YouTube, and Prime Video. Integrated voice control lets you navigate effortlessly, while multiple HDMI and USB ports ensure easy connectivity with other devices. Its slim, modern design enhances any living space, providing both elegance and entertainment. Perfect for families, gamers, and movie enthusiasts.</p>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>', NULL, NULL, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(68, 6, 52, 27, 'Spicy Chili Powder – Bold, Fiery Heat for Your Dishes', 'spicy-chili-powder-–-bold-fiery-heat-for-your-dishes', 'Add a fiery kick to your meals with our Chili Powder. This aromatic, hot spice is perfect for seasoning curries, soups, sauces, marinades, and more. With a rich, vibrant flavor, it\'s the ideal ingredient for anyone who loves heat and bold flavors in their cooking.', '<p>Our&nbsp;<strong>Chili Powder</strong>&nbsp;is crafted from the finest dried chili peppers, ground into a smooth powder that retains all the bold, spicy heat you crave. It&rsquo;s perfect for spicing up your curries, soups, stews, and sauces, and works wonderfully in marinades, dressings, and even for sprinkling on roasted vegetables.</p>\r\n<p>With its vibrant red color and rich, intense heat, this&nbsp;<strong>Chili Powder</strong>&nbsp;adds not only spice but depth and complexity to your dishes. Whether you\'re making a traditional chili, adding heat to a Tex-Mex dish, or giving your homemade sauces a fiery boost, this powder is a must-have for any kitchen.</p>\r\n<p><strong>Why Choose Our Chili Powder?</strong></p>\r\n<ul>\r\n<li><strong>Rich, Fiery Heat:</strong>&nbsp;Made from carefully selected chili peppers, it brings bold and intense heat to your meals.</li>\r\n<li><strong>Versatile Spice:</strong>&nbsp;Perfect for a variety of dishes, from curries to marinades, sauces, and more.</li>\r\n<li><strong>No Artificial Additives:</strong>&nbsp;Free from preservatives and artificial colors&mdash;just pure, natural chili flavor.</li>\r\n<li><strong>Easy to Use:</strong>&nbsp;The finely ground powder easily dissolves into your dishes, giving you the perfect balance of heat and flavor every time.</li>\r\n</ul>\r\n<p><strong>Key Features:</strong></p>\r\n<ul>\r\n<li><strong>Made from High-Quality Chili Peppers:</strong>&nbsp;Ground into a fine powder to preserve flavor and heat.</li>\r\n<li><strong>Versatile for Cooking:</strong>&nbsp;Ideal for curries, soups, stews, sauces, marinades, and dressings.</li>\r\n<li><strong>Natural and Pure:</strong>&nbsp;Contains no artificial preservatives or colorants.</li>\r\n<li><strong>Bold and Aromatic:</strong>&nbsp;Adds intense heat and depth to your dishes.</li>\r\n</ul>', NULL, NULL, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(69, 6, 53, 28, 'Adidas Ultraboost 22 Performance Gym Shoes', 'adidas-ultraboost-22-performance-gym-shoes', 'The Adidas Ultraboost 22 Performance Gym Shoes are engineered for maximum comfort and performance, featuring a responsive Boost midsole and breathable mesh upper. Perfect for both gym workouts and outdoor activities, these shoes provide the support and flexibility you need to stay at the top of your game.', '<p>The&nbsp;<strong>Adidas Ultraboost 22 Performance Gym Shoes</strong>&nbsp;are designed to help you perform at your best, no matter the workout. The signature Boost midsole technology offers superior cushioning and energy return with every step, providing a responsive feel that helps you power through intense sessions. The breathable mesh upper enhances airflow, keeping your feet cool and dry during even the toughest workouts.</p>\r\n<p>These shoes feature a durable rubber outsole with a grippy pattern, providing excellent traction on a variety of surfaces. Whether you\'re lifting, running, or doing agility drills, the&nbsp;<strong>Ultraboost 22</strong>&nbsp;ensures stability and support, giving you the confidence to push yourself further. The sleek, modern design with reflective details also adds a stylish touch, making these shoes perfect for both the gym and casual wear.</p>\r\n<p>Available in a range of colors, the&nbsp;<strong>Adidas Ultraboost 22 Gym Shoes</strong>&nbsp;combine performance with comfort and style, making them an essential addition to any fitness enthusiast\'s collection.</p>', NULL, NULL, '2026-02-27 11:17:48', '2026-02-27 11:17:48');
+
 -- --------------------------------------------------------
 
 --
@@ -695,6 +721,13 @@ CREATE TABLE `product_coupons` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `product_coupons`
+--
+
+INSERT INTO `product_coupons` (`id`, `name`, `code`, `type`, `value`, `start_date`, `end_date`, `amount_spend`, `created_at`, `updated_at`) VALUES
+(4, 'SUPER99', 'SUPER99', 'fixed', 100.00, '2026-02-27', '2026-04-24', 399.00, '2026-02-27 11:18:41', '2026-02-27 11:18:41');
+
 -- --------------------------------------------------------
 
 --
@@ -710,6 +743,18 @@ CREATE TABLE `product_options` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `product_options`
+--
+
+INSERT INTO `product_options` (`id`, `product_id`, `name`, `position`, `created_at`, `updated_at`) VALUES
+(60, 51, 'Color', 0, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(61, 51, 'Audio Technology', 1, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(62, 52, 'Size', 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(63, 52, 'Quality', 1, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(64, 53, 'Size', 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(65, 53, 'Color', 1, '2026-02-27 11:17:48', '2026-02-27 11:17:48');
+
 -- --------------------------------------------------------
 
 --
@@ -724,6 +769,26 @@ CREATE TABLE `product_option_values` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `product_option_values`
+--
+
+INSERT INTO `product_option_values` (`id`, `product_option_id`, `value`, `position`, `created_at`, `updated_at`) VALUES
+(124, 60, 'Black', 0, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(125, 60, 'Metallic Silver', 1, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(126, 61, 'Dolby Audio', 0, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(127, 61, 'Dolby Atmos', 1, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(128, 62, '500gm', 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(129, 62, '1kg', 1, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(130, 63, 'Fine Grind', 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(131, 63, 'Organic', 1, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(132, 64, '23.5 cm', 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(133, 64, '24.4 cm', 1, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(134, 64, '25.5 cm', 2, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(135, 65, 'Black', 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(136, 65, 'White', 1, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(137, 65, 'Gray', 2, '2026-02-27 11:17:48', '2026-02-27 11:17:48');
 
 -- --------------------------------------------------------
 
@@ -756,16 +821,39 @@ CREATE TABLE `product_variants` (
   `id` bigint UNSIGNED NOT NULL,
   `product_id` bigint UNSIGNED NOT NULL,
   `sku` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` decimal(8,2) DEFAULT NULL,
   `stock` int NOT NULL DEFAULT '0',
   `status` tinyint NOT NULL DEFAULT '1',
   `track_serial` tinyint(1) NOT NULL DEFAULT '0',
-  `serial_start` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `serial_end` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `serial_start` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `serial_end` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `product_variants`
+--
+
+INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `image`, `price`, `stock`, `status`, `track_serial`, `serial_start`, `serial_end`, `created_at`, `updated_at`) VALUES
+(112, 51, 'LED-TV-1', NULL, 399.99, 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(113, 51, 'LED-TV-2', NULL, 299.99, 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(114, 51, 'LED-TV-3', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(115, 51, 'LED-TV-4', NULL, 499.99, 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(116, 52, 'CHILI-4', NULL, 100.00, 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(117, 52, 'CHILI-1', NULL, 120.00, 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(118, 52, 'CHILI-3', NULL, 110.00, 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(119, 52, 'CHILI-2', NULL, 90.00, 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(120, 53, 'SHOE-1', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(121, 53, 'SHOE-2', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(122, 53, 'SHOE-3', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(123, 53, 'SHOE-4', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(124, 53, 'SHOE-5', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(125, 53, 'SHOE-6', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(126, 53, 'SHOE-7', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(127, 53, 'SHOE-8', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(128, 53, 'SHOE-9', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48');
 
 -- --------------------------------------------------------
 
@@ -780,6 +868,46 @@ CREATE TABLE `product_variant_values` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `product_variant_values`
+--
+
+INSERT INTO `product_variant_values` (`id`, `variant_id`, `option_value_id`, `created_at`, `updated_at`) VALUES
+(166, 112, 124, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(167, 112, 126, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(168, 113, 124, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(169, 113, 127, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(170, 114, 125, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(171, 114, 126, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(172, 115, 125, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(173, 115, 127, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(174, 116, 128, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(175, 116, 130, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(176, 117, 128, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(177, 117, 131, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(178, 118, 129, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(179, 118, 130, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(180, 119, 129, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(181, 119, 131, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(182, 120, 132, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(183, 120, 135, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(184, 121, 132, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(185, 121, 136, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(186, 122, 132, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(187, 122, 137, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(188, 123, 133, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(189, 123, 135, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(190, 124, 133, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(191, 124, 136, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(192, 125, 133, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(193, 125, 137, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(194, 126, 134, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(195, 126, 135, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(196, 127, 134, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(197, 127, 136, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(198, 128, 134, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(199, 128, 137, '2026-02-27 11:17:48', '2026-02-27 11:17:48');
 
 -- --------------------------------------------------------
 
@@ -848,9 +976,13 @@ CREATE TABLE `settings` (
   `pusher_app_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `pusher_app_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `pusher_app_cluster` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `stedfast_api_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `stedfast_secret_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stedfast_api_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stedfast_secret_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `stedfast_status` tinyint NOT NULL DEFAULT '0',
+  `gemini_status` tinyint NOT NULL DEFAULT '0',
+  `gemini_api_key` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gemini_image_model` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gemini_text_model` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -859,8 +991,8 @@ CREATE TABLE `settings` (
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `uniqid`, `website_logo`, `logo_two`, `footer_logo`, `favicon`, `website_title`, `email_address`, `contact_number`, `address`, `smtp_host`, `smtp_port`, `smtp_username`, `smtp_password`, `encryption`, `sender_mail`, `sender_name`, `smtp_status`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `currency_rate`, `timezone`, `website_color`, `maintenance_image`, `maintenance_status`, `maintenance_message`, `bypass_token`, `package_expire_day`, `admin_approval`, `email_verification_approval`, `admin_approval_notice`, `pusher_app_id`, `pusher_status`, `pusher_app_key`, `pusher_app_secret`, `pusher_app_cluster`, `stedfast_api_key`, `stedfast_secret_key`, `stedfast_status`, `created_at`, `updated_at`) VALUES
-(1, 1234, '6792620a5426d.png', NULL, '6623f11a26d49.png', '6792620a5379d.png', 'Business Validator', NULL, NULL, NULL, 'smtp.gmail.com', '587', 'airdrop446646@gmail.com', 'lwee cjer feik pdof', 'TLS', 'airdrop446646@gmail.com', 'Myapp', 1, '$', 'left', 'USD', 'right', 1, 'Europe/Andorra', '#FF0000FF', '6706bc36b9811.jpg', 0, '<p>Maintenance MessageMaintenance Message</p>', '-1', 4, 1, 1, 'You need to permission from admin to access this panel', '1942636', 1, 'e58380d6ebb048e6feb4', '24a208922bc018ef9b37', 'ap2', 'xnwbyhhhyuycs6ckslp9v0qlylzwflps', 'dw8wwhnqcaiajhpk93lsfrms', 1, NULL, '2024-12-09 11:41:33');
+INSERT INTO `settings` (`id`, `uniqid`, `website_logo`, `logo_two`, `footer_logo`, `favicon`, `website_title`, `email_address`, `contact_number`, `address`, `smtp_host`, `smtp_port`, `smtp_username`, `smtp_password`, `encryption`, `sender_mail`, `sender_name`, `smtp_status`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `currency_rate`, `timezone`, `website_color`, `maintenance_image`, `maintenance_status`, `maintenance_message`, `bypass_token`, `package_expire_day`, `admin_approval`, `email_verification_approval`, `admin_approval_notice`, `pusher_app_id`, `pusher_status`, `pusher_app_key`, `pusher_app_secret`, `pusher_app_cluster`, `stedfast_api_key`, `stedfast_secret_key`, `stedfast_status`, `gemini_status`, `gemini_api_key`, `gemini_image_model`, `gemini_text_model`, `created_at`, `updated_at`) VALUES
+(1, 1234, '6792620a5426d.png', NULL, '6623f11a26d49.png', '6792620a5379d.png', 'Business Validator', NULL, NULL, NULL, 'smtp.gmail.com', '587', 'airdrop446646@gmail.com', 'lwee cjer feik pdof', 'TLS', 'airdrop446646@gmail.com', 'Myapp', 1, '$', 'left', 'USD', 'right', 1, 'Europe/Andorra', '#FF0000FF', '6706bc36b9811.jpg', 0, '<p>Maintenance MessageMaintenance Message</p>', '-1', 4, 1, 1, 'You need to permission from admin to access this panel', '1942636', 1, 'e58380d6ebb048e6feb4', '24a208922bc018ef9b37', 'ap2', 'xnwbyhhhyuycs6ckslp9v0qlylzwflps', 'dw8wwhnqcaiajhpk93lsfrms', 1, 1, 'AIzaSyBiPZPJu6xLOd5lE8H_tjCI7Ufa7Pas0YM', 'imagen-4.0-generate', 'Gemini 2.5 Pro', NULL, '2024-12-09 11:41:33');
 
 -- --------------------------------------------------------
 
@@ -894,6 +1026,27 @@ CREATE TABLE `slider_images` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `slider_images`
+--
+
+INSERT INTO `slider_images` (`id`, `item_id`, `item_type`, `image`, `created_at`, `updated_at`) VALUES
+(180, 50, 'product', '69a1cea659684.png', '2026-02-27 11:04:38', '2026-02-27 11:05:23'),
+(181, 50, 'product', '69a1cea661c30.png', '2026-02-27 11:04:38', '2026-02-27 11:05:23'),
+(182, 50, 'product', '69a1cea695fdb.png', '2026-02-27 11:04:38', '2026-02-27 11:05:23'),
+(183, 50, 'product', '69a1cea6a7299.png', '2026-02-27 11:04:38', '2026-02-27 11:05:23'),
+(184, 51, 'product', '69a1cfd1d2444.png', '2026-02-27 11:09:37', '2026-02-27 11:09:41'),
+(185, 51, 'product', '69a1cfd1d7c98.png', '2026-02-27 11:09:37', '2026-02-27 11:09:41'),
+(186, 51, 'product', '69a1cfd227690.png', '2026-02-27 11:09:38', '2026-02-27 11:09:41'),
+(187, 51, 'product', '69a1cfd22f214.png', '2026-02-27 11:09:38', '2026-02-27 11:09:41'),
+(188, 52, 'product', '69a1d075d5973.png', '2026-02-27 11:12:21', '2026-02-27 11:14:14'),
+(189, 52, 'product', '69a1d075d67bc.png', '2026-02-27 11:12:21', '2026-02-27 11:14:14'),
+(190, 52, 'product', '69a1d0761d3e3.png', '2026-02-27 11:12:22', '2026-02-27 11:14:14'),
+(191, 52, 'product', '69a1d07620833.png', '2026-02-27 11:12:22', '2026-02-27 11:14:14'),
+(192, 53, 'product', '69a1d1b76ceb3.png', '2026-02-27 11:17:43', '2026-02-27 11:17:48'),
+(193, 53, 'product', '69a1d1b770ee0.png', '2026-02-27 11:17:43', '2026-02-27 11:17:48'),
+(194, 53, 'product', '69a1d1b7b18a3.png', '2026-02-27 11:17:43', '2026-02-27 11:17:48');
 
 -- --------------------------------------------------------
 
@@ -1079,8 +1232,8 @@ INSERT INTO `users` (`id`, `name`, `company_name`, `username`, `email`, `image`,
 CREATE TABLE `variant_serials` (
   `id` bigint UNSIGNED NOT NULL,
   `variant_id` bigint UNSIGNED NOT NULL,
-  `serial` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'in_stock',
+  `serial` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'in_stock',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1094,14 +1247,37 @@ CREATE TABLE `variant_serials` (
 CREATE TABLE `variant_serial_batches` (
   `id` bigint UNSIGNED NOT NULL,
   `variant_id` bigint UNSIGNED NOT NULL,
-  `batch_no` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `serial_start` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `serial_end` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `serial_start` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `serial_end` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `qty` int NOT NULL,
   `sold_qty` int NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `variant_serial_batches`
+--
+
+INSERT INTO `variant_serial_batches` (`id`, `variant_id`, `batch_no`, `serial_start`, `serial_end`, `qty`, `sold_qty`, `created_at`, `updated_at`) VALUES
+(7, 112, 'INIT-112-20260227170941', '1', '10', 10, 0, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(8, 113, 'INIT-113-20260227170941', '1', '10', 10, 0, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(9, 114, 'INIT-114-20260227170941', '1', '10', 10, 0, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(10, 115, 'INIT-115-20260227170941', '1', '10', 10, 0, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(11, 116, 'INIT-116-20260227171414', '1', '10', 10, 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(12, 117, 'INIT-117-20260227171414', '1', '10', 10, 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(13, 118, 'INIT-118-20260227171414', '1', '10', 10, 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(14, 119, 'INIT-119-20260227171414', '1', '10', 10, 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(15, 120, 'INIT-120-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(16, 121, 'INIT-121-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(17, 122, 'INIT-122-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(18, 123, 'INIT-123-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(19, 124, 'INIT-124-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(20, 125, 'INIT-125-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(21, 126, 'INIT-126-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(22, 127, 'INIT-127-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(23, 128, 'INIT-128-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48');
 
 -- --------------------------------------------------------
 
@@ -1113,8 +1289,8 @@ CREATE TABLE `variant_sold_serials` (
   `id` bigint UNSIGNED NOT NULL,
   `order_item_id` bigint UNSIGNED NOT NULL,
   `variant_id` bigint UNSIGNED NOT NULL,
-  `serial` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'sold',
+  `serial` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'sold',
   `returned_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -1582,37 +1758,37 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `product_categories`
 --
 ALTER TABLE `product_categories`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `product_contents`
 --
 ALTER TABLE `product_contents`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `product_coupons`
 --
 ALTER TABLE `product_coupons`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `product_options`
 --
 ALTER TABLE `product_options`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `product_option_values`
 --
 ALTER TABLE `product_option_values`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=138;
 
 --
 -- AUTO_INCREMENT for table `product_settings`
@@ -1624,13 +1800,13 @@ ALTER TABLE `product_settings`
 -- AUTO_INCREMENT for table `product_variants`
 --
 ALTER TABLE `product_variants`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 
 --
 -- AUTO_INCREMENT for table `product_variant_values`
 --
 ALTER TABLE `product_variant_values`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=200;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -1654,7 +1830,7 @@ ALTER TABLE `shipping_charges`
 -- AUTO_INCREMENT for table `slider_images`
 --
 ALTER TABLE `slider_images`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=195;
 
 --
 -- AUTO_INCREMENT for table `tables`
@@ -1684,7 +1860,7 @@ ALTER TABLE `variant_serials`
 -- AUTO_INCREMENT for table `variant_serial_batches`
 --
 ALTER TABLE `variant_serial_batches`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `variant_sold_serials`
