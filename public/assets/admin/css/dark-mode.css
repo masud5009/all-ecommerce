@@ -254,7 +254,7 @@ body[data-background-color="dark"] .bootstrap-tagsinput {
     border: 1px solid #2f3e52;
 }
 body[data-background-color="dark"] .tox-tinymce{
-   border: 1px solid #2f3e52 !important; 
+   border: 1px solid #2f3e52 !important;
 }
 body[data-background-color="dark"]  ::placeholder {
   color: rgba(255, 255, 255, 0.45);
@@ -355,4 +355,7 @@ body[data-background-color="dark"] .menu-builder-offcanvas-footer {
 
 body[data-background-color="dark"] .bootstrap-tagsinput input{
     color: #fff !important;
+}
+body[data-background-color="dark"] .offcanvas-header {
+    background: #222f3e;
 }

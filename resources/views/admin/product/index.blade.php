@@ -40,10 +40,10 @@
                             </button>
 
                             <button type="button"
-                                class="btn btn-sm me-2 {{ $hasProductFilter ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                class="btn btn-sm me-2 {{ $hasProductFilter ? 'btn-primary' : 'btn-outline-info' }}"
                                 data-bs-toggle="offcanvas" data-bs-target="#productFilterOffcanvas"
                                 aria-controls="productFilterOffcanvas">
-                                <i class="fas fa-filter"></i>
+                                <i class="fas fa-filter"></i> {{ __('Filter') }}
                             </button>
 
                             @if ($hasProductFilter)
