@@ -167,6 +167,19 @@
                                                         <span class="fas fa-edit"></span>
                                                         <span class="product-action-label">{{ __('Edit') }}</span>
                                                     </a>
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-warning product-action-btn flashSaleBtn"
+                                                        data-bs-toggle="modal" data-bs-target="#flashSaleModal"
+                                                        data-product-id="{{ $product->id }}"
+                                                        data-title="{{ $product->title }}"
+                                                        data-current-price="{{ (float) ($product->current_price ?? 0) }}"
+                                                        data-flash-sale-status="{{ (int) ($product->flash_sale_status ?? 0) }}"
+                                                        data-flash-sale-price="{{ $product->flash_sale_price !== null ? (float) $product->flash_sale_price : '' }}"
+                                                        data-flash-sale-start-at="{{ !empty($product->flash_sale_start_at) ? \Illuminate\Support\Carbon::parse($product->flash_sale_start_at)->format('Y-m-d\\TH:i') : '' }}"
+                                                        data-flash-sale-end-at="{{ !empty($product->flash_sale_end_at) ? \Illuminate\Support\Carbon::parse($product->flash_sale_end_at)->format('Y-m-d\\TH:i') : '' }}">
+                                                        <span class="fas fa-bolt"></span>
+                                                        <span class="product-action-label">{{ __('Flash Sale') }}</span>
+                                                    </button>
                                                     <form class="deleteForm d-inline-block"
                                                         action="{{ route('admin.product.delete') }}" method="post">
                                                         @csrf
@@ -193,5 +206,99 @@
         </div>
     </div>
 
-@include('admin.product.search')
+    <div class="modal fade" id="flashSaleModal" tabindex="-1" aria-labelledby="flashSaleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="flashSaleModalLabel">{{ __('Update Flash Sale') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('admin.product.flash_sale_update') }}" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <input type="hidden" name="product_id" id="flash_product_id">
+
+                        <div class="form-group mb-3">
+                            <label>{{ __('Product') }}</label>
+                            <input type="text" id="flash_product_title" class="form-control" readonly>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>{{ __('Current Price') }}</label>
+                            <input type="text" id="flash_current_price" class="form-control" readonly>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>{{ __('Flash Sale Status') }}</label>
+                            <select name="flash_sale_status" id="flash_sale_status" class="form-select" required>
+                                <option value="1">{{ __('Enable') }}</option>
+                                <option value="0">{{ __('Disable') }}</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>{{ __('Flash Sale Price') }}</label>
+                            <input type="number" step="0.01" min="0" name="flash_sale_price" id="flash_sale_price"
+                                class="form-control">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>{{ __('Start At') }}</label>
+                            <input type="datetime-local" name="flash_sale_start_at" id="flash_sale_start_at"
+                                class="form-control">
+                        </div>
+
+                        <div class="form-group mb-0">
+                            <label>{{ __('End At') }}</label>
+                            <input type="datetime-local" name="flash_sale_end_at" id="flash_sale_end_at"
+                                class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger"
+                            data-bs-dismiss="modal">{{ __('Close') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @include('admin.product.search')
+@endsection
+
+@section('script')
+    <script>
+        (function() {
+            const statusInput = document.getElementById('flash_sale_status');
+            const priceInput = document.getElementById('flash_sale_price');
+            const startInput = document.getElementById('flash_sale_start_at');
+            const endInput = document.getElementById('flash_sale_end_at');
+
+            $(document).on('click', '.flashSaleBtn', function() {
+                const $btn = $(this);
+                const hasSavedValues = (($btn.attr('data-flash-sale-price') || '').toString().trim() !== '') ||
+                    (($btn.attr('data-flash-sale-start-at') || '').toString().trim() !== '') ||
+                    (($btn.attr('data-flash-sale-end-at') || '').toString().trim() !== '');
+                const savedStatus = $btn.attr('data-flash-sale-status') === '1' ? '1' : '0';
+                const initialStatus = savedStatus === '1' || !hasSavedValues ? '1' : '0';
+
+                $('#flash_product_id').val($btn.attr('data-product-id'));
+                $('#flash_product_title').val($btn.data('title') || '');
+                $('#flash_current_price').val($btn.attr('data-current-price') || 0);
+                $('#flash_sale_status').val(initialStatus);
+                $('#flash_sale_price').val($btn.attr('data-flash-sale-price') || '');
+                $('#flash_sale_start_at').val($btn.attr('data-flash-sale-start-at') || '');
+                $('#flash_sale_end_at').val($btn.attr('data-flash-sale-end-at') || '');
+            });
+
+            statusInput?.addEventListener('change', function() {
+                if (this.value === '0') {
+                    if (priceInput) priceInput.value = '';
+                    if (startInput) startInput.value = '';
+                    if (endInput) endInput.value = '';
+                }
+            });
+        })();
+    </script>
 @endsection

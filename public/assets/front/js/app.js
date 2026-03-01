@@ -316,6 +316,72 @@
     });
   }
 
+  const serverFlashSaleProducts =
+    typeof window !== 'undefined' && Array.isArray(window.serverFlashSaleProducts)
+      ? window.serverFlashSaleProducts
+      : [];
+
+  const flashSaleProductIds = [];
+
+  if (serverFlashSaleProducts.length) {
+    serverFlashSaleProducts.forEach((raw) => {
+      const id = raw && raw.id !== undefined && raw.id !== null ? String(raw.id) : '';
+      if (!id) return;
+
+      const basePrice = Number(raw.price || raw.current_price || 0);
+      const baseOldPrice = Number(raw.oldPrice || raw.previous_price || 0);
+      const normalizedUnits =
+        Array.isArray(raw.units) && raw.units.length
+          ? raw.units.map((unit, idx) => ({
+              label: unit.label || `Option ${idx + 1}`,
+              price: Number(unit.price || basePrice || 0),
+              oldPrice: Number(unit.oldPrice || unit.previous_price || baseOldPrice || 0)
+            }))
+          : [{ label: '1 unit', price: basePrice, oldPrice: baseOldPrice }];
+
+      const normalizedProduct = {
+        id,
+        name: raw.name || `Product #${id}`,
+        category: raw.category || 'Featured',
+        rating: Number(raw.rating || 4.7),
+        reviews: Number(raw.reviews || 142),
+        badge: raw.badge || raw.category || 'Featured',
+        image: raw.image || `https://picsum.photos/seed/flash-${id}/600/400`,
+        images:
+          Array.isArray(raw.images) && raw.images.length
+            ? raw.images
+            : [raw.image || `https://picsum.photos/seed/flash-${id}/600/400`],
+        isDeal: true,
+        popular: raw.popular !== false,
+        description: raw.description || 'Limited flash offer from our catalog.',
+        nutrition:
+          Array.isArray(raw.nutrition) && raw.nutrition.length
+            ? raw.nutrition
+            : ['Fresh stock', 'Quality checked'],
+        reviewList:
+          Array.isArray(raw.reviewList) && raw.reviewList.length
+            ? raw.reviewList
+            : [{ name: 'Customer', rating: 5, text: 'Great quality product.' }],
+        units: normalizedUnits
+      };
+
+      const existingIndex = products.findIndex((item) => String(item.id) === id);
+
+      if (existingIndex >= 0) {
+        const existingProduct = products.splice(existingIndex, 1)[0];
+        products.unshift({
+          ...existingProduct,
+          ...normalizedProduct,
+          isDeal: true
+        });
+      } else {
+        products.unshift(normalizedProduct);
+      }
+
+      flashSaleProductIds.push(id);
+    });
+  }
+
   const storeKey = 'grocery_cart';
   const wishlistKey = 'grocery_wishlist';
   const modalState = {
@@ -1143,7 +1209,25 @@
     const slider = qs('[data-deals-slider]');
     if (!slider) return;
     const limit = Number(slider.dataset.productsLimit || 0);
-    let list = products.filter((product) => product.isDeal);
+    let list = [];
+
+    if (flashSaleProductIds.length > 0) {
+      const seen = new Set();
+      list = flashSaleProductIds
+        .map((id) => products.find((product) => String(product.id) === String(id)))
+        .filter((product) => {
+          if (!product) return false;
+          const key = String(product.id);
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+    }
+
+    if (!list.length) {
+      list = products.filter((product) => product.isDeal);
+    }
+
     if (limit) list = list.slice(0, limit);
     const countEl = qs('[data-deals-count]');
     if (countEl) {

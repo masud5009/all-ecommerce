@@ -446,10 +446,60 @@
                 'popular' => true,
             ];
         })->values();
+
+        $flashSaleQuickViewData = collect($flashSaleProducts ?? [])->map(function ($product) {
+            $title = $product->title ?: 'Untitled Product';
+            $category = $product->category_name ?: 'Featured';
+            $salePrice = (float) ($product->flash_sale_price ?? $product->current_price ?? 0);
+            $oldPrice = (float) ($product->flash_sale_old_price ?? $product->current_price ?? 0);
+            $thumbnail = !empty($product->thumbnail)
+                ? asset('assets/img/product/' . $product->thumbnail)
+                : 'https://picsum.photos/seed/flash-' . $product->id . '/600/400';
+            $summary = !empty($product->summary)
+                ? \Illuminate\Support\Str::limit(strip_tags($product->summary), 180)
+                : 'Limited flash offer selected by our team.';
+            $images = is_array($product->images ?? null) ? $product->images : [];
+            if (empty($images)) {
+                $images[] = $thumbnail;
+            }
+            $units = is_array($product->quick_units ?? null) ? $product->quick_units : [];
+            if (empty($units)) {
+                $units[] = [
+                    'label' => '1 unit',
+                    'price' => $salePrice,
+                    'oldPrice' => $oldPrice,
+                ];
+            }
+
+            return [
+                'id' => (string) $product->id,
+                'name' => $title,
+                'category' => $category,
+                'rating' => 4.7,
+                'reviews' => 142,
+                'badge' => $category,
+                'image' => $images[0],
+                'images' => $images,
+                'description' => $summary,
+                'nutrition' => ['Fresh stock', 'Quality checked', 'Fast delivery', 'Secure packaging'],
+                'reviewList' => [
+                    ['name' => 'Ariana', 'rating' => 5, 'text' => 'Great quality and fast delivery.'],
+                    ['name' => 'Chris', 'rating' => 4, 'text' => 'Loved the packaging and freshness.'],
+                ],
+                'units' => $units,
+                'isDeal' => true,
+                'popular' => true,
+            ];
+        })->values();
     @endphp
     @if ($featuredProductQuickViewData->isNotEmpty())
         <script>
             window.serverFeaturedProducts = @json($featuredProductQuickViewData);
+        </script>
+    @endif
+    @if ($flashSaleQuickViewData->isNotEmpty())
+        <script>
+            window.serverFlashSaleProducts = @json($flashSaleQuickViewData);
         </script>
     @endif
 
@@ -527,6 +577,32 @@
 
     <div class="mx-auto mt-16 h-px max-w-5xl bg-gradient-to-r from-transparent via-green-200 to-transparent"></div>
 
+    @php
+        $dealFeatured = $flashSaleFeaturedProduct ?? null;
+        $dealTitle = $dealFeatured?->title ?: "Chef's seafood bundle";
+        $dealSummary = !empty($dealFeatured?->summary)
+            ? \Illuminate\Support\Str::limit(strip_tags($dealFeatured->summary), 120)
+            : 'Salmon, shrimp, and seasonal greens in one chilled delivery.';
+        $dealSalePrice = (float) ($dealFeatured?->flash_sale_price ?? 18.9);
+        $dealOldPrice = (float) ($dealFeatured?->flash_sale_old_price ?? 23.5);
+        $dealSaveAmount = max(0, $dealOldPrice - $dealSalePrice);
+        $dealSavePercent = $dealOldPrice > 0 && $dealSaveAmount > 0 ? (int) round(($dealSaveAmount / $dealOldPrice) * 100) : 0;
+        $dealImages = is_array($dealFeatured->images ?? null) ? $dealFeatured->images : [];
+        $dealImage = !empty($dealImages[0]) ? $dealImages[0] : 'https://picsum.photos/seed/featured-deal/640/420';
+        $dealStock = (int) ($dealFeatured?->stock ?? 5);
+        $dealStockLabel = $dealStock > 0 ? 'Only ' . $dealStock . ' left' : 'Out of stock';
+        $dealDetailsUrl = !empty($dealFeatured?->id)
+            ? route('frontend.product.details', ['product' => $dealFeatured->id])
+            : 'products.html';
+        $dealCountdown = (int) ($flashSaleCountdownSeconds ?? 8132);
+
+        $maxFlashDiscount = collect($flashSaleProducts ?? [])->max(function ($product) {
+            return (int) ($product->flash_sale_save_percent ?? 0);
+        });
+        $maxFlashDiscount = (int) ($maxFlashDiscount ?? 0);
+        $maxDiscountLabel = $maxFlashDiscount > 0 ? ('Up to ' . $maxFlashDiscount . '% off') : 'Up to 25% off';
+    @endphp
+
     <section id="deals" class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
         <div class="flex flex-wrap items-end justify-between gap-4" data-reveal-child>
             <div>
@@ -539,7 +615,7 @@
                         Fresh drops daily
                     </span>
                     <span class="inline-flex items-center gap-2 rounded-full border border-green-100 bg-white px-3 py-1">
-                        Up to 25% off
+                        {{ $maxDiscountLabel }}
                     </span>
                 </div>
                 <div class="mt-4 flex flex-wrap items-center gap-2 text-xs text-slate-600">
@@ -551,11 +627,11 @@
                         </svg>
                         Ends in
                         <span class="font-semibold tabular-nums text-slate-900" data-countdown
-                            data-countdown-seconds="8132">02:15:32</span>
+                            data-countdown-seconds="{{ $dealCountdown }}">02:15:32</span>
                     </span>
                     <span
                         class="inline-flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 font-semibold text-green-700">
-                        Only 5 left
+                        {{ $dealStockLabel }}
                     </span>
                 </div>
             </div>
@@ -568,7 +644,7 @@
                         <path d="M12 7v6l3 2"></path>
                     </svg>
                     Ends in <span class="font-semibold tabular-nums text-slate-900" data-countdown
-                        data-countdown-seconds="8132">02:15:32</span>
+                        data-countdown-seconds="{{ $dealCountdown }}">02:15:32</span>
                 </span>
                 <a href="products.html" class="text-sm font-semibold text-green-700 transition hover:text-green-800">See
                     all deals</a>
@@ -588,43 +664,44 @@
                             class="rounded-full bg-green-600 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">Featured</span>
                         <span class="text-xs text-slate-500">Ends in <span
                                 class="font-semibold tabular-nums text-slate-900" data-countdown
-                                data-countdown-seconds="8132">02:15:32</span></span>
+                                data-countdown-seconds="{{ $dealCountdown }}">02:15:32</span></span>
                     </div>
-                    <h3 class="relative mt-4 text-2xl font-semibold text-slate-900">Chef's seafood bundle</h3>
-                    <p class="relative mt-2 text-sm text-slate-600">Salmon, shrimp, and seasonal greens in one
-                        chilled delivery.</p>
+                    <h3 class="relative mt-4 text-2xl font-semibold text-slate-900">{{ $dealTitle }}</h3>
+                    <p class="relative mt-2 text-sm text-slate-600">{{ $dealSummary }}</p>
                     <div class="relative mt-4 flex items-end gap-3">
-                        <span class="text-3xl font-semibold text-slate-900">$18.90</span>
-                        <span class="text-sm text-slate-400 line-through">$23.50</span>
+                        <span class="text-3xl font-semibold text-slate-900">{{ currency_symbol($dealSalePrice) }}</span>
+                        @if ($dealOldPrice > $dealSalePrice)
+                            <span class="text-sm text-slate-400 line-through">{{ currency_symbol($dealOldPrice) }}</span>
+                        @endif
                     </div>
                     <div class="relative mt-4 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                        <span class="rounded-full bg-green-100 px-3 py-1 font-semibold text-green-700">Save
-                            20%</span>
+                        <span class="rounded-full bg-green-100 px-3 py-1 font-semibold text-green-700">
+                            {{ $dealSavePercent > 0 ? 'Save ' . $dealSavePercent . '%' : 'Limited offer' }}
+                        </span>
                         <span class="rounded-full border border-green-100 px-3 py-1">Free delivery</span>
-                        <span class="rounded-full border border-green-100 px-3 py-1 text-green-700">Only 5
-                            left</span>
+                        <span class="rounded-full border border-green-100 px-3 py-1 text-green-700">{{ $dealStockLabel }}</span>
                     </div>
                     <div class="relative mt-6">
-                        <a href="products.html"
+                        <a href="{{ $dealDetailsUrl }}"
                             class="inline-flex items-center justify-center rounded-2xl bg-green-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">Grab
                             bundle</a>
                     </div>
                     <div class="relative mt-6 overflow-hidden rounded-2xl">
-                        <img src="https://picsum.photos/seed/featured-deal/640/420" alt="Seafood bundle"
+                        <img src="{{ $dealImage }}" alt="{{ $dealTitle }}"
                             class="h-48 w-full object-cover">
                     </div>
                     <div class="relative mt-6 grid grid-cols-3 gap-3 text-xs text-slate-600">
                         <div class="rounded-2xl border border-green-100 bg-white p-3">
                             <p class="text-slate-500">Avg store</p>
-                            <p class="mt-1 text-sm font-semibold text-slate-900">$24.90</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-900">{{ currency_symbol($dealOldPrice) }}</p>
                         </div>
                         <div class="rounded-2xl border border-green-100 bg-white p-3">
                             <p class="text-slate-500">FreshCart</p>
-                            <p class="mt-1 text-sm font-semibold text-slate-900">$18.90</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-900">{{ currency_symbol($dealSalePrice) }}</p>
                         </div>
                         <div class="rounded-2xl border border-green-100 bg-white p-3">
                             <p class="text-slate-500">You save</p>
-                            <p class="mt-1 text-sm font-semibold text-green-700">$6.00</p>
+                            <p class="mt-1 text-sm font-semibold text-green-700">{{ currency_symbol($dealSaveAmount) }}</p>
                         </div>
                     </div>
                 </div>

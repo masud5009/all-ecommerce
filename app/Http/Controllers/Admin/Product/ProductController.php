@@ -19,7 +19,9 @@ use App\Models\ProductOptionValue;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProductVariantValue;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\Product\StoreRequest;
 use App\Http\Requests\Product\UpdateRequest;
@@ -30,6 +32,11 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $language_id = Language::where('code', $request->language)->pluck('id');
+        $hasFlashSaleColumns = Schema::hasColumn('products', 'flash_sale_status')
+            && Schema::hasColumn('products', 'flash_sale_price')
+            && Schema::hasColumn('products', 'flash_sale_start_at')
+            && Schema::hasColumn('products', 'flash_sale_end_at');
+
         $search = trim((string) $request->input('search', ''));
         $status = $request->input('status');
         $stock = $request->input('stock');
@@ -62,21 +69,42 @@ class ProductController extends Controller
             $productQuery->where('products.type', $productType);
         }
 
+        $selectColumns = [
+            'products.id',
+            'products.thumbnail',
+            'products.status',
+            'products.stock',
+            'products.has_variants',
+            'products.current_price',
+            'products.previous_price',
+            'product_contents.title',
+            'product_categories.name as categoryName',
+        ];
+
+        if ($hasFlashSaleColumns) {
+            $selectColumns[] = 'products.flash_sale_status';
+            $selectColumns[] = 'products.flash_sale_price';
+            $selectColumns[] = 'products.flash_sale_start_at';
+            $selectColumns[] = 'products.flash_sale_end_at';
+        }
+
         $products = $productQuery
-            ->select(
-                'products.id',
-                'products.thumbnail',
-                'products.status',
-                'products.stock',
-                'products.has_variants',
-                'product_contents.title',
-                'product_categories.name as categoryName'
-            )
+            ->select($selectColumns)
             ->orderBy('products.created_at', 'desc')
             ->get();
 
-        $products->transform(function ($product) {
+        $products->transform(function ($product) use ($hasFlashSaleColumns) {
             $product->available_stock = (int) $product->stock;
+
+            if (!$hasFlashSaleColumns) {
+                $product->flash_sale_status = 0;
+                $product->flash_sale_price = null;
+                $product->flash_sale_start_at = null;
+                $product->flash_sale_end_at = null;
+            } else {
+                $product->flash_sale_status = (int) ($product->flash_sale_status ?? 0);
+            }
+
             return $product;
         });
 
@@ -142,6 +170,7 @@ class ProductController extends Controller
         $data['products'] = $products;
         $data['product_setting'] = ProductSetting::first();
         $data['search'] = $search;
+        $data['hasFlashSaleColumns'] = $hasFlashSaleColumns;
 
         return view('admin.product.index', $data);
     }
@@ -354,6 +383,58 @@ class ProductController extends Controller
     {
         Product::where('id', $request->id)->update(['status' => $request->status]);
         return 'success';
+    }
+
+    public function updateFlashSale(Request $request)
+    {
+        $hasFlashSaleColumns = Schema::hasColumn('products', 'flash_sale_status')
+            && Schema::hasColumn('products', 'flash_sale_price')
+            && Schema::hasColumn('products', 'flash_sale_start_at')
+            && Schema::hasColumn('products', 'flash_sale_end_at');
+
+        if (!$hasFlashSaleColumns) {
+            return redirect()->back()->with('error', __('Please run migration first to enable flash sale.'));
+        }
+
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'flash_sale_status' => 'required|in:0,1',
+            'flash_sale_price' => 'nullable|required_if:flash_sale_status,1|numeric|min:0',
+            'flash_sale_start_at' => 'nullable|date',
+            'flash_sale_end_at' => 'nullable|date|after:flash_sale_start_at',
+        ]);
+
+        $product = Product::findOrFail((int) $validated['product_id']);
+        $status = (int) $validated['flash_sale_status'];
+
+        if ($status === 0) {
+            $product->flash_sale_status = 0;
+            $product->flash_sale_price = null;
+            $product->flash_sale_start_at = null;
+            $product->flash_sale_end_at = null;
+            $product->save();
+
+            return redirect()->back()->with('success', __('Flash sale disabled successfully'));
+        }
+
+        $flashSalePrice = (float) ($validated['flash_sale_price'] ?? 0);
+        $currentPrice = (float) ($product->current_price ?? 0);
+
+        if ($currentPrice > 0 && $flashSalePrice >= $currentPrice) {
+            return redirect()->back()->with('error', __('Flash sale price must be less than current price.'));
+        }
+
+        $product->flash_sale_status = 1;
+        $product->flash_sale_price = $flashSalePrice;
+        $product->flash_sale_start_at = !empty($validated['flash_sale_start_at'])
+            ? Carbon::parse($validated['flash_sale_start_at'])
+            : null;
+        $product->flash_sale_end_at = !empty($validated['flash_sale_end_at'])
+            ? Carbon::parse($validated['flash_sale_end_at'])
+            : null;
+        $product->save();
+
+        return redirect()->back()->with('success', __('Flash sale updated successfully'));
     }
 
     private function deleteProductData(Product $product): void

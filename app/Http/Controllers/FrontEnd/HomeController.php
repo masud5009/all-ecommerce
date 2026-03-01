@@ -60,103 +60,79 @@ class HomeController extends Controller
             ->limit(8)
             ->get();
 
-        $productIds = $featuredProducts->pluck('id')->filter()->values();
-        $sliderImagesByProduct = collect();
-        $variantsByProduct = collect();
-        $variantOptionRowsByVariant = collect();
+        $featuredProducts = $this->hydrateProductCards($featuredProducts);
 
-        if ($productIds->isNotEmpty()) {
-            $sliderImagesByProduct = DB::table('slider_images')
-                ->where('item_type', 'product')
-                ->whereIn('item_id', $productIds)
-                ->select('item_id', 'image')
-                ->orderBy('id')
-                ->get()
-                ->groupBy('item_id');
+        $flashSaleProducts = collect();
+        $flashSaleCountdownSeconds = 8132;
 
-            $variantRows = DB::table('product_variants')
-                ->whereIn('product_id', $productIds)
-                ->where('status', 1)
-                ->select('id', 'product_id', 'price')
-                ->orderBy('id')
+        if ($this->hasFlashSaleColumns()) {
+            $now = now();
+
+            $flashSaleProducts = Product::query()
+                ->join('product_contents', function ($join) use ($languageId) {
+                    $join->on('product_contents.product_id', '=', 'products.id');
+                    if ($languageId) {
+                        $join->where('product_contents.language_id', '=', $languageId);
+                    }
+                })
+                ->leftJoin('product_categories', function ($join) use ($languageId) {
+                    $join->on('product_categories.id', '=', 'product_contents.category_id');
+                    if ($languageId) {
+                        $join->where('product_categories.language_id', '=', $languageId);
+                    }
+                })
+                ->where('products.status', 1)
+                ->where('products.flash_sale_status', 1)
+                ->whereNotNull('products.flash_sale_price')
+                ->where(function ($query) use ($now) {
+                    $query->whereNull('products.flash_sale_start_at')
+                        ->orWhere('products.flash_sale_start_at', '<=', $now);
+                })
+                ->where(function ($query) use ($now) {
+                    $query->whereNull('products.flash_sale_end_at')
+                        ->orWhere('products.flash_sale_end_at', '>=', $now);
+                })
+                ->select(
+                    'products.id',
+                    'products.thumbnail',
+                    'products.current_price',
+                    'products.previous_price',
+                    'products.stock',
+                    'products.has_variants',
+                    'products.flash_sale_price',
+                    'products.flash_sale_start_at',
+                    'products.flash_sale_end_at',
+                    'product_contents.title',
+                    'product_contents.summary',
+                    'product_contents.slug',
+                    'product_categories.name as category_name'
+                )
+                ->orderByRaw('CASE WHEN products.flash_sale_end_at IS NULL THEN 1 ELSE 0 END')
+                ->orderBy('products.flash_sale_end_at')
+                ->orderByDesc('products.id')
+                ->limit(10)
                 ->get();
 
-            $variantsByProduct = $variantRows->groupBy('product_id');
-            $variantIds = $variantRows->pluck('id')->filter()->values();
+            $flashSaleProducts = $this->hydrateProductCards($flashSaleProducts)
+                ->map(function ($product) {
+                    $oldPrice = (float) ($product->current_price ?? 0);
+                    $salePrice = (float) ($product->flash_sale_price ?? $oldPrice);
+                    $saveAmount = $oldPrice > $salePrice ? ($oldPrice - $salePrice) : 0;
+                    $savePercent = ($oldPrice > 0 && $saveAmount > 0) ? (int) round(($saveAmount / $oldPrice) * 100) : 0;
 
-            if ($variantIds->isNotEmpty()) {
-                $variantOptionRowsByVariant = DB::table('product_variant_values as pvv')
-                    ->join('product_option_values as pov', 'pov.id', '=', 'pvv.option_value_id')
-                    ->join('product_options as po', 'po.id', '=', 'pov.product_option_id')
-                    ->whereIn('pvv.variant_id', $variantIds)
-                    ->select(
-                        'pvv.variant_id',
-                        'po.name as option_name',
-                        'pov.value as option_value',
-                        'po.position',
-                        'pov.position as option_value_position'
-                    )
-                    ->orderBy('po.position')
-                    ->orderBy('pov.position')
-                    ->get()
-                    ->groupBy('variant_id');
-            }
-        }
+                    $product->flash_sale_price = $salePrice;
+                    $product->flash_sale_old_price = $oldPrice;
+                    $product->flash_sale_save_amount = $saveAmount;
+                    $product->flash_sale_save_percent = $savePercent;
 
-        $featuredProducts = $featuredProducts->map(function ($product) use ($sliderImagesByProduct, $variantsByProduct, $variantOptionRowsByVariant) {
-            $images = collect();
+                    $units = collect($product->quick_units ?? [])
+                        ->map(function ($unit, $index) use ($salePrice, $oldPrice) {
+                            if ($index === 0) {
+                                $unit['price'] = $salePrice;
+                                $unit['oldPrice'] = $oldPrice;
+                            }
 
-            if (!empty($product->thumbnail)) {
-                $images->push(asset('assets/img/product/' . $product->thumbnail));
-            }
-
-            $galleryRows = $sliderImagesByProduct->get($product->id, collect());
-            foreach ($galleryRows as $row) {
-                if (!empty($row->image)) {
-                    $images->push(asset('assets/img/product/gallery/' . $row->image));
-                }
-            }
-
-            $product->images = $images->unique()->values()->all();
-            $product->quick_units = [
-                [
-                    'label' => '1 unit',
-                    'price' => (float) ($product->current_price ?? 0),
-                    'oldPrice' => (float) ($product->previous_price ?? 0),
-                ],
-            ];
-
-            if ((int) ($product->has_variants ?? 0) === 1) {
-                $productVariants = $variantsByProduct->get($product->id, collect());
-
-                if ($productVariants->isNotEmpty()) {
-                    $units = $productVariants
-                        ->values()
-                        ->map(function ($variant, $index) use ($variantOptionRowsByVariant, $product) {
-                            $optionRows = collect($variantOptionRowsByVariant->get($variant->id, collect()));
-
-                            $labelParts = $optionRows
-                                ->map(function ($row) {
-                                    $name = trim((string) ($row->option_name ?? ''));
-                                    $value = trim((string) ($row->option_value ?? ''));
-
-                                    if ($name === '' || $value === '') {
-                                        return null;
-                                    }
-
-                                    return $name . ': ' . $value;
-                                })
-                                ->filter()
-                                ->values();
-
-                            return [
-                                'label' => $labelParts->isNotEmpty() ? $labelParts->implode(', ') : ('Option ' . ($index + 1)),
-                                'price' => (float) ($variant->price ?? $product->current_price ?? 0),
-                                'oldPrice' => (float) ($product->previous_price ?? 0),
-                            ];
-                        })
-                        ->filter(function ($unit) {
-                            return !empty($unit['label']);
+                            return $unit;
                         })
                         ->values()
                         ->all();
@@ -164,13 +140,31 @@ class HomeController extends Controller
                     if (!empty($units)) {
                         $product->quick_units = $units;
                     }
-                }
-            }
 
-            return $product;
-        });
+                    return $product;
+                })
+                ->values();
+
+            $nextEndingAt = $flashSaleProducts
+                ->pluck('flash_sale_end_at')
+                ->filter()
+                ->map(function ($dateTime) {
+                    return \Illuminate\Support\Carbon::parse($dateTime);
+                })
+                ->sortBy(function ($dateTime) {
+                    return $dateTime->timestamp;
+                })
+                ->first();
+
+            if (!empty($nextEndingAt) && $nextEndingAt->greaterThan($now)) {
+                $flashSaleCountdownSeconds = $now->diffInSeconds($nextEndingAt);
+            }
+        }
 
         $data['featuredProducts'] = $featuredProducts;
+        $data['flashSaleProducts'] = $flashSaleProducts;
+        $data['flashSaleFeaturedProduct'] = $flashSaleProducts->first();
+        $data['flashSaleCountdownSeconds'] = $flashSaleCountdownSeconds;
         $data['homeCategories'] = $this->getHomeCategories($languageId);
 
         return view('front.home.index', $data);
@@ -344,6 +338,127 @@ class HomeController extends Controller
         // ]);
 
         return view('admin.invoices.product-invoice', $data);
+    }
+
+    private function hasFlashSaleColumns(): bool
+    {
+        return Schema::hasColumn('products', 'flash_sale_status')
+            && Schema::hasColumn('products', 'flash_sale_price')
+            && Schema::hasColumn('products', 'flash_sale_start_at')
+            && Schema::hasColumn('products', 'flash_sale_end_at');
+    }
+
+    private function hydrateProductCards($products)
+    {
+        $productIds = collect($products)->pluck('id')->filter()->values();
+        $sliderImagesByProduct = collect();
+        $variantsByProduct = collect();
+        $variantOptionRowsByVariant = collect();
+
+        if ($productIds->isNotEmpty()) {
+            $sliderImagesByProduct = DB::table('slider_images')
+                ->where('item_type', 'product')
+                ->whereIn('item_id', $productIds)
+                ->select('item_id', 'image')
+                ->orderBy('id')
+                ->get()
+                ->groupBy('item_id');
+
+            $variantRows = DB::table('product_variants')
+                ->whereIn('product_id', $productIds)
+                ->where('status', 1)
+                ->select('id', 'product_id', 'price')
+                ->orderBy('id')
+                ->get();
+
+            $variantsByProduct = $variantRows->groupBy('product_id');
+            $variantIds = $variantRows->pluck('id')->filter()->values();
+
+            if ($variantIds->isNotEmpty()) {
+                $variantOptionRowsByVariant = DB::table('product_variant_values as pvv')
+                    ->join('product_option_values as pov', 'pov.id', '=', 'pvv.option_value_id')
+                    ->join('product_options as po', 'po.id', '=', 'pov.product_option_id')
+                    ->whereIn('pvv.variant_id', $variantIds)
+                    ->select(
+                        'pvv.variant_id',
+                        'po.name as option_name',
+                        'pov.value as option_value',
+                        'po.position',
+                        'pov.position as option_value_position'
+                    )
+                    ->orderBy('po.position')
+                    ->orderBy('pov.position')
+                    ->get()
+                    ->groupBy('variant_id');
+            }
+        }
+
+        return collect($products)->map(function ($product) use ($sliderImagesByProduct, $variantsByProduct, $variantOptionRowsByVariant) {
+            $images = collect();
+
+            if (!empty($product->thumbnail)) {
+                $images->push(asset('assets/img/product/' . $product->thumbnail));
+            }
+
+            $galleryRows = $sliderImagesByProduct->get($product->id, collect());
+            foreach ($galleryRows as $row) {
+                if (!empty($row->image)) {
+                    $images->push(asset('assets/img/product/gallery/' . $row->image));
+                }
+            }
+
+            $product->images = $images->unique()->values()->all();
+            $product->quick_units = [
+                [
+                    'label' => '1 unit',
+                    'price' => (float) ($product->current_price ?? 0),
+                    'oldPrice' => (float) ($product->previous_price ?? 0),
+                ],
+            ];
+
+            if ((int) ($product->has_variants ?? 0) === 1) {
+                $productVariants = $variantsByProduct->get($product->id, collect());
+
+                if ($productVariants->isNotEmpty()) {
+                    $units = $productVariants
+                        ->values()
+                        ->map(function ($variant, $index) use ($variantOptionRowsByVariant, $product) {
+                            $optionRows = collect($variantOptionRowsByVariant->get($variant->id, collect()));
+
+                            $labelParts = $optionRows
+                                ->map(function ($row) {
+                                    $name = trim((string) ($row->option_name ?? ''));
+                                    $value = trim((string) ($row->option_value ?? ''));
+
+                                    if ($name === '' || $value === '') {
+                                        return null;
+                                    }
+
+                                    return $name . ': ' . $value;
+                                })
+                                ->filter()
+                                ->values();
+
+                            return [
+                                'label' => $labelParts->isNotEmpty() ? $labelParts->implode(', ') : ('Option ' . ($index + 1)),
+                                'price' => (float) ($variant->price ?? $product->current_price ?? 0),
+                                'oldPrice' => (float) ($product->previous_price ?? 0),
+                            ];
+                        })
+                        ->filter(function ($unit) {
+                            return !empty($unit['label']);
+                        })
+                        ->values()
+                        ->all();
+
+                    if (!empty($units)) {
+                        $product->quick_units = $units;
+                    }
+                }
+            }
+
+            return $product;
+        });
     }
 
     private function getCurrentLanguageId(): ?int
