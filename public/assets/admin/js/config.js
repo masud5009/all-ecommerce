@@ -416,7 +416,15 @@ $(".editBtn").on('click', function () {
             }
 
             if ($('#in_icon').length > 0) {
-                $('#in_icon').attr('class', datas['icon']);
+                if ($('#in_icon').is('input,textarea,select')) {
+                    const iconClass = datas['icon'] || '';
+                    const $componentIcon = $('#in_icon').closest('.input-group').find('.iconpicker-component i');
+                    if ($componentIcon.length > 0) {
+                        $componentIcon.attr('class', iconClass.length > 0 ? iconClass : 'fas fa-seedling');
+                    }
+                } else {
+                    $('#in_icon').attr('class', datas['icon']);
+                }
             }
         }
     }

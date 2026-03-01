@@ -13,6 +13,22 @@
                     <x-TextInput col="12" placeholder="Enter category name" name="name" type="text"
                         label="Name" required="*" action="edit" />
 
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>{{ __('Icon') }}</label>
+                            <div class="input-group">
+                                <input type="text" id="in_icon" name="icon"
+                                    class="form-control icp-dd editErr_icon"
+                                    placeholder="{{ __('Pick an icon') }}"
+                                    value="fas fa-seedling"
+                                    data-placement="bottomRight" data-input-search="true"
+                                    data-hide-on-select="true">
+                                <span class="input-group-text iconpicker-component"><i class="fas fa-seedling"></i></span>
+                            </div>
+                            <p id="editErr_icon" class="text-danger em"></p>
+                        </div>
+                    </div>
+
                     @php
                         $options = ['1' => 'Active', '0' => 'Dactive'];
                     @endphp

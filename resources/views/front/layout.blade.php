@@ -4,11 +4,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>FreshCart | Premium Grocery</title>
+    <title>@yield('title', 'FreshCart | Premium Grocery')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('assets/admin/js/icon.js') }}" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ asset('assets/front/css/style.css') }}">
     <style>
         .category-scroll {
@@ -51,7 +52,7 @@
     </style>
 </head>
 
-<body class="bg-white text-slate-900" data-page="home">
+<body class="bg-white text-slate-900" data-page="@yield('page', 'home')">
     @include('front.partials.navbar')
 
     <main class="pb-24 md:pb-0">
@@ -64,7 +65,7 @@
         class="fixed bottom-0 inset-x-0 z-40 border-t border-green-100 bg-white/95 backdrop-blur shadow-[0_-8px_20px_rgba(15,23,42,0.08)] md:hidden">
         <div class="mx-auto max-w-7xl px-4">
             <div class="grid grid-cols-4 gap-2 py-2 text-[11px] text-slate-500">
-                <a href="index.html" data-nav="home"
+                <a href="{{ route('front.index') }}" data-nav="home"
                     class="flex flex-col items-center gap-1 rounded-2xl px-2 py-2 transition hover:bg-green-50 hover:text-green-700">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         aria-hidden="true">

@@ -1,53 +1,5 @@
 (() => {
 
-
-
-  const slider = document.querySelector("[data-hero-slider]");
-  if (!slider) return;
-
-  const slides = Array.from(slider.querySelectorAll("[data-slide]"));
-  const dots = Array.from(slider.querySelectorAll("[data-dot]"));
-  const prev = slider.querySelector("[data-prev]");
-  const next = slider.querySelector("[data-next]");
-  let index = Math.max(0, slides.findIndex((s) => !s.classList.contains("hidden")));
-
-  const show = (nextIndex) => {
-    index = (nextIndex + slides.length) % slides.length;
-    slides.forEach((slide, idx) => {
-      const isActive = idx === index;
-      slide.classList.toggle("hidden", !isActive);
-      slide.setAttribute("aria-hidden", isActive ? "false" : "true");
-    });
-    dots.forEach((dot, idx) => {
-      const isActive = idx === index;
-      dot.classList.toggle("bg-green-600", isActive);
-      dot.classList.toggle("bg-green-200", !isActive);
-      dot.setAttribute("aria-current", isActive ? "true" : "false");
-    });
-  };
-
-  prev?.addEventListener("click", () => show(index - 1));
-  next?.addEventListener("click", () => show(index + 1));
-  dots.forEach((dot, idx) => dot.addEventListener("click", () => show(idx)));
-
-  slider.addEventListener("keydown", (event) => {
-    const tag = event.target.tagName.toLowerCase();
-    if (["input", "textarea", "select", "button", "a"].includes(tag)) return;
-    if (event.key === "ArrowLeft") {
-      event.preventDefault();
-      show(index - 1);
-    }
-    if (event.key === "ArrowRight") {
-      event.preventDefault();
-      show(index + 1);
-    }
-  });
-
-  show(index);
-
-
-
-
   const products = [
     {
       id: 'avocado',
@@ -314,6 +266,55 @@
       ]
     }
   ];
+
+  const serverFeaturedProducts =
+    typeof window !== 'undefined' && Array.isArray(window.serverFeaturedProducts)
+      ? window.serverFeaturedProducts
+      : [];
+
+  if (serverFeaturedProducts.length) {
+    serverFeaturedProducts.forEach((raw) => {
+      const id = raw && raw.id !== undefined && raw.id !== null ? String(raw.id) : '';
+      if (!id || products.some((item) => String(item.id) === id)) return;
+
+      const basePrice = Number(raw.price || raw.current_price || 0);
+      const baseOldPrice = Number(raw.oldPrice || raw.previous_price || 0);
+      const normalizedUnits =
+        Array.isArray(raw.units) && raw.units.length
+          ? raw.units.map((unit, idx) => ({
+              label: unit.label || `Option ${idx + 1}`,
+              price: Number(unit.price || basePrice || 0),
+              oldPrice: Number(unit.oldPrice || unit.previous_price || baseOldPrice || 0)
+            }))
+          : [{ label: '1 unit', price: basePrice, oldPrice: baseOldPrice }];
+
+      products.unshift({
+        id,
+        name: raw.name || `Product #${id}`,
+        category: raw.category || 'Featured',
+        rating: Number(raw.rating || 4.7),
+        reviews: Number(raw.reviews || 142),
+        badge: raw.badge || raw.category || 'Featured',
+        image: raw.image || `https://picsum.photos/seed/featured-${id}/600/400`,
+        images:
+          Array.isArray(raw.images) && raw.images.length
+            ? raw.images
+            : [raw.image || `https://picsum.photos/seed/featured-${id}/600/400`],
+        isDeal: Boolean(raw.isDeal || (baseOldPrice > basePrice)),
+        popular: raw.popular !== false,
+        description: raw.description || 'Featured product from our catalog.',
+        nutrition:
+          Array.isArray(raw.nutrition) && raw.nutrition.length
+            ? raw.nutrition
+            : ['Fresh stock', 'Quality checked'],
+        reviewList:
+          Array.isArray(raw.reviewList) && raw.reviewList.length
+            ? raw.reviewList
+            : [{ name: 'Customer', rating: 5, text: 'Great quality product.' }],
+        units: normalizedUnits
+      });
+    });
+  }
 
   const storeKey = 'grocery_cart';
   const wishlistKey = 'grocery_wishlist';
@@ -905,6 +906,7 @@
                 <div class="magnify overflow-hidden rounded-2xl border border-green-100 bg-white shadow-sm" data-magnify>
                   <img src="" alt="" class="h-64 w-full object-cover sm:h-72" data-modal-image data-magnify-image>
                 </div>
+                <div class="mt-3 hidden grid-cols-4 gap-2" data-modal-thumbs></div>
                 <div class="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
                   <span class="rounded-full bg-green-100 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-green-700" data-modal-category>Category</span>
                   <span class="rounded-full border border-green-100 bg-white px-3 py-1 text-[10px] font-semibold text-slate-600" data-modal-badge>Badge</span>
@@ -982,8 +984,35 @@
     qs('[data-modal-description]', modal).textContent = product.description;
 
     const imageEl = qs('[data-modal-image]', modal);
-    imageEl.src = product.image;
+    const images =
+      Array.isArray(product.images) && product.images.length
+        ? product.images
+        : [product.image];
+
+    imageEl.src = images[0];
     imageEl.alt = product.name;
+
+    const thumbsEl = qs('[data-modal-thumbs]', modal);
+    if (thumbsEl) {
+      if (images.length > 1) {
+        thumbsEl.innerHTML = images
+          .slice(0, 8)
+          .map(
+            (src, index) => `
+            <button class="group overflow-hidden rounded-xl border ${index === 0 ? 'border-green-500 ring-2 ring-green-200' : 'border-green-100'} bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200" data-modal-thumb data-src="${src}" aria-label="View image ${index + 1}" aria-pressed="${index === 0 ? 'true' : 'false'}" type="button">
+              <img src="${src}" alt="${product.name} thumbnail ${index + 1}" loading="lazy" decoding="async" class="h-12 w-full object-cover transition duration-300 group-hover:scale-105">
+            </button>
+          `
+          )
+          .join('');
+        thumbsEl.classList.remove('hidden');
+        thumbsEl.classList.add('grid');
+      } else {
+        thumbsEl.innerHTML = '';
+        thumbsEl.classList.add('hidden');
+        thumbsEl.classList.remove('grid');
+      }
+    }
 
     const unitsEl = qs('[data-modal-units]', modal);
     unitsEl.innerHTML = buildModalUnits(product, selectedUnit);
@@ -994,7 +1023,11 @@
     if (qtyEl) qtyEl.textContent = '1';
 
     const linkEl = qs('[data-modal-link]', modal);
-    linkEl.href = `product-details.html?id=${product.id}`;
+    const productIdText = String(product.id || '');
+    const detailParam = /^[0-9]+$/.test(productIdText)
+      ? `product=${encodeURIComponent(productIdText)}`
+      : `id=${encodeURIComponent(productIdText)}`;
+    linkEl.href = `product-details.html?${detailParam}`;
 
     modal.classList.remove('hidden');
     modal.setAttribute('aria-hidden', 'false');
@@ -1317,9 +1350,49 @@
   const renderProductDetails = () => {
     const detail = qs('[data-product-detail]');
     if (!detail) return;
-    const params = new URLSearchParams(window.location.search);
-    const productId = params.get('id') || products[0].id;
-    const product = findProduct(productId) || products[0];
+    const serverProduct =
+      typeof window !== 'undefined' &&
+      window.serverProductDetail &&
+      typeof window.serverProductDetail === 'object'
+        ? window.serverProductDetail
+        : null;
+
+    let sourceProduct = serverProduct;
+
+    if (!sourceProduct) {
+      const params = new URLSearchParams(window.location.search);
+      const productId = params.get('id') || products[0].id;
+      sourceProduct = findProduct(productId) || products[0];
+    }
+
+    if (!sourceProduct) return;
+
+    const fallbackUnit = {
+      label: '1 unit',
+      price: Number(sourceProduct.price || sourceProduct.current_price || 0),
+      oldPrice: Number(sourceProduct.oldPrice || sourceProduct.previous_price || 0)
+    };
+
+    const product = {
+      ...sourceProduct,
+      rating: Number(sourceProduct.rating || 4.7),
+      reviews: Number(sourceProduct.reviews || 142),
+      image: sourceProduct.image || `https://picsum.photos/seed/${sourceProduct.id || 'product'}/800/600`,
+      summary: sourceProduct.summary || sourceProduct.description || '',
+      description: sourceProduct.description || sourceProduct.summary || '',
+      units:
+        Array.isArray(sourceProduct.units) && sourceProduct.units.length
+          ? sourceProduct.units
+          : [fallbackUnit],
+      nutrition:
+        Array.isArray(sourceProduct.nutrition) && sourceProduct.nutrition.length
+          ? sourceProduct.nutrition
+          : ['Fresh stock', 'Quality checked'],
+      reviewList:
+        Array.isArray(sourceProduct.reviewList) && sourceProduct.reviewList.length
+          ? sourceProduct.reviewList
+          : [{ name: 'Customer', rating: 5, text: 'Great quality product.' }]
+    };
 
     detail.dataset.productId = product.id;
 
@@ -1350,7 +1423,7 @@
 
     const descriptionEl = qs('[data-detail-description]');
     if (descriptionEl) {
-      descriptionEl.textContent = product.description;
+      descriptionEl.textContent = product.summary || product.description;
     }
 
     const unitSelect = qs('[data-detail-unit-select]');
@@ -1368,14 +1441,17 @@
       detailUnits.innerHTML = buildDetailUnits(product);
     }
 
-    const images = [
-      product.image,
-      `https://picsum.photos/seed/${product.id}-alt1/800/600`,
-      `https://picsum.photos/seed/${product.id}-alt2/800/600`,
-      `https://picsum.photos/seed/${product.id}-alt3/800/600`,
-      `https://picsum.photos/seed/${product.id}-alt4/800/600`,
-      `https://picsum.photos/seed/${product.id}-alt5/800/600`
-    ];
+    const images =
+      Array.isArray(product.images) && product.images.length
+        ? product.images
+        : [
+            product.image,
+            `https://picsum.photos/seed/${product.id}-alt1/800/600`,
+            `https://picsum.photos/seed/${product.id}-alt2/800/600`,
+            `https://picsum.photos/seed/${product.id}-alt3/800/600`,
+            `https://picsum.photos/seed/${product.id}-alt4/800/600`,
+            `https://picsum.photos/seed/${product.id}-alt5/800/600`
+          ];
 
     const mainImage = qs('[data-detail-main]');
     if (mainImage) {
@@ -1400,7 +1476,7 @@
       }
     }
 
-    qs('[data-tab="description"]').textContent = product.description;
+    qs('[data-tab="description"]').textContent = product.description || product.summary;
     qs('[data-tab="nutrition"]').innerHTML = `
       <ul class="list-disc space-y-2 pl-5">
         ${product.nutrition.map((item) => `<li>${item}</li>`).join('')}
@@ -1591,12 +1667,14 @@
 
     const quickViewButton = event.target.closest('[data-action="quick-view"]');
     if (quickViewButton) {
-      const card = quickViewButton.closest('[data-product-card]');
+      const card = quickViewButton.closest('[data-product-card], [data-featured-card]');
       if (card) {
-        const id = card.dataset.productId;
+        const id = String(card.dataset.productId || quickViewButton.dataset.productId || '');
         const unitSelect = qs('[data-unit-select]', card);
         const unit = unitSelect ? unitSelect.value : null;
-        openProductModal(id, { mode: 'quick', unit });
+        if (id) {
+          openProductModal(id, { mode: 'quick', unit });
+        }
       }
       return;
     }
@@ -1606,6 +1684,27 @@
       const modal = modalAction.closest('[data-modal]');
       const direction = modalAction.dataset.modalAction;
       updateModalQty(modal, direction === 'inc' ? 1 : -1);
+      return;
+    }
+
+    const modalThumb = event.target.closest('[data-modal-thumb]');
+    if (modalThumb) {
+      const modal = modalThumb.closest('[data-modal="product"]');
+      if (modal) {
+        const src = modalThumb.dataset.src;
+        const imageEl = qs('[data-modal-image]', modal);
+        if (imageEl && src) {
+          imageEl.src = src;
+        }
+        qsa('[data-modal-thumb]', modal).forEach((button) => {
+          button.classList.remove('border-green-500', 'ring-2', 'ring-green-200');
+          button.classList.add('border-green-100');
+          button.setAttribute('aria-pressed', 'false');
+        });
+        modalThumb.classList.add('border-green-500', 'ring-2', 'ring-green-200');
+        modalThumb.classList.remove('border-green-100');
+        modalThumb.setAttribute('aria-pressed', 'true');
+      }
       return;
     }
 

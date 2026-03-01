@@ -278,6 +278,181 @@
         </div>
     </section>
 
+    <section class="mx-auto mt-10 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
+        <div
+            class="rounded-3xl border border-green-100 bg-gradient-to-br from-green-50/70 via-white to-emerald-50/60 p-6 shadow-sm sm:p-8">
+            <div class="flex flex-wrap items-end justify-between gap-4" data-reveal-child>
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-green-700">Featured Products</p>
+                    <h2 class="mt-2 text-3xl font-semibold text-slate-900">Handpicked picks for today</h2>
+                    <p class="mt-2 text-sm text-slate-600">Top curated products selected by our team for faster shopping.</p>
+                </div>
+                <a href="products.html" class="text-sm font-semibold text-green-700 transition hover:text-green-800">
+                    View all products
+                </a>
+            </div>
+
+            @if (!empty($featuredProducts) && $featuredProducts->isNotEmpty())
+                <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                    @foreach ($featuredProducts as $product)
+                        @php
+                            $thumbnail = !empty($product->thumbnail)
+                                ? asset('assets/img/product/' . $product->thumbnail)
+                                : 'https://picsum.photos/seed/featured-' . $product->id . '/600/400';
+                            $title = $product->title ?: 'Untitled Product';
+                            $summary = !empty($product->summary)
+                                ? \Illuminate\Support\Str::limit(strip_tags($product->summary), 70)
+                                : 'Freshly selected item from our featured collection.';
+                            $category = $product->category_name ?: 'Featured';
+                            $price = (float) ($product->current_price ?? 0);
+                            $oldPrice = (float) ($product->previous_price ?? 0);
+                            $showOldPrice = $oldPrice > $price && $oldPrice > 0;
+                            $discount = $showOldPrice && $oldPrice > 0 ? (int) round((1 - $price / $oldPrice) * 100) : 0;
+                            $stock = (int) ($product->stock ?? 0);
+                            $stockLabel = $stock > 0 ? 'Only ' . min($stock, 5) . ' left' : 'Out of stock';
+                            $variantLabel = (int) ($product->has_variants ?? 0) === 1 ? 'Variants' : 'Standard';
+                            $variantText = (int) ($product->has_variants ?? 0) === 1 ? 'Multiple sizes available' : 'Single size';
+                            $badgeLabel = $category ?: 'Fresh';
+                        @endphp
+                        <article class="group relative flex h-full flex-col rounded-2xl border border-green-100 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)]"
+                            data-reveal-child data-featured-card data-product-id="{{ (string) $product->id }}"
+                            data-product-name="{{ $title }}">
+                            <span
+                                class="absolute left-4 top-4 rounded-full bg-green-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-sm {{ $discount > 0 ? '' : 'hidden' }}">
+                                -{{ $discount }}%
+                            </span>
+
+                            <div class="relative overflow-hidden rounded-2xl bg-green-50">
+                                <a href="{{ route('frontend.product.details', ['product' => $product->id]) }}"
+                                    class="block">
+                                    <img src="{{ $thumbnail }}" alt="{{ $title }}"
+                                        class="h-40 w-full object-cover transition duration-500 group-hover:scale-105"
+                                        loading="lazy" decoding="async">
+                                </a>
+                                <button type="button" data-action="quick-view" data-product-id="{{ (string) $product->id }}"
+                                    class="absolute bottom-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition duration-300 hover:bg-green-700"
+                                    aria-label="Quick view {{ $title }}">
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" aria-hidden="true">
+                                        <path d="M12 5v14"></path>
+                                        <path d="M5 12h14"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="mt-4 space-y-2">
+                                <div class="flex items-start justify-between gap-2">
+                                    <a href="{{ route('frontend.product.details', ['product' => $product->id]) }}"
+                                        class="text-sm font-semibold text-slate-900 transition hover:text-green-700">
+                                        {{ \Illuminate\Support\Str::limit($title, 42) }}
+                                    </a>
+                                    <span class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">
+                                        {{ \Illuminate\Support\Str::limit($badgeLabel, 14) }}
+                                    </span>
+                                </div>
+
+                                <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                                    <span class="flex items-center gap-1">
+                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
+                                        </svg>
+                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
+                                        </svg>
+                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
+                                        </svg>
+                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
+                                        </svg>
+                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
+                                        </svg>
+                                    </span>
+                                    <span>4.7 (142 reviews)</span>
+                                    <span
+                                        class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">{{ $stockLabel }}</span>
+                                </div>
+
+                                <div class="flex items-center gap-2 text-xs text-slate-500">
+                                    <span class="rounded-full bg-green-50 px-2 py-1 text-[10px] font-semibold text-green-700">
+                                        {{ $variantLabel }}
+                                    </span>
+                                    <span>{{ $variantText }}</span>
+                                </div>
+
+                                <div class="flex items-end justify-between gap-3">
+                                    <div>
+                                        <p class="text-3xl font-semibold text-slate-900">{{ currency_symbol($price) }}</p>
+                                        @if ($showOldPrice)
+                                            <p class="text-sm text-slate-400 line-through">{{ currency_symbol($oldPrice) }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            @else
+                <div class="mt-8 rounded-2xl border border-dashed border-green-200 bg-white p-8 text-center text-sm text-slate-500"
+                    data-reveal-child>
+                    No featured products found.
+                </div>
+            @endif
+        </div>
+    </section>
+    @php
+        $featuredProductQuickViewData = collect($featuredProducts ?? [])->map(function ($product) {
+            $title = $product->title ?: 'Untitled Product';
+            $category = $product->category_name ?: 'Featured';
+            $price = (float) ($product->current_price ?? 0);
+            $oldPrice = (float) ($product->previous_price ?? 0);
+            $thumbnail = !empty($product->thumbnail)
+                ? asset('assets/img/product/' . $product->thumbnail)
+                : 'https://picsum.photos/seed/featured-' . $product->id . '/600/400';
+            $summary = !empty($product->summary)
+                ? \Illuminate\Support\Str::limit(strip_tags($product->summary), 180)
+                : 'Freshly selected item from our featured collection.';
+            $images = is_array($product->images ?? null) ? $product->images : [];
+            if (empty($images)) {
+                $images[] = $thumbnail;
+            }
+            $units = is_array($product->quick_units ?? null) ? $product->quick_units : [];
+            if (empty($units)) {
+                $units[] = [
+                    'label' => '1 unit',
+                    'price' => $price,
+                    'oldPrice' => $oldPrice,
+                ];
+            }
+
+            return [
+                'id' => (string) $product->id,
+                'name' => $title,
+                'category' => $category,
+                'rating' => 4.7,
+                'reviews' => 142,
+                'badge' => $category,
+                'image' => $images[0],
+                'images' => $images,
+                'description' => $summary,
+                'nutrition' => ['Fresh stock', 'Quality checked', 'Fast delivery', 'Secure packaging'],
+                'reviewList' => [
+                    ['name' => 'Ariana', 'rating' => 5, 'text' => 'Great quality and fast delivery.'],
+                    ['name' => 'Chris', 'rating' => 4, 'text' => 'Loved the packaging and freshness.'],
+                ],
+                'units' => $units,
+                'isDeal' => $oldPrice > $price,
+                'popular' => true,
+            ];
+        })->values();
+    @endphp
+    @if ($featuredProductQuickViewData->isNotEmpty())
+        <script>
+            window.serverFeaturedProducts = @json($featuredProductQuickViewData);
+        </script>
+    @endif
+
     <section id="categories" class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="category-heading"
         data-reveal>
         <div class="flex flex-wrap items-center justify-between gap-4" data-reveal-child>
@@ -304,204 +479,49 @@
         </div>
         <div class="category-scroll mt-8 flex gap-4 overflow-x-auto pb-4 scroll-px-4 scroll-smooth snap-x snap-mandatory"
             data-category-track>
-            <a href="products.html" aria-label="Browse Fresh Meat" data-reveal-child
-                class="group flex min-w-[150px] flex-col items-center rounded-2xl border border-green-100 bg-white px-4 py-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-300 hover:bg-green-50/70 hover:shadow-[0_16px_32px_rgba(16,185,129,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:min-w-[160px] lg:min-w-[170px] snap-start">
-                <div class="brush-ring flex h-20 w-20 items-center justify-center">
+            @forelse ($homeCategories ?? collect() as $category)
+                <a href="products.html?category={{ $category->id }}"
+                    aria-label="Browse {{ $category->name }}" data-reveal-child
+                    class="group flex min-w-[150px] flex-col items-center rounded-2xl border border-green-100 bg-white px-4 py-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-300 hover:bg-green-50/70 hover:shadow-[0_16px_32px_rgba(16,185,129,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:min-w-[160px] lg:min-w-[170px] snap-start">
+                    <div class="brush-ring flex h-20 w-20 items-center justify-center">
+                        <span
+                            class="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-green-100 transition duration-300 group-hover:scale-105">
+                            @if (!empty($category->icon_class))
+                                <i class="{{ $category->icon_class }} text-[26px] leading-none text-emerald-600"
+                                    aria-hidden="true"></i>
+                            @else
+                                <svg class="h-8 w-8 text-emerald-600" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                                    @foreach ($category->icon_paths ?? [] as $iconPath)
+                                        <path d="{{ $iconPath }}"></path>
+                                    @endforeach
+                                </svg>
+                            @endif
+                        </span>
+                    </div>
+                    <p class="mt-4 text-sm font-semibold text-emerald-900 transition group-hover:text-green-800">
+                        {{ \Illuminate\Support\Str::limit($category->name, 20) }}
+                    </p>
+                    <p class="mt-1 text-xs text-slate-500">{{ $category->subtitle }}</p>
                     <span
-                        class="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-green-100 transition duration-300 group-hover:scale-105">
-                        <svg class="h-8 w-8 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.8" aria-hidden="true">
-                            <path d="M4 14c0-4 3-7 7-7h3a6 6 0 0 1 0 12h-3a7 7 0 0 1-7-5Z"></path>
-                            <circle cx="16" cy="11" r="1.5"></circle>
+                        class="mt-3 inline-flex items-center rounded-full border border-green-100 bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">
+                        {{ (int) ($category->item_count ?? 0) }} {{ (int) ($category->item_count ?? 0) === 1 ? 'Item' : 'Items' }}
+                    </span>
+                    <span
+                        class="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-green-700 opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-1"
+                        aria-hidden="true">
+                        <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            aria-hidden="true">
+                            <path d="M9 6l6 6-6 6"></path>
                         </svg>
                     </span>
+                </a>
+            @empty
+                <div class="w-full rounded-2xl border border-dashed border-green-200 bg-white p-8 text-center text-sm text-slate-500"
+                    data-reveal-child>
+                    No categories found.
                 </div>
-                <p class="mt-4 text-sm font-semibold text-emerald-900 transition group-hover:text-green-800">Fresh
-                    Meat</p>
-                <p class="mt-1 text-xs text-slate-500">Premium cuts</p>
-                <span
-                    class="mt-3 inline-flex items-center rounded-full border border-green-100 bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">4
-                    Items</span>
-                <span
-                    class="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-green-700 opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-1"
-                    aria-hidden="true">
-                    <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        aria-hidden="true">
-                        <path d="M9 6l6 6-6 6"></path>
-                    </svg>
-                </span>
-            </a>
-
-            <a href="products.html" aria-label="Browse Pure Fruits" data-reveal-child
-                class="group flex min-w-[150px] flex-col items-center rounded-2xl border border-green-100 bg-white px-4 py-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-300 hover:bg-green-50/70 hover:shadow-[0_16px_32px_rgba(16,185,129,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:min-w-[160px] lg:min-w-[170px] snap-start">
-                <div class="brush-ring flex h-20 w-20 items-center justify-center">
-                    <span
-                        class="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-green-100 transition duration-300 group-hover:scale-105">
-                        <svg class="h-8 w-8 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.8" aria-hidden="true">
-                            <path d="M4 14c6-1 10-5 12-10 3 5 4 10 3 14-2 6-10 8-13 3-1-2-1-5-1-7Z"></path>
-                            <path d="M7 15c3-2 6-5 9-10"></path>
-                        </svg>
-                    </span>
-                </div>
-                <p class="mt-4 text-sm font-semibold text-emerald-900 transition group-hover:text-green-800">Pure
-                    Fruits</p>
-                <p class="mt-1 text-xs text-slate-500">Sweet & juicy</p>
-                <span
-                    class="mt-3 inline-flex items-center rounded-full border border-green-100 bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">5
-                    Items</span>
-                <span
-                    class="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-green-700 opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-1"
-                    aria-hidden="true">
-                    <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        aria-hidden="true">
-                        <path d="M9 6l6 6-6 6"></path>
-                    </svg>
-                </span>
-            </a>
-
-            <a href="products.html" aria-label="Browse Fast Food" data-reveal-child
-                class="group flex min-w-[150px] flex-col items-center rounded-2xl border border-green-100 bg-white px-4 py-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-300 hover:bg-green-50/70 hover:shadow-[0_16px_32px_rgba(16,185,129,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:min-w-[160px] lg:min-w-[170px] snap-start">
-                <div class="brush-ring flex h-20 w-20 items-center justify-center">
-                    <span
-                        class="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-green-100 transition duration-300 group-hover:scale-105">
-                        <svg class="h-8 w-8 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.8" aria-hidden="true">
-                            <path d="M4 9c0-2 4-4 8-4s8 2 8 4"></path>
-                            <path d="M4 13h16"></path>
-                            <path d="M6 17h12"></path>
-                        </svg>
-                    </span>
-                </div>
-                <p class="mt-4 text-sm font-semibold text-emerald-900 transition group-hover:text-green-800">Fast
-                    Food</p>
-                <p class="mt-1 text-xs text-slate-500">Ready to eat</p>
-                <span
-                    class="mt-3 inline-flex items-center rounded-full border border-green-100 bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">3
-                    Items</span>
-                <span
-                    class="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-green-700 opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-1"
-                    aria-hidden="true">
-                    <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        aria-hidden="true">
-                        <path d="M9 6l6 6-6 6"></path>
-                    </svg>
-                </span>
-            </a>
-
-            <a href="products.html" aria-label="Browse Pure Spices" data-reveal-child
-                class="group flex min-w-[150px] flex-col items-center rounded-2xl border border-green-100 bg-white px-4 py-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-300 hover:bg-green-50/70 hover:shadow-[0_16px_32px_rgba(16,185,129,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:min-w-[160px] lg:min-w-[170px] snap-start">
-                <div class="brush-ring flex h-20 w-20 items-center justify-center">
-                    <span
-                        class="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-green-100 transition duration-300 group-hover:scale-105">
-                        <svg class="h-8 w-8 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.8" aria-hidden="true">
-                            <rect x="7" y="6" width="10" height="14" rx="2"></rect>
-                            <path d="M9 4h6v2H9z"></path>
-                            <path d="M9 11h6"></path>
-                        </svg>
-                    </span>
-                </div>
-                <p class="mt-4 text-sm font-semibold text-emerald-900 transition group-hover:text-green-800">Pure
-                    Spices</p>
-                <p class="mt-1 text-xs text-slate-500">Aroma & flavor</p>
-                <span
-                    class="mt-3 inline-flex items-center rounded-full border border-green-100 bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">4
-                    Items</span>
-                <span
-                    class="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-green-700 opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-1"
-                    aria-hidden="true">
-                    <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        aria-hidden="true">
-                        <path d="M9 6l6 6-6 6"></path>
-                    </svg>
-                </span>
-            </a>
-
-            <a href="products.html" aria-label="Browse Dry Bread" data-reveal-child
-                class="group flex min-w-[150px] flex-col items-center rounded-2xl border border-green-100 bg-white px-4 py-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-300 hover:bg-green-50/70 hover:shadow-[0_16px_32px_rgba(16,185,129,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:min-w-[160px] lg:min-w-[170px] snap-start">
-                <div class="brush-ring flex h-20 w-20 items-center justify-center">
-                    <span
-                        class="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-green-100 transition duration-300 group-hover:scale-105">
-                        <svg class="h-8 w-8 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.8" aria-hidden="true">
-                            <path d="M4 12a4 4 0 0 1 4-4h8a4 4 0 0 1 0 8H8a4 4 0 0 1-4-4Z"></path>
-                        </svg>
-                    </span>
-                </div>
-                <p class="mt-4 text-sm font-semibold text-emerald-900 transition group-hover:text-green-800">Dry
-                    Bread</p>
-                <p class="mt-1 text-xs text-slate-500">Daily staples</p>
-                <span
-                    class="mt-3 inline-flex items-center rounded-full border border-green-100 bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">0
-                    Item</span>
-                <span
-                    class="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-green-700 opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-1"
-                    aria-hidden="true">
-                    <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        aria-hidden="true">
-                        <path d="M9 6l6 6-6 6"></path>
-                    </svg>
-                </span>
-            </a>
-
-            <a href="products.html" aria-label="Browse Vegetables" data-reveal-child
-                class="group flex min-w-[150px] flex-col items-center rounded-2xl border border-green-100 bg-white px-4 py-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-300 hover:bg-green-50/70 hover:shadow-[0_16px_32px_rgba(16,185,129,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:min-w-[160px] lg:min-w-[170px] snap-start">
-                <div class="brush-ring flex h-20 w-20 items-center justify-center">
-                    <span
-                        class="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-green-100 transition duration-300 group-hover:scale-105">
-                        <svg class="h-8 w-8 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.8" aria-hidden="true">
-                            <path d="M12 20V10"></path>
-                            <path d="M12 10c-3-3-6-3-8-3 0 4 3 6 8 6"></path>
-                            <path d="M12 10c3-3 6-3 8-3 0 4-3 6-8 6"></path>
-                        </svg>
-                    </span>
-                </div>
-                <p class="mt-4 text-sm font-semibold text-emerald-900 transition group-hover:text-green-800">
-                    Vegetables</p>
-                <p class="mt-1 text-xs text-slate-500">Greens & roots</p>
-                <span
-                    class="mt-3 inline-flex items-center rounded-full border border-green-100 bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">4
-                    Items</span>
-                <span
-                    class="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-green-700 opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-1"
-                    aria-hidden="true">
-                    <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        aria-hidden="true">
-                        <path d="M9 6l6 6-6 6"></path>
-                    </svg>
-                </span>
-            </a>
-
-            <a href="products.html" aria-label="Browse Layer Cake" data-reveal-child
-                class="group flex min-w-[150px] flex-col items-center rounded-2xl border border-green-100 bg-white px-4 py-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-300 hover:bg-green-50/70 hover:shadow-[0_16px_32px_rgba(16,185,129,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:min-w-[160px] lg:min-w-[170px] snap-start">
-                <div class="brush-ring flex h-20 w-20 items-center justify-center">
-                    <span
-                        class="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-green-100 transition duration-300 group-hover:scale-105">
-                        <svg class="h-8 w-8 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.8" aria-hidden="true">
-                            <path d="M4 12h16v8H4z"></path>
-                            <path d="M6 9h12v3H6z"></path>
-                            <path d="M8 6h8v3H8z"></path>
-                        </svg>
-                    </span>
-                </div>
-                <p class="mt-4 text-sm font-semibold text-emerald-900 transition group-hover:text-green-800">Layer
-                    Cake</p>
-                <p class="mt-1 text-xs text-slate-500">Sweet treats</p>
-                <span
-                    class="mt-3 inline-flex items-center rounded-full border border-green-100 bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">0
-                    Item</span>
-                <span
-                    class="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-green-700 opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-1"
-                    aria-hidden="true">
-                    <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        aria-hidden="true">
-                        <path d="M9 6l6 6-6 6"></path>
-                    </svg>
-                </span>
-            </a>
+            @endforelse
         </div>
     </section>
 

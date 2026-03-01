@@ -20,6 +20,7 @@ Route::prefix('/admin')->middleware('guest:admin')->group(function () {
 });
 Route::prefix('/')->controller(HomeController::class)->group(function () {
     Route::get('', 'index')->name('front.index');
+    Route::get('/product-details.html', 'productDetails')->name('frontend.product.details');
     Route::get('/contact', 'contact')->name('frontend.contact');
     Route::get('/blog', 'blog')->name('frontend.blog');
     Route::get('/about', 'about')->name('frontend.about');

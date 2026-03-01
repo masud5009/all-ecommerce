@@ -75,6 +75,7 @@
                                                     <a href="" class="btn btn-sm editBtn edit-button product-action-btn"
                                                         data-bs-toggle="modal" data-bs-target="#editModal"
                                                         data-id="{{ $category->id }}" data-name="{{ $category->name }}"
+                                                        data-icon="{{ $category->icon }}"
                                                         data-serial_number="{{ $category->serial_number }}"
                                                         data-status="{{ $category->status }}">
                                                         <span class="fas fa-edit"></span>

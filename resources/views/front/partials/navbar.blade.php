@@ -12,7 +12,7 @@
                     FreshCart
                 </a>
                 <div class="hidden lg:flex items-center gap-6">
-                    <a href="index.html" data-nav="home"
+                    <a href="{{ route('front.index') }}" data-nav="home"
                         class="nav-link rounded-full px-3 py-1 text-sm font-medium text-slate-600 transition hover:bg-green-50 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200">
                         Home
                     </a>

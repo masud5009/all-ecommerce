@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
@@ -22,6 +23,7 @@ class CategoryController extends Controller
     {
         $rules = [
             'name' => 'required|max:255|unique:product_categories,name',
+            'icon' => 'nullable|string|max:255',
             'serial_number' => 'required|numeric|min:0',
             'status' => 'required|in:1,0',
             'language_id' => 'required|exists:languages,id'
@@ -33,13 +35,19 @@ class CategoryController extends Controller
                 'errors' => $validator->getMessageBag()->toArray()
             ], 422);
         }
-        ProductCategory::create([
+        $payload = [
             'language_id' => $request->language_id,
             'name' => $request->name,
             'slug' => createSlug($request->name),
             'serial_number' => $request->serial_number,
             'status' => $request->status
-        ]);
+        ];
+
+        if (Schema::hasColumn('product_categories', 'icon')) {
+            $payload['icon'] = $request->filled('icon') ? trim($request->icon) : null;
+        }
+
+        ProductCategory::create($payload);
         session()->flash('success', __('Category create successfully'));
         return response()->json(['status' => 'success'], 200);
     }
@@ -48,6 +56,7 @@ class CategoryController extends Controller
     {
         $rules = [
             'name' => 'required|max:255|unique:product_categories,name,' . $request->id,
+            'icon' => 'nullable|string|max:255',
             'serial_number' => 'required|numeric|min:0',
             'status' => 'required|in:1,0'
         ];
@@ -60,15 +69,19 @@ class CategoryController extends Controller
         }
 
         $category = ProductCategory::findOrFail($request->id);
-        $category->update(
-            [
-                'language_id' => $category->language_id,
-                'name' => $request->name,
-                'slug' => createSlug($request->name),
-                'serial_number' => $request->serial_number,
-                'status' => $request->status
-            ]
-        );
+        $payload = [
+            'language_id' => $category->language_id,
+            'name' => $request->name,
+            'slug' => createSlug($request->name),
+            'serial_number' => $request->serial_number,
+            'status' => $request->status
+        ];
+
+        if (Schema::hasColumn('product_categories', 'icon')) {
+            $payload['icon'] = $request->filled('icon') ? trim($request->icon) : null;
+        }
+
+        $category->update($payload);
         session()->flash('success', __('Category update successfully'));
         return response()->json(['status' => 'success'], 200);
     }
