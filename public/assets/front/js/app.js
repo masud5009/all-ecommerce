@@ -54,12 +54,74 @@
     });
   }
 
+  const serverPopularProducts =
+    typeof window !== 'undefined' && Array.isArray(window.serverPopularProducts)
+      ? window.serverPopularProducts
+      : [];
+
+  if (serverPopularProducts.length) {
+    serverPopularProducts.forEach((raw) => {
+      const id = raw && raw.id !== undefined && raw.id !== null ? String(raw.id) : '';
+      if (!id) return;
+
+      const basePrice = Number(raw.price || raw.current_price || 0);
+      const baseOldPrice = Number(raw.oldPrice || raw.previous_price || 0);
+      const normalizedImages = Array.isArray(raw.images)
+        ? raw.images.filter((src) => typeof src === 'string' && src.trim() !== '')
+        : [];
+      const primaryImage =
+        (typeof raw.image === 'string' && raw.image.trim() !== '' ? raw.image : normalizedImages[0]) || '';
+      if (!primaryImage) return;
+      const normalizedUnits =
+        Array.isArray(raw.units) && raw.units.length
+          ? raw.units.map((unit, idx) => ({
+              label: unit.label || `Option ${idx + 1}`,
+              price: Number(unit.price || basePrice || 0),
+              oldPrice: Number(unit.oldPrice || unit.previous_price || baseOldPrice || 0)
+            }))
+          : [{ label: '1 unit', price: basePrice, oldPrice: baseOldPrice }];
+
+      const normalizedProduct = {
+        id,
+        name: raw.name || `Product #${id}`,
+        category: raw.category || 'Featured',
+        rating: Number(raw.rating || 4.7),
+        reviews: Number(raw.reviews || 142),
+        badge: raw.badge || raw.category || 'Featured',
+        image: primaryImage,
+        images: normalizedImages.length ? normalizedImages : [primaryImage],
+        isDeal: Boolean(raw.isDeal || (baseOldPrice > basePrice)),
+        popular: raw.popular !== false,
+        description: raw.description || 'Popular product from our catalog.',
+        nutrition:
+          Array.isArray(raw.nutrition) && raw.nutrition.length
+            ? raw.nutrition
+            : ['Fresh stock', 'Quality checked'],
+        reviewList:
+          Array.isArray(raw.reviewList) && raw.reviewList.length
+            ? raw.reviewList
+            : [{ name: 'Customer', rating: 5, text: 'Great quality product.' }],
+        units: normalizedUnits
+      };
+
+      const existingIndex = products.findIndex((item) => String(item.id) === id);
+
+      if (existingIndex >= 0) {
+        const existingProduct = products.splice(existingIndex, 1)[0];
+        products.push({
+          ...existingProduct,
+          ...normalizedProduct
+        });
+      } else {
+        products.push(normalizedProduct);
+      }
+    });
+  }
+
   const serverFlashSaleProducts =
     typeof window !== 'undefined' && Array.isArray(window.serverFlashSaleProducts)
       ? window.serverFlashSaleProducts
       : [];
-
-  const flashSaleProductIds = [];
 
   if (serverFlashSaleProducts.length) {
     serverFlashSaleProducts.forEach((raw) => {
@@ -118,8 +180,6 @@
       } else {
         products.unshift(normalizedProduct);
       }
-
-      flashSaleProductIds.push(id);
     });
   }
 
@@ -907,65 +967,6 @@
     });
   };
 
-  const renderProductCollections = () => {
-    const grids = qsa('[data-products-grid]');
-    if (!grids.length) return;
-
-    grids.forEach((grid) => {
-      const source = grid.dataset.productsSource || 'all';
-      const limit = Number(grid.dataset.productsLimit || 0);
-      let list = [...products];
-
-      if (source === 'popular') {
-        list = list.filter((product) => product.popular);
-      }
-
-      if (source === 'listing') {
-        return;
-      }
-
-      if (limit) {
-        list = list.slice(0, limit);
-      }
-
-      grid.innerHTML = list.map((product) => productCardTemplate(product)).join('');
-    });
-
-    refreshAllProductCards();
-  };
-
-  const renderDealsSlider = () => {
-    const slider = qs('[data-deals-slider]');
-    if (!slider) return;
-    const limit = Number(slider.dataset.productsLimit || 0);
-    let list = [];
-
-    if (flashSaleProductIds.length > 0) {
-      const seen = new Set();
-      list = flashSaleProductIds
-        .map((id) => products.find((product) => String(product.id) === String(id)))
-        .filter((product) => {
-          if (!product) return false;
-          const key = String(product.id);
-          if (seen.has(key)) return false;
-          seen.add(key);
-          return true;
-        });
-    }
-
-    if (!list.length) {
-      list = [];
-    }
-
-    if (limit) list = list.slice(0, limit);
-    const countEl = qs('[data-deals-count]');
-    if (countEl) {
-      countEl.textContent = list.length;
-    }
-    slider.innerHTML = list.map((product) => productCardTemplate(product, 'slider')).join('');
-    refreshAllProductCards();
-  };
-
   const initDealsCarousel = () => {
     const slider = qs('[data-deals-slider]');
     if (!slider || slider.dataset.dealsReady === 'true') return;
@@ -1718,9 +1719,7 @@
   initStickyHeader();
   initHeroSlider();
   initCountdowns();
-  renderDealsSlider();
   initDealsCarousel();
-  renderProductCollections();
   renderListingGrid();
   renderProductDetails();
   renderCart();

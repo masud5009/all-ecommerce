@@ -195,7 +195,7 @@
 
     <div class="mx-auto mt-12 h-px max-w-5xl bg-gradient-to-r from-transparent via-green-200 to-transparent"></div>
 
-        <!-- Categories section -->
+    <!-- Categories section -->
     <section id="categories" class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="category-heading"
         data-reveal>
         <div class="flex flex-wrap items-center justify-between gap-4" data-reveal-child>
@@ -222,34 +222,24 @@
         </div>
         <div class="category-scroll mt-8 flex gap-4 overflow-x-auto pb-4 scroll-px-4 scroll-smooth snap-x snap-mandatory"
             data-category-track>
-            @forelse ($homeCategories ?? collect() as $category)
-                <a href="products.html?category={{ $category->id }}" aria-label="Browse {{ $category->name }}"
-                    data-reveal-child
+            @forelse ($homeCategories as $category)
+                <a href="#" aria-label="Browse {{ $category->name }}" data-reveal-child
                     class="group flex min-w-[150px] flex-col items-center rounded-2xl border border-green-100 bg-white px-4 py-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-300 hover:bg-green-50/70 hover:shadow-[0_16px_32px_rgba(16,185,129,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:min-w-[160px] lg:min-w-[170px] snap-start">
                     <div class="brush-ring flex h-20 w-20 items-center justify-center">
                         <span
                             class="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-green-100 transition duration-300 group-hover:scale-105">
-                            @if (!empty($category->icon_class))
-                                <i class="{{ $category->icon_class }} text-[26px] leading-none text-emerald-600"
+                            @if (!empty($category->icon))
+                                <i class="{{ $category->icon }} text-[26px] leading-none text-emerald-600"
                                     aria-hidden="true"></i>
-                            @else
-                                <svg class="h-8 w-8 text-emerald-600" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                                    @foreach ($category->icon_paths ?? [] as $iconPath)
-                                        <path d="{{ $iconPath }}"></path>
-                                    @endforeach
-                                </svg>
                             @endif
                         </span>
                     </div>
                     <p class="mt-4 text-sm font-semibold text-emerald-900 transition group-hover:text-green-800">
-                        {{ $category->display_name }}
+                        {{ $category->name }}
                     </p>
-                    <p class="mt-1 text-xs text-slate-500">{{ $category->subtitle }}</p>
                     <span
                         class="mt-3 inline-flex items-center rounded-full border border-green-100 bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">
-                        {{ (int) ($category->item_count ?? 0) }}
-                        {{ (int) ($category->item_count ?? 0) === 1 ? 'Item' : 'Items' }}
+                        {{ $category->productContent->count() }} {{ __('products') }}
                     </span>
                     <span
                         class="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-green-700 opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-1"
@@ -263,12 +253,12 @@
             @empty
                 <div class="w-full rounded-2xl border border-dashed border-green-200 bg-white p-8 text-center text-sm text-slate-500"
                     data-reveal-child>
-                    No categories found.
+                    {{ __('NO FEATURED CATEGORY FOUND!') }}
                 </div>
             @endforelse
         </div>
     </section>
-    
+
     <!-- Featured products -->
     <section class="mx-auto mt-10 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
         <div
@@ -284,113 +274,16 @@
                 </a>
             </div>
 
-            @if (!empty($featuredProducts) && $featuredProducts->isNotEmpty())
+            @if (count($featuredProducts) > 0)
                 <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     @foreach ($featuredProducts as $product)
-                        <article
-                            class="group relative flex h-full flex-col rounded-2xl border border-green-100 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)]"
-                            data-reveal-child data-featured-card data-product-id="{{ (string) $product->id }}"
-                            data-product-name="{{ $product->display_title }}">
-                            <span
-                                class="absolute left-4 top-4 rounded-full bg-green-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-sm {{ $product->discount_percent > 0 ? '' : 'hidden' }}">
-                                -{{ $product->discount_percent }}%
-                            </span>
-
-                            <div class="relative overflow-hidden rounded-2xl bg-green-50">
-                                <a href="{{ route('frontend.product.details', ['product' => $product->id]) }}"
-                                    class="block">
-                                    <img src="{{ $product->thumbnail_url }}" alt="{{ $product->display_title }}"
-                                        class="h-40 w-full object-cover transition duration-500 group-hover:scale-105"
-                                        loading="lazy" decoding="async">
-                                </a>
-                                <button type="button" data-action="quick-view"
-                                    data-product-id="{{ (string) $product->id }}"
-                                    class="absolute bottom-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition duration-300 hover:bg-green-700"
-                                    aria-label="Quick view {{ $product->display_title }}">
-                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2" aria-hidden="true">
-                                        <path d="M12 5v14"></path>
-                                        <path d="M5 12h14"></path>
-                                    </svg>
-                                </button>
-                            </div>
-
-                            <div class="mt-4 space-y-2">
-                                <div class="flex items-start justify-between gap-2">
-                                    <a href="{{ route('frontend.product.details', ['product' => $product->id]) }}"
-                                        class="text-sm font-semibold text-slate-900 transition hover:text-green-700">
-                                        {{ $product->display_title_short }}
-                                    </a>
-                                    <span
-                                        class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">
-                                        {{ $product->badge_label_short }}
-                                    </span>
-                                </div>
-
-                                <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                                    <span class="flex items-center gap-1">
-                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
-                                            aria-hidden="true">
-                                            <path
-                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                                            </path>
-                                        </svg>
-                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
-                                            aria-hidden="true">
-                                            <path
-                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                                            </path>
-                                        </svg>
-                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
-                                            aria-hidden="true">
-                                            <path
-                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                                            </path>
-                                        </svg>
-                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
-                                            aria-hidden="true">
-                                            <path
-                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                                            </path>
-                                        </svg>
-                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
-                                            aria-hidden="true">
-                                            <path
-                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                                            </path>
-                                        </svg>
-                                    </span>
-                                    <span>4.7 (142 reviews)</span>
-                                    <span
-                                        class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">{{ $product->stock_label }}</span>
-                                </div>
-
-                                <div class="flex items-center gap-2 text-xs text-slate-500">
-                                    <span
-                                        class="rounded-full bg-green-50 px-2 py-1 text-[10px] font-semibold text-green-700">
-                                        {{ $product->variant_label }}
-                                    </span>
-                                    <span>{{ $product->variant_text }}</span>
-                                </div>
-
-                                <div class="flex items-end justify-between gap-3">
-                                    <div>
-                                        <p class="text-3xl font-semibold text-slate-900">
-                                            {{ currency_symbol($product->price_value) }}</p>
-                                        @if ($product->show_old_price)
-                                            <p class="text-sm text-slate-400 line-through">
-                                                {{ currency_symbol($product->old_price_value) }}</p>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
+                        @include('front.home.partials.product-card', ['product' => $product])
                     @endforeach
                 </div>
             @else
                 <div class="mt-8 rounded-2xl border border-dashed border-green-200 bg-white p-8 text-center text-sm text-slate-500"
                     data-reveal-child>
-                    No featured products found.
+                    {{ __('NO FEATURED PRODUCTS FOUND!') }}
                 </div>
             @endif
         </div>
@@ -406,159 +299,171 @@
             </div>
             <a href="products.html" class="text-sm font-semibold text-green-700">Shop all</a>
         </div>
-        <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-products-grid data-products-source="popular"
-            data-products-limit="8"></div>
+        @if (count($popularProducts) > 0)
+            <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                @foreach ($popularProducts as $product)
+                    @include('front.home.partials.product-card', ['product' => $product])
+                @endforeach
+            </div>
+        @else
+            <div class="mt-8 rounded-2xl border border-dashed border-green-200 bg-white p-8 text-center text-sm text-slate-500"
+                data-reveal-child>
+                No popular products found.
+            </div>
+        @endif
     </section>
-
-    @if (!empty($serverFeaturedProducts) && $serverFeaturedProducts->isNotEmpty())
-        <script>
-            window.serverFeaturedProducts = @json($serverFeaturedProducts);
-        </script>
-    @endif
-    @if (!empty($serverFlashSaleProducts) && $serverFlashSaleProducts->isNotEmpty())
-        <script>
-            window.serverFlashSaleProducts = @json($serverFlashSaleProducts);
-        </script>
-    @endif
 
     <div class="mx-auto mt-16 h-px max-w-5xl bg-gradient-to-r from-transparent via-green-200 to-transparent"></div>
 
-    @if (!empty($flashSaleDeal))
+    @if (count($flashSaleCardProducts) > 0)
         <section id="deals" class="flash-sale-section mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
-        <div class="flash-sale-head flex flex-wrap items-end justify-between gap-4" data-reveal-child>
-            <div>
-                <p class="flash-sale-kicker text-xs font-semibold uppercase tracking-wide text-green-700">Flash sale</p>
-                <h2 class="flash-sale-title mt-2 text-3xl font-semibold text-slate-900">{{ $flashSaleDeal->title }}</h2>
+            <div class="flash-sale-head flex flex-wrap items-end justify-between gap-4" data-reveal-child>
+                <div>
+                    <p class="flash-sale-kicker text-xs font-semibold uppercase tracking-wide text-green-700">Flash sale
+                    </p>
+                    <h2 class="flash-sale-title mt-2 text-3xl font-semibold text-slate-900">{{ $flashSaleDeal->title }}
+                    </h2>
+                </div>
+                <div class="flash-sale-head-actions flex items-center gap-3" data-reveal-child>
+                    <span
+                        class="flash-sale-timer hidden items-center gap-2.5 rounded-full border border-green-100 bg-white px-4 py-2 text-sm text-slate-600 sm:inline-flex">
+                        <svg class="h-4 w-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="M12 7v6l3 2"></path>
+                        </svg>
+                        Ends in <span class="font-semibold tabular-nums text-slate-900" data-countdown
+                            data-countdown-seconds="{{ $flashSaleDeal->countdown_seconds }}">02:15:32</span>
+                    </span>
+                    <a href="products.html"
+                        class="flash-sale-all-deals inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
+                        Show more products
+                    </a>
+                </div>
             </div>
-            <div class="flash-sale-head-actions flex items-center gap-3" data-reveal-child>
-                <span
-                    class="flash-sale-timer hidden items-center gap-2.5 rounded-full border border-green-100 bg-white px-4 py-2 text-sm text-slate-600 sm:inline-flex">
-                    <svg class="h-4 w-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="1.8" aria-hidden="true">
-                        <circle cx="12" cy="12" r="9"></circle>
-                        <path d="M12 7v6l3 2"></path>
-                    </svg>
-                    Ends in <span class="font-semibold tabular-nums text-slate-900" data-countdown
-                        data-countdown-seconds="{{ $flashSaleDeal->countdown_seconds }}">02:15:32</span>
-                </span>
-                <a href="products.html"
-                    class="flash-sale-all-deals inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
-                    Show more products
-                </a>
-            </div>
-        </div>
-        <div class="flash-sale-shell mt-8 rounded-3xl border border-green-100 bg-gradient-to-br from-green-50/80 via-white to-emerald-50/60 p-6 shadow-sm sm:p-8"
-            data-reveal-child>
-            <div class="grid gap-6 lg:grid-cols-[1.1fr_1.9fr]">
-                <div class="flash-sale-featured-card relative overflow-hidden rounded-3xl border border-green-100 bg-white/90 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-                    data-reveal-child>
-                    <div class="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-green-100/80 blur-2xl"
-                        aria-hidden="true"></div>
-                    <div class="pointer-events-none absolute -bottom-12 left-6 h-24 w-24 rounded-full bg-emerald-100/60 blur-2xl"
-                        aria-hidden="true"></div>
-                    <div class="relative flex items-center justify-between">
-                        <span
-                            class="rounded-full bg-green-600 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">Featured</span>
-                        <span class="text-xs text-slate-500">Ends in <span
-                                class="font-semibold tabular-nums text-slate-900" data-countdown
-                                data-countdown-seconds="{{ $flashSaleDeal->countdown_seconds }}">02:15:32</span></span>
-                    </div>
-                    <h3 class="relative mt-4 text-2xl font-semibold text-slate-900">{{ $flashSaleDeal->title }}</h3>
-                    <p class="relative mt-2 text-sm text-slate-600">{{ $flashSaleDeal->summary }}</p>
-                    <div class="relative mt-4 flex items-end gap-3">
-                        <span
-                            class="text-3xl font-semibold text-slate-900">{{ currency_symbol($flashSaleDeal->sale_price) }}</span>
-                        @if ($flashSaleDeal->old_price > $flashSaleDeal->sale_price)
+            <div class="flash-sale-shell mt-8 rounded-3xl border border-green-100 bg-gradient-to-br from-green-50/80 via-white to-emerald-50/60 p-6 shadow-sm sm:p-8"
+                data-reveal-child>
+                <div class="grid gap-6 lg:grid-cols-[1.1fr_1.9fr]">
+                    <div class="flash-sale-featured-card relative overflow-hidden rounded-3xl border border-green-100 bg-white/90 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                        data-reveal-child>
+                        <div class="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-green-100/80 blur-2xl"
+                            aria-hidden="true"></div>
+                        <div class="pointer-events-none absolute -bottom-12 left-6 h-24 w-24 rounded-full bg-emerald-100/60 blur-2xl"
+                            aria-hidden="true"></div>
+                        <div class="relative flex items-center justify-between">
                             <span
-                                class="text-sm text-slate-400 line-through">{{ currency_symbol($flashSaleDeal->old_price) }}</span>
-                        @endif
-                    </div>
-                    <div class="relative mt-4 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                        <span class="rounded-full bg-green-100 px-3 py-1 font-semibold text-green-700">
-                            {{ $flashSaleDeal->save_percent > 0 ? 'Save ' . $flashSaleDeal->save_percent . '%' : 'Limited offer' }}
-                        </span>
-                        <span class="rounded-full border border-green-100 px-3 py-1">Free delivery</span>
-                        <span
-                            class="rounded-full border border-green-100 px-3 py-1 text-green-700">{{ $flashSaleDeal->stock_label }}</span>
-                    </div>
-                    <div class="relative mt-6">
-                        <a href="{{ $flashSaleDeal->details_url }}"
-                            class="inline-flex items-center justify-center rounded-2xl bg-green-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">Grab
-                            bundle</a>
-                    </div>
-                    <div class="relative mt-6 overflow-hidden rounded-2xl">
-                        <img src="{{ $flashSaleDeal->image }}" alt="{{ $flashSaleDeal->title }}" class="h-48 w-full object-cover">
-                    </div>
-                    <div class="relative mt-6 grid grid-cols-3 gap-3 text-xs text-slate-600">
-                        <div class="rounded-2xl border border-green-100 bg-white p-3">
-                            <p class="text-slate-500">Avg store</p>
-                            <p class="mt-1 text-sm font-semibold text-slate-900">{{ currency_symbol($flashSaleDeal->old_price) }}
-                            </p>
+                                class="rounded-full bg-green-600 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">Featured</span>
+                            <span class="text-xs text-slate-500">Ends in <span
+                                    class="font-semibold tabular-nums text-slate-900" data-countdown
+                                    data-countdown-seconds="{{ $flashSaleDeal->countdown_seconds }}">02:15:32</span></span>
                         </div>
-                        <div class="rounded-2xl border border-green-100 bg-white p-3">
-                            <p class="text-slate-500">FreshCart</p>
-                            <p class="mt-1 text-sm font-semibold text-slate-900">{{ currency_symbol($flashSaleDeal->sale_price) }}
-                            </p>
+                        <h3 class="relative mt-4 text-2xl font-semibold text-slate-900">{{ $flashSaleDeal->title }}</h3>
+                        <p class="relative mt-2 text-sm text-slate-600">{{ $flashSaleDeal->summary }}</p>
+                        <div class="relative mt-4 flex items-end gap-3">
+                            <span
+                                class="text-3xl font-semibold text-slate-900">{{ currency_symbol($flashSaleDeal->sale_price) }}</span>
+                            @if ($flashSaleDeal->old_price > $flashSaleDeal->sale_price)
+                                <span
+                                    class="text-sm text-slate-400 line-through">{{ currency_symbol($flashSaleDeal->old_price) }}</span>
+                            @endif
                         </div>
-                        <div class="rounded-2xl border border-green-100 bg-white p-3">
-                            <p class="text-slate-500">You save</p>
-                            <p class="mt-1 text-sm font-semibold text-green-700">
-                                {{ currency_symbol($flashSaleDeal->save_amount) }}</p>
+                        <div class="relative mt-4 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                            <span class="rounded-full bg-green-100 px-3 py-1 font-semibold text-green-700">
+                                {{ $flashSaleDeal->save_percent > 0 ? 'Save ' . $flashSaleDeal->save_percent . '%' : 'Limited offer' }}
+                            </span>
+                            <span class="rounded-full border border-green-100 px-3 py-1">Free delivery</span>
+                            <span
+                                class="rounded-full border border-green-100 px-3 py-1 text-green-700">{{ $flashSaleDeal->stock_label }}</span>
+                        </div>
+                        <div class="relative mt-6">
+                            <a href="{{ $flashSaleDeal->details_url }}"
+                                class="inline-flex items-center justify-center rounded-2xl bg-green-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">Grab
+                                bundle</a>
+                        </div>
+                        <div class="relative mt-6 overflow-hidden rounded-2xl">
+                            <img src="{{ $flashSaleDeal->image }}" alt="{{ $flashSaleDeal->title }}"
+                                class="h-48 w-full object-cover">
+                        </div>
+                        <div class="relative mt-6 grid grid-cols-3 gap-3 text-xs text-slate-600">
+                            <div class="rounded-2xl border border-green-100 bg-white p-3">
+                                <p class="text-slate-500">Avg store</p>
+                                <p class="mt-1 text-sm font-semibold text-slate-900">
+                                    {{ currency_symbol($flashSaleDeal->old_price) }}
+                                </p>
+                            </div>
+                            <div class="rounded-2xl border border-green-100 bg-white p-3">
+                                <p class="text-slate-500">FreshCart</p>
+                                <p class="mt-1 text-sm font-semibold text-slate-900">
+                                    {{ currency_symbol($flashSaleDeal->sale_price) }}
+                                </p>
+                            </div>
+                            <div class="rounded-2xl border border-green-100 bg-white p-3">
+                                <p class="text-slate-500">You save</p>
+                                <p class="mt-1 text-sm font-semibold text-green-700">
+                                    {{ currency_symbol($flashSaleDeal->save_amount) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flash-sale-carousel-shell relative overflow-hidden rounded-3xl border border-green-100 bg-white p-5 shadow-sm"
+                        data-reveal-child>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-semibold text-slate-900">More curated deals</p>
+                                <p class="mt-1 text-xs text-slate-500">Drag to explore or use arrows</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button
+                                    class="flash-sale-arrow inline-flex h-10 w-10 items-center justify-center rounded-full border border-green-100 bg-white text-slate-500 transition hover:border-green-300 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
+                                    type="button" aria-label="Scroll deals left" data-deals-prev
+                                    aria-controls="deals-carousel">
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" aria-hidden="true">
+                                        <path d="M15 18l-6-6 6-6"></path>
+                                    </svg>
+                                </button>
+                                <button
+                                    class="flash-sale-arrow inline-flex h-10 w-10 items-center justify-center rounded-full border border-green-100 bg-white text-slate-500 transition hover:border-green-300 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
+                                    type="button" aria-label="Scroll deals right" data-deals-next
+                                    aria-controls="deals-carousel">
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" aria-hidden="true">
+                                        <path d="M9 18l6-6-6-6"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="relative mt-4">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-white to-transparent"
+                                aria-hidden="true"></div>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-white to-transparent"
+                                aria-hidden="true"></div>
+                            <div class="flash-sale-slider scrollbar-hide flex gap-4 overflow-x-auto pb-4 pr-6 snap-x snap-mandatory scroll-px-4 cursor-grab active:cursor-grabbing"
+                                data-deals-slider id="deals-carousel" role="region" aria-label="Today's deals carousel"
+                                tabindex="0">
+                                @foreach ($flashSaleCardProducts as $product)
+                                    <div class="min-w-[220px] snap-start sm:min-w-[240px] lg:min-w-[260px]">
+                                        @include('front.home.partials.product-card', [
+                                            'product' => $product,
+                                        ])
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="flash-sale-live-count inline-flex items-center rounded-full bg-green-50 px-3 py-1 text-[11px] font-semibold text-green-700"
+                                    data-deals-count>{{ !empty($flashSaleCardProducts) ? $flashSaleCardProducts->count() : 0 }}</span>
+                                <span>items live now</span>
+                            </div>
+                            <span
+                                class="flash-sale-swipe inline-flex items-center rounded-full border border-green-100 bg-white px-3 py-1">Swipe
+                                &
+                                discover</span>
                         </div>
                     </div>
                 </div>
-                <div class="flash-sale-carousel-shell relative overflow-hidden rounded-3xl border border-green-100 bg-white p-5 shadow-sm"
-                    data-reveal-child>
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-semibold text-slate-900">More curated deals</p>
-                            <p class="mt-1 text-xs text-slate-500">Drag to explore or use arrows</p>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <button
-                                class="flash-sale-arrow inline-flex h-10 w-10 items-center justify-center rounded-full border border-green-100 bg-white text-slate-500 transition hover:border-green-300 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
-                                type="button" aria-label="Scroll deals left" data-deals-prev
-                                aria-controls="deals-carousel">
-                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" aria-hidden="true">
-                                    <path d="M15 18l-6-6 6-6"></path>
-                                </svg>
-                            </button>
-                            <button
-                                class="flash-sale-arrow inline-flex h-10 w-10 items-center justify-center rounded-full border border-green-100 bg-white text-slate-500 transition hover:border-green-300 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
-                                type="button" aria-label="Scroll deals right" data-deals-next
-                                aria-controls="deals-carousel">
-                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" aria-hidden="true">
-                                    <path d="M9 18l6-6-6-6"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="relative mt-4">
-                        <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-white to-transparent"
-                            aria-hidden="true"></div>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-white to-transparent"
-                            aria-hidden="true"></div>
-                        <div class="flash-sale-slider scrollbar-hide flex gap-4 overflow-x-auto pb-4 pr-6 snap-x snap-mandatory scroll-px-4 cursor-grab active:cursor-grabbing"
-                            data-deals-slider data-products-limit="10" id="deals-carousel" role="region"
-                            aria-label="Today's deals carousel" tabindex="0"></div>
-                    </div>
-                    <div class="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
-                        <div class="flex items-center gap-2">
-                            <span
-                                class="flash-sale-live-count inline-flex items-center rounded-full bg-green-50 px-3 py-1 text-[11px] font-semibold text-green-700"
-                                data-deals-count>0</span>
-                            <span>items live now</span>
-                        </div>
-                        <span
-                            class="flash-sale-swipe inline-flex items-center rounded-full border border-green-100 bg-white px-3 py-1">Swipe
-                            &
-                            discover</span>
-                    </div>
-                </div>
             </div>
-        </div>
         </section>
     @endif
 

@@ -2,11 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ProductContent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProductCategory extends Model
 {
     use HasFactory;
     protected $fillable = ['name', 'slug', 'serial_number', 'status', 'language_id', 'icon'];
+
+    /**
+     * Get the count of products in this category for a specific language.
+     */
+    public function productContent()
+    {
+        return $this->hasMany(ProductContent::class, 'category_id');
+    }
 }

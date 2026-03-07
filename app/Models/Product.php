@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ProductVariant;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -19,10 +20,10 @@ class Product extends Model
         return $this->hasMany(SliderImage::class, 'item_id', 'id')->where('item_type', 'product');
     }
 
-    // public function variations()
-    // {
-    //     return $this->hasMany(ProductVariation::class,'product_id','id');
-    // }
+    public function variations()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
 
     public function options()
     {
