@@ -16,7 +16,8 @@ class GatewayController extends Controller
     public function index()
     {
         $totalG = PaymentGateway::count();
-        return view('admin.settings.payment.index',compact('totalG'));
+
+        return view('admin.settings.payment.index', compact('totalG'));
     }
 
     /**
@@ -24,15 +25,21 @@ class GatewayController extends Controller
      */
     public function online()
     {
-        $data['stripe'] = PaymentGateway::where('keyword', 'stripe')->first();
-        $data['paypal'] = PaymentGateway::where('keyword', 'paypal')->first();
-        $data['paytm'] = PaymentGateway::where('keyword', 'paytm')->first();
-        $data['instamojo'] = PaymentGateway::where('keyword', 'instamojo')->first();
+        $gateways = [
+            'stripe' => 'Stripe',
+            'paypal' => 'Paypal',
+            'paytm' => 'Paytm',
+            'instamojo' => 'Instamojo',
+            'sslcommerz' => 'SSLCommerz',
+        ];
 
-        $data['stripe_info'] = json_decode($data['stripe']->information, true);
-        $data['paypal_info'] = json_decode($data['paypal']->information, true);
-        $data['paytm_info'] = json_decode($data['paytm']->information, true);
-        $data['instamojo_info'] = json_decode($data['instamojo']->information, true);
+        $data = [];
+
+        foreach ($gateways as $keyword => $name) {
+            $data[$keyword] = $this->gateway($keyword, $name);
+            $data[$keyword . '_info'] = json_decode($data[$keyword]->information, true) ?: [];
+        }
+
         return view('admin.settings.payment.online', $data);
     }
 
@@ -52,17 +59,18 @@ class GatewayController extends Controller
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
 
-        $stripe = PaymentGateway::where("keyword", "stripe")->first();
+        $stripe = $this->gateway('stripe', 'Stripe');
 
-        $information = [];
         $stripe->status = $request->stripe_status;
-        $information['key'] = $request->stripe_key;
-        $information['secret'] = $request->stripe_secret;
-        $information['text'] = "Pay via your Credit account.";
-        $stripe->information = json_encode($information);
+        $stripe->information = json_encode([
+            'key' => $request->stripe_key,
+            'secret' => $request->stripe_secret,
+            'text' => 'Pay via your Credit account.',
+        ]);
         $stripe->save();
 
         Session::flash('success', 'Stripe update successfully');
+
         return back();
     }
 
@@ -83,18 +91,19 @@ class GatewayController extends Controller
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
 
-        $paypal = PaymentGateway::where("keyword", "paypal")->first();
+        $paypal = $this->gateway('paypal', 'Paypal');
 
-        $information = [];
         $paypal->status = $request->paypal_status;
-        $information['sandbox_status'] = $request->paypal_sandbox_status;
-        $information['client_id'] = $request->paypal_client_id;
-        $information['client_secret'] = $request->paypal_client_secret;
-        $information['text'] = "Pay via your Credit account.";
-        $paypal->information = json_encode($information);
+        $paypal->information = json_encode([
+            'sandbox_status' => $request->paypal_sandbox_status,
+            'client_id' => $request->paypal_client_id,
+            'client_secret' => $request->paypal_client_secret,
+            'text' => 'Pay via your Credit account.',
+        ]);
         $paypal->save();
 
         Session::flash('success', 'Paypal update successfully');
+
         return back();
     }
 
@@ -117,22 +126,24 @@ class GatewayController extends Controller
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
 
-        $paytm = PaymentGateway::where("keyword", "paytm")->first();
+        $paytm = $this->gateway('paytm', 'Paytm');
 
-        $information = [];
         $paytm->status = $request->paytm_status;
-        $information['environment'] = $request->paytm_environment_mode;
-        $information['merchant_key'] = $request->paytm_merchant_key;
-        $information['merchant_mid'] = $request->paytm_merchant_MID;
-        $information['merchant_website'] = $request->paytm_merchant_website;
-        $information['industry_type'] = $request->paytm_industry_type;
-        $information['text'] = "Pay via your Credit account.";
-        $paytm->information = json_encode($information);
+        $paytm->information = json_encode([
+            'environment' => $request->paytm_environment_mode,
+            'merchant_key' => $request->paytm_merchant_key,
+            'merchant_mid' => $request->paytm_merchant_MID,
+            'merchant_website' => $request->paytm_merchant_website,
+            'industry_type' => $request->paytm_industry_type,
+            'text' => 'Pay via your Credit account.',
+        ]);
         $paytm->save();
 
         Session::flash('success', 'Paytm update successfully');
+
         return back();
     }
+
     /**
      * upate instamojo
      */
@@ -142,7 +153,7 @@ class GatewayController extends Controller
             'insta_status' => 'required',
             'insta_sandbox_status' => 'required',
             'insta_api_key' => 'required',
-            'insta_auth_token' => 'required'
+            'insta_auth_token' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
 
@@ -150,25 +161,77 @@ class GatewayController extends Controller
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
 
-        $instamojo = PaymentGateway::where("keyword", "instamojo")->first();
+        $instamojo = $this->gateway('instamojo', 'Instamojo');
 
-        $information = [];
         $instamojo->status = $request->insta_status;
-        $information['sandbox_status'] = $request->insta_sandbox_status;
-        $information['key'] = $request->insta_api_key;
-        $information['token'] = $request->insta_auth_token;
-        $information['text'] = "Pay via your Credit account.";
-        $instamojo->information = json_encode($information);
+        $instamojo->information = json_encode([
+            'sandbox_status' => $request->insta_sandbox_status,
+            'key' => $request->insta_api_key,
+            'token' => $request->insta_auth_token,
+            'text' => 'Pay via your Credit account.',
+        ]);
         $instamojo->save();
 
         Session::flash('success', 'Instamojo update successfully');
+
         return back();
     }
+
+    /**
+     * update sslcommerz
+     */
+    public function sslcommerz(Request $request)
+    {
+        $rules = [
+            'sslcommerz_status' => 'required|in:0,1',
+            'sslcommerz_mode' => 'required|in:sandbox,live',
+            'sslcommerz_store_id' => 'required|max:255',
+            'sslcommerz_store_password' => 'required|max:255',
+            'sslcommerz_currency' => 'required|size:3',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors())->withInput();
+        }
+
+        $sslcommerz = $this->gateway('sslcommerz', 'SSLCommerz');
+
+        $sslcommerz->status = $request->sslcommerz_status;
+        $sslcommerz->information = json_encode([
+            'mode' => strtolower((string) $request->sslcommerz_mode),
+            'store_id' => $request->sslcommerz_store_id,
+            'store_password' => $request->sslcommerz_store_password,
+            'currency' => strtoupper((string) $request->sslcommerz_currency),
+            'text' => 'Pay securely via SSLCommerz.',
+        ]);
+        $sslcommerz->save();
+
+        Session::flash('success', 'SSLCommerz update successfully');
+
+        return back();
+    }
+
     /**
      * show online gateway page
      */
     public function offline()
     {
         return view('admin.settings.payment.offline.index');
+    }
+
+    private function gateway(string $keyword, string $name): PaymentGateway
+    {
+        return PaymentGateway::firstOrCreate(
+            ['keyword' => $keyword],
+            [
+                'name' => $name,
+                'type' => 'automatic',
+                'information' => json_encode([
+                    'text' => 'Pay via your Credit account.',
+                ]),
+                'status' => 0,
+            ]
+        );
     }
 }

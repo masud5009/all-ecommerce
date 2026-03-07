@@ -36,8 +36,8 @@ Route::controller(CheckoutController::class)->group(function () {
     Route::post('/check-registration', 'checkRegistration')->name('frontend.register.validate_check');
     Route::get('/checkout', 'checkoutPage')->name('frontend.checkout.view');
     Route::post('/checkout-submit', 'checkoutSubmit')->name('frontend.checkout.submit');
-    Route::get('/membership-payment/cancel', 'paymentCancel')->name('frontend.checkout.payment_cancel');
-    Route::get('/membership-payment/success', 'paymentSuccess')->name('frontend.checkout.payment_success');
+    Route::match(['get', 'post'], '/membership-payment/cancel', 'paymentCancel')->name('frontend.checkout.payment_cancel');
+    Route::match(['get', 'post'], '/membership-payment/success', 'paymentSuccess')->name('frontend.checkout.payment_success');
 
     Route::get('/payment-success', 'successPage')->name('frontend.payment_success.view');
     Route::get('/payment-cancel', 'cancelPage')->name('frontend.payment_cancel.view');

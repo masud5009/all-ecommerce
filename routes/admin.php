@@ -177,6 +177,7 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
         Route::get('online-gateway', 'Admin\GatewayController@online')->name('admin.online_gateway');
         Route::post('stripe/update', 'Admin\GatewayController@stripe')->name('admin.online_gateway.stripe');
         Route::post('paypal/update', 'Admin\GatewayController@paypal')->name('admin.online_gateway.paypal');
+        Route::post('sslcommerz/update', 'Admin\GatewayController@sslcommerz')->name('admin.online_gateway.sslcommerz');
         Route::post('paytm/update', 'Admin\GatewayController@paytm')->name('admin.online_gateway.paytm');
         Route::post('instamojo/update', 'Admin\GatewayController@instamojo')->name('admin.online_gateway.instamojo');
         Route::get('offline-gateway', 'Admin\GatewayController@offline')->name('admin.offline_gateway');

@@ -578,7 +578,8 @@ INSERT INTO `payment_gateways` (`id`, `name`, `text`, `type`, `information`, `ke
 (1, 'Stripe', NULL, 'automatic', '{\"key\":\"pk_test_UnU1Coi1p5qFGwtpjZMRMgJM\",\"secret\":\"sk_test_QQcg3vGsKRPlW6T3dXcNJsor\",\"text\":\"Pay via your Credit account.\"}', 'stripe', 1, NULL, '2025-11-16 12:32:06'),
 (2, 'Paypal', NULL, 'automatic', '{\"sandbox_status\":\"1\",\"client_id\":\"AVYKFEw63FtDt9aeYOe9biyifNI56s2Hc2F1Us11hWoY5GMuegipJRQBfWLiIKNbwQ5tmqKSrQTU3zB3\",\"client_secret\":\"EJY0qOKliVg7wKsR3uPN7lngr9rL1N7q4WV0FulT1h4Fw3_e5Itv1mxSdbtSUwAaQoXQFgq-RLlk_sQu\",\"text\":\"Pay via your Credit account.\"}', 'paypal', 1, NULL, '2025-02-12 13:01:46'),
 (3, 'Paytm', NULL, 'automatic', '{\"environment\":\"production\",\"merchant_key\":\"sdasdfasdf\",\"merchant_mid\":\"asdfasdfasdf\",\"merchant_website\":\"asdfasdfdasf\",\"industry_type\":\"Retail\",\"text\":\"Pay via your Credit account.\"}', 'paytm', 1, NULL, '2025-02-12 13:09:48'),
-(4, 'Instamojo', NULL, 'automatic', '{\"sandbox_status\":\"production\",\"key\":\"sdfsdf\",\"token\":\"sdfsdaf\",\"text\":\"Pay via your Credit account.\"}', 'instamojo', 1, NULL, '2025-02-12 13:18:21');
+(4, 'Instamojo', NULL, 'automatic', '{\"sandbox_status\":\"production\",\"key\":\"sdfsdf\",\"token\":\"sdfsdaf\",\"text\":\"Pay via your Credit account.\"}', 'instamojo', 1, NULL, '2025-02-12 13:18:21'),
+(5, 'SSLCommerz', NULL, 'automatic', '{\"mode\":\"sandbox\",\"store_id\":\"\",\"store_password\":\"\",\"currency\":\"BDT\",\"text\":\"Pay securely via SSLCommerz.\"}', 'sslcommerz', 0, NULL, '2026-03-07 00:00:00');
 
 -- --------------------------------------------------------
 

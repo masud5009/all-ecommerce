@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(\App\Services\Payment\PaymentService::class);
         $this->app->bind(\App\Services\Payment\Gateways\PayPalGateway::class);
         $this->app->bind(\App\Services\Payment\Gateways\StripeGateway::class);
+        $this->app->bind(\App\Services\Payment\Gateways\SslCommerzGateway::class);
 
         $this->app->singleton('languages', function () {
             return Language::all();

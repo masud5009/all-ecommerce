@@ -14,6 +14,12 @@ class MembershipService
 {
     public function createMembership($data)
     {
+        $transactionId = $data->transaction_id ?? null;
+
+        if ($transactionId && Membership::where('transaction_id', $transactionId)->exists()) {
+            return;
+        }
+
         $token = md5(time() . $data->username . $data->email);
         $verification_link = url('user/register/mode/verify/' . $token);
 
@@ -55,8 +61,9 @@ class MembershipService
                 'currency_symbol' => $bs->currency_symbol ?? '$',
                 'currency_symbol_position' => $bs->currency_symbol_position ?? "left",
                 'payment_method' => $data->payment_method,
-                'transaction_id' => $transaction_id ?? 0,
+                'transaction_id' => $transactionId ?: 0,
                 'status' => 1,
+                'transaction_details' => $data->transaction_details ?? null,
                 'settings' => json_encode($bs),
                 'package_id' => $package->id,
                 'user_id' => $user->id,

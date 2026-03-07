@@ -32,6 +32,10 @@
                             role="tab" aria-selected="false">
                             {{ __('PayPal') }}
                         </button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#sslcommerz" type="button"
+                            role="tab" aria-selected="false">
+                            {{ __('SSLCommerz') }}
+                        </button>
                         <button class="nav-link" data-bs-toggle="pill" data-bs-target="#paytm" type="button" role="tab"
                             aria-selected="false">
                             {{ __('Paytm') }}
@@ -147,6 +151,52 @@
                     </div>
                 </div>
 
+                <div class="tab-pane fade" id="sslcommerz" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>{{ __('SSLCommerz') }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <form action="{{ route('admin.online_gateway.sslcommerz') }}" method="post"
+                                id="sslcommerzForm">
+                                @csrf
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="selectgroup w-100">
+                                            <label class="selectgroup-item">
+                                                <input type="radio" name="sslcommerz_status" value="1"
+                                                    class="selectgroup-input" @checked($sslcommerz->status == 1)>
+                                                <span class="selectgroup-button">{{ __('Enable') }}</span>
+                                            </label>
+
+                                            <label class="selectgroup-item">
+                                                <input type="radio" name="sslcommerz_status" value="0"
+                                                    class="selectgroup-input" @checked($sslcommerz->status == 0)>
+                                                <span class="selectgroup-button">{{ __('Disable') }}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                @php
+                                    $sslcommerzModes = ['sandbox' => 'Sandbox', 'live' => 'Live'];
+                                @endphp
+                                <x-text-input col="12" name="sslcommerz_mode" type="custom-select"
+                                    :dataInfo="$sslcommerzModes" value="{{ $sslcommerz_info['mode'] ?? 'sandbox' }}" />
+                                <x-text-input col="12" name="sslcommerz_store_id" placeholder="Enter store ID"
+                                    value="{{ $sslcommerz_info['store_id'] ?? '' }}" />
+                                <x-text-input col="12" name="sslcommerz_store_password"
+                                    placeholder="Enter store password"
+                                    value="{{ $sslcommerz_info['store_password'] ?? '' }}" />
+                                <x-text-input col="12" name="sslcommerz_currency" placeholder="Enter currency code"
+                                    value="{{ $sslcommerz_info['currency'] ?? 'BDT' }}" />
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-success" form="sslcommerzForm">{{ __('Save & Changes') }}</button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Paytm Tab Content -->
                 <div class="tab-pane fade" id="paytm" role="tabpanel">
                     <div class="card">
@@ -224,12 +274,12 @@
                                     $options = ['local' => 'Local', 'production' => 'Production'];
                                 @endphp
                                 <x-text-input col="12" name="insta_sandbox_status"
-                                    value="{{ $instamojo_info['sandbox_status'] }}" type="custom-select"
+                                    value="{{ $instamojo_info['sandbox_status'] ?? '' }}" type="custom-select"
                                     :dataInfo="$options" />
-                                <x-text-input col="12" name="insta_api_key" value="{{ $instamojo_info['key'] }}"
+                                <x-text-input col="12" name="insta_api_key" value="{{ $instamojo_info['key'] ?? '' }}"
                                     placeholder="Enter instamojo api key" />
                                 <x-text-input col="12" name="insta_auth_token"
-                                    value="{{ $instamojo_info['token'] }}" placeholder="Enter instamojo auth token" />
+                                    value="{{ $instamojo_info['token'] ?? '' }}" placeholder="Enter instamojo auth token" />
                             </form>
                         </div>
                         <div class="card-footer">
