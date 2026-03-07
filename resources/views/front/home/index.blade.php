@@ -1,283 +1,201 @@
 @extends('front.layout')
 @section('content')
     <!-- Hero Banner Slider -->
-    <section class="relative overflow-hidden bg-gradient-to-r from-green-50 via-white to-emerald-50">
-        <!-- Decorative background shapes -->
-        <div class="pointer-events-none absolute -left-24 top-10 h-48 w-48 rounded-full bg-green-200/40 blur-3xl"
-            aria-hidden="true"></div>
-        <div class="pointer-events-none absolute right-0 top-0 h-56 w-56 rounded-full bg-emerald-200/50 blur-3xl"
-            aria-hidden="true"></div>
-        <div class="pointer-events-none absolute bottom-0 left-1/3 h-40 w-40 rounded-full bg-lime-200/40 blur-3xl"
-            aria-hidden="true"></div>
+    <section class="premium-hero relative overflow-hidden">
+        <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+            <div class="hero-ambient-blob hero-ambient-blob-one"></div>
+            <div class="hero-ambient-blob hero-ambient-blob-two"></div>
+            <div class="hero-ambient-blob hero-ambient-blob-three"></div>
+        </div>
 
         <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
-            <div class="relative hero-slider" data-hero-slider role="region" aria-roledescription="carousel"
+            <div class="relative hero-slider hero-slider-stage" data-hero-slider role="region" aria-roledescription="carousel"
                 aria-label="Hero promotions" tabindex="0">
+                <div class="hero-controls" aria-label="Hero slide controls">
+                    <button type="button" class="hero-nav-btn" aria-label="Previous slide" data-prev>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path d="M15 5l-7 7 7 7"></path>
+                        </svg>
+                    </button>
+                    <button type="button" class="hero-nav-btn" aria-label="Next slide" data-next>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+
                 <!-- Slide 1 -->
-                <div class="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 hero-slide is-active" data-slide
+                <div class="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 hero-slide is-active" data-slide
                     id="hero-slide-1" role="group" aria-roledescription="slide" aria-label="1 of 3" aria-hidden="false">
-                    <div>
+                    <div class="hero-content">
                         <p
-                            class="inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-green-700 hero-kicker">
-                            Today get 20% off now!
+                            class="inline-flex items-center gap-2 rounded-full bg-emerald-100/80 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700 hero-kicker">
+                            Exclusive launch week
                         </p>
                         <h1
-                            class="mt-4 text-4xl font-semibold leading-tight text-slate-900 sm:text-6xl sm:leading-tight lg:text-7xl lg:leading-[1.1] tracking-tight hero-title">
-                            Organic Food For Health
+                            class="mt-5 text-4xl font-semibold leading-tight text-slate-900 sm:text-6xl sm:leading-tight lg:text-7xl lg:leading-[1.05] tracking-tight hero-title">
+                            Groceries That Feel <span class="hero-gradient-text">Premium</span> Every Day
                         </h1>
-                        <p class="mt-4 max-w-lg text-base text-slate-600 sm:text-lg hero-text">
-                            Fresh produce and pantry staples delivered in 90 minutes across Downtown, picked today
-                            for peak
-                            freshness.
+                        <p class="mt-5 max-w-2xl text-base text-slate-600 sm:text-lg hero-text">
+                            Chef grade produce, artisanal pantry staples, and dairy delivered with white-glove
+                            care in under 90 minutes.
                         </p>
-                        <div class="mt-6 flex flex-wrap items-center gap-3 hero-actions">
+                        <div class="mt-7 flex flex-wrap items-center gap-3 hero-actions">
                             <a href="products.html"
-                                class="rounded-full bg-green-600 px-8 py-4 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(16,185,129,0.35)] transition hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-[0_20px_45px_rgba(16,185,129,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white active:translate-y-0 active:shadow-md">
-                                Order Now
+                                class="hero-btn-primary rounded-full px-8 py-4 text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
+                                Start Shopping
                             </a>
                             <a href="#deals"
-                                class="rounded-full border border-green-200 bg-white/70 px-6 py-3 text-sm font-semibold text-slate-600 transition hover:-translate-y-0.5 hover:border-green-300 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
-                                Shop Deals
+                                class="hero-btn-secondary rounded-full px-6 py-3.5 text-sm font-semibold text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
+                                View Deals
                             </a>
-                        </div>
-                        <div class="mt-6 flex flex-wrap items-center gap-3 text-xs text-slate-600">
-                            <span
-                                class="inline-flex items-center gap-2 rounded-full border border-green-100 bg-white/80 px-3 py-1 shadow-sm">
-                                ⭐ 4.8 rating
-                            </span>
-                            <span
-                                class="inline-flex items-center gap-2 rounded-full border border-green-100 bg-white/80 px-3 py-1 shadow-sm">
-                                ⚡ 30–60 min delivery
-                            </span>
-                            <span
-                                class="inline-flex items-center gap-2 rounded-full border border-green-100 bg-white/80 px-3 py-1 shadow-sm">
-                                ✅ Fresh guarantee
-                            </span>
                         </div>
                     </div>
                     <div class="relative hero-media">
-                        <div class="absolute -left-6 -top-6 h-24 w-24 rounded-3xl bg-green-200/60"></div>
-                        <div
-                            class="group relative overflow-hidden rounded-3xl border border-green-100 bg-white shadow-xl transition-shadow duration-500 hover:shadow-2xl float-slow">
+                        <div class="hero-orbit hero-orbit-one" aria-hidden="true"></div>
+                        <div class="hero-orbit hero-orbit-two" aria-hidden="true"></div>
+                        <div class="hero-media-card group">
                             <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80"
                                 srcset="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=640&q=80 640w, https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80 900w, https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80 1200w"
                                 sizes="(min-width: 1024px) 520px, 100vw" width="700" height="520"
                                 alt="Fresh produce assortment on a market table"
-                                class="h-full w-full object-cover transition duration-500 group-hover:scale-105 group-hover:rotate-1"
+                                class="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                                 decoding="async" fetchpriority="high">
+                            <div class="hero-media-gradient" aria-hidden="true"></div>
+                        </div>
+                        <div class="hero-media-badge hero-media-badge-top">
+                            <p class="hero-media-badge-label">Curated Daily</p>
+                            <p class="hero-media-badge-value">Market fresh produce</p>
+                        </div>
+                        <div class="hero-media-badge hero-media-badge-bottom">
+                            <p class="hero-media-badge-label">Next Slot</p>
+                            <p class="hero-media-badge-value">7:30 PM delivery</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Slide 2 -->
-                <div class="hidden grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 hero-slide" data-slide
+                <div class="hidden grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 hero-slide" data-slide
                     id="hero-slide-2" role="group" aria-roledescription="slide" aria-label="2 of 3" aria-hidden="true">
-                    <div>
+                    <div class="hero-content">
                         <p
-                            class="inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-green-700 hero-kicker">
-                            Fresh delivery in 90 minutes
+                            class="inline-flex items-center gap-2 rounded-full bg-emerald-100/80 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700 hero-kicker">
+                            Fast lane delivery
                         </p>
-                        <h1
-                            class="mt-4 text-4xl font-semibold leading-tight text-slate-900 sm:text-6xl sm:leading-tight lg:text-7xl lg:leading-[1.1] tracking-tight hero-title">
-                            Farm Fresh Grocery, Fast
-                        </h1>
-                        <p class="mt-4 max-w-lg text-base text-slate-600 sm:text-lg hero-text">
-                            Healthy proteins, dairy, and produce delivered same day with live ETA tracking and
-                            freshness guarantee.
+                        <h2
+                            class="mt-5 text-4xl font-semibold leading-tight text-slate-900 sm:text-6xl sm:leading-tight lg:text-7xl lg:leading-[1.05] tracking-tight hero-title">
+                            Farm to Fridge With <span class="hero-gradient-text">Live Tracking</span>
+                        </h2>
+                        <p class="mt-5 max-w-2xl text-base text-slate-600 sm:text-lg hero-text">
+                            Keep your schedule smooth with precise ETA updates, temperature-safe transport, and
+                            dedicated rider support.
                         </p>
-                        <div class="mt-6 flex flex-wrap items-center gap-3 hero-actions">
+                        <div class="mt-7 flex flex-wrap items-center gap-3 hero-actions">
                             <a href="products.html"
-                                class="rounded-full bg-green-600 px-8 py-4 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(16,185,129,0.35)] transition hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-[0_20px_45px_rgba(16,185,129,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white active:translate-y-0 active:shadow-md">Order
-                                Now</a>
+                                class="hero-btn-primary rounded-full px-8 py-4 text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
+                                Shop Fresh
+                            </a>
                             <a href="#deals"
-                                class="rounded-full border border-green-200 bg-white/70 px-6 py-3 text-sm font-semibold text-slate-600 transition hover:-translate-y-0.5 hover:border-green-300 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white">Shop
-                                Deals</a>
-                        </div>
-                        <div class="mt-6 flex flex-wrap items-center gap-3 text-xs text-slate-600">
-                            <span
-                                class="inline-flex items-center gap-2 rounded-full border border-green-100 bg-white/80 px-3 py-1 shadow-sm">
-                                ⭐ 4.8 rating
-                            </span>
-                            <span
-                                class="inline-flex items-center gap-2 rounded-full border border-green-100 bg-white/80 px-3 py-1 shadow-sm">
-                                ⚡ 30–60 min delivery
-                            </span>
-                            <span
-                                class="inline-flex items-center gap-2 rounded-full border border-green-100 bg-white/80 px-3 py-1 shadow-sm">
-                                ✅ Fresh guarantee
-                            </span>
+                                class="hero-btn-secondary rounded-full px-6 py-3.5 text-sm font-semibold text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
+                                Explore Weekly Deals
+                            </a>
                         </div>
                     </div>
                     <div class="relative hero-media">
-                        <div class="absolute -left-6 -top-6 h-24 w-24 rounded-3xl bg-emerald-200/60"></div>
-                        <div
-                            class="group relative overflow-hidden rounded-3xl border border-green-100 bg-white shadow-xl transition-shadow duration-500 hover:shadow-2xl float-slow">
+                        <div class="hero-orbit hero-orbit-one" aria-hidden="true"></div>
+                        <div class="hero-orbit hero-orbit-two" aria-hidden="true"></div>
+                        <div class="hero-media-card group">
                             <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1200&q=80"
                                 srcset="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=640&q=80 640w, https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80 900w, https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1200&q=80 1200w"
                                 sizes="(min-width: 1024px) 520px, 100vw" width="700" height="520"
                                 alt="Healthy salad bowl with fresh vegetables"
-                                class="h-full w-full object-cover transition duration-500 group-hover:scale-105 group-hover:rotate-1"
+                                class="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                                 loading="lazy" decoding="async">
+                            <div class="hero-media-gradient" aria-hidden="true"></div>
+                        </div>
+                        <div class="hero-media-badge hero-media-badge-top">
+                            <p class="hero-media-badge-label">Transport Quality</p>
+                            <p class="hero-media-badge-value">Temperature controlled</p>
+                        </div>
+                        <div class="hero-media-badge hero-media-badge-bottom">
+                            <p class="hero-media-badge-label">Delivery ETA</p>
+                            <p class="hero-media-badge-value">Expected in 42 minutes</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Slide 3 -->
-                <div class="hidden grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 hero-slide" data-slide
-                    id="hero-slide-3" role="group" aria-roledescription="slide" aria-label="3 of 3" aria-hidden="true">
-                    <div>
+                <div class="hidden grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 hero-slide" data-slide
+                    id="hero-slide-3" role="group" aria-roledescription="slide" aria-label="3 of 3"
+                    aria-hidden="true">
+                    <div class="hero-content">
                         <p
-                            class="inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-green-700 hero-kicker">
-                            Weekly pantry picks
+                            class="inline-flex items-center gap-2 rounded-full bg-emerald-100/80 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700 hero-kicker">
+                            Pantry signature edit
                         </p>
-                        <h1
-                            class="mt-4 text-4xl font-semibold leading-tight text-slate-900 sm:text-6xl sm:leading-tight lg:text-7xl lg:leading-[1.1] tracking-tight hero-title">
-                            Healthy Pantry Essentials
-                        </h1>
-                        <p class="mt-4 max-w-lg text-base text-slate-600 sm:text-lg hero-text">
-                            Organic staples and premium pantry items delivered fresh to your door with easy returns.
+                        <h2
+                            class="mt-5 text-4xl font-semibold leading-tight text-slate-900 sm:text-6xl sm:leading-tight lg:text-7xl lg:leading-[1.05] tracking-tight hero-title">
+                            Stock Smart With <span class="hero-gradient-text">Chef Picked</span> Essentials
+                        </h2>
+                        <p class="mt-5 max-w-2xl text-base text-slate-600 sm:text-lg hero-text">
+                            Build a premium pantry in minutes with curated weekly bundles, transparent savings, and
+                            easy returns if something misses the mark.
                         </p>
-                        <div class="mt-6 flex flex-wrap items-center gap-3 hero-actions">
+                        <div class="mt-7 flex flex-wrap items-center gap-3 hero-actions">
                             <a href="products.html"
-                                class="rounded-full bg-green-600 px-8 py-4 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(16,185,129,0.35)] transition hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-[0_20px_45px_rgba(16,185,129,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white active:translate-y-0 active:shadow-md">Order
-                                Now</a>
+                                class="hero-btn-primary rounded-full px-8 py-4 text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
+                                Build My Basket
+                            </a>
                             <a href="#deals"
-                                class="rounded-full border border-green-200 bg-white/70 px-6 py-3 text-sm font-semibold text-slate-600 transition hover:-translate-y-0.5 hover:border-green-300 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white">Shop
-                                Deals</a>
-                        </div>
-                        <div class="mt-6 flex flex-wrap items-center gap-3 text-xs text-slate-600">
-                            <span
-                                class="inline-flex items-center gap-2 rounded-full border border-green-100 bg-white/80 px-3 py-1 shadow-sm">
-                                ⭐ 4.8 rating
-                            </span>
-                            <span
-                                class="inline-flex items-center gap-2 rounded-full border border-green-100 bg-white/80 px-3 py-1 shadow-sm">
-                                ⚡ 30–60 min delivery
-                            </span>
-                            <span
-                                class="inline-flex items-center gap-2 rounded-full border border-green-100 bg-white/80 px-3 py-1 shadow-sm">
-                                ✅ Fresh guarantee
-                            </span>
+                                class="hero-btn-secondary rounded-full px-6 py-3.5 text-sm font-semibold text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
+                                Compare Bundles
+                            </a>
                         </div>
                     </div>
                     <div class="relative hero-media">
-                        <div class="absolute -left-6 -top-6 h-24 w-24 rounded-3xl bg-lime-200/60"></div>
-                        <div
-                            class="group relative overflow-hidden rounded-3xl border border-green-100 bg-white shadow-xl transition-shadow duration-500 hover:shadow-2xl float-slow">
+                        <div class="hero-orbit hero-orbit-one" aria-hidden="true"></div>
+                        <div class="hero-orbit hero-orbit-two" aria-hidden="true"></div>
+                        <div class="hero-media-card group">
                             <img src="https://images.unsplash.com/photo-1506807803488-8eafc15323d1?auto=format&fit=crop&w=1200&q=80"
                                 srcset="https://images.unsplash.com/photo-1506807803488-8eafc15323d1?auto=format&fit=crop&w=640&q=80 640w, https://images.unsplash.com/photo-1506807803488-8eafc15323d1?auto=format&fit=crop&w=900&q=80 900w, https://images.unsplash.com/photo-1506807803488-8eafc15323d1?auto=format&fit=crop&w=1200&q=80 1200w"
                                 sizes="(min-width: 1024px) 520px, 100vw" width="700" height="520"
                                 alt="Fresh citrus fruit in a wooden crate"
-                                class="h-full w-full object-cover transition duration-500 group-hover:scale-105 group-hover:rotate-1"
+                                class="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                                 loading="lazy" decoding="async">
+                            <div class="hero-media-gradient" aria-hidden="true"></div>
+                        </div>
+                        <div class="hero-media-badge hero-media-badge-top">
+                            <p class="hero-media-badge-label">Top Rated Bundle</p>
+                            <p class="hero-media-badge-value">Signature pantry box</p>
+                        </div>
+                        <div class="hero-media-badge hero-media-badge-bottom">
+                            <p class="hero-media-badge-label">Bundle Savings</p>
+                            <p class="hero-media-badge-value">Save up to 18 percent</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="mt-8 flex items-center justify-center gap-2" aria-label="Choose slide">
+                <div class="mt-10 flex items-center justify-center gap-3" aria-label="Choose slide">
                     <button
-                        class="h-2.5 w-2.5 rounded-full bg-green-600 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                        type="button" aria-label="Go to slide 1" aria-controls="hero-slide-1" data-dot></button>
+                        class="hero-dot bg-green-600 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                        type="button" aria-label="Go to slide 1" aria-controls="hero-slide-1" data-dot
+                        aria-current="true"></button>
                     <button
-                        class="h-2.5 w-2.5 rounded-full bg-green-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                        type="button" aria-label="Go to slide 2" aria-controls="hero-slide-2" data-dot></button>
+                        class="hero-dot bg-green-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                        type="button" aria-label="Go to slide 2" aria-controls="hero-slide-2" data-dot
+                        aria-current="false"></button>
                     <button
-                        class="h-2.5 w-2.5 rounded-full bg-green-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                        type="button" aria-label="Go to slide 3" aria-controls="hero-slide-3" data-dot></button>
+                        class="hero-dot bg-green-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                        type="button" aria-label="Go to slide 3" aria-controls="hero-slide-3" data-dot
+                        aria-current="false"></button>
                 </div>
             </div>
         </div>
     </section>
-
-
 
     <div class="mx-auto mt-12 h-px max-w-5xl bg-gradient-to-r from-transparent via-green-200 to-transparent"></div>
 
-    <section class="mx-auto mt-12 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
-        <div class="rounded-3xl border border-green-100/70 bg-white/90 p-6 shadow-sm sm:p-8">
-            <div class="grid gap-6 lg:grid-cols-3">
-                <div class="group rounded-2xl border border-green-100 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-300 hover:bg-green-50/40 hover:shadow-[0_20px_50px_rgba(16,185,129,0.18)]"
-                    data-reveal-child>
-                    <div class="flex items-center justify-between text-[10px] font-semibold uppercase tracking-wide">
-                        <span class="rounded-full bg-green-600 px-3 py-1 text-white">FreshCart</span>
-                        <span class="rounded-full border border-slate-200 px-3 py-1 text-slate-400">Typical</span>
-                    </div>
-                    <div class="mt-5 flex items-start gap-3">
-                        <span
-                            class="flex h-11 w-11 items-center justify-center rounded-2xl bg-green-100 text-green-700 shadow-sm">
-                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" aria-hidden="true">
-                                <circle cx="12" cy="12" r="9"></circle>
-                                <path d="M12 7v6l3 2"></path>
-                            </svg>
-                        </span>
-                        <div>
-                            <h3 class="text-base font-semibold text-slate-900">Delivery confidence</h3>
-                            <p class="mt-1 text-sm text-slate-600">90-minute slots with live tracking vs 4-hour
-                                ranges.</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 flex flex-wrap items-center gap-2 text-xs">
-                        <span class="rounded-full bg-green-100 px-3 py-1 text-green-700">Live ETA</span>
-                        <span class="rounded-full bg-slate-100 px-3 py-1 text-slate-500">No updates</span>
-                    </div>
-                </div>
-                <div class="group rounded-2xl border border-green-100 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-300 hover:bg-green-50/40 hover:shadow-[0_20px_50px_rgba(16,185,129,0.18)]"
-                    data-reveal-child>
-                    <div class="flex items-center justify-between text-[10px] font-semibold uppercase tracking-wide">
-                        <span class="rounded-full bg-green-600 px-3 py-1 text-white">FreshCart</span>
-                        <span class="rounded-full border border-slate-200 px-3 py-1 text-slate-400">Typical</span>
-                    </div>
-                    <div class="mt-5 flex items-start gap-3">
-                        <span
-                            class="flex h-11 w-11 items-center justify-center rounded-2xl bg-green-100 text-green-700 shadow-sm">
-                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" aria-hidden="true">
-                                <path d="M4 14c6-1 10-5 12-10 3 5 4 10 3 14-2 6-10 8-13 3-1-2-1-5-1-7Z"></path>
-                                <path d="M7 15c3-2 6-5 9-10"></path>
-                            </svg>
-                        </span>
-                        <div>
-                            <h3 class="text-base font-semibold text-slate-900">Freshness standards</h3>
-                            <p class="mt-1 text-sm text-slate-600">Hand-picked within 12 hours vs unknown shelf
-                                age.</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 flex flex-wrap items-center gap-2 text-xs">
-                        <span class="rounded-full bg-green-100 px-3 py-1 text-green-700">Farm sourced</span>
-                        <span class="rounded-full bg-slate-100 px-3 py-1 text-slate-500">Bulk stock</span>
-                    </div>
-                </div>
-                <div class="group rounded-2xl border border-green-100 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-300 hover:bg-green-50/40 hover:shadow-[0_20px_50px_rgba(16,185,129,0.18)]"
-                    data-reveal-child>
-                    <div class="flex items-center justify-between text-[10px] font-semibold uppercase tracking-wide">
-                        <span class="rounded-full bg-green-600 px-3 py-1 text-white">FreshCart</span>
-                        <span class="rounded-full border border-slate-200 px-3 py-1 text-slate-400">Typical</span>
-                    </div>
-                    <div class="mt-5 flex items-start gap-3">
-                        <span
-                            class="flex h-11 w-11 items-center justify-center rounded-2xl bg-green-100 text-green-700 shadow-sm">
-                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" aria-hidden="true">
-                                <path d="M12 3v18"></path>
-                                <path d="M8 7h7a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h7"></path>
-                            </svg>
-                        </span>
-                        <div>
-                            <h3 class="text-base font-semibold text-slate-900">Price clarity</h3>
-                            <p class="mt-1 text-sm text-slate-600">Transparent unit pricing vs surprise markups.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="mt-4 flex flex-wrap items-center gap-2 text-xs">
-                        <span class="rounded-full bg-green-100 px-3 py-1 text-green-700">No hidden fees</span>
-                        <span class="rounded-full bg-slate-100 px-3 py-1 text-slate-500">Extra charges</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    <!-- Featured products -->
     <section class="mx-auto mt-10 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
         <div
             class="rounded-3xl border border-green-100 bg-gradient-to-br from-green-50/70 via-white to-emerald-50/60 p-6 shadow-sm sm:p-8">
@@ -285,9 +203,9 @@
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-wide text-green-700">Featured Products</p>
                     <h2 class="mt-2 text-3xl font-semibold text-slate-900">Handpicked picks for today</h2>
-                    <p class="mt-2 text-sm text-slate-600">Top curated products selected by our team for faster shopping.</p>
                 </div>
-                <a href="products.html" class="text-sm font-semibold text-green-700 transition hover:text-green-800">
+                <a href="products.html"
+                    class="inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
                     View all products
                 </a>
             </div>
@@ -307,14 +225,17 @@
                             $price = (float) ($product->current_price ?? 0);
                             $oldPrice = (float) ($product->previous_price ?? 0);
                             $showOldPrice = $oldPrice > $price && $oldPrice > 0;
-                            $discount = $showOldPrice && $oldPrice > 0 ? (int) round((1 - $price / $oldPrice) * 100) : 0;
+                            $discount =
+                                $showOldPrice && $oldPrice > 0 ? (int) round((1 - $price / $oldPrice) * 100) : 0;
                             $stock = (int) ($product->stock ?? 0);
                             $stockLabel = $stock > 0 ? 'Only ' . min($stock, 5) . ' left' : 'Out of stock';
                             $variantLabel = (int) ($product->has_variants ?? 0) === 1 ? 'Variants' : 'Standard';
-                            $variantText = (int) ($product->has_variants ?? 0) === 1 ? 'Multiple sizes available' : 'Single size';
+                            $variantText =
+                                (int) ($product->has_variants ?? 0) === 1 ? 'Multiple sizes available' : 'Single size';
                             $badgeLabel = $category ?: 'Fresh';
                         @endphp
-                        <article class="group relative flex h-full flex-col rounded-2xl border border-green-100 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)]"
+                        <article
+                            class="group relative flex h-full flex-col rounded-2xl border border-green-100 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)]"
                             data-reveal-child data-featured-card data-product-id="{{ (string) $product->id }}"
                             data-product-name="{{ $title }}">
                             <span
@@ -329,7 +250,8 @@
                                         class="h-40 w-full object-cover transition duration-500 group-hover:scale-105"
                                         loading="lazy" decoding="async">
                                 </a>
-                                <button type="button" data-action="quick-view" data-product-id="{{ (string) $product->id }}"
+                                <button type="button" data-action="quick-view"
+                                    data-product-id="{{ (string) $product->id }}"
                                     class="absolute bottom-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition duration-300 hover:bg-green-700"
                                     aria-label="Quick view {{ $title }}">
                                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -346,27 +268,43 @@
                                         class="text-sm font-semibold text-slate-900 transition hover:text-green-700">
                                         {{ \Illuminate\Support\Str::limit($title, 42) }}
                                     </a>
-                                    <span class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">
+                                    <span
+                                        class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">
                                         {{ \Illuminate\Support\Str::limit($badgeLabel, 14) }}
                                     </span>
                                 </div>
 
                                 <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
                                     <span class="flex items-center gap-1">
-                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
+                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
+                                            </path>
                                         </svg>
-                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
+                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
+                                            </path>
                                         </svg>
-                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
+                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
+                                            </path>
                                         </svg>
-                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
+                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
+                                            </path>
                                         </svg>
-                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
+                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
+                                            </path>
                                         </svg>
                                     </span>
                                     <span>4.7 (142 reviews)</span>
@@ -375,7 +313,8 @@
                                 </div>
 
                                 <div class="flex items-center gap-2 text-xs text-slate-500">
-                                    <span class="rounded-full bg-green-50 px-2 py-1 text-[10px] font-semibold text-green-700">
+                                    <span
+                                        class="rounded-full bg-green-50 px-2 py-1 text-[10px] font-semibold text-green-700">
                                         {{ $variantLabel }}
                                     </span>
                                     <span>{{ $variantText }}</span>
@@ -385,7 +324,8 @@
                                     <div>
                                         <p class="text-3xl font-semibold text-slate-900">{{ currency_symbol($price) }}</p>
                                         @if ($showOldPrice)
-                                            <p class="text-sm text-slate-400 line-through">{{ currency_symbol($oldPrice) }}</p>
+                                            <p class="text-sm text-slate-400 line-through">
+                                                {{ currency_symbol($oldPrice) }}</p>
                                         @endif
                                     </div>
                                 </div>
@@ -401,108 +341,8 @@
             @endif
         </div>
     </section>
-    @php
-        $featuredProductQuickViewData = collect($featuredProducts ?? [])->map(function ($product) {
-            $title = $product->title ?: 'Untitled Product';
-            $category = $product->category_name ?: 'Featured';
-            $price = (float) ($product->current_price ?? 0);
-            $oldPrice = (float) ($product->previous_price ?? 0);
-            $thumbnail = !empty($product->thumbnail)
-                ? asset('assets/img/product/' . $product->thumbnail)
-                : 'https://picsum.photos/seed/featured-' . $product->id . '/600/400';
-            $summary = !empty($product->summary)
-                ? \Illuminate\Support\Str::limit(strip_tags($product->summary), 180)
-                : 'Freshly selected item from our featured collection.';
-            $images = is_array($product->images ?? null) ? $product->images : [];
-            if (empty($images)) {
-                $images[] = $thumbnail;
-            }
-            $units = is_array($product->quick_units ?? null) ? $product->quick_units : [];
-            if (empty($units)) {
-                $units[] = [
-                    'label' => '1 unit',
-                    'price' => $price,
-                    'oldPrice' => $oldPrice,
-                ];
-            }
 
-            return [
-                'id' => (string) $product->id,
-                'name' => $title,
-                'category' => $category,
-                'rating' => 4.7,
-                'reviews' => 142,
-                'badge' => $category,
-                'image' => $images[0],
-                'images' => $images,
-                'description' => $summary,
-                'nutrition' => ['Fresh stock', 'Quality checked', 'Fast delivery', 'Secure packaging'],
-                'reviewList' => [
-                    ['name' => 'Ariana', 'rating' => 5, 'text' => 'Great quality and fast delivery.'],
-                    ['name' => 'Chris', 'rating' => 4, 'text' => 'Loved the packaging and freshness.'],
-                ],
-                'units' => $units,
-                'isDeal' => $oldPrice > $price,
-                'popular' => true,
-            ];
-        })->values();
-
-        $flashSaleQuickViewData = collect($flashSaleProducts ?? [])->map(function ($product) {
-            $title = $product->title ?: 'Untitled Product';
-            $category = $product->category_name ?: 'Featured';
-            $salePrice = (float) ($product->flash_sale_price ?? $product->current_price ?? 0);
-            $oldPrice = (float) ($product->flash_sale_old_price ?? $product->current_price ?? 0);
-            $thumbnail = !empty($product->thumbnail)
-                ? asset('assets/img/product/' . $product->thumbnail)
-                : 'https://picsum.photos/seed/flash-' . $product->id . '/600/400';
-            $summary = !empty($product->summary)
-                ? \Illuminate\Support\Str::limit(strip_tags($product->summary), 180)
-                : 'Limited flash offer selected by our team.';
-            $images = is_array($product->images ?? null) ? $product->images : [];
-            if (empty($images)) {
-                $images[] = $thumbnail;
-            }
-            $units = is_array($product->quick_units ?? null) ? $product->quick_units : [];
-            if (empty($units)) {
-                $units[] = [
-                    'label' => '1 unit',
-                    'price' => $salePrice,
-                    'oldPrice' => $oldPrice,
-                ];
-            }
-
-            return [
-                'id' => (string) $product->id,
-                'name' => $title,
-                'category' => $category,
-                'rating' => 4.7,
-                'reviews' => 142,
-                'badge' => $category,
-                'image' => $images[0],
-                'images' => $images,
-                'description' => $summary,
-                'nutrition' => ['Fresh stock', 'Quality checked', 'Fast delivery', 'Secure packaging'],
-                'reviewList' => [
-                    ['name' => 'Ariana', 'rating' => 5, 'text' => 'Great quality and fast delivery.'],
-                    ['name' => 'Chris', 'rating' => 4, 'text' => 'Loved the packaging and freshness.'],
-                ],
-                'units' => $units,
-                'isDeal' => true,
-                'popular' => true,
-            ];
-        })->values();
-    @endphp
-    @if ($featuredProductQuickViewData->isNotEmpty())
-        <script>
-            window.serverFeaturedProducts = @json($featuredProductQuickViewData);
-        </script>
-    @endif
-    @if ($flashSaleQuickViewData->isNotEmpty())
-        <script>
-            window.serverFlashSaleProducts = @json($flashSaleQuickViewData);
-        </script>
-    @endif
-
+    <!-- Categories section -->
     <section id="categories" class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="category-heading"
         data-reveal>
         <div class="flex flex-wrap items-center justify-between gap-4" data-reveal-child>
@@ -530,8 +370,8 @@
         <div class="category-scroll mt-8 flex gap-4 overflow-x-auto pb-4 scroll-px-4 scroll-smooth snap-x snap-mandatory"
             data-category-track>
             @forelse ($homeCategories ?? collect() as $category)
-                <a href="products.html?category={{ $category->id }}"
-                    aria-label="Browse {{ $category->name }}" data-reveal-child
+                <a href="products.html?category={{ $category->id }}" aria-label="Browse {{ $category->name }}"
+                    data-reveal-child
                     class="group flex min-w-[150px] flex-col items-center rounded-2xl border border-green-100 bg-white px-4 py-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-300 hover:bg-green-50/70 hover:shadow-[0_16px_32px_rgba(16,185,129,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:min-w-[160px] lg:min-w-[170px] snap-start">
                     <div class="brush-ring flex h-20 w-20 items-center justify-center">
                         <span
@@ -555,7 +395,8 @@
                     <p class="mt-1 text-xs text-slate-500">{{ $category->subtitle }}</p>
                     <span
                         class="mt-3 inline-flex items-center rounded-full border border-green-100 bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">
-                        {{ (int) ($category->item_count ?? 0) }} {{ (int) ($category->item_count ?? 0) === 1 ? 'Item' : 'Items' }}
+                        {{ (int) ($category->item_count ?? 0) }}
+                        {{ (int) ($category->item_count ?? 0) === 1 ? 'Item' : 'Items' }}
                     </span>
                     <span
                         class="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-green-700 opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-1"
@@ -574,6 +415,122 @@
             @endforelse
         </div>
     </section>
+    <!-- Popular products section -->
+    <section class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
+        <div class="flex flex-wrap items-end justify-between gap-4" data-reveal-child>
+            <div>
+                <h2 class="text-3xl font-semibold text-slate-900">Popular right now</h2>
+                <p class="mt-2 text-sm text-slate-600">Most loved picks across produce, pantry, and seafood.</p>
+            </div>
+            <a href="products.html" class="text-sm font-semibold text-green-700">Shop all</a>
+        </div>
+        <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-products-grid data-products-source="popular"
+            data-products-limit="8"></div>
+    </section>
+
+    @php
+        $featuredProductQuickViewData = collect($featuredProducts ?? [])
+            ->map(function ($product) {
+                $title = $product->title;
+                $category = $product->category_name;
+                $price = $product->current_price ?? 0;
+                $oldPrice = $product->previous_price ?? 0;
+                $thumbnail = asset('assets/img/product/' . $product->thumbnail);
+                $summary = !empty($product->summary)
+                    ? \Illuminate\Support\Str::limit(strip_tags($product->summary), 180)
+                    : 'Freshly selected item from our featured collection.';
+                $images = is_array($product->images ?? null) ? $product->images : [];
+                if (empty($images)) {
+                    $images[] = $thumbnail;
+                }
+                $units = is_array($product->quick_units ?? null) ? $product->quick_units : [];
+                if (empty($units)) {
+                    $units[] = [
+                        'label' => '1 unit',
+                        'price' => $price,
+                        'oldPrice' => $oldPrice,
+                    ];
+                }
+
+                return [
+                    'id' => (string) $product->id,
+                    'name' => $title,
+                    'category' => $category,
+                    'rating' => 4.7,
+                    'reviews' => 142,
+                    'badge' => $category,
+                    'image' => $images[0],
+                    'images' => $images,
+                    'description' => $summary,
+                    'nutrition' => ['Fresh stock', 'Quality checked', 'Fast delivery', 'Secure packaging'],
+                    'reviewList' => [
+                        ['name' => 'Ariana', 'rating' => 5, 'text' => 'Great quality and fast delivery.'],
+                        ['name' => 'Chris', 'rating' => 4, 'text' => 'Loved the packaging and freshness.'],
+                    ],
+                    'units' => $units,
+                    'isDeal' => $oldPrice > $price,
+                    'popular' => true,
+                ];
+            })
+            ->values();
+
+        $flashSaleQuickViewData = collect($flashSaleProducts ?? [])
+            ->map(function ($product) {
+                $title = $product->title ?: 'Untitled Product';
+                $category = $product->category_name ?: 'Featured';
+                $salePrice = (float) ($product->flash_sale_price ?? ($product->current_price ?? 0));
+                $oldPrice = (float) ($product->flash_sale_old_price ?? ($product->current_price ?? 0));
+                $thumbnail = !empty($product->thumbnail)
+                    ? asset('assets/img/product/' . $product->thumbnail)
+                    : 'https://picsum.photos/seed/flash-' . $product->id . '/600/400';
+                $summary = !empty($product->summary)
+                    ? \Illuminate\Support\Str::limit(strip_tags($product->summary), 180)
+                    : 'Limited flash offer selected by our team.';
+                $images = is_array($product->images ?? null) ? $product->images : [];
+                if (empty($images)) {
+                    $images[] = $thumbnail;
+                }
+                $units = is_array($product->quick_units ?? null) ? $product->quick_units : [];
+                if (empty($units)) {
+                    $units[] = [
+                        'label' => '1 unit',
+                        'price' => $salePrice,
+                        'oldPrice' => $oldPrice,
+                    ];
+                }
+
+                return [
+                    'id' => (string) $product->id,
+                    'name' => $title,
+                    'category' => $category,
+                    'rating' => 4.7,
+                    'reviews' => 142,
+                    'badge' => $category,
+                    'image' => $images[0],
+                    'images' => $images,
+                    'description' => $summary,
+                    'nutrition' => ['Fresh stock', 'Quality checked', 'Fast delivery', 'Secure packaging'],
+                    'reviewList' => [
+                        ['name' => 'Ariana', 'rating' => 5, 'text' => 'Great quality and fast delivery.'],
+                        ['name' => 'Chris', 'rating' => 4, 'text' => 'Loved the packaging and freshness.'],
+                    ],
+                    'units' => $units,
+                    'isDeal' => true,
+                    'popular' => true,
+                ];
+            })
+            ->values();
+    @endphp
+    @if ($featuredProductQuickViewData->isNotEmpty())
+        <script>
+            window.serverFeaturedProducts = @json($featuredProductQuickViewData);
+        </script>
+    @endif
+    @if ($flashSaleQuickViewData->isNotEmpty())
+        <script>
+            window.serverFlashSaleProducts = @json($flashSaleQuickViewData);
+        </script>
+    @endif
 
     <div class="mx-auto mt-16 h-px max-w-5xl bg-gradient-to-r from-transparent via-green-200 to-transparent"></div>
 
@@ -586,7 +543,8 @@
         $dealSalePrice = (float) ($dealFeatured?->flash_sale_price ?? 18.9);
         $dealOldPrice = (float) ($dealFeatured?->flash_sale_old_price ?? 23.5);
         $dealSaveAmount = max(0, $dealOldPrice - $dealSalePrice);
-        $dealSavePercent = $dealOldPrice > 0 && $dealSaveAmount > 0 ? (int) round(($dealSaveAmount / $dealOldPrice) * 100) : 0;
+        $dealSavePercent =
+            $dealOldPrice > 0 && $dealSaveAmount > 0 ? (int) round(($dealSaveAmount / $dealOldPrice) * 100) : 0;
         $dealImages = is_array($dealFeatured->images ?? null) ? $dealFeatured->images : [];
         $dealImage = !empty($dealImages[0]) ? $dealImages[0] : 'https://picsum.photos/seed/featured-deal/640/420';
         $dealStock = (int) ($dealFeatured?->stock ?? 5);
@@ -596,48 +554,17 @@
             : 'products.html';
         $dealCountdown = (int) ($flashSaleCountdownSeconds ?? 8132);
 
-        $maxFlashDiscount = collect($flashSaleProducts ?? [])->max(function ($product) {
-            return (int) ($product->flash_sale_save_percent ?? 0);
-        });
-        $maxFlashDiscount = (int) ($maxFlashDiscount ?? 0);
-        $maxDiscountLabel = $maxFlashDiscount > 0 ? ('Up to ' . $maxFlashDiscount . '% off') : 'Up to 25% off';
     @endphp
 
-    <section id="deals" class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
-        <div class="flex flex-wrap items-end justify-between gap-4" data-reveal-child>
+    <section id="deals" class="flash-sale-section mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
+        <div class="flash-sale-head flex flex-wrap items-end justify-between gap-4" data-reveal-child>
             <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-green-700">Today's deals</p>
-                <h2 class="mt-2 text-3xl font-semibold text-slate-900">Today's deals, elevated.</h2>
-                <p class="mt-2 text-sm text-slate-600">Short window offers curated by our market team.</p>
-                <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                    <span
-                        class="inline-flex items-center gap-2 rounded-full bg-green-50 px-3 py-1 font-semibold text-green-700">
-                        Fresh drops daily
-                    </span>
-                    <span class="inline-flex items-center gap-2 rounded-full border border-green-100 bg-white px-3 py-1">
-                        {{ $maxDiscountLabel }}
-                    </span>
-                </div>
-                <div class="mt-4 flex flex-wrap items-center gap-2 text-xs text-slate-600">
-                    <span class="inline-flex items-center gap-2 rounded-full border border-green-100 bg-white px-3 py-1">
-                        <svg class="h-4 w-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.8" aria-hidden="true">
-                            <circle cx="12" cy="12" r="9"></circle>
-                            <path d="M12 7v6l3 2"></path>
-                        </svg>
-                        Ends in
-                        <span class="font-semibold tabular-nums text-slate-900" data-countdown
-                            data-countdown-seconds="{{ $dealCountdown }}">02:15:32</span>
-                    </span>
-                    <span
-                        class="inline-flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 font-semibold text-green-700">
-                        {{ $dealStockLabel }}
-                    </span>
-                </div>
+                <p class="flash-sale-kicker text-xs font-semibold uppercase tracking-wide text-green-700">Flash sale</p>
+                <h2 class="flash-sale-title mt-2 text-3xl font-semibold text-slate-900">{{ $dealTitle }}</h2>
             </div>
-            <div class="flex items-center gap-3" data-reveal-child>
+            <div class="flash-sale-head-actions flex items-center gap-3" data-reveal-child>
                 <span
-                    class="hidden items-center gap-2 rounded-full border border-green-100 bg-white px-3 py-1 text-xs text-slate-600 sm:inline-flex">
+                    class="flash-sale-timer hidden items-center gap-2.5 rounded-full border border-green-100 bg-white px-4 py-2 text-sm text-slate-600 sm:inline-flex">
                     <svg class="h-4 w-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="1.8" aria-hidden="true">
                         <circle cx="12" cy="12" r="9"></circle>
@@ -646,14 +573,16 @@
                     Ends in <span class="font-semibold tabular-nums text-slate-900" data-countdown
                         data-countdown-seconds="{{ $dealCountdown }}">02:15:32</span>
                 </span>
-                <a href="products.html" class="text-sm font-semibold text-green-700 transition hover:text-green-800">See
-                    all deals</a>
+                <a href="products.html"
+                    class="flash-sale-all-deals inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
+                    Show more products
+                </a>
             </div>
         </div>
-        <div class="mt-8 rounded-3xl border border-green-100 bg-gradient-to-br from-green-50/80 via-white to-emerald-50/60 p-6 shadow-sm sm:p-8"
+        <div class="flash-sale-shell mt-8 rounded-3xl border border-green-100 bg-gradient-to-br from-green-50/80 via-white to-emerald-50/60 p-6 shadow-sm sm:p-8"
             data-reveal-child>
             <div class="grid gap-6 lg:grid-cols-[1.1fr_1.9fr]">
-                <div class="relative overflow-hidden rounded-3xl border border-green-100 bg-white/90 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                <div class="flash-sale-featured-card relative overflow-hidden rounded-3xl border border-green-100 bg-white/90 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
                     data-reveal-child>
                     <div class="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-green-100/80 blur-2xl"
                         aria-hidden="true"></div>
@@ -679,7 +608,8 @@
                             {{ $dealSavePercent > 0 ? 'Save ' . $dealSavePercent . '%' : 'Limited offer' }}
                         </span>
                         <span class="rounded-full border border-green-100 px-3 py-1">Free delivery</span>
-                        <span class="rounded-full border border-green-100 px-3 py-1 text-green-700">{{ $dealStockLabel }}</span>
+                        <span
+                            class="rounded-full border border-green-100 px-3 py-1 text-green-700">{{ $dealStockLabel }}</span>
                     </div>
                     <div class="relative mt-6">
                         <a href="{{ $dealDetailsUrl }}"
@@ -687,8 +617,7 @@
                             bundle</a>
                     </div>
                     <div class="relative mt-6 overflow-hidden rounded-2xl">
-                        <img src="{{ $dealImage }}" alt="{{ $dealTitle }}"
-                            class="h-48 w-full object-cover">
+                        <img src="{{ $dealImage }}" alt="{{ $dealTitle }}" class="h-48 w-full object-cover">
                     </div>
                     <div class="relative mt-6 grid grid-cols-3 gap-3 text-xs text-slate-600">
                         <div class="rounded-2xl border border-green-100 bg-white p-3">
@@ -701,11 +630,12 @@
                         </div>
                         <div class="rounded-2xl border border-green-100 bg-white p-3">
                             <p class="text-slate-500">You save</p>
-                            <p class="mt-1 text-sm font-semibold text-green-700">{{ currency_symbol($dealSaveAmount) }}</p>
+                            <p class="mt-1 text-sm font-semibold text-green-700">{{ currency_symbol($dealSaveAmount) }}
+                            </p>
                         </div>
                     </div>
                 </div>
-                <div class="relative overflow-hidden rounded-3xl border border-green-100 bg-white p-5 shadow-sm"
+                <div class="flash-sale-carousel-shell relative overflow-hidden rounded-3xl border border-green-100 bg-white p-5 shadow-sm"
                     data-reveal-child>
                     <div class="flex items-center justify-between">
                         <div>
@@ -714,7 +644,7 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <button
-                                class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-green-100 bg-white text-slate-500 transition hover:border-green-300 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
+                                class="flash-sale-arrow inline-flex h-10 w-10 items-center justify-center rounded-full border border-green-100 bg-white text-slate-500 transition hover:border-green-300 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
                                 type="button" aria-label="Scroll deals left" data-deals-prev
                                 aria-controls="deals-carousel">
                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -723,7 +653,7 @@
                                 </svg>
                             </button>
                             <button
-                                class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-green-100 bg-white text-slate-500 transition hover:border-green-300 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
+                                class="flash-sale-arrow inline-flex h-10 w-10 items-center justify-center rounded-full border border-green-100 bg-white text-slate-500 transition hover:border-green-300 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40"
                                 type="button" aria-label="Scroll deals right" data-deals-next
                                 aria-controls="deals-carousel">
                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -738,19 +668,19 @@
                             aria-hidden="true"></div>
                         <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-white to-transparent"
                             aria-hidden="true"></div>
-                        <div class="scrollbar-hide flex gap-4 overflow-x-auto pb-4 pr-6 snap-x snap-mandatory scroll-px-4 cursor-grab active:cursor-grabbing"
+                        <div class="flash-sale-slider scrollbar-hide flex gap-4 overflow-x-auto pb-4 pr-6 snap-x snap-mandatory scroll-px-4 cursor-grab active:cursor-grabbing"
                             data-deals-slider data-products-limit="10" id="deals-carousel" role="region"
                             aria-label="Today's deals carousel" tabindex="0"></div>
                     </div>
                     <div class="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
                         <div class="flex items-center gap-2">
                             <span
-                                class="inline-flex items-center rounded-full bg-green-50 px-3 py-1 text-[11px] font-semibold text-green-700"
+                                class="flash-sale-live-count inline-flex items-center rounded-full bg-green-50 px-3 py-1 text-[11px] font-semibold text-green-700"
                                 data-deals-count>0</span>
                             <span>items live now</span>
                         </div>
                         <span
-                            class="inline-flex items-center rounded-full border border-green-100 bg-white px-3 py-1">Swipe
+                            class="flash-sale-swipe inline-flex items-center rounded-full border border-green-100 bg-white px-3 py-1">Swipe
                             &
                             discover</span>
                     </div>
@@ -823,18 +753,6 @@
                 </div>
             </div>
         </div>
-    </section>
-
-    <section class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
-        <div class="flex flex-wrap items-end justify-between gap-4" data-reveal-child>
-            <div>
-                <h2 class="text-3xl font-semibold text-slate-900">Popular right now</h2>
-                <p class="mt-2 text-sm text-slate-600">Most loved picks across produce, pantry, and seafood.</p>
-            </div>
-            <a href="products.html" class="text-sm font-semibold text-green-700">Shop all</a>
-        </div>
-        <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-products-grid data-products-source="popular"
-            data-products-limit="8"></div>
     </section>
 
     <div class="mx-auto mt-16 h-px max-w-5xl bg-gradient-to-r from-transparent via-green-200 to-transparent"></div>
@@ -969,6 +887,7 @@
         </div>
     </section>
 
+    <!-- Testimonials Section -->
     <section class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
         <div class="flex flex-wrap items-center justify-between gap-4" data-reveal-child>
             <div>
@@ -1100,6 +1019,7 @@
         </div>
     </section>
 
+    <!--about section -->
     <section class="mx-auto mt-16 max-w-7xl px-4 pb-16 sm:px-6 lg:px-8" data-reveal>
         <div class="flex flex-wrap items-center justify-between gap-4" data-reveal-child>
             <div>

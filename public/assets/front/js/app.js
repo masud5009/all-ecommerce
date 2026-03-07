@@ -765,93 +765,76 @@
   const productCardTemplate = (product, layout = 'grid') => {
     const unit = product.units[0];
     const discount = computeDiscount(unit.price, unit.oldPrice);
-    const badgeLabel = discount ? `-${discount}%` : product.isDeal ? 'Deal' : '';
     const wrapperClass = layout === 'slider' ? 'min-w-[220px] snap-start sm:min-w-[240px] lg:min-w-[260px]' : '';
+    const truncate = (value, limit) =>
+      value && value.length > limit ? `${value.slice(0, Math.max(1, limit - 3))}...` : value;
     const hasVariants = product.units.length > 1;
-    const selectClass = hasVariants
-      ? 'hidden'
-      : 'w-full rounded-full border border-green-100 bg-white px-3 py-2 text-xs text-slate-600 focus:border-green-300 focus:ring-2 focus:ring-green-100';
-    const selectAria = hasVariants ? 'aria-hidden="true" tabindex="-1"' : '';
-    const actionLabel = hasVariants ? 'Select options' : 'Quick add';
-    const variantNote = hasVariants
-      ? `
-        <div class="flex items-center gap-2 text-xs text-slate-500">
-          <span class="rounded-full bg-green-50 px-2 py-1 text-[10px] font-semibold text-green-700">Variants</span>
-          <span>${product.units.length} sizes available</span>
+    const stockRaw = Number(product.stock ?? (product.isDeal ? 5 : 12));
+    const stockLabel = stockRaw > 0 ? `Only ${Math.min(stockRaw, 5)} left` : 'Out of stock';
+    const variantLabel = hasVariants ? 'Variants' : 'Standard';
+    const variantText = hasVariants ? `${product.units.length} sizes available` : 'Single size';
+    const productTitle = truncate(product.name || 'Untitled Product', 42);
+    const badgeText = truncate(product.badge || 'Featured', 14);
+    const showOldPrice = unit.oldPrice && unit.oldPrice > unit.price;
+    const rating = Number(product.rating || 0);
+    const reviews = Number(product.reviews || 0);
+
+    const cardMarkup = `
+      <article class="group relative flex h-full flex-col rounded-2xl border border-green-100 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)]" data-featured-card data-reveal-child data-product-id="${product.id}" data-product-name="${product.name}">
+        <span class="absolute left-4 top-4 rounded-full bg-green-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-sm ${discount > 0 ? '' : 'hidden'}">
+          -${discount}%
+        </span>
+
+        <div class="relative overflow-hidden rounded-2xl bg-green-50">
+          <a href="product-details.html?id=${product.id}" class="block">
+            <img src="${product.image}" alt="${product.name}" class="h-40 w-full object-cover transition duration-500 group-hover:scale-105">
+          </a>
+          <button type="button" data-action="quick-view" data-product-id="${product.id}" class="absolute bottom-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition duration-300 hover:bg-green-700" aria-label="Quick view ${product.name}">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 5v14"></path>
+              <path d="M5 12h14"></path>
+            </svg>
+          </button>
         </div>
-      `
-      : '';
 
-    const unitOptions = product.units
-      .map(
-        (option) =>
-          `<option value="${option.label}" data-price="${option.price}" data-old-price="${option.oldPrice || ''}">${option.label}</option>`
-      )
-      .join('');
-
-    const stockNote = product.isDeal
-      ? '<span class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">Only 5 left</span>'
-      : '';
-    const badgePill = product.badge
-      ? `<span class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">${product.badge}</span>`
-      : '';
-
-    return `
-      <div class="${wrapperClass}">
-        <div class="group relative flex h-full flex-col rounded-2xl border border-green-100 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)]" data-product-card data-product-id="${product.id}" data-product-name="${product.name}" data-deal="${product.isDeal ? 'true' : 'false'}" data-reveal-child>
-          <span class="absolute left-4 top-4 rounded-full bg-green-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-sm ${badgeLabel ? '' : 'hidden'}" data-discount-badge>${badgeLabel}</span>
-          <button class="wishlist-btn absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-green-100 bg-white/90 text-slate-500 shadow-sm opacity-0 transition duration-300 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200" type="button" data-action="wishlist" aria-label="Add ${product.name} to wishlist" aria-pressed="false">
-            <svg class="wishlist-icon h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-.9.9-.9-.9a5.5 5.5 0 0 0-7.8 7.8l8.7 8.7 8.7-8.7a5.5 5.5 0 0 0 0-7.8Z"></path>
-            </svg>
-          </button>
-          <button class="absolute right-4 top-14 inline-flex items-center gap-1 rounded-full border border-green-100 bg-white/95 px-3 py-1 text-[11px] font-semibold text-slate-600 shadow-sm opacity-0 transition duration-300 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200" type="button" data-action="quick-view" aria-label="Quick view ${product.name}">
-            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6Z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-            Quick view
-          </button>
-          <div class="relative overflow-hidden rounded-2xl bg-green-50">
-            <a href="product-details.html?id=${product.id}" class="block">
-              <img src="${product.image}" alt="${product.name}" class="h-40 w-full object-cover transition duration-500 group-hover:scale-105">
+        <div class="mt-4 space-y-2">
+          <div class="flex items-start justify-between gap-2">
+            <a href="product-details.html?id=${product.id}" class="text-sm font-semibold text-slate-900 transition hover:text-green-700">
+              ${productTitle}
             </a>
-            <button class="absolute bottom-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white shadow-lg opacity-0 translate-y-2 transition duration-300 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200" data-action="add" aria-label="${actionLabel} ${product.name}">
-              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M12 5v14"></path>
-                <path d="M5 12h14"></path>
-              </svg>
-            </button>
+            <span class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">
+              ${badgeText}
+            </span>
           </div>
-          <div class="mt-4 space-y-2">
-            <div class="flex items-start justify-between gap-2">
-              <a href="product-details.html?id=${product.id}" class="text-sm font-semibold text-slate-900 transition hover:text-green-700">${product.name}</a>
-              ${badgePill}
-            </div>
-            <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-              <span class="flex items-center gap-1">${renderStars(product.rating)}</span>
-              <span>${product.rating.toFixed(1)} (${product.reviews} reviews)</span>
-              ${stockNote}
-            </div>
-            ${variantNote}
-            <select class="${selectClass}" data-unit-select aria-label="Select unit" ${selectAria}>
-              ${unitOptions}
-            </select>
-            <div class="flex items-end justify-between gap-3">
-              <div>
-                <p class="text-lg font-semibold text-slate-900" data-price>${formatCurrency(unit.price)}</p>
-                <p class="text-xs text-slate-400 line-through ${unit.oldPrice ? '' : 'hidden'}" data-old-price>${unit.oldPrice ? formatCurrency(unit.oldPrice) : ''}</p>
-              </div>
-              <div class="hidden items-center gap-2 rounded-full border border-green-100 bg-white px-3 py-2 shadow-sm" data-qty-stepper>
-                <button class="h-7 w-7 rounded-full bg-green-50 text-green-700 transition hover:bg-green-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200" aria-label="Decrease quantity" data-action="dec">-</button>
-                <span class="min-w-[1.5rem] text-center text-xs font-semibold text-slate-700" data-qty>1</span>
-                <button class="h-7 w-7 rounded-full bg-green-600 text-white transition hover:bg-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200" aria-label="Increase quantity" data-action="inc">+</button>
-              </div>
+
+          <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+            <span class="flex items-center gap-1">${renderStars(rating)}</span>
+            <span>${rating.toFixed(1)} (${reviews} reviews)</span>
+            <span class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">${stockLabel}</span>
+          </div>
+
+          <div class="flex items-center gap-2 text-xs text-slate-500">
+            <span class="rounded-full bg-green-50 px-2 py-1 text-[10px] font-semibold text-green-700">
+              ${variantLabel}
+            </span>
+            <span>${variantText}</span>
+          </div>
+
+          <div class="flex items-end justify-between gap-3">
+            <div>
+              <p class="text-3xl font-semibold text-slate-900">${formatCurrency(unit.price)}</p>
+              <p class="text-sm text-slate-400 line-through ${showOldPrice ? '' : 'hidden'}">${showOldPrice ? formatCurrency(unit.oldPrice) : ''}</p>
             </div>
           </div>
         </div>
-      </div>
+      </article>
     `;
+
+    if (layout === 'slider') {
+      return `<div class="${wrapperClass}">${cardMarkup}</div>`;
+    }
+
+    return cardMarkup;
   };
 
   const setCardUnitSelection = (productId, unitLabel) => {
