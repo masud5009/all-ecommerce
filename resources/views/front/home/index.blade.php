@@ -195,154 +195,7 @@
 
     <div class="mx-auto mt-12 h-px max-w-5xl bg-gradient-to-r from-transparent via-green-200 to-transparent"></div>
 
-    <!-- Featured products -->
-    <section class="mx-auto mt-10 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
-        <div
-            class="rounded-3xl border border-green-100 bg-gradient-to-br from-green-50/70 via-white to-emerald-50/60 p-6 shadow-sm sm:p-8">
-            <div class="flex flex-wrap items-end justify-between gap-4" data-reveal-child>
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-wide text-green-700">Featured Products</p>
-                    <h2 class="mt-2 text-3xl font-semibold text-slate-900">Handpicked picks for today</h2>
-                </div>
-                <a href="products.html"
-                    class="inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
-                    View all products
-                </a>
-            </div>
-
-            @if (!empty($featuredProducts) && $featuredProducts->isNotEmpty())
-                <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                    @foreach ($featuredProducts as $product)
-                        @php
-                            $thumbnail = !empty($product->thumbnail)
-                                ? asset('assets/img/product/' . $product->thumbnail)
-                                : 'https://picsum.photos/seed/featured-' . $product->id . '/600/400';
-                            $title = $product->title ?: 'Untitled Product';
-                            $summary = !empty($product->summary)
-                                ? \Illuminate\Support\Str::limit(strip_tags($product->summary), 70)
-                                : 'Freshly selected item from our featured collection.';
-                            $category = $product->category_name ?: 'Featured';
-                            $price = (float) ($product->current_price ?? 0);
-                            $oldPrice = (float) ($product->previous_price ?? 0);
-                            $showOldPrice = $oldPrice > $price && $oldPrice > 0;
-                            $discount =
-                                $showOldPrice && $oldPrice > 0 ? (int) round((1 - $price / $oldPrice) * 100) : 0;
-                            $stock = (int) ($product->stock ?? 0);
-                            $stockLabel = $stock > 0 ? 'Only ' . min($stock, 5) . ' left' : 'Out of stock';
-                            $variantLabel = (int) ($product->has_variants ?? 0) === 1 ? 'Variants' : 'Standard';
-                            $variantText =
-                                (int) ($product->has_variants ?? 0) === 1 ? 'Multiple sizes available' : 'Single size';
-                            $badgeLabel = $category ?: 'Fresh';
-                        @endphp
-                        <article
-                            class="group relative flex h-full flex-col rounded-2xl border border-green-100 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)]"
-                            data-reveal-child data-featured-card data-product-id="{{ (string) $product->id }}"
-                            data-product-name="{{ $title }}">
-                            <span
-                                class="absolute left-4 top-4 rounded-full bg-green-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-sm {{ $discount > 0 ? '' : 'hidden' }}">
-                                -{{ $discount }}%
-                            </span>
-
-                            <div class="relative overflow-hidden rounded-2xl bg-green-50">
-                                <a href="{{ route('frontend.product.details', ['product' => $product->id]) }}"
-                                    class="block">
-                                    <img src="{{ $thumbnail }}" alt="{{ $title }}"
-                                        class="h-40 w-full object-cover transition duration-500 group-hover:scale-105"
-                                        loading="lazy" decoding="async">
-                                </a>
-                                <button type="button" data-action="quick-view"
-                                    data-product-id="{{ (string) $product->id }}"
-                                    class="absolute bottom-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition duration-300 hover:bg-green-700"
-                                    aria-label="Quick view {{ $title }}">
-                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2" aria-hidden="true">
-                                        <path d="M12 5v14"></path>
-                                        <path d="M5 12h14"></path>
-                                    </svg>
-                                </button>
-                            </div>
-
-                            <div class="mt-4 space-y-2">
-                                <div class="flex items-start justify-between gap-2">
-                                    <a href="{{ route('frontend.product.details', ['product' => $product->id]) }}"
-                                        class="text-sm font-semibold text-slate-900 transition hover:text-green-700">
-                                        {{ \Illuminate\Support\Str::limit($title, 42) }}
-                                    </a>
-                                    <span
-                                        class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">
-                                        {{ \Illuminate\Support\Str::limit($badgeLabel, 14) }}
-                                    </span>
-                                </div>
-
-                                <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                                    <span class="flex items-center gap-1">
-                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
-                                            aria-hidden="true">
-                                            <path
-                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                                            </path>
-                                        </svg>
-                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
-                                            aria-hidden="true">
-                                            <path
-                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                                            </path>
-                                        </svg>
-                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
-                                            aria-hidden="true">
-                                            <path
-                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                                            </path>
-                                        </svg>
-                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
-                                            aria-hidden="true">
-                                            <path
-                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                                            </path>
-                                        </svg>
-                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
-                                            aria-hidden="true">
-                                            <path
-                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                                            </path>
-                                        </svg>
-                                    </span>
-                                    <span>4.7 (142 reviews)</span>
-                                    <span
-                                        class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">{{ $stockLabel }}</span>
-                                </div>
-
-                                <div class="flex items-center gap-2 text-xs text-slate-500">
-                                    <span
-                                        class="rounded-full bg-green-50 px-2 py-1 text-[10px] font-semibold text-green-700">
-                                        {{ $variantLabel }}
-                                    </span>
-                                    <span>{{ $variantText }}</span>
-                                </div>
-
-                                <div class="flex items-end justify-between gap-3">
-                                    <div>
-                                        <p class="text-3xl font-semibold text-slate-900">{{ currency_symbol($price) }}</p>
-                                        @if ($showOldPrice)
-                                            <p class="text-sm text-slate-400 line-through">
-                                                {{ currency_symbol($oldPrice) }}</p>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-                    @endforeach
-                </div>
-            @else
-                <div class="mt-8 rounded-2xl border border-dashed border-green-200 bg-white p-8 text-center text-sm text-slate-500"
-                    data-reveal-child>
-                    No featured products found.
-                </div>
-            @endif
-        </div>
-    </section>
-
-    <!-- Categories section -->
+        <!-- Categories section -->
     <section id="categories" class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" aria-labelledby="category-heading"
         data-reveal>
         <div class="flex flex-wrap items-center justify-between gap-4" data-reveal-child>
@@ -390,7 +243,7 @@
                         </span>
                     </div>
                     <p class="mt-4 text-sm font-semibold text-emerald-900 transition group-hover:text-green-800">
-                        {{ \Illuminate\Support\Str::limit($category->name, 20) }}
+                        {{ $category->display_name }}
                     </p>
                     <p class="mt-1 text-xs text-slate-500">{{ $category->subtitle }}</p>
                     <span
@@ -415,6 +268,135 @@
             @endforelse
         </div>
     </section>
+    
+    <!-- Featured products -->
+    <section class="mx-auto mt-10 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
+        <div
+            class="rounded-3xl border border-green-100 bg-gradient-to-br from-green-50/70 via-white to-emerald-50/60 p-6 shadow-sm sm:p-8">
+            <div class="flex flex-wrap items-end justify-between gap-4" data-reveal-child>
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-green-700">Featured Products</p>
+                    <h2 class="mt-2 text-3xl font-semibold text-slate-900">Handpicked picks for today</h2>
+                </div>
+                <a href="products.html"
+                    class="inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
+                    View all products
+                </a>
+            </div>
+
+            @if (!empty($featuredProducts) && $featuredProducts->isNotEmpty())
+                <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                    @foreach ($featuredProducts as $product)
+                        <article
+                            class="group relative flex h-full flex-col rounded-2xl border border-green-100 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)]"
+                            data-reveal-child data-featured-card data-product-id="{{ (string) $product->id }}"
+                            data-product-name="{{ $product->display_title }}">
+                            <span
+                                class="absolute left-4 top-4 rounded-full bg-green-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-sm {{ $product->discount_percent > 0 ? '' : 'hidden' }}">
+                                -{{ $product->discount_percent }}%
+                            </span>
+
+                            <div class="relative overflow-hidden rounded-2xl bg-green-50">
+                                <a href="{{ route('frontend.product.details', ['product' => $product->id]) }}"
+                                    class="block">
+                                    <img src="{{ $product->thumbnail_url }}" alt="{{ $product->display_title }}"
+                                        class="h-40 w-full object-cover transition duration-500 group-hover:scale-105"
+                                        loading="lazy" decoding="async">
+                                </a>
+                                <button type="button" data-action="quick-view"
+                                    data-product-id="{{ (string) $product->id }}"
+                                    class="absolute bottom-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition duration-300 hover:bg-green-700"
+                                    aria-label="Quick view {{ $product->display_title }}">
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" aria-hidden="true">
+                                        <path d="M12 5v14"></path>
+                                        <path d="M5 12h14"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div class="mt-4 space-y-2">
+                                <div class="flex items-start justify-between gap-2">
+                                    <a href="{{ route('frontend.product.details', ['product' => $product->id]) }}"
+                                        class="text-sm font-semibold text-slate-900 transition hover:text-green-700">
+                                        {{ $product->display_title_short }}
+                                    </a>
+                                    <span
+                                        class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">
+                                        {{ $product->badge_label_short }}
+                                    </span>
+                                </div>
+
+                                <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                                    <span class="flex items-center gap-1">
+                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
+                                            </path>
+                                        </svg>
+                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
+                                            </path>
+                                        </svg>
+                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
+                                            </path>
+                                        </svg>
+                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
+                                            </path>
+                                        </svg>
+                                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    <span>4.7 (142 reviews)</span>
+                                    <span
+                                        class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">{{ $product->stock_label }}</span>
+                                </div>
+
+                                <div class="flex items-center gap-2 text-xs text-slate-500">
+                                    <span
+                                        class="rounded-full bg-green-50 px-2 py-1 text-[10px] font-semibold text-green-700">
+                                        {{ $product->variant_label }}
+                                    </span>
+                                    <span>{{ $product->variant_text }}</span>
+                                </div>
+
+                                <div class="flex items-end justify-between gap-3">
+                                    <div>
+                                        <p class="text-3xl font-semibold text-slate-900">
+                                            {{ currency_symbol($product->price_value) }}</p>
+                                        @if ($product->show_old_price)
+                                            <p class="text-sm text-slate-400 line-through">
+                                                {{ currency_symbol($product->old_price_value) }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            @else
+                <div class="mt-8 rounded-2xl border border-dashed border-green-200 bg-white p-8 text-center text-sm text-slate-500"
+                    data-reveal-child>
+                    No featured products found.
+                </div>
+            @endif
+        </div>
+    </section>
+
+
     <!-- Popular products section -->
     <section class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
         <div class="flex flex-wrap items-end justify-between gap-4" data-reveal-child>
@@ -428,139 +410,25 @@
             data-products-limit="8"></div>
     </section>
 
-    @php
-        $featuredProductQuickViewData = collect($featuredProducts ?? [])
-            ->map(function ($product) {
-                $title = $product->title;
-                $category = $product->category_name;
-                $price = $product->current_price ?? 0;
-                $oldPrice = $product->previous_price ?? 0;
-                $thumbnail = asset('assets/img/product/' . $product->thumbnail);
-                $summary = !empty($product->summary)
-                    ? \Illuminate\Support\Str::limit(strip_tags($product->summary), 180)
-                    : 'Freshly selected item from our featured collection.';
-                $images = is_array($product->images ?? null) ? $product->images : [];
-                if (empty($images)) {
-                    $images[] = $thumbnail;
-                }
-                $units = is_array($product->quick_units ?? null) ? $product->quick_units : [];
-                if (empty($units)) {
-                    $units[] = [
-                        'label' => '1 unit',
-                        'price' => $price,
-                        'oldPrice' => $oldPrice,
-                    ];
-                }
-
-                return [
-                    'id' => (string) $product->id,
-                    'name' => $title,
-                    'category' => $category,
-                    'rating' => 4.7,
-                    'reviews' => 142,
-                    'badge' => $category,
-                    'image' => $images[0],
-                    'images' => $images,
-                    'description' => $summary,
-                    'nutrition' => ['Fresh stock', 'Quality checked', 'Fast delivery', 'Secure packaging'],
-                    'reviewList' => [
-                        ['name' => 'Ariana', 'rating' => 5, 'text' => 'Great quality and fast delivery.'],
-                        ['name' => 'Chris', 'rating' => 4, 'text' => 'Loved the packaging and freshness.'],
-                    ],
-                    'units' => $units,
-                    'isDeal' => $oldPrice > $price,
-                    'popular' => true,
-                ];
-            })
-            ->values();
-
-        $flashSaleQuickViewData = collect($flashSaleProducts ?? [])
-            ->map(function ($product) {
-                $title = $product->title ?: 'Untitled Product';
-                $category = $product->category_name ?: 'Featured';
-                $salePrice = (float) ($product->flash_sale_price ?? ($product->current_price ?? 0));
-                $oldPrice = (float) ($product->flash_sale_old_price ?? ($product->current_price ?? 0));
-                $thumbnail = !empty($product->thumbnail)
-                    ? asset('assets/img/product/' . $product->thumbnail)
-                    : 'https://picsum.photos/seed/flash-' . $product->id . '/600/400';
-                $summary = !empty($product->summary)
-                    ? \Illuminate\Support\Str::limit(strip_tags($product->summary), 180)
-                    : 'Limited flash offer selected by our team.';
-                $images = is_array($product->images ?? null) ? $product->images : [];
-                if (empty($images)) {
-                    $images[] = $thumbnail;
-                }
-                $units = is_array($product->quick_units ?? null) ? $product->quick_units : [];
-                if (empty($units)) {
-                    $units[] = [
-                        'label' => '1 unit',
-                        'price' => $salePrice,
-                        'oldPrice' => $oldPrice,
-                    ];
-                }
-
-                return [
-                    'id' => (string) $product->id,
-                    'name' => $title,
-                    'category' => $category,
-                    'rating' => 4.7,
-                    'reviews' => 142,
-                    'badge' => $category,
-                    'image' => $images[0],
-                    'images' => $images,
-                    'description' => $summary,
-                    'nutrition' => ['Fresh stock', 'Quality checked', 'Fast delivery', 'Secure packaging'],
-                    'reviewList' => [
-                        ['name' => 'Ariana', 'rating' => 5, 'text' => 'Great quality and fast delivery.'],
-                        ['name' => 'Chris', 'rating' => 4, 'text' => 'Loved the packaging and freshness.'],
-                    ],
-                    'units' => $units,
-                    'isDeal' => true,
-                    'popular' => true,
-                ];
-            })
-            ->values();
-    @endphp
-    @if ($featuredProductQuickViewData->isNotEmpty())
+    @if (!empty($serverFeaturedProducts) && $serverFeaturedProducts->isNotEmpty())
         <script>
-            window.serverFeaturedProducts = @json($featuredProductQuickViewData);
+            window.serverFeaturedProducts = @json($serverFeaturedProducts);
         </script>
     @endif
-    @if ($flashSaleQuickViewData->isNotEmpty())
+    @if (!empty($serverFlashSaleProducts) && $serverFlashSaleProducts->isNotEmpty())
         <script>
-            window.serverFlashSaleProducts = @json($flashSaleQuickViewData);
+            window.serverFlashSaleProducts = @json($serverFlashSaleProducts);
         </script>
     @endif
 
     <div class="mx-auto mt-16 h-px max-w-5xl bg-gradient-to-r from-transparent via-green-200 to-transparent"></div>
 
-    @php
-        $dealFeatured = $flashSaleFeaturedProduct ?? null;
-        $dealTitle = $dealFeatured?->title ?: "Chef's seafood bundle";
-        $dealSummary = !empty($dealFeatured?->summary)
-            ? \Illuminate\Support\Str::limit(strip_tags($dealFeatured->summary), 120)
-            : 'Salmon, shrimp, and seasonal greens in one chilled delivery.';
-        $dealSalePrice = (float) ($dealFeatured?->flash_sale_price ?? 18.9);
-        $dealOldPrice = (float) ($dealFeatured?->flash_sale_old_price ?? 23.5);
-        $dealSaveAmount = max(0, $dealOldPrice - $dealSalePrice);
-        $dealSavePercent =
-            $dealOldPrice > 0 && $dealSaveAmount > 0 ? (int) round(($dealSaveAmount / $dealOldPrice) * 100) : 0;
-        $dealImages = is_array($dealFeatured->images ?? null) ? $dealFeatured->images : [];
-        $dealImage = !empty($dealImages[0]) ? $dealImages[0] : 'https://picsum.photos/seed/featured-deal/640/420';
-        $dealStock = (int) ($dealFeatured?->stock ?? 5);
-        $dealStockLabel = $dealStock > 0 ? 'Only ' . $dealStock . ' left' : 'Out of stock';
-        $dealDetailsUrl = !empty($dealFeatured?->id)
-            ? route('frontend.product.details', ['product' => $dealFeatured->id])
-            : 'products.html';
-        $dealCountdown = (int) ($flashSaleCountdownSeconds ?? 8132);
-
-    @endphp
-
-    <section id="deals" class="flash-sale-section mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
+    @if (!empty($flashSaleDeal))
+        <section id="deals" class="flash-sale-section mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
         <div class="flash-sale-head flex flex-wrap items-end justify-between gap-4" data-reveal-child>
             <div>
                 <p class="flash-sale-kicker text-xs font-semibold uppercase tracking-wide text-green-700">Flash sale</p>
-                <h2 class="flash-sale-title mt-2 text-3xl font-semibold text-slate-900">{{ $dealTitle }}</h2>
+                <h2 class="flash-sale-title mt-2 text-3xl font-semibold text-slate-900">{{ $flashSaleDeal->title }}</h2>
             </div>
             <div class="flash-sale-head-actions flex items-center gap-3" data-reveal-child>
                 <span
@@ -571,7 +439,7 @@
                         <path d="M12 7v6l3 2"></path>
                     </svg>
                     Ends in <span class="font-semibold tabular-nums text-slate-900" data-countdown
-                        data-countdown-seconds="{{ $dealCountdown }}">02:15:32</span>
+                        data-countdown-seconds="{{ $flashSaleDeal->countdown_seconds }}">02:15:32</span>
                 </span>
                 <a href="products.html"
                     class="flash-sale-all-deals inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
@@ -593,45 +461,49 @@
                             class="rounded-full bg-green-600 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">Featured</span>
                         <span class="text-xs text-slate-500">Ends in <span
                                 class="font-semibold tabular-nums text-slate-900" data-countdown
-                                data-countdown-seconds="{{ $dealCountdown }}">02:15:32</span></span>
+                                data-countdown-seconds="{{ $flashSaleDeal->countdown_seconds }}">02:15:32</span></span>
                     </div>
-                    <h3 class="relative mt-4 text-2xl font-semibold text-slate-900">{{ $dealTitle }}</h3>
-                    <p class="relative mt-2 text-sm text-slate-600">{{ $dealSummary }}</p>
+                    <h3 class="relative mt-4 text-2xl font-semibold text-slate-900">{{ $flashSaleDeal->title }}</h3>
+                    <p class="relative mt-2 text-sm text-slate-600">{{ $flashSaleDeal->summary }}</p>
                     <div class="relative mt-4 flex items-end gap-3">
-                        <span class="text-3xl font-semibold text-slate-900">{{ currency_symbol($dealSalePrice) }}</span>
-                        @if ($dealOldPrice > $dealSalePrice)
-                            <span class="text-sm text-slate-400 line-through">{{ currency_symbol($dealOldPrice) }}</span>
+                        <span
+                            class="text-3xl font-semibold text-slate-900">{{ currency_symbol($flashSaleDeal->sale_price) }}</span>
+                        @if ($flashSaleDeal->old_price > $flashSaleDeal->sale_price)
+                            <span
+                                class="text-sm text-slate-400 line-through">{{ currency_symbol($flashSaleDeal->old_price) }}</span>
                         @endif
                     </div>
                     <div class="relative mt-4 flex flex-wrap items-center gap-2 text-xs text-slate-500">
                         <span class="rounded-full bg-green-100 px-3 py-1 font-semibold text-green-700">
-                            {{ $dealSavePercent > 0 ? 'Save ' . $dealSavePercent . '%' : 'Limited offer' }}
+                            {{ $flashSaleDeal->save_percent > 0 ? 'Save ' . $flashSaleDeal->save_percent . '%' : 'Limited offer' }}
                         </span>
                         <span class="rounded-full border border-green-100 px-3 py-1">Free delivery</span>
                         <span
-                            class="rounded-full border border-green-100 px-3 py-1 text-green-700">{{ $dealStockLabel }}</span>
+                            class="rounded-full border border-green-100 px-3 py-1 text-green-700">{{ $flashSaleDeal->stock_label }}</span>
                     </div>
                     <div class="relative mt-6">
-                        <a href="{{ $dealDetailsUrl }}"
+                        <a href="{{ $flashSaleDeal->details_url }}"
                             class="inline-flex items-center justify-center rounded-2xl bg-green-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">Grab
                             bundle</a>
                     </div>
                     <div class="relative mt-6 overflow-hidden rounded-2xl">
-                        <img src="{{ $dealImage }}" alt="{{ $dealTitle }}" class="h-48 w-full object-cover">
+                        <img src="{{ $flashSaleDeal->image }}" alt="{{ $flashSaleDeal->title }}" class="h-48 w-full object-cover">
                     </div>
                     <div class="relative mt-6 grid grid-cols-3 gap-3 text-xs text-slate-600">
                         <div class="rounded-2xl border border-green-100 bg-white p-3">
                             <p class="text-slate-500">Avg store</p>
-                            <p class="mt-1 text-sm font-semibold text-slate-900">{{ currency_symbol($dealOldPrice) }}</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-900">{{ currency_symbol($flashSaleDeal->old_price) }}
+                            </p>
                         </div>
                         <div class="rounded-2xl border border-green-100 bg-white p-3">
                             <p class="text-slate-500">FreshCart</p>
-                            <p class="mt-1 text-sm font-semibold text-slate-900">{{ currency_symbol($dealSalePrice) }}</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-900">{{ currency_symbol($flashSaleDeal->sale_price) }}
+                            </p>
                         </div>
                         <div class="rounded-2xl border border-green-100 bg-white p-3">
                             <p class="text-slate-500">You save</p>
-                            <p class="mt-1 text-sm font-semibold text-green-700">{{ currency_symbol($dealSaveAmount) }}
-                            </p>
+                            <p class="mt-1 text-sm font-semibold text-green-700">
+                                {{ currency_symbol($flashSaleDeal->save_amount) }}</p>
                         </div>
                     </div>
                 </div>
@@ -687,7 +559,8 @@
                 </div>
             </div>
         </div>
-    </section>
+        </section>
+    @endif
 
     <section id="rewards" class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
         <div

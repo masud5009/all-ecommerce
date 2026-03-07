@@ -113,6 +113,7 @@
                                     <th scope="col">{{ __('Category') }}</th>
                                     <th scope="col">{{ __('Variant Type') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
+                                    <th scope="col">{{ __('Featured') }}</th>
                                     <th scope="col">{{ __('Stock') }}</th>
                                     <th scope="col">{{ __('Actions') }}</th>
                                 </thead>
@@ -148,6 +149,24 @@
                                                     <span class="badge bg-danger changeStatusBtn"
                                                         data-id="{{ $product->id }}" data-value="{{ $product->status }}"
                                                         data-url="{{ route('admin.product.status_change') }}">{{ __('Inactive') }}</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($hasFeaturedColumn)
+                                                    <form action="{{ route('admin.product.featured_update') }}" method="post"
+                                                        class="d-inline-block">
+                                                        @csrf
+                                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                        <input type="hidden" name="featured"
+                                                            value="{{ (int) $product->featured === 1 ? 0 : 1 }}">
+                                                        <button type="submit"
+                                                            class="btn btn-sm {{ (int) $product->featured === 1 ? 'btn-warning' : 'btn-outline-secondary' }}">
+                                                            <i class="fas fa-star me-1"></i>
+                                                            {{ (int) $product->featured === 1 ? __('Yes') : __('No') }}
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <span class="badge bg-secondary">{{ __('N/A') }}</span>
                                                 @endif
                                             </td>
                                             <td>

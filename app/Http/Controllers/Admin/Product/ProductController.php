@@ -32,6 +32,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $language_id = Language::where('code', $request->language)->pluck('id');
+        $hasFeaturedColumn = Schema::hasColumn('products', 'featured');
         $hasFlashSaleColumns = Schema::hasColumn('products', 'flash_sale_status')
             && Schema::hasColumn('products', 'flash_sale_price')
             && Schema::hasColumn('products', 'flash_sale_start_at')
@@ -81,6 +82,10 @@ class ProductController extends Controller
             'product_categories.name as categoryName',
         ];
 
+        if ($hasFeaturedColumn) {
+            $selectColumns[] = 'products.featured';
+        }
+
         if ($hasFlashSaleColumns) {
             $selectColumns[] = 'products.flash_sale_status';
             $selectColumns[] = 'products.flash_sale_price';
@@ -93,8 +98,9 @@ class ProductController extends Controller
             ->orderBy('products.created_at', 'desc')
             ->get();
 
-        $products->transform(function ($product) use ($hasFlashSaleColumns) {
+        $products->transform(function ($product) use ($hasFlashSaleColumns, $hasFeaturedColumn) {
             $product->available_stock = (int) $product->stock;
+            $product->featured = $hasFeaturedColumn ? (int) ($product->featured ?? 0) : 0;
 
             if (!$hasFlashSaleColumns) {
                 $product->flash_sale_status = 0;
@@ -170,6 +176,7 @@ class ProductController extends Controller
         $data['products'] = $products;
         $data['product_setting'] = ProductSetting::first();
         $data['search'] = $search;
+        $data['hasFeaturedColumn'] = $hasFeaturedColumn;
         $data['hasFlashSaleColumns'] = $hasFlashSaleColumns;
 
         return view('admin.product.index', $data);
@@ -383,6 +390,28 @@ class ProductController extends Controller
     {
         Product::where('id', $request->id)->update(['status' => $request->status]);
         return 'success';
+    }
+
+    public function updateFeatured(Request $request)
+    {
+        if (!Schema::hasColumn('products', 'featured')) {
+            return redirect()->back()->with('error', __('Please run migration first to enable featured status.'));
+        }
+
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'featured' => 'required|in:0,1',
+        ]);
+
+        Product::where('id', (int) $validated['product_id'])->update([
+            'featured' => (int) $validated['featured'],
+        ]);
+
+        $message = (int) $validated['featured'] === 1
+            ? __('Product marked as featured')
+            : __('Product removed from featured');
+
+        return redirect()->back()->with('success', $message);
     }
 
     public function updateFlashSale(Request $request)

@@ -260,6 +260,7 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
             Route::get('/product-edit/{id}', 'Admin\Product\ProductController@edit')->name('admin.product.edit');
             Route::post('/product-update/{id}', 'Admin\Product\ProductController@update')->name('admin.product.update');
             Route::post('/flash-sale-update', 'Admin\Product\ProductController@updateFlashSale')->name('admin.product.flash_sale_update');
+            Route::post('/featured-update', 'Admin\Product\ProductController@updateFeatured')->name('admin.product.featured_update');
             Route::post('/product-delete', 'Admin\Product\ProductController@delete')->name('admin.product.delete');
             Route::post('/product-bulk-delete', 'Admin\Product\ProductController@bulkDelete')->name('admin.product.bulk_delete');
             Route::post('/changeStatus', 'Admin\Product\ProductController@changeStatus')->name('admin.product.status_change');

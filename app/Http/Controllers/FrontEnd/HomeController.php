@@ -13,6 +13,7 @@ use App\Models\ProductContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -29,6 +30,7 @@ class HomeController extends Controller
         $data['packages'] = Package::where('status', 1)->get();
 
         $languageId = $this->getCurrentLanguageId();
+        $hasFeaturedColumn = Schema::hasColumn('products', 'featured');
 
         $featuredProducts = Product::query()
             ->join('product_contents', function ($join) use ($languageId) {
@@ -44,6 +46,9 @@ class HomeController extends Controller
                 }
             })
             ->where('products.status', 1)
+            ->when($hasFeaturedColumn, function ($query) {
+                $query->where('products.featured', 1);
+            })
             ->select(
                 'products.id',
                 'products.thumbnail',
@@ -161,11 +166,16 @@ class HomeController extends Controller
             }
         }
 
-        $data['featuredProducts'] = $featuredProducts;
+        $flashSaleFeaturedProduct = $flashSaleProducts->first();
+
+        $data['featuredProducts'] = $this->mapFeaturedProductsForView($featuredProducts);
         $data['flashSaleProducts'] = $flashSaleProducts;
-        $data['flashSaleFeaturedProduct'] = $flashSaleProducts->first();
+        $data['flashSaleFeaturedProduct'] = $flashSaleFeaturedProduct;
         $data['flashSaleCountdownSeconds'] = $flashSaleCountdownSeconds;
         $data['homeCategories'] = $this->getHomeCategories($languageId);
+        $data['serverFeaturedProducts'] = $this->buildQuickViewPayload($featuredProducts);
+        $data['serverFlashSaleProducts'] = $this->buildQuickViewPayload($flashSaleProducts, true);
+        $data['flashSaleDeal'] = $this->buildFlashSaleDealData($flashSaleFeaturedProduct, $flashSaleCountdownSeconds);
 
         return view('front.home.index', $data);
     }
@@ -177,7 +187,7 @@ class HomeController extends Controller
 
     public function productDetails(Request $request)
     {
-        // Preserve existing client-side demo behavior for links like product-details.html?id=avocado
+        // Preserve existing client-side behavior for links like product-details.html?id=some-id
         if (!$request->has('product') && $request->filled('id')) {
             return view('front.home.product-details');
         }
@@ -236,10 +246,6 @@ class HomeController extends Controller
             }
         }
 
-        if (empty($images)) {
-            $images[] = 'https://picsum.photos/seed/detail-' . $product->id . '/1200/900';
-        }
-
         $summaryText = html_entity_decode(
             strip_tags((string) ($content?->summary ?: 'No summary available.')),
             ENT_QUOTES | ENT_HTML5,
@@ -295,7 +301,7 @@ class HomeController extends Controller
             'rating' => 4.7,
             'reviews' => 142,
             'badge' => $categoryName,
-            'image' => $images[0],
+            'image' => $images[0] ?? null,
             'images' => $images,
             'summary' => $summaryText,
             'description' => $descriptionText,
@@ -461,6 +467,158 @@ class HomeController extends Controller
         });
     }
 
+    private function mapFeaturedProductsForView($products)
+    {
+        return collect($products)->map(function ($product) {
+            $title = $product->title ?: 'Untitled Product';
+            $category = $product->category_name ?: 'Featured';
+            $price = (float) ($product->current_price ?? 0);
+            $oldPrice = (float) ($product->previous_price ?? 0);
+            $showOldPrice = $oldPrice > $price && $oldPrice > 0;
+            $discount = $showOldPrice ? (int) round((1 - ($price / $oldPrice)) * 100) : 0;
+            $stock = (int) ($product->stock ?? 0);
+            $hasVariants = (int) ($product->has_variants ?? 0) === 1;
+            $images = collect($product->images ?? [])
+                ->filter(function ($image) {
+                    return is_string($image) && trim($image) !== '';
+                })
+                ->values()
+                ->all();
+            $thumbnailUrl = !empty($product->thumbnail)
+                ? asset('assets/img/product/' . $product->thumbnail)
+                : ($images[0] ?? null);
+
+            if (empty($thumbnailUrl)) {
+                return null;
+            }
+
+            $product->display_title = $title;
+            $product->display_title_short = Str::limit($title, 42);
+            $product->thumbnail_url = $thumbnailUrl;
+            $product->badge_label = $category ?: 'Fresh';
+            $product->badge_label_short = Str::limit($product->badge_label, 14);
+            $product->price_value = $price;
+            $product->old_price_value = $oldPrice;
+            $product->show_old_price = $showOldPrice;
+            $product->discount_percent = $discount;
+            $product->stock_label = $stock > 0 ? 'Only ' . min($stock, 5) . ' left' : 'Out of stock';
+            $product->variant_label = $hasVariants ? 'Variants' : 'Standard';
+            $product->variant_text = $hasVariants ? 'Multiple sizes available' : 'Single size';
+
+            return $product;
+        })->filter()->values();
+    }
+
+    private function buildQuickViewPayload($products, bool $isFlashSale = false)
+    {
+        return collect($products)
+            ->map(function ($product) use ($isFlashSale) {
+                $title = $product->title ?: 'Untitled Product';
+                $category = $product->category_name ?: 'Featured';
+                $price = $isFlashSale
+                    ? (float) ($product->flash_sale_price ?? ($product->current_price ?? 0))
+                    : (float) ($product->current_price ?? 0);
+                $oldPrice = $isFlashSale
+                    ? (float) ($product->flash_sale_old_price ?? ($product->current_price ?? 0))
+                    : (float) ($product->previous_price ?? 0);
+                $summary = !empty($product->summary)
+                    ? Str::limit(strip_tags($product->summary), 180)
+                    : ($isFlashSale
+                        ? 'Limited flash offer selected by our team.'
+                        : 'Freshly selected item from our featured collection.');
+                $images = collect($product->images ?? [])
+                    ->filter(function ($image) {
+                        return is_string($image) && trim($image) !== '';
+                    })
+                    ->values()
+                    ->all();
+                $thumbnail = !empty($product->thumbnail)
+                    ? asset('assets/img/product/' . $product->thumbnail)
+                    : ($images[0] ?? null);
+                if (empty($images) && !empty($thumbnail)) {
+                    $images[] = $thumbnail;
+                }
+                if (empty($images)) {
+                    return null;
+                }
+
+                $units = is_array($product->quick_units ?? null) ? $product->quick_units : [];
+                if (empty($units)) {
+                    $units[] = [
+                        'label' => '1 unit',
+                        'price' => $price,
+                        'oldPrice' => $oldPrice,
+                    ];
+                }
+
+                return [
+                    'id' => (string) $product->id,
+                    'name' => $title,
+                    'category' => $category,
+                    'rating' => 4.7,
+                    'reviews' => 142,
+                    'badge' => $category,
+                    'image' => $images[0],
+                    'images' => $images,
+                    'description' => $summary,
+                    'nutrition' => ['Fresh stock', 'Quality checked', 'Fast delivery', 'Secure packaging'],
+                    'reviewList' => [
+                        ['name' => 'Ariana', 'rating' => 5, 'text' => 'Great quality and fast delivery.'],
+                        ['name' => 'Chris', 'rating' => 4, 'text' => 'Loved the packaging and freshness.'],
+                    ],
+                    'units' => $units,
+                    'isDeal' => $isFlashSale || ($oldPrice > $price),
+                    'popular' => true,
+                ];
+            })
+            ->filter()
+            ->values();
+    }
+
+    private function buildFlashSaleDealData($dealFeatured, int $countdownSeconds): ?object
+    {
+        if (empty($dealFeatured)) {
+            return null;
+        }
+
+        $title = $dealFeatured?->title ?: 'Flash sale item';
+        $summary = !empty($dealFeatured?->summary)
+            ? Str::limit(strip_tags($dealFeatured->summary), 120)
+            : 'Limited-time offer available while stock lasts.';
+        $salePrice = (float) ($dealFeatured?->flash_sale_price ?? 18.9);
+        $oldPrice = (float) ($dealFeatured?->flash_sale_old_price ?? 23.5);
+        $saveAmount = max(0, $oldPrice - $salePrice);
+        $savePercent = ($oldPrice > 0 && $saveAmount > 0) ? (int) round(($saveAmount / $oldPrice) * 100) : 0;
+        $images = collect($dealFeatured?->images ?? [])
+            ->filter(function ($image) {
+                return is_string($image) && trim($image) !== '';
+            })
+            ->values()
+            ->all();
+        $image = $images[0] ?? (!empty($dealFeatured?->thumbnail) ? asset('assets/img/product/' . $dealFeatured->thumbnail) : null);
+        if (empty($image)) {
+            return null;
+        }
+        $stock = (int) ($dealFeatured?->stock ?? 5);
+        $stockLabel = $stock > 0 ? 'Only ' . $stock . ' left' : 'Out of stock';
+        $detailsUrl = !empty($dealFeatured?->id)
+            ? route('frontend.product.details', ['product' => $dealFeatured->id])
+            : 'products.html';
+
+        return (object) [
+            'title' => $title,
+            'summary' => $summary,
+            'sale_price' => $salePrice,
+            'old_price' => $oldPrice,
+            'save_amount' => $saveAmount,
+            'save_percent' => $savePercent,
+            'image' => $image,
+            'stock_label' => $stockLabel,
+            'details_url' => $detailsUrl,
+            'countdown_seconds' => $countdownSeconds,
+        ];
+    }
+
     private function getCurrentLanguageId(): ?int
     {
         $languageCode = session('lang');
@@ -538,6 +696,7 @@ class HomeController extends Controller
             $category->item_count = (int) ($counts[$category->id] ?? 0);
             $category->icon_class = $hasIconColumn ? trim((string) ($category->icon ?? '')) : '';
             $category->icon_paths = $category->icon_class !== '' ? [] : $iconSet[$index % count($iconSet)];
+            $category->display_name = Str::limit((string) $category->name, 20);
 
             return $category;
         });

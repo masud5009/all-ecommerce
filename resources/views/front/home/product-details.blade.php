@@ -32,7 +32,8 @@
                     <div
                         class="magnify overflow-hidden rounded-3xl border border-green-100 bg-white shadow-[0_22px_55px_rgba(15,23,42,0.12)]"
                         data-magnify>
-                        <img src="https://picsum.photos/seed/detail-fallback/1200/900" alt="Product preview"
+                        <img src="{{ $productDetailData['image'] ?? 'about:blank' }}"
+                            alt="{{ $productDetailData['name'] ?? 'Product preview' }}"
                             class="h-[360px] w-full object-cover sm:h-[430px] lg:h-[520px]" data-detail-main
                             data-magnify-image>
                     </div>

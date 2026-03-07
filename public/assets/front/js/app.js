@@ -1,271 +1,6 @@
-(() => {
+﻿(() => {
 
-  const products = [
-    {
-      id: 'avocado',
-      name: 'Organic Hass Avocado',
-      category: 'Fresh Produce',
-      rating: 4.7,
-      reviews: 142,
-      badge: 'Farm fresh',
-      image: 'https://picsum.photos/seed/avocado/600/400',
-      isDeal: true,
-      popular: true,
-      description: 'Buttery and rich avocados sourced from small farms for creamy texture and clean flavor.',
-      nutrition: ['Calories 160', 'Fat 14g', 'Fiber 7g', 'Potassium 485mg'],
-      reviewList: [
-        { name: 'Ariana', rating: 5, text: 'Perfect ripeness and packed carefully.' },
-        { name: 'Chris', rating: 4, text: 'Great taste and value for the size.' }
-      ],
-      units: [
-        { label: '1kg', price: 6.5, oldPrice: 7.4 },
-        { label: '500g', price: 3.5, oldPrice: 4.1 },
-        { label: '250g', price: 2.0, oldPrice: 2.5 }
-      ]
-    },
-    {
-      id: 'strawberries',
-      name: 'Sweet Strawberries',
-      category: 'Fresh Produce',
-      rating: 4.6,
-      reviews: 118,
-      badge: 'Seasonal',
-      image: 'https://picsum.photos/seed/strawberries/600/400',
-      isDeal: true,
-      popular: true,
-      description: 'Juicy, fragrant strawberries picked at peak sweetness for snacking and desserts.',
-      nutrition: ['Calories 33', 'Vitamin C 59mg', 'Fiber 2g', 'Natural sugars 4.9g'],
-      reviewList: [
-        { name: 'Maya', rating: 5, text: 'Sweet and vibrant, made great smoothies.' },
-        { name: 'Leo', rating: 4, text: 'Fresh and firm, held up well in transit.' }
-      ],
-      units: [
-        { label: '1kg', price: 8.2, oldPrice: 9.0 },
-        { label: '500g', price: 4.4, oldPrice: 4.9 },
-        { label: '250g', price: 2.5, oldPrice: 2.9 }
-      ]
-    },
-    {
-      id: 'spinach',
-      name: 'Baby Spinach Leaves',
-      category: 'Fresh Produce',
-      rating: 4.5,
-      reviews: 96,
-      badge: 'Washed',
-      image: 'https://picsum.photos/seed/spinach/600/400',
-      isDeal: true,
-      popular: true,
-      description: 'Tender baby spinach pre-washed and ready for salads, sautes, or smoothies.',
-      nutrition: ['Calories 23', 'Protein 2.9g', 'Iron 2.7mg', 'Vitamin A 469mcg'],
-      reviewList: [
-        { name: 'Jordan', rating: 5, text: 'Crisp and clean, no wilted leaves.' },
-        { name: 'Nia', rating: 4, text: 'Great for quick weeknight meals.' }
-      ],
-      units: [
-        { label: '1kg', price: 4.5, oldPrice: 5.2 },
-        { label: '500g', price: 2.6, oldPrice: 3.1 },
-        { label: '250g', price: 1.5, oldPrice: 1.8 }
-      ]
-    },
-    {
-      id: 'roma-tomatoes',
-      name: 'Roma Tomatoes',
-      category: 'Fresh Produce',
-      rating: 4.4,
-      reviews: 83,
-      badge: 'Vine ripened',
-      image: 'https://picsum.photos/seed/tomatoes/600/400',
-      isDeal: true,
-      popular: true,
-      description: 'Rich, meaty Roma tomatoes ideal for sauces, salads, and roasting.',
-      nutrition: ['Calories 18', 'Vitamin C 14mg', 'Potassium 237mg', 'Fiber 1.2g'],
-      reviewList: [
-        { name: 'Elle', rating: 5, text: 'Great for pasta sauce and salsa.' },
-        { name: 'Sam', rating: 4, text: 'Firm and flavorful, no bruising.' }
-      ],
-      units: [
-        { label: '1kg', price: 3.8, oldPrice: 4.4 },
-        { label: '500g', price: 2.1, oldPrice: 2.6 },
-        { label: '250g', price: 1.3, oldPrice: 1.6 }
-      ]
-    },
-    {
-      id: 'grapes',
-      name: 'Red Seedless Grapes',
-      category: 'Fresh Produce',
-      rating: 4.5,
-      reviews: 102,
-      badge: 'Sweet bite',
-      image: 'https://picsum.photos/seed/grapes/600/400',
-      isDeal: true,
-      popular: false,
-      description: 'Crunchy, seedless grapes with a balanced sweet flavor and crisp texture.',
-      nutrition: ['Calories 69', 'Vitamin K 14mcg', 'Carbs 18g', 'Water 81%'],
-      reviewList: [
-        { name: 'Priya', rating: 5, text: 'Loved the crunch and freshness.' },
-        { name: 'Omar', rating: 4, text: 'Great for lunchboxes and snacking.' }
-      ],
-      units: [
-        { label: '1kg', price: 6.9, oldPrice: 7.6 },
-        { label: '500g', price: 3.8, oldPrice: 4.2 },
-        { label: '250g', price: 2.2, oldPrice: 2.6 }
-      ]
-    },
-    {
-      id: 'salmon',
-      name: 'Atlantic Salmon Fillet',
-      category: 'Seafood',
-      rating: 4.8,
-      reviews: 154,
-      badge: 'Chef pick',
-      image: 'https://picsum.photos/seed/salmon/600/400',
-      isDeal: true,
-      popular: true,
-      description: 'Rich, buttery salmon fillets trimmed and portioned for easy weeknight dinners.',
-      nutrition: ['Calories 208', 'Protein 20g', 'Omega-3 2.3g', 'Vitamin D 10mcg'],
-      reviewList: [
-        { name: 'Grace', rating: 5, text: 'Perfect thickness and flavor.' },
-        { name: 'Ben', rating: 5, text: 'Arrived chilled and beautifully cut.' }
-      ],
-      units: [
-        { label: '1kg', price: 18.5, oldPrice: 21.0 },
-        { label: '500g', price: 9.8, oldPrice: 11.2 },
-        { label: '250g', price: 5.4, oldPrice: 6.2 }
-      ]
-    },
-    {
-      id: 'chicken',
-      name: 'Chicken Breast Fillet',
-      category: 'Meat & Poultry',
-      rating: 4.6,
-      reviews: 131,
-      badge: 'Trimmed',
-      image: 'https://picsum.photos/seed/chicken/600/400',
-      isDeal: true,
-      popular: true,
-      description: 'Lean, tender chicken breast fillets ready for grilling, roasting, or stir-fry.',
-      nutrition: ['Calories 165', 'Protein 31g', 'Fat 3.6g', 'Sodium 74mg'],
-      reviewList: [
-        { name: 'Ivy', rating: 5, text: 'Moist and clean cuts every time.' },
-        { name: 'Jon', rating: 4, text: 'Great for meal prep and salads.' }
-      ],
-      units: [
-        { label: '1kg', price: 10.2, oldPrice: 11.4 },
-        { label: '500g', price: 5.5, oldPrice: 6.2 },
-        { label: '250g', price: 3.1, oldPrice: 3.6 }
-      ]
-    },
-    {
-      id: 'sirloin',
-      name: 'Beef Sirloin Steak',
-      category: 'Meat & Poultry',
-      rating: 4.7,
-      reviews: 97,
-      badge: 'Grass fed',
-      image: 'https://picsum.photos/seed/sirloin/600/400',
-      isDeal: true,
-      popular: false,
-      description: 'Juicy sirloin with a rich bite, hand-trimmed for tenderness.',
-      nutrition: ['Calories 217', 'Protein 26g', 'Fat 11g', 'Iron 2.3mg'],
-      reviewList: [
-        { name: 'Lena', rating: 5, text: 'Loved the marbling and flavor.' },
-        { name: 'Marcus', rating: 4, text: 'Great grill results and easy to cook.' }
-      ],
-      units: [
-        { label: '1kg', price: 16.8, oldPrice: 19.0 },
-        { label: '500g', price: 8.9, oldPrice: 10.2 },
-        { label: '250g', price: 4.9, oldPrice: 5.6 }
-      ]
-    },
-    {
-      id: 'shrimp',
-      name: 'Wild Gulf Shrimp',
-      category: 'Seafood',
-      rating: 4.5,
-      reviews: 88,
-      badge: 'Peeled',
-      image: 'https://picsum.photos/seed/shrimp/600/400',
-      isDeal: true,
-      popular: false,
-      description: 'Sweet, wild-caught shrimp peeled and deveined for quick cooking.',
-      nutrition: ['Calories 99', 'Protein 24g', 'Cholesterol 189mg', 'Sodium 111mg'],
-      reviewList: [
-        { name: 'Tessa', rating: 5, text: 'Clean flavor and great texture.' },
-        { name: 'Ravi', rating: 4, text: 'Perfect for garlic butter shrimp.' }
-      ],
-      units: [
-        { label: '1kg', price: 14.6, oldPrice: 16.8 },
-        { label: '500g', price: 7.8, oldPrice: 9.1 },
-        { label: '250g', price: 4.3, oldPrice: 5.0 }
-      ]
-    },
-    {
-      id: 'almonds',
-      name: 'Raw Almonds',
-      category: 'Pantry',
-      rating: 4.4,
-      reviews: 75,
-      badge: 'New crop',
-      image: 'https://picsum.photos/seed/almonds/600/400',
-      isDeal: false,
-      popular: true,
-      description: 'Crunchy raw almonds packed with protein and healthy fats.',
-      nutrition: ['Calories 579', 'Protein 21g', 'Fat 50g', 'Fiber 12g'],
-      reviewList: [
-        { name: 'Drew', rating: 5, text: 'Fresh and crunchy, great snack.' },
-        { name: 'Salma', rating: 4, text: 'Excellent for baking and granola.' }
-      ],
-      units: [
-        { label: '1kg', price: 12.4, oldPrice: 14.0 },
-        { label: '500g', price: 6.6, oldPrice: 7.5 },
-        { label: '250g', price: 3.6, oldPrice: 4.2 }
-      ]
-    },
-    {
-      id: 'cheddar',
-      name: 'Aged Cheddar Block',
-      category: 'Dairy',
-      rating: 4.6,
-      reviews: 69,
-      badge: 'Aged 12 months',
-      image: 'https://picsum.photos/seed/cheddar/600/400',
-      isDeal: false,
-      popular: false,
-      description: 'Sharp, creamy cheddar with a rich finish for cheese boards and sandwiches.',
-      nutrition: ['Calories 403', 'Protein 25g', 'Calcium 721mg', 'Fat 33g'],
-      reviewList: [
-        { name: 'Sofia', rating: 5, text: 'Bold flavor and smooth texture.' },
-        { name: 'Ethan', rating: 4, text: 'Great for grilled cheese nights.' }
-      ],
-      units: [
-        { label: '1kg', price: 9.6, oldPrice: 10.8 },
-        { label: '500g', price: 5.0, oldPrice: 5.8 },
-        { label: '250g', price: 2.9, oldPrice: 3.4 }
-      ]
-    },
-    {
-      id: 'jasmine-rice',
-      name: 'Jasmine Rice',
-      category: 'Pantry',
-      rating: 4.3,
-      reviews: 58,
-      badge: 'Aromatic',
-      image: 'https://picsum.photos/seed/rice/600/400',
-      isDeal: true,
-      popular: false,
-      description: 'Fragrant jasmine rice with soft, fluffy grains for daily meals.',
-      nutrition: ['Calories 365', 'Protein 7g', 'Carbs 80g', 'Iron 1.5mg'],
-      reviewList: [
-        { name: 'Nora', rating: 4, text: 'Cooks evenly and smells amazing.' },
-        { name: 'Pete', rating: 4, text: 'Good staple for the pantry.' }
-      ],
-      units: [
-        { label: '1kg', price: 4.2, oldPrice: 4.9 },
-        { label: '500g', price: 2.4, oldPrice: 2.9 },
-        { label: '250g', price: 1.4, oldPrice: 1.7 }
-      ]
-    }
-  ];
+  const products = [];
 
   const serverFeaturedProducts =
     typeof window !== 'undefined' && Array.isArray(window.serverFeaturedProducts)
@@ -279,6 +14,12 @@
 
       const basePrice = Number(raw.price || raw.current_price || 0);
       const baseOldPrice = Number(raw.oldPrice || raw.previous_price || 0);
+      const normalizedImages = Array.isArray(raw.images)
+        ? raw.images.filter((src) => typeof src === 'string' && src.trim() !== '')
+        : [];
+      const primaryImage =
+        (typeof raw.image === 'string' && raw.image.trim() !== '' ? raw.image : normalizedImages[0]) || '';
+      if (!primaryImage) return;
       const normalizedUnits =
         Array.isArray(raw.units) && raw.units.length
           ? raw.units.map((unit, idx) => ({
@@ -295,11 +36,8 @@
         rating: Number(raw.rating || 4.7),
         reviews: Number(raw.reviews || 142),
         badge: raw.badge || raw.category || 'Featured',
-        image: raw.image || `https://picsum.photos/seed/featured-${id}/600/400`,
-        images:
-          Array.isArray(raw.images) && raw.images.length
-            ? raw.images
-            : [raw.image || `https://picsum.photos/seed/featured-${id}/600/400`],
+        image: primaryImage,
+        images: normalizedImages.length ? normalizedImages : [primaryImage],
         isDeal: Boolean(raw.isDeal || (baseOldPrice > basePrice)),
         popular: raw.popular !== false,
         description: raw.description || 'Featured product from our catalog.',
@@ -330,6 +68,12 @@
 
       const basePrice = Number(raw.price || raw.current_price || 0);
       const baseOldPrice = Number(raw.oldPrice || raw.previous_price || 0);
+      const normalizedImages = Array.isArray(raw.images)
+        ? raw.images.filter((src) => typeof src === 'string' && src.trim() !== '')
+        : [];
+      const primaryImage =
+        (typeof raw.image === 'string' && raw.image.trim() !== '' ? raw.image : normalizedImages[0]) || '';
+      if (!primaryImage) return;
       const normalizedUnits =
         Array.isArray(raw.units) && raw.units.length
           ? raw.units.map((unit, idx) => ({
@@ -346,11 +90,8 @@
         rating: Number(raw.rating || 4.7),
         reviews: Number(raw.reviews || 142),
         badge: raw.badge || raw.category || 'Featured',
-        image: raw.image || `https://picsum.photos/seed/flash-${id}/600/400`,
-        images:
-          Array.isArray(raw.images) && raw.images.length
-            ? raw.images
-            : [raw.image || `https://picsum.photos/seed/flash-${id}/600/400`],
+        image: primaryImage,
+        images: normalizedImages.length ? normalizedImages : [primaryImage],
         isDeal: true,
         popular: raw.popular !== false,
         description: raw.description || 'Limited flash offer from our catalog.',
@@ -441,7 +182,7 @@
     return wishlist;
   };
 
-  const findProduct = (id) => products.find((product) => product.id === id);
+  const findProduct = (id) => products.find((product) => String(product.id) === String(id));
   const findUnit = (product, label) => product.units.find((unit) => unit.label === label) || product.units[0];
 
   const getCartCount = (cart) => cart.reduce((sum, item) => sum + item.qty, 0);
@@ -966,7 +707,7 @@
                 <h3 class="mt-2 text-2xl font-semibold text-slate-900" id="product-modal-title" data-modal-name>Product name</h3>
                 <div class="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500" data-modal-rating></div>
                 <p class="mt-4 text-sm text-slate-600" data-modal-description></p>
-                <div class="mt-5">
+                <div class="mt-5" data-modal-units-block>
                   <p class="text-sm font-semibold text-slate-900">Choose size</p>
                   <div class="mt-3 grid gap-2" data-modal-units role="radiogroup"></div>
                 </div>
@@ -1063,7 +804,12 @@
       }
     }
 
+    const hasVariants = product.units.length > 1;
+    const unitsBlock = qs('[data-modal-units-block]', modal);
     const unitsEl = qs('[data-modal-units]', modal);
+    if (unitsBlock) {
+      unitsBlock.classList.toggle('hidden', !hasVariants);
+    }
     unitsEl.innerHTML = buildModalUnits(product, selectedUnit);
     const selectedInput = qs('[data-modal-unit]:checked', modal) || qs('[data-modal-unit]', modal);
     updateModalPrice(modal, selectedInput);
@@ -1083,7 +829,7 @@
     modal.scrollTop = 0;
     lockBodyScroll();
 
-    if (options.focusUnits) {
+    if (options.focusUnits && hasVariants) {
       const focusTarget = qs('[data-modal-unit]:checked', modal) || qs('[data-modal-unit]', modal);
       if (focusTarget) {
         focusTarget.focus();
@@ -1208,7 +954,7 @@
     }
 
     if (!list.length) {
-      list = products.filter((product) => product.isDeal);
+      list = [];
     }
 
     if (limit) list = list.slice(0, limit);
@@ -1428,23 +1174,48 @@
 
     if (!sourceProduct) {
       const params = new URLSearchParams(window.location.search);
-      const productId = params.get('id') || products[0].id;
-      sourceProduct = findProduct(productId) || products[0];
+      const productId = params.get('id');
+      sourceProduct = productId ? findProduct(productId) : null;
     }
 
-    if (!sourceProduct) return;
+    if (!sourceProduct) {
+      detail.innerHTML = `
+        <div class="rounded-2xl border border-dashed border-green-200 bg-white p-8 text-center text-sm text-slate-500">
+          Product information is unavailable.
+        </div>
+      `;
+      return;
+    }
 
     const fallbackUnit = {
       label: '1 unit',
       price: Number(sourceProduct.price || sourceProduct.current_price || 0),
       oldPrice: Number(sourceProduct.oldPrice || sourceProduct.previous_price || 0)
     };
+    const sourceImages =
+      Array.isArray(sourceProduct.images) && sourceProduct.images.length
+        ? sourceProduct.images.filter((src) => typeof src === 'string' && src.trim() !== '')
+        : [];
+    const primaryImage =
+      (typeof sourceProduct.image === 'string' && sourceProduct.image.trim() !== ''
+        ? sourceProduct.image
+        : sourceImages[0]) || '';
+
+    if (!primaryImage) {
+      detail.innerHTML = `
+        <div class="rounded-2xl border border-dashed border-green-200 bg-white p-8 text-center text-sm text-slate-500">
+          Product image is unavailable.
+        </div>
+      `;
+      return;
+    }
 
     const product = {
       ...sourceProduct,
       rating: Number(sourceProduct.rating || 4.7),
       reviews: Number(sourceProduct.reviews || 142),
-      image: sourceProduct.image || `https://picsum.photos/seed/${sourceProduct.id || 'product'}/800/600`,
+      image: primaryImage,
+      images: sourceImages.length ? sourceImages : [primaryImage],
       summary: sourceProduct.summary || sourceProduct.description || '',
       description: sourceProduct.description || sourceProduct.summary || '',
       units:
@@ -1456,12 +1227,31 @@
           ? sourceProduct.nutrition
           : ['Fresh stock', 'Quality checked'],
       reviewList:
-        Array.isArray(sourceProduct.reviewList) && sourceProduct.reviewList.length
-          ? sourceProduct.reviewList
-          : [{ name: 'Customer', rating: 5, text: 'Great quality product.' }]
+          Array.isArray(sourceProduct.reviewList) && sourceProduct.reviewList.length
+            ? sourceProduct.reviewList
+            : [{ name: 'Customer', rating: 5, text: 'Great quality product.' }]
     };
+    const normalizedId = String(product.id || '');
+    if (normalizedId && !findProduct(normalizedId)) {
+      products.unshift({
+        id: normalizedId,
+        name: product.name || `Product #${normalizedId}`,
+        category: product.category || 'Featured',
+        rating: Number(product.rating || 4.7),
+        reviews: Number(product.reviews || 142),
+        badge: product.badge || product.category || 'Featured',
+        image: product.image,
+        images: product.images,
+        isDeal: Boolean(product.isDeal),
+        popular: Boolean(product.popular),
+        description: product.description || product.summary || '',
+        nutrition: Array.isArray(product.nutrition) ? product.nutrition : [],
+        reviewList: Array.isArray(product.reviewList) ? product.reviewList : [],
+        units: Array.isArray(product.units) && product.units.length ? product.units : [fallbackUnit]
+      });
+    }
 
-    detail.dataset.productId = product.id;
+    detail.dataset.productId = normalizedId;
 
     const nameEl = qs('[data-detail-name]');
     nameEl.textContent = product.name;
@@ -1511,14 +1301,7 @@
     const images =
       Array.isArray(product.images) && product.images.length
         ? product.images
-        : [
-            product.image,
-            `https://picsum.photos/seed/${product.id}-alt1/800/600`,
-            `https://picsum.photos/seed/${product.id}-alt2/800/600`,
-            `https://picsum.photos/seed/${product.id}-alt3/800/600`,
-            `https://picsum.photos/seed/${product.id}-alt4/800/600`,
-            `https://picsum.photos/seed/${product.id}-alt5/800/600`
-          ];
+        : [product.image];
 
     const mainImage = qs('[data-detail-main]');
     if (mainImage) {
@@ -1945,3 +1728,4 @@
   updateCartBadges();
   initScrollReveal();
 })();
+
