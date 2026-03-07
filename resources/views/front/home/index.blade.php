@@ -849,4 +849,10 @@
             </div>
         </div>
     </section>
+
+    <script>
+        window.serverFeaturedProducts = @json($serverFeaturedProducts);
+        window.serverPopularProducts = @json($serverPopularProducts);
+        window.serverFlashSaleProducts = @json($serverFlashSaleProducts);
+    </script>
 @endsection

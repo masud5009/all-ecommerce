@@ -143,6 +143,11 @@
         })();
     </script>
 
+    <script>
+        window.frontRoutes = window.frontRoutes || {};
+        window.frontRoutes.productDetails = @json(route('frontend.product.details', ['product' => '__PRODUCT_ID__']));
+    </script>
+
     <script src="{{ asset('assets/front/js/app.js') }}"></script>
 </body>
 

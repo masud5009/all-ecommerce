@@ -184,7 +184,6 @@
   }
 
   const storeKey = 'grocery_cart';
-  const wishlistKey = 'grocery_wishlist';
   const modalState = {
     element: null,
     activeProductId: null,
@@ -194,6 +193,33 @@
 
   const qs = (selector, scope = document) => scope.querySelector(selector);
   const qsa = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
+
+  const productDetailsRouteTemplate =
+    typeof window !== 'undefined' &&
+    window.frontRoutes &&
+    typeof window.frontRoutes.productDetails === 'string'
+      ? window.frontRoutes.productDetails
+      : '';
+
+  const getProductDetailsUrl = (productId) => {
+    const normalizedId = String(productId ?? '').trim();
+    if (!normalizedId) {
+      return productDetailsRouteTemplate || '/product-details';
+    }
+
+    const encodedId = encodeURIComponent(normalizedId);
+
+    if (productDetailsRouteTemplate) {
+      if (productDetailsRouteTemplate.includes('__PRODUCT_ID__')) {
+        return productDetailsRouteTemplate.replace('__PRODUCT_ID__', encodedId);
+      }
+
+      const separator = productDetailsRouteTemplate.includes('?') ? '&' : '?';
+      return `${productDetailsRouteTemplate}${separator}product=${encodedId}`;
+    }
+
+    return `/product-details/${encodedId}`;
+  };
 
   const formatCurrency = (value) =>
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
@@ -216,30 +242,6 @@
 
   const saveCart = (cart) => {
     localStorage.setItem(storeKey, JSON.stringify(cart));
-  };
-
-  const getWishlist = () => {
-    try {
-      return JSON.parse(localStorage.getItem(wishlistKey)) || [];
-    } catch (error) {
-      return [];
-    }
-  };
-
-  const saveWishlist = (wishlist) => {
-    localStorage.setItem(wishlistKey, JSON.stringify(wishlist));
-  };
-
-  const toggleWishlist = (id) => {
-    const wishlist = getWishlist();
-    const index = wishlist.indexOf(id);
-    if (index >= 0) {
-      wishlist.splice(index, 1);
-    } else {
-      wishlist.push(id);
-    }
-    saveWishlist(wishlist);
-    return wishlist;
   };
 
   const findProduct = (id) => products.find((product) => String(product.id) === String(id));
@@ -425,11 +427,6 @@
     showSlide(0);
   };
 
-  const computeDiscount = (price, oldPrice) => {
-    if (!oldPrice || oldPrice <= price) return 0;
-    return Math.round((1 - price / oldPrice) * 100);
-  };
-
   const renderStars = (rating) => {
     const rounded = Math.round(rating);
     let stars = '';
@@ -490,183 +487,16 @@
     return cart;
   };
 
-  const updateUnitDisplay = (card) => {
-    const select = qs('[data-unit-select]', card);
-    if (!select) return;
-    const selected = select.selectedOptions[0];
-    if (!selected) return;
-    const price = Number(selected.dataset.price || 0);
-    const oldPrice = Number(selected.dataset.oldPrice || 0);
-    const priceEl = qs('[data-price]', card);
-    const oldEl = qs('[data-old-price]', card);
-    const badgeEl = qs('[data-discount-badge]', card);
-    priceEl.textContent = formatCurrency(price);
-    if (oldPrice && oldPrice > price) {
-      const discount = computeDiscount(price, oldPrice);
-      oldEl.textContent = formatCurrency(oldPrice);
-      oldEl.classList.remove('hidden');
-      if (badgeEl) {
-        badgeEl.textContent = `-${discount}%`;
-        badgeEl.classList.remove('hidden');
-      }
-    } else {
-      oldEl.classList.add('hidden');
-      if (badgeEl) {
-        if (card.dataset.deal === 'true') {
-          badgeEl.textContent = 'Deal';
-          badgeEl.classList.remove('hidden');
-        } else {
-          badgeEl.classList.add('hidden');
-        }
-      }
-    }
-  };
-
-  const syncCardState = (card) => {
-    const id = card.dataset.productId;
-    const unit = qs('[data-unit-select]', card).value;
-    const cart = getCart();
-    const item = getCartItem(cart, id, unit);
-    const addBtn = qs('[data-action="add"]', card);
-    const stepper = qs('[data-qty-stepper]', card);
-    const qtyEl = qs('[data-qty]', stepper);
-
-    if (item) {
-      addBtn.classList.add('hidden');
-      stepper.classList.remove('hidden');
-      qtyEl.textContent = item.qty;
-    } else {
-      addBtn.classList.remove('hidden');
-      stepper.classList.add('hidden');
-    }
-  };
-
-  const syncWishlistState = (card, wishlist) => {
-    const button = qs('[data-action="wishlist"]', card);
-    if (!button) return;
-    const id = card.dataset.productId;
-    const name = card.dataset.productName || 'item';
-    const isActive = wishlist.includes(id);
-    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-    button.setAttribute(
-      'aria-label',
-      `${isActive ? 'Remove' : 'Add'} ${name} ${isActive ? 'from' : 'to'} wishlist`
-    );
-  };
-
-  const refreshAllProductCards = () => {
-    const wishlist = getWishlist();
-    qsa('[data-product-card]').forEach((card) => {
-      updateUnitDisplay(card);
-      syncCardState(card);
-      syncWishlistState(card, wishlist);
-    });
-  };
-
-  const productCardTemplate = (product, layout = 'grid') => {
-    const unit = product.units[0];
-    const discount = computeDiscount(unit.price, unit.oldPrice);
-    const wrapperClass = layout === 'slider' ? 'min-w-[220px] snap-start sm:min-w-[240px] lg:min-w-[260px]' : '';
-    const truncate = (value, limit) =>
-      value && value.length > limit ? `${value.slice(0, Math.max(1, limit - 3))}...` : value;
-    const hasVariants = product.units.length > 1;
-    const stockRaw = Number(product.stock ?? (product.isDeal ? 5 : 12));
-    const stockLabel = stockRaw > 0 ? `Only ${Math.min(stockRaw, 5)} left` : 'Out of stock';
-    const variantLabel = hasVariants ? 'Variants' : 'Standard';
-    const variantText = hasVariants ? `${product.units.length} sizes available` : 'Single size';
-    const productTitle = truncate(product.name || 'Untitled Product', 42);
-    const badgeText = truncate(product.badge || 'Featured', 14);
-    const showOldPrice = unit.oldPrice && unit.oldPrice > unit.price;
-    const rating = Number(product.rating || 0);
-    const reviews = Number(product.reviews || 0);
-
-    const cardMarkup = `
-      <article class="group relative flex h-full flex-col rounded-2xl border border-green-100 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)]" data-featured-card data-reveal-child data-product-id="${product.id}" data-product-name="${product.name}">
-        <span class="absolute left-4 top-4 rounded-full bg-green-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-sm ${discount > 0 ? '' : 'hidden'}">
-          -${discount}%
-        </span>
-
-        <div class="relative overflow-hidden rounded-2xl bg-green-50">
-          <a href="product-details.html?id=${product.id}" class="block">
-            <img src="${product.image}" alt="${product.name}" class="h-40 w-full object-cover transition duration-500 group-hover:scale-105">
-          </a>
-          <button type="button" data-action="quick-view" data-product-id="${product.id}" class="absolute bottom-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition duration-300 hover:bg-green-700" aria-label="Quick view ${product.name}">
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M12 5v14"></path>
-              <path d="M5 12h14"></path>
-            </svg>
-          </button>
-        </div>
-
-        <div class="mt-4 space-y-2">
-          <div class="flex items-start justify-between gap-2">
-            <a href="product-details.html?id=${product.id}" class="text-sm font-semibold text-slate-900 transition hover:text-green-700">
-              ${productTitle}
-            </a>
-            <span class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">
-              ${badgeText}
-            </span>
-          </div>
-
-          <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-            <span class="flex items-center gap-1">${renderStars(rating)}</span>
-            <span>${rating.toFixed(1)} (${reviews} reviews)</span>
-            <span class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">${stockLabel}</span>
-          </div>
-
-          <div class="flex items-center gap-2 text-xs text-slate-500">
-            <span class="rounded-full bg-green-50 px-2 py-1 text-[10px] font-semibold text-green-700">
-              ${variantLabel}
-            </span>
-            <span>${variantText}</span>
-          </div>
-
-          <div class="flex items-end justify-between gap-3">
-            <div>
-              <p class="text-3xl font-semibold text-slate-900">${formatCurrency(unit.price)}</p>
-              <p class="text-sm text-slate-400 line-through ${showOldPrice ? '' : 'hidden'}">${showOldPrice ? formatCurrency(unit.oldPrice) : ''}</p>
-            </div>
-          </div>
-        </div>
-      </article>
-    `;
-
-    if (layout === 'slider') {
-      return `<div class="${wrapperClass}">${cardMarkup}</div>`;
-    }
-
-    return cardMarkup;
-  };
-
-  const setCardUnitSelection = (productId, unitLabel) => {
-    if (!productId || !unitLabel) return;
-    qsa(`[data-product-card][data-product-id="${productId}"]`).forEach((card) => {
-      const select = qs('[data-unit-select]', card);
-      if (!select) return;
-      select.value = unitLabel;
-      updateUnitDisplay(card);
-      syncCardState(card);
-    });
-  };
-
   const buildModalUnits = (product, selectedUnit) =>
     product.units
       .map((option, index) => {
         const isChecked = selectedUnit ? option.label === selectedUnit : index === 0;
-        const discount = computeDiscount(option.price, option.oldPrice);
-        const badge = discount
-          ? `<span class="rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-semibold text-green-700">-${discount}%</span>`
-          : '<span class="rounded-full border border-green-100 px-2 py-0.5 text-[10px] font-semibold text-slate-500">Standard</span>';
         return `
           <label class="group relative flex cursor-pointer items-center gap-3">
             <input class="peer sr-only" type="radio" name="modal-unit" value="${option.label}" data-modal-unit data-price="${option.price}" data-old-price="${option.oldPrice || ''}" ${isChecked ? 'checked' : ''}>
             <div class="flex w-full items-center justify-between rounded-2xl border border-green-100 bg-white px-5 py-4 text-sm shadow-sm transition hover:border-green-300 hover:shadow-md peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:ring-2 peer-checked:ring-green-200">
               <div>
                 <p class="font-semibold text-slate-900">${option.label}</p>
-                <div class="mt-1 flex items-center gap-2 text-xs text-slate-500">
-                  ${badge}
-                  <span>${discount ? 'Limited deal' : 'Standard price'}</span>
-                </div>
               </div>
               <div class="text-right">
                 <p class="font-semibold text-slate-900">${formatCurrency(option.price)}</p>
@@ -682,20 +512,12 @@
     product.units
       .map((option, index) => {
         const isChecked = selectedUnit ? option.label === selectedUnit : index === 0;
-        const discount = computeDiscount(option.price, option.oldPrice);
-        const badge = discount
-          ? `<span class="rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-semibold text-green-700">-${discount}%</span>`
-          : '<span class="rounded-full border border-green-100 px-2 py-0.5 text-[10px] font-semibold text-slate-500">Standard</span>';
         return `
           <label class="group relative flex cursor-pointer items-center gap-3">
             <input class="peer sr-only" type="radio" name="detail-unit" value="${option.label}" data-detail-unit data-price="${option.price}" data-old-price="${option.oldPrice || ''}" ${isChecked ? 'checked' : ''}>
             <div class="flex w-full items-center justify-between rounded-2xl border border-green-100 bg-white px-5 py-4 text-sm shadow-sm transition hover:border-green-300 hover:shadow-md peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:ring-2 peer-checked:ring-green-200">
               <div>
                 <p class="font-semibold text-slate-900">${option.label}</p>
-                <div class="mt-1 flex items-center gap-2 text-xs text-slate-500">
-                  ${badge}
-                  <span>${discount ? 'Limited deal' : 'Standard price'}</span>
-                </div>
               </div>
               <div class="text-right">
                 <p class="font-semibold text-slate-900">${formatCurrency(option.price)}</p>
@@ -757,14 +579,9 @@
                   <img src="" alt="" class="h-64 w-full object-cover sm:h-72" data-modal-image data-magnify-image>
                 </div>
                 <div class="mt-3 hidden grid-cols-4 gap-2" data-modal-thumbs></div>
-                <div class="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
-                  <span class="rounded-full bg-green-100 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-green-700" data-modal-category>Category</span>
-                  <span class="rounded-full border border-green-100 bg-white px-3 py-1 text-[10px] font-semibold text-slate-600" data-modal-badge>Badge</span>
-                </div>
               </div>
               <div class="p-6 sm:p-8">
-                <p class="text-[11px] font-semibold uppercase tracking-wide text-green-600" data-modal-kicker>Quick view</p>
-                <h3 class="mt-2 text-2xl font-semibold text-slate-900" id="product-modal-title" data-modal-name>Product name</h3>
+                <h3 class="text-2xl font-semibold text-slate-900" id="product-modal-title" data-modal-name>Product name</h3>
                 <div class="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500" data-modal-rating></div>
                 <p class="mt-4 text-sm text-slate-600" data-modal-description></p>
                 <div class="mt-5" data-modal-units-block>
@@ -785,8 +602,7 @@
                     <button class="rounded-2xl bg-green-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" type="button" data-action="add">Add to cart</button>
                   </div>
                 </div>
-                <div class="mt-5 flex items-center justify-between text-xs text-slate-500">
-                  <span>Delivery in 90 min</span>
+                <div class="mt-5 flex items-center justify-end text-xs text-slate-500">
                   <a href="#" class="font-semibold text-green-700" data-modal-link>View details</a>
                 </div>
               </div>
@@ -813,17 +629,7 @@
     modalState.activeProductId = product.id;
     modalState.lastFocused = document.activeElement;
 
-    qs('[data-modal-kicker]', modal).textContent = options.mode === 'options' ? 'Select options' : 'Quick view';
     qs('[data-modal-name]', modal).textContent = product.name;
-    qs('[data-modal-category]', modal).textContent = product.category;
-
-    const badgeEl = qs('[data-modal-badge]', modal);
-    if (product.badge) {
-      badgeEl.textContent = product.badge;
-      badgeEl.classList.remove('hidden');
-    } else {
-      badgeEl.classList.add('hidden');
-    }
 
     const ratingEl = qs('[data-modal-rating]', modal);
     ratingEl.innerHTML = `
@@ -878,11 +684,7 @@
     if (qtyEl) qtyEl.textContent = '1';
 
     const linkEl = qs('[data-modal-link]', modal);
-    const productIdText = String(product.id || '');
-    const detailParam = /^[0-9]+$/.test(productIdText)
-      ? `product=${encodeURIComponent(productIdText)}`
-      : `id=${encodeURIComponent(productIdText)}`;
-    linkEl.href = `product-details.html?${detailParam}`;
+    linkEl.href = getProductDetailsUrl(product.id);
 
     modal.classList.remove('hidden');
     modal.setAttribute('aria-hidden', 'false');
@@ -1093,47 +895,18 @@
     sections.forEach((section) => observer.observe(section));
   };
 
-  const getListingFilters = () => {
-    const selected = qsa('[data-filter-category]:checked').map((input) => input.value);
-    const sortValue = qs('[data-sort]') ? qs('[data-sort]').value : 'featured';
-    return { categories: selected, sort: sortValue };
-  };
-
-  const renderListingGrid = () => {
-    const grid = qs('[data-products-grid][data-products-source=\"listing\"]');
-    if (!grid) return;
-    let list = [...products];
-    const { categories, sort } = getListingFilters();
-
-    if (categories.length) {
-      list = list.filter((product) => categories.includes(product.category));
-    }
-
-    if (sort === 'price-low') {
-      list.sort((a, b) => a.units[0].price - b.units[0].price);
-    } else if (sort === 'price-high') {
-      list.sort((a, b) => b.units[0].price - a.units[0].price);
-    } else if (sort === 'rating') {
-      list.sort((a, b) => b.rating - a.rating);
-    }
-
-    grid.innerHTML = list.map((product) => productCardTemplate(product)).join('');
-
-    const countEl = qs('[data-results-count]');
-    if (countEl) {
-      countEl.textContent = list.length;
-    }
-
-    refreshAllProductCards();
-  };
-
   const updateDetailPrice = (detail) => {
     const select = qs('[data-detail-unit-select]', detail);
+    if (!select || !select.selectedOptions || !select.selectedOptions.length) return;
     const option = select.selectedOptions[0];
     const price = Number(option.dataset.price || 0);
     const oldPrice = Number(option.dataset.oldPrice || 0);
-    qs('[data-detail-price]', detail).textContent = formatCurrency(price);
+    const priceEl = qs('[data-detail-price]', detail);
+    if (priceEl) {
+      priceEl.textContent = formatCurrency(price);
+    }
     const oldEl = qs('[data-detail-old-price]', detail);
+    if (!oldEl) return;
     if (oldPrice && oldPrice > price) {
       oldEl.textContent = formatCurrency(oldPrice);
       oldEl.classList.remove('hidden');
@@ -1175,7 +948,9 @@
 
     if (!sourceProduct) {
       const params = new URLSearchParams(window.location.search);
-      const productId = params.get('id');
+      const pathMatch = window.location.pathname.match(/\/product-details\/([^/?#]+)/i);
+      const pathProductId = pathMatch ? decodeURIComponent(pathMatch[1]) : null;
+      const productId = params.get('product') || params.get('id') || pathProductId;
       sourceProduct = productId ? findProduct(productId) : null;
     }
 
@@ -1404,7 +1179,7 @@
           <div class="flex flex-wrap items-center gap-4 rounded-2xl border border-green-100 bg-white p-4 shadow-sm" data-cart-item data-product-id="${item.id}" data-unit="${item.unit}">
             <img src="${product.image}" alt="${product.name}" class="h-20 w-20 rounded-xl object-cover">
             <div class="min-w-[180px] flex-1">
-              <a href="product-details.html?id=${product.id}" class="text-sm font-semibold text-slate-900 hover:text-green-700">${product.name}</a>
+              <a href="${getProductDetailsUrl(product.id)}" class="text-sm font-semibold text-slate-900 hover:text-green-700">${product.name}</a>
               <p class="mt-1 text-xs text-slate-500">${item.unit}</p>
               <p class="mt-1 text-xs text-slate-500">${formatCurrency(unit.price)} per unit</p>
             </div>
@@ -1472,24 +1247,11 @@
       return;
     }
 
-    const unitSelect = event.target.closest('[data-unit-select]');
-    if (unitSelect) {
-      const card = unitSelect.closest('[data-product-card]');
-      if (card) {
-        updateUnitDisplay(card);
-        syncCardState(card);
-      }
-    }
-
     const detailUnit = event.target.closest('[data-detail-unit-select]');
     if (detailUnit) {
       const detail = detailUnit.closest('[data-product-detail]');
       updateDetailPrice(detail);
       syncDetailState(detail);
-    }
-
-    if (event.target.closest('[data-sort]') || event.target.closest('[data-filter-category]')) {
-      renderListingGrid();
     }
   });
 
@@ -1506,25 +1268,13 @@
       return;
     }
 
-    const wishlistButton = event.target.closest('[data-action="wishlist"]');
-    if (wishlistButton) {
-      const card = wishlistButton.closest('[data-product-card]');
-      if (card) {
-        toggleWishlist(card.dataset.productId);
-        refreshAllProductCards();
-      }
-      return;
-    }
-
     const quickViewButton = event.target.closest('[data-action="quick-view"]');
     if (quickViewButton) {
-      const card = quickViewButton.closest('[data-product-card], [data-featured-card]');
+      const card = quickViewButton.closest('[data-featured-card]');
       if (card) {
         const id = String(card.dataset.productId || quickViewButton.dataset.productId || '');
-        const unitSelect = qs('[data-unit-select]', card);
-        const unit = unitSelect ? unitSelect.value : null;
         if (id) {
-          openProductModal(id, { mode: 'quick', unit });
+          openProductModal(id, { mode: 'quick' });
         }
       }
       return;
@@ -1562,7 +1312,6 @@
     const addButton = event.target.closest('[data-action="add"]');
     if (addButton) {
       const modal = addButton.closest('[data-modal]');
-      const card = addButton.closest('[data-product-card]');
       const detail = addButton.closest('[data-product-detail]');
 
       if (modal) {
@@ -1574,30 +1323,11 @@
 
         if (productId && unit) {
           addToCart(productId, unit, qty);
-          setCardUnitSelection(productId, unit);
         }
 
         closeProductModal();
         updateCartBadges();
-        refreshAllProductCards();
         return;
-      }
-
-      if (card) {
-        const id = card.dataset.productId;
-        const product = findProduct(id);
-        const unitSelect = qs('[data-unit-select]', card);
-        const unit = unitSelect ? unitSelect.value : null;
-
-        if (product && product.units.length > 1) {
-          openProductModal(id, { mode: 'options', unit, focusUnits: true });
-          return;
-        }
-
-        if (unit) {
-          addToCart(id, unit);
-          syncCardState(card);
-        }
       }
 
       if (detail) {
@@ -1608,25 +1338,18 @@
       }
 
       updateCartBadges();
-      refreshAllProductCards();
       return;
     }
 
     const incButton = event.target.closest('[data-action="inc"]');
     if (incButton) {
       const cartItem = incButton.closest('[data-cart-item]');
-      const card = incButton.closest('[data-product-card]');
       const detail = incButton.closest('[data-product-detail]');
 
       if (cartItem) {
         updateCartItem(cartItem.dataset.productId, cartItem.dataset.unit, 1);
         renderCart();
         renderCheckoutSummary();
-      } else if (card) {
-        const id = card.dataset.productId;
-        const unit = qs('[data-unit-select]', card).value;
-        updateCartItem(id, unit, 1);
-        syncCardState(card);
       } else if (detail) {
         const id = detail.dataset.productId;
         const unit = qs('[data-detail-unit-select]', detail).value;
@@ -1635,25 +1358,18 @@
       }
 
       updateCartBadges();
-      refreshAllProductCards();
       return;
     }
 
     const decButton = event.target.closest('[data-action="dec"]');
     if (decButton) {
       const cartItem = decButton.closest('[data-cart-item]');
-      const card = decButton.closest('[data-product-card]');
       const detail = decButton.closest('[data-product-detail]');
 
       if (cartItem) {
         updateCartItem(cartItem.dataset.productId, cartItem.dataset.unit, -1);
         renderCart();
         renderCheckoutSummary();
-      } else if (card) {
-        const id = card.dataset.productId;
-        const unit = qs('[data-unit-select]', card).value;
-        updateCartItem(id, unit, -1);
-        syncCardState(card);
       } else if (detail) {
         const id = detail.dataset.productId;
         const unit = qs('[data-detail-unit-select]', detail).value;
@@ -1662,7 +1378,6 @@
       }
 
       updateCartBadges();
-      refreshAllProductCards();
       return;
     }
 
@@ -1674,7 +1389,6 @@
         renderCart();
         renderCheckoutSummary();
         updateCartBadges();
-        refreshAllProductCards();
       }
       return;
     }
@@ -1720,11 +1434,9 @@
   initHeroSlider();
   initCountdowns();
   initDealsCarousel();
-  renderListingGrid();
   renderProductDetails();
   renderCart();
   renderCheckoutSummary();
   updateCartBadges();
   initScrollReveal();
 })();
-

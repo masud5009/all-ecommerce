@@ -30,9 +30,18 @@ class HomeController extends Controller
     {
         $languageId = $this->getCurrentLanguageId();
         $data['homeCategories'] = CategoryService::getHomeFeaturedCategories($languageId);
-        $data['featuredProducts'] = ProductService::getHomeFeaturedProducts($languageId);
-        $data['flashSaleCardProducts'] = ProductService::getHomeFlashSaleProducts($languageId);
-        $data['popularProducts'] = ProductService::latestHomeProducts($languageId);
+
+        $featuredProducts = ProductService::getHomeFeaturedProducts($languageId);
+        $flashSaleCardProducts = ProductService::getHomeFlashSaleProducts($languageId);
+        $popularProducts = ProductService::latestHomeProducts($languageId);
+
+        $data['featuredProducts'] = $featuredProducts;
+        $data['flashSaleCardProducts'] = $flashSaleCardProducts;
+        $data['popularProducts'] = $popularProducts;
+
+        $data['serverFeaturedProducts'] = ProductService::mapHomeProductsForQuickView($featuredProducts, 'Featured');
+        $data['serverPopularProducts'] = ProductService::mapHomeProductsForQuickView($popularProducts, 'Popular');
+        $data['serverFlashSaleProducts'] = ProductService::mapHomeProductsForQuickView($flashSaleCardProducts, 'Flash Sale');
         return view('front.home.index', $data);
     }
 
@@ -41,15 +50,16 @@ class HomeController extends Controller
         return view('frontend.contact');
     }
 
-    public function productDetails(Request $request)
+    public function productDetails(Request $request, $product = null)
     {
-        // Preserve existing client-side behavior for links like product-details.html?id=some-id
-        if (!$request->has('product') && $request->filled('id')) {
+        // Preserve existing client-side behavior for legacy non-numeric ids.
+        if (is_null($product) && !$request->has('product') && $request->filled('id') && !is_numeric($request->query('id'))) {
             return view('front.home.product-details');
         }
 
         $languageId = $this->getCurrentLanguageId();
-        $productId = (int) $request->query('product', 0);
+        $rawProductId = $product ?? $request->query('product', $request->query('id', 0));
+        $productId = (int) $rawProductId;
 
         $productQuery = Product::query()
             ->with([
@@ -170,6 +180,18 @@ class HomeController extends Controller
             'isDeal' => ((float) ($product->previous_price ?? 0) > (float) ($product->current_price ?? 0)),
             'popular' => true,
         ];
+
+        $data['youMayAlsoLikeProducts'] = ProductService::latestHomeProducts($languageId)
+            ->reject(function ($item) use ($product) {
+                return (int) $item->id === (int) $product->id;
+            })
+            ->take(4)
+            ->values();
+
+        $data['serverPopularProducts'] = ProductService::mapHomeProductsForQuickView(
+            $data['youMayAlsoLikeProducts'],
+            'Popular'
+        );
 
         return view('front.home.product-details', $data);
     }
