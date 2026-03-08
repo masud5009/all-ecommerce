@@ -73,6 +73,16 @@
                         <span>{{ __('Home Section') }}</span>
                     </a>
                 </li>
+                <!-- slider section -->
+                <li class="nav-item">
+                    <a href="{{ route('admin.home.slider', ['language' => $defaultLang->code]) }}"
+                        class="nav-link
+                        @if (request()->routeIs('admin.home.slider')) active @endif
+                        ">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>{{ __('Slider Section') }}</span>
+                    </a>
+                </li>
                 <!-- user managment -->
                 <li
                     class="nav-item nav-item-submenu

@@ -76,6 +76,11 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
     Route::get('home-section', 'Admin\HomeSecController@index')->name('admin.home_section');
     Route::post('home-section/update', 'Admin\HomeSecController@update')->name('admin.home.section.update');
 
+        /*============================
+      slider section route
+     =============================*/
+    Route::get('slider-section', 'Admin\SliderController@index')->name('admin.home.slider');
+
     /*============================
       user managment route
      =============================*/
