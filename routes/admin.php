@@ -76,10 +76,15 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
     Route::get('home-section', 'Admin\HomeSecController@index')->name('admin.home_section');
     Route::post('home-section/update', 'Admin\HomeSecController@update')->name('admin.home.section.update');
 
-        /*============================
+    /*============================
       slider section route
      =============================*/
     Route::get('slider-section', 'Admin\SliderController@index')->name('admin.home.slider');
+    Route::post('slider-section/store', 'Admin\SliderController@store')->name('admin.home.slider.store');
+    Route::post('slider-section/update', 'Admin\SliderController@update')->name('admin.home.slider.update');
+    Route::post('slider-section/delete', 'Admin\SliderController@delete')->name('admin.home.slider.delete');
+    Route::post('slider-section/status-change', 'Admin\SliderController@changeStatus')->name('admin.home.slider.status_change');
+    Route::post('slider-section-bulk-delete', 'Admin\SliderController@bulkDelete')->name('admin.home.slider.bulk_delete');
 
     /*============================
       user managment route
