@@ -3,7 +3,7 @@
     <nav aria-label="breadcrumb" class="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item active">{{ __('Slider Section') }}</li>
+            <li class="breadcrumb-item active">{{ __('Sliders') }}</li>
         </ol>
     </nav>
 
@@ -54,8 +54,8 @@
                                                     <img src="{{ asset('assets/img/home_slider/' . $slider->image) }}"
                                                         alt="{{ $slider->title ?? 'Slider Image' }}" width="80">
                                                 @else
-                                                    <img src="{{ asset('assets/admin/noimage.jpg') }}"
-                                                        alt="No image" width="80">
+                                                    <img src="{{ asset('assets/admin/noimage.jpg') }}" alt="No image"
+                                                        width="80">
                                                 @endif
                                             </td>
                                             <td>
@@ -94,8 +94,7 @@
                                                         <span class="product-action-label">{{ __('Edit') }}</span>
                                                     </a>
                                                     <form class="deleteForm d-inline-block"
-                                                        action="{{ route('admin.home.slider.delete') }}"
-                                                        method="post">
+                                                        action="{{ route('admin.home.slider.delete') }}" method="post">
                                                         @csrf
                                                         <input type="hidden" value="{{ $slider->id }}" name="slider_id">
                                                         <button

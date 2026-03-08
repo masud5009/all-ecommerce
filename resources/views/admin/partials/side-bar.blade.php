@@ -63,26 +63,130 @@
                         <span>{{ __('Menu Builder') }}</span>
                     </a>
                 </li>
-                <!-- home section -->
-                <li class="nav-item">
-                    <a href="{{ route('admin.home_section', ['language' => $defaultLang->code]) }}"
-                        class="nav-link
+                <!-- product managment -->
+                <li
+                    class="nav-item nav-item-submenu
+                    {{ request()->routeIs('admin.product') ||
+                    request()->routeIs('admin.shop.shipping_charge') ||
+                    request()->routeIs('admin.product.*')
+                        ? 'nav-item-expanded nav-item-open'
+                        : '' }}
+                            ">
+                    <a href="#" class="nav-link"><i class="fas fa-store"></i>
+                        <span>{{ __('Product Management') }}</span></a>
+
+                    <ul class="nav nav-group-sub" data-submenu-title="{{ __('Product Management') }}">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.product.settings') }}"
+                                class="nav-link {{ request()->routeIs('admin.product.settings') ? 'active' : '' }}">
+                                {{ __('Settings') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.product.category', ['language' => $defaultLang->code]) }}"
+                                class="nav-link {{ request()->routeIs('admin.product.category') ? 'active' : '' }}">
+                                {{ __('Categories') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.product.coupon') }}"
+                                class="nav-link {{ request()->routeIs('admin.product.coupon') ? 'active' : '' }}">
+                                {{ __('Coupons') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.shop.shipping_charge', ['language' => $defaultLang->code]) }}"
+                                class="nav-link
+                        @if (request()->routeIs('admin.shop.shipping_charge')) active @endif
+                        @if (request()->routeIs('admin.shop.shipping_charge_edit')) active @endif
+                        ">
+                                <span>{{ __('Shipping Charge') }}</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('admin.product', ['language' => $defaultLang->code]) }}"
+                                class="nav-link
+                                            @if (request()->routeIs('admin.product')) active @endif
+                                            @if (request()->routeIs('admin.product.create')) active @endif
+                                            @if (request()->routeIs('admin.product.edit')) active @endif
+                                            ">
+                                {{ __('Products') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.product.variant.restock') }}"
+                                class="nav-link {{ request()->routeIs('admin.product.variant.*') ? 'active' : '' }}">
+                                {{ __('Restock Variant') }}</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- sales managment -->
+                <li
+                    class="nav-item nav-item-submenu
+                                       @if (request()->routeIs('admin.sales')) nav-item-expanded nav-item-open @endif
+                                       @if (request()->routeIs('admin.sales.details')) nav-item-expanded nav-item-open @endif
+                                       @if (request()->routeIs('admin.sales.reports')) nav-item-expanded nav-item-open @endif
+                                       @if (request()->routeIs('admin.transaction')) nav-item-expanded nav-item-open @endif
+                                       ">
+                    <a href="#" class="nav-link"><i class="fas fa-chart-line"></i>
+                        <span>{{ __('Sales Management') }}</span></a>
+
+                    <ul class="nav nav-group-sub" data-submenu-title="{{ __('Sales Management') }}">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.sales', ['language' => $defaultLang->code]) }}"
+                                class="nav-link {{ request()->routeIs('admin.sales') || request()->routeIs('admin.sales.details') ? 'active' : '' }}">
+                                {{ __('All Sales') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.sales.create') }}"
+                                class="nav-link {{ request()->routeIs('admin.sales.create') ? 'active' : '' }}">
+                                {{ __('Create Order') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.sales.reports') }}"
+                                class="nav-link {{ request()->routeIs('admin.sales.reports') ? 'active' : '' }}">
+                                {{ __('Reports') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.transaction') }}"
+                                class="nav-link {{ request()->routeIs('admin.transaction') ? 'active' : '' }}">
+                                {{ __('Transaction') }}</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--home page content -->
+                <li
+                    class="nav-item nav-item-submenu
+                            @if (request()->routeIs('admin.home_section')) nav-item-expanded nav-item-open @endif
+                            @if (request()->routeIs('admin.home.slider')) nav-item-expanded nav-item-open @endif
+                            ">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        <span>{{ __('Home Page Content') }}</span></a>
+
+                    <ul class="nav nav-group-sub" data-submenu-title="{{ __('Home Page Content') }}">
+                        <!-- home section -->
+                        <li class="nav-item">
+                            <a href="{{ route('admin.home_section', ['language' => $defaultLang->code]) }}"
+                                class="nav-link
                         @if (request()->routeIs('admin.home_section')) active @endif
                         ">
-                        <i class="fas fa-home"></i>
-                        <span>{{ __('Home Section') }}</span>
-                    </a>
-                </li>
-                <!-- slider section -->
-                <li class="nav-item">
-                    <a href="{{ route('admin.home.slider', ['language' => $defaultLang->code]) }}"
-                        class="nav-link
+                                <span>{{ __('Home Section') }}</span>
+                            </a>
+                        </li>
+                        <!-- slider section -->
+                        <li class="nav-item">
+                            <a href="{{ route('admin.home.slider', ['language' => $defaultLang->code]) }}"
+                                class="nav-link
                         @if (request()->routeIs('admin.home.slider')) active @endif
                         ">
-                        <i class="fas fa-sliders-h"></i>
-                        <span>{{ __('Slider Section') }}</span>
-                    </a>
+                                <span>{{ __('Sliders') }}</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
+
+
+
                 <!-- user managment -->
                 <li
                     class="nav-item nav-item-submenu
@@ -121,37 +225,6 @@
                         <span>{{ __('Idea Evaluation') }}</span>
                     </a>
                 </li> --}}
-                <!-- setting managment -->
-                <li class="nav-item">
-                    <a href="{{ route('admin.website_setting') }}"
-                        class="nav-link
-                        @if (request()->routeIs('admin.website_setting')) active @endif
-                        @if (request()->routeIs('admin.maintenance')) active @endif
-                        @if (request()->routeIs('admin.website_setting.general_setting')) active @endif
-                        @if (request()->routeIs('admin.website_setting.mail_template')) active @endif
-                        @if (request()->routeIs('admin.website_setting.mail_template.edit')) active @endif
-                        @if (request()->routeIs('admin.website_setting.config_email')) active @endif
-                        @if (request()->routeIs('admin.gateway')) active @endif
-                        @if (request()->routeIs('admin.online_gateway')) active @endif
-                        @if (request()->routeIs('admin.offline_gateway')) active @endif
-                        @if (request()->routeIs('admin.offline_gateway')) active @endif
-                        @if (request()->routeIs('admin.plugin')) active @endif
-                        ">
-                        <i class="fas fa-sliders-h"></i>
-                        <span>{{ __('Settings') }}</span>
-                    </a>
-                </li>
-                <!-- Shipping Charge -->
-                <li class="nav-item">
-                    <a href="{{ route('admin.shop.shipping_charge', ['language' => $defaultLang->code]) }}"
-                        class="nav-link
-                        @if (request()->routeIs('admin.shop.shipping_charge')) active @endif
-                        @if (request()->routeIs('admin.shop.shipping_charge_edit')) active @endif
-                        ">
-                        <i class="fas fa-shipping-fast"></i>
-                        <span>{{ __('Shipping Charge') }}</span>
-                    </a>
-                </li>
 
                 <!-- Stedfast -->
                 <li class="nav-item">
@@ -160,85 +233,8 @@
                         @if (request()->routeIs('admin.stedfast.*')) active @endif
                         ">
                         <i class="fas fa-truck"></i>
-                        <span>{{ __('Shipping Charge') }}</span>
+                        <span>{{ __('Stedfast') }}</span>
                     </a>
-                </li>
-
-                <!-- sales managment -->
-                <li
-                    class="nav-item nav-item-submenu
-                                       @if (request()->routeIs('admin.sales')) nav-item-expanded nav-item-open @endif
-                                       @if (request()->routeIs('admin.sales.details')) nav-item-expanded nav-item-open @endif
-                                       @if (request()->routeIs('admin.sales.reports')) nav-item-expanded nav-item-open @endif
-                                       @if (request()->routeIs('admin.transaction')) nav-item-expanded nav-item-open @endif
-                                       ">
-                    <a href="#" class="nav-link"><i class="fas fa-chart-line"></i>
-                        <span>{{ __('Sales Management') }}</span></a>
-
-                    <ul class="nav nav-group-sub" data-submenu-title="{{ __('Sales Management') }}">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.sales', ['language' => $defaultLang->code]) }}"
-                                class="nav-link {{ request()->routeIs('admin.sales') || request()->routeIs('admin.sales.details') ? 'active' : '' }}">
-                                {{ __('All Sales') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.sales.create') }}"
-                                class="nav-link {{ request()->routeIs('admin.sales.create') ? 'active' : '' }}">
-                                {{ __('Create Order') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.sales.reports') }}"
-                                class="nav-link {{ request()->routeIs('admin.sales.reports') ? 'active' : '' }}">
-                                {{ __('Reports') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.transaction') }}"
-                                class="nav-link {{ request()->routeIs('admin.transaction') ? 'active' : '' }}">
-                                {{ __('Transaction') }}</a>
-                        </li>
-                    </ul>
-                </li>
-
-
-                <!-- product managment -->
-                <li
-                    class="nav-item nav-item-submenu
-                    {{ request()->routeIs('admin.product') || request()->routeIs('admin.product.*') ? 'nav-item-expanded nav-item-open' : '' }}
-                            ">
-                    <a href="#" class="nav-link"><i class="fas fa-store"></i>
-                        <span>{{ __('Product Management') }}</span></a>
-
-                    <ul class="nav nav-group-sub" data-submenu-title="{{ __('Product Management') }}">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.product.settings') }}"
-                                class="nav-link {{ request()->routeIs('admin.product.settings') ? 'active' : '' }}">
-                                {{ __('Settings') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.product.category', ['language' => $defaultLang->code]) }}"
-                                class="nav-link {{ request()->routeIs('admin.product.category') ? 'active' : '' }}">
-                                {{ __('Categories') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.product.coupon') }}"
-                                class="nav-link {{ request()->routeIs('admin.product.coupon') ? 'active' : '' }}">
-                                {{ __('Coupons') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.product', ['language' => $defaultLang->code]) }}"
-                                class="nav-link
-                                            @if (request()->routeIs('admin.product')) active @endif
-                                            @if (request()->routeIs('admin.product.create')) active @endif
-                                            @if (request()->routeIs('admin.product.edit')) active @endif
-                                            ">
-                                {{ __('Products') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.product.variant.restock') }}"
-                                class="nav-link {{ request()->routeIs('admin.product.variant.*') ? 'active' : '' }}">
-                                {{ __('Restock Variant') }}</a>
-                        </li>
-                    </ul>
                 </li>
 
                 <!-- blog managment -->
@@ -332,6 +328,27 @@
                         ">
                         <i class="fas fa-language"></i>
                         <span>{{ __('Language Management') }}</span>
+                    </a>
+                </li>
+
+                <!-- setting managment -->
+                <li class="nav-item">
+                    <a href="{{ route('admin.website_setting') }}"
+                        class="nav-link
+                        @if (request()->routeIs('admin.website_setting')) active @endif
+                        @if (request()->routeIs('admin.maintenance')) active @endif
+                        @if (request()->routeIs('admin.website_setting.general_setting')) active @endif
+                        @if (request()->routeIs('admin.website_setting.mail_template')) active @endif
+                        @if (request()->routeIs('admin.website_setting.mail_template.edit')) active @endif
+                        @if (request()->routeIs('admin.website_setting.config_email')) active @endif
+                        @if (request()->routeIs('admin.gateway')) active @endif
+                        @if (request()->routeIs('admin.online_gateway')) active @endif
+                        @if (request()->routeIs('admin.offline_gateway')) active @endif
+                        @if (request()->routeIs('admin.offline_gateway')) active @endif
+                        @if (request()->routeIs('admin.plugin')) active @endif
+                        ">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>{{ __('Settings') }}</span>
                     </a>
                 </li>
 
