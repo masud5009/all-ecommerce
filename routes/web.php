@@ -45,6 +45,9 @@ Route::prefix('cart')->controller(CartController::class)->group(function () {
     Route::post('/update', 'update')->name('cart.update');
     Route::post('/remove', 'remove')->name('cart.remove');
     Route::post('/clear', 'clear')->name('cart.clear');
+    Route::get('/checkout', 'checkout')->name('cart.checkout');
+    Route::post('/place-order', 'placeOrder')->name('cart.place.order');
+    Route::get('/order-success/{order}', 'orderSuccess')->name('cart.order.success');
 });
 
 

@@ -51,7 +51,7 @@
             <span class="text-lg font-semibold text-slate-900" data-cart-total>৳0.00</span>
         </div>
         <div class="space-y-2">
-            <a href="{{ route('frontend.checkout.view') }}"
+            <a href="{{ route('cart.checkout') }}"
                 class="flex w-full items-center justify-center rounded-2xl bg-green-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-md">
                 <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path d="M9 5l7 7-7 7"></path>
