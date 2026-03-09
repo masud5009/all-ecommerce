@@ -73,7 +73,7 @@
                     </svg>
                     Home
                 </a>
-                <a href="products.html" data-nav="categories"
+                <a href="{{ route('frontend.shop') }}" data-nav="shop"
                     class="flex flex-col items-center gap-1 rounded-2xl px-2 py-2 transition hover:bg-green-50 hover:text-green-700">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         aria-hidden="true">
@@ -82,7 +82,7 @@
                         <path d="M4 14h6v6H4z"></path>
                         <path d="M14 14h6v6h-6z"></path>
                     </svg>
-                    Categories
+                    Shop
                 </a>
                 <button type="button" data-action="open-cart-offcanvas" data-nav="shop"
                     class="relative flex flex-col items-center gap-1 rounded-2xl px-2 py-2 transition hover:bg-green-50 hover:text-green-700">

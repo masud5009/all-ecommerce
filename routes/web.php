@@ -21,6 +21,7 @@ Route::prefix('/admin')->middleware('guest:admin')->group(function () {
 });
 Route::prefix('/')->controller(HomeController::class)->group(function () {
     Route::get('', 'index')->name('front.index');
+    Route::get('/shop', 'shop')->name('frontend.shop');
     Route::get('/product-details/{product?}', 'productDetails')->name('frontend.product.details');
     Route::get('/product-details.html', function (Request $request) {
         $product = $request->query('product', $request->query('id'));

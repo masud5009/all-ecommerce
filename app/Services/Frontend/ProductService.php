@@ -82,6 +82,82 @@ class ProductService
     }
 
     /**
+     * Get all products for shop page with filtering and pagination.
+     */
+    public static function getShopProducts($languageId = null, array $filters = [])
+    {
+        if (!$languageId) {
+            $languageId = Language::where('is_default', 1)->value('id');
+        }
+
+        $query = Product::with([
+            'content' => function ($q) use ($languageId) {
+                $q->where('language_id', $languageId);
+            },
+            'variations.variantValues.optionValue.option'
+        ])
+            ->where('status', 1)
+            ->whereHas('content', function ($q) use ($languageId) {
+                $q->where('language_id', $languageId);
+            });
+
+        // Category filter
+        if (!empty($filters['category'])) {
+            $query->whereHas('content', function ($q) use ($filters, $languageId) {
+                $q->where('language_id', $languageId)
+                  ->where('category_id', $filters['category']);
+            });
+        }
+
+        // Search filter
+        if (!empty($filters['search'])) {
+            $searchTerm = $filters['search'];
+            $query->whereHas('content', function ($q) use ($searchTerm, $languageId) {
+                $q->where('language_id', $languageId)
+                  ->where(function ($q2) use ($searchTerm) {
+                      $q2->where('title', 'like', "%{$searchTerm}%")
+                         ->orWhere('summary', 'like', "%{$searchTerm}%")
+                         ->orWhere('description', 'like', "%{$searchTerm}%");
+                  });
+            });
+        }
+
+        // Price filter
+        if (!empty($filters['min_price'])) {
+            $query->where('current_price', '>=', (float) $filters['min_price']);
+        }
+        if (!empty($filters['max_price'])) {
+            $query->where('current_price', '<=', (float) $filters['max_price']);
+        }
+
+        // Sorting
+        $sort = $filters['sort'] ?? 'latest';
+        switch ($sort) {
+            case 'price_low':
+                $query->orderBy('current_price', 'asc');
+                break;
+            case 'price_high':
+                $query->orderByDesc('current_price');
+                break;
+            case 'name_asc':
+                $query->orderBy('id', 'asc');
+                break;
+            case 'name_desc':
+                $query->orderByDesc('id');
+                break;
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'latest':
+            default:
+                $query->orderByDesc('created_at');
+                break;
+        }
+
+        return $query->paginate(12);
+    }
+
+    /**
      * Normalize products for homepage quick-view modal payload.
      */
     public static function mapHomeProductsForQuickView($products, $badgeLabel = 'Featured')

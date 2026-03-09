@@ -41,7 +41,7 @@
                             care in under 90 minutes.
                         </p>
                         <div class="mt-7 flex flex-wrap items-center gap-3 hero-actions">
-                            <a href="products.html"
+                            <a href="{{ route('frontend.shop') }}"
                                 class="hero-btn-primary rounded-full px-8 py-4 text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
                                 Start Shopping
                             </a>
@@ -91,7 +91,7 @@
                             dedicated rider support.
                         </p>
                         <div class="mt-7 flex flex-wrap items-center gap-3 hero-actions">
-                            <a href="products.html"
+                            <a href="{{ route('frontend.shop') }}"
                                 class="hero-btn-primary rounded-full px-8 py-4 text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
                                 Shop Fresh
                             </a>
@@ -142,7 +142,7 @@
                             easy returns if something misses the mark.
                         </p>
                         <div class="mt-7 flex flex-wrap items-center gap-3 hero-actions">
-                            <a href="products.html"
+                            <a href="{{ route('frontend.shop') }}"
                                 class="hero-btn-primary rounded-full px-8 py-4 text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
                                 Build My Basket
                             </a>
@@ -200,7 +200,7 @@
         data-reveal>
         <div class="flex flex-wrap items-center justify-between gap-4" data-reveal-child>
             <div>
-                <h2 id="category-heading" class="text-3xl font-semibold text-slate-900">Browse By Categories</h2>
+                <h2 id="category-heading" class="text-2xl font-semibold text-slate-900">Browse By Categories</h2>
                 <p class="mt-2 text-sm text-slate-600">Hand-picked aisles for quick grocery runs.</p>
             </div>
             <div class="hidden items-center gap-2 sm:flex">
@@ -266,9 +266,9 @@
             <div class="flex flex-wrap items-end justify-between gap-4" data-reveal-child>
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-wide text-green-700">Featured Products</p>
-                    <h2 class="mt-2 text-3xl font-semibold text-slate-900">Handpicked picks for today</h2>
+                    <h2 class="mt-2 text-2xl font-semibold text-slate-900">Handpicked picks for today</h2>
                 </div>
-                <a href="products.html"
+                <a href="{{ route('frontend.shop') }}"
                     class="inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
                     View all products
                 </a>
@@ -294,10 +294,10 @@
     <section class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
         <div class="flex flex-wrap items-end justify-between gap-4" data-reveal-child>
             <div>
-                <h2 class="text-3xl font-semibold text-slate-900">Popular right now</h2>
+                <h2 class="text-2xl font-semibold text-slate-900">Popular right now</h2>
                 <p class="mt-2 text-sm text-slate-600">Most loved picks across produce, pantry, and seafood.</p>
             </div>
-            <a href="products.html" class="text-sm font-semibold text-green-700">Shop all</a>
+            <a href="{{ route('frontend.shop') }}" class="text-sm font-semibold text-green-700">Shop all</a>
         </div>
         @if (count($popularProducts) > 0)
             <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -321,7 +321,7 @@
                 <div>
                     <p class="flash-sale-kicker text-xs font-semibold uppercase tracking-wide text-green-700">Flash sale
                     </p>
-                    <h2 class="flash-sale-title mt-2 text-3xl font-semibold text-slate-900">{{ $flashSaleDeal->title }}
+                    <h2 class="flash-sale-title mt-2 text-2xl font-semibold text-slate-900">{{ $flashSaleDeal->title }}
                     </h2>
                 </div>
                 <div class="flash-sale-head-actions flex items-center gap-3" data-reveal-child>
@@ -335,7 +335,7 @@
                         Ends in <span class="font-semibold tabular-nums text-slate-900" data-countdown
                             data-countdown-seconds="{{ $flashSaleDeal->countdown_seconds }}">02:15:32</span>
                     </span>
-                    <a href="products.html"
+                    <a href="{{ route('frontend.shop') }}"
                         class="flash-sale-all-deals inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
                         Show more products
                     </a>
@@ -361,7 +361,7 @@
                         <p class="relative mt-2 text-sm text-slate-600">{{ $flashSaleDeal->summary }}</p>
                         <div class="relative mt-4 flex items-end gap-3">
                             <span
-                                class="text-3xl font-semibold text-slate-900">{{ currency_symbol($flashSaleDeal->sale_price) }}</span>
+                                class="text-2xl font-semibold text-slate-900">{{ currency_symbol($flashSaleDeal->sale_price) }}</span>
                             @if ($flashSaleDeal->old_price > $flashSaleDeal->sale_price)
                                 <span
                                     class="text-sm text-slate-400 line-through">{{ currency_symbol($flashSaleDeal->old_price) }}</span>
@@ -525,7 +525,7 @@
                     <p class="mt-3 text-4xl font-semibold">1 point</p>
                     <p class="text-sm text-white/80">per $1 spent</p>
                     <p class="mt-4 text-sm text-white/80">Redeem 200 points for $10 off your next order.</p>
-                    <a href="products.html"
+                    <a href="{{ route('frontend.shop') }}"
                         class="mt-6 inline-flex w-full items-center justify-center rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70">Join
                         Free</a>
                 </div>
@@ -544,7 +544,7 @@
             <div class="relative">
                 <div class="text-center" data-reveal-child>
                     <p class="text-xs font-semibold uppercase tracking-wide text-green-700">Why FreshCart</p>
-                    <h2 class="mt-3 text-3xl font-semibold text-slate-900">Freshness you can feel.</h2>
+                    <h2 class="mt-3 text-2xl font-semibold text-slate-900">Freshness you can feel.</h2>
                     <p class="mt-3 text-sm text-slate-600">Hand-picked produce, secure payment, and fast
                         delivery—every time.
                     </p>
@@ -670,7 +670,7 @@
         <div class="flex flex-wrap items-center justify-between gap-4" data-reveal-child>
             <div>
                 <p class="text-xs font-semibold uppercase tracking-wide text-green-700">Testimonials</p>
-                <h2 class="mt-2 text-3xl font-semibold text-slate-900">Loved by busy households.</h2>
+                <h2 class="mt-2 text-2xl font-semibold text-slate-900">Loved by busy households.</h2>
                 <p class="mt-2 text-sm text-slate-600">Real feedback from families who shop every week.</p>
             </div>
             <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
@@ -802,7 +802,7 @@
         <div class="flex flex-wrap items-center justify-between gap-4" data-reveal-child>
             <div>
                 <p class="text-xs font-semibold uppercase tracking-wide text-green-700">Why choose us</p>
-                <h2 class="mt-2 text-3xl font-semibold text-slate-900">Why shoppers stay with FreshCart.</h2>
+                <h2 class="mt-2 text-2xl font-semibold text-slate-900">Why shoppers stay with FreshCart.</h2>
                 <p class="mt-2 text-sm text-slate-600">Premium service backed by real-time support and transparent
                     standards.
                 </p>

@@ -17,7 +17,7 @@
                     Home
                 </a>
                 <span>/</span>
-                <a href="products.html"
+                <a href="{{ route('frontend.shop') }}"
                     class="rounded-full border border-green-100 bg-white px-3 py-1 transition hover:border-green-300 hover:text-green-700">
                     Shop
                 </a>
@@ -129,7 +129,7 @@
                     <div>
                         <h2 class="text-2xl font-semibold text-slate-900">You may also like</h2>
                     </div>
-                    <a href="products.html"
+                    <a href="{{ route('frontend.shop') }}"
                         class="inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
                         Browse all
                     </a>

@@ -236,6 +236,31 @@ class HomeController extends Controller
         return view('frontend.about');
     }
 
+    public function shop(Request $request)
+    {
+        $languageId = $this->getCurrentLanguageId();
+
+        $data['categories'] = CategoryService::getHomeFeaturedCategories($languageId);
+
+        $data['products'] = ProductService::getShopProducts($languageId, [
+            'category' => $request->query('category'),
+            'search' => $request->query('search'),
+            'sort' => $request->query('sort', 'latest'),
+            'min_price' => $request->query('min_price'),
+            'max_price' => $request->query('max_price'),
+        ]);
+
+        $data['filters'] = [
+            'category' => $request->query('category'),
+            'search' => $request->query('search'),
+            'sort' => $request->query('sort', 'latest'),
+            'min_price' => $request->query('min_price'),
+            'max_price' => $request->query('max_price'),
+        ];
+
+        return view('front.shop', $data);
+    }
+
 
 
 
