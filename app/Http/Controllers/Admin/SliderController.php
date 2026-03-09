@@ -14,20 +14,38 @@ class SliderController extends Controller
 {
     private string $imageDirectory = 'assets/img/home_slider/';
 
+    /**
+     * slider page load
+     */
     public function index(Request $request)
     {
         $sliders = HomeSlider::orderBy('serial_number', 'ASC')->get();
         return view('admin.home.slider', compact('sliders'));
     }
 
+    /**
+     * store slider data
+     */
     public function store(Request $request)
     {
-        $tableCheck = $this->ensureSliderTableExists();
-        if ($tableCheck) {
-            return $tableCheck;
-        }
+        $rules = [
+            'image' => 'required|mimes:jpg,jpeg,png,webp,svg,avif|max:2048',
+            'title' => 'required|string|max:255',
+            'sub_title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'button_text_1' => 'required|string|max:255',
+            'button_url_1' => 'required|string|max:255',
+            'button_text_2' => 'required|string|max:255',
+            'button_url_2' => 'required|string|max:255',
+            'image_left_badge_title' => 'nullable|string|max:255',
+            'image_left_badge_sub_title' => 'nullable|string|max:255',
+            'image_right_badge_title' => 'nullable|string|max:255',
+            'image_right_badge_sub_title' => 'nullable|string|max:255',
+            'status' => 'required|in:0,1',
+            'serial_number' => 'required|integer|min:0',
+        ];
 
-        $validator = Validator::make($request->all(), $this->sliderRules());
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             return Response::json([
@@ -35,12 +53,28 @@ class SliderController extends Controller
             ], 422);
         }
 
-        $slider = new HomeSlider();
-        $uploadResult = $this->saveSlider($slider, $request);
-
-        if ($uploadResult !== true) {
-            return $uploadResult;
+        if ($request->hasFile('image')) {
+            $directory = public_path($this->imageDirectory);
+            $imageName = ImageUpload::store($directory, $request->file('image'));
         }
+
+        $slider = new HomeSlider();
+        $slider->language_id = $request->language_id;
+        $slider->image = $imageName;
+        $slider->title = $request->title;
+        $slider->sub_title = $request->sub_title;
+        $slider->description = $request->description;
+        $slider->button_text_1 = $request->button_text_1;
+        $slider->button_url_1 = $request->button_url_1;
+        $slider->button_text_2 = $request->button_text_2;
+        $slider->button_url_2 = $request->button_url_2;
+        $slider->image_left_badge_title = $request->image_left_badge_title;
+        $slider->image_left_badge_sub_title = $request->image_left_badge_sub_title;
+        $slider->image_right_badge_title = $request->image_right_badge_title;
+        $slider->image_right_badge_sub_title = $request->image_right_badge_sub_title;
+        $slider->status = $request->status;
+        $slider->serial_number = $request->serial_number;
+        $slider->save();
 
         session()->flash('success', __('Slider created successfully'));
 
@@ -179,50 +213,29 @@ class SliderController extends Controller
         return $rules;
     }
 
-    private function saveSlider(HomeSlider $slider, Request $request, bool $isUpdate = false)
+    private function saveSlider(Request $request)
     {
-        if (Schema::hasColumn('home_sliders', 'language_id') && $request->filled('language_id')) {
-            $slider->language_id = (int) $request->language_id;
-        }
-
         if ($request->hasFile('image')) {
             $directory = public_path($this->imageDirectory);
-            $imageName = $isUpdate
-                ? ImageUpload::update($directory, $request->file('image'), $slider->image)
-                : ImageUpload::store($directory, $request->file('image'));
-
-            if (!$imageName) {
-                return Response::json([
-                    'errors' => [
-                        'image' => [__('Image upload failed. Please try again.')],
-                    ],
-                ], 422);
-            }
-
-            $slider->image = $imageName;
+            $imageName = ImageUpload::store($directory, $request->file('image'));
         }
 
-        $slider->title = trim((string) $request->title);
-        $slider->sub_title = trim((string) $request->sub_title);
-        $slider->description = trim((string) $request->description);
-        $slider->button_text_1 = trim((string) $request->button_text_1);
-        $slider->button_url_1 = trim((string) $request->button_url_1);
-        $slider->button_text_2 = trim((string) $request->button_text_2);
-        $slider->button_url_2 = trim((string) $request->button_url_2);
-        $slider->image_left_badge_title = $request->filled('image_left_badge_title')
-            ? trim((string) $request->image_left_badge_title)
-            : null;
-        $slider->image_left_badge_sub_title = $request->filled('image_left_badge_sub_title')
-            ? trim((string) $request->image_left_badge_sub_title)
-            : null;
-        $slider->image_right_badge_title = $request->filled('image_right_badge_title')
-            ? trim((string) $request->image_right_badge_title)
-            : null;
-        $slider->image_right_badge_sub_title = $request->filled('image_right_badge_sub_title')
-            ? trim((string) $request->image_right_badge_sub_title)
-            : null;
-        $slider->status = (int) $request->status;
-        $slider->serial_number = (int) $request->serial_number;
+        $slider = new HomeSlider();
+        $slider->language_id = $request->language_id;
+        $slider->image = $imageName;
+        $slider->title = $request->title;
+        $slider->sub_title = $request->sub_title;
+        $slider->description = $request->description;
+        $slider->button_text_1 = $request->button_text_1;
+        $slider->button_url_1 = $request->button_url_1;
+        $slider->button_text_2 = $request->button_text_2;
+        $slider->button_url_2 = $request->button_url_2;
+        $slider->image_left_badge_title = $request->image_left_badge_title;
+        $slider->image_left_badge_sub_title = $request->image_left_badge_sub_title;
+        $slider->image_right_badge_title = $request->image_right_badge_title;
+        $slider->image_right_badge_sub_title = $request->image_right_badge_sub_title;
+        $slider->status = $request->status;
+        $slider->serial_number = $request->serial_number;
         $slider->save();
 
         return true;

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderItem;
+use App\Models\HomeSlider;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Admin\Package;
@@ -19,6 +20,16 @@ use App\Services\Frontend\CategoryService;
 
 class HomeController extends Controller
 {
+    protected $currentLang;
+    public function __construct()
+    {
+        if (session()->has('lang')) {
+            $this->currentLang = Language::where('code', session()->get('lang'))->first();
+        } else {
+            $this->currentLang = Language::where('is_default', 1)->first();
+        }
+    }
+
     public function changeLanguage($code)
     {
         session()->put('lang', $code);
@@ -28,7 +39,7 @@ class HomeController extends Controller
 
     public function index()
     {
-        $languageId = $this->getCurrentLanguageId();
+        $languageId = $this->currentLang->id;
         $data['homeCategories'] = CategoryService::getHomeFeaturedCategories($languageId);
 
         $featuredProducts = ProductService::getHomeFeaturedProducts($languageId);
@@ -76,6 +87,11 @@ class HomeController extends Controller
                 'details_url' => route('frontend.product.details', ['product' => $firstFlash->id]),
             ];
         }
+
+        $data['homeSliders'] = HomeSlider::where('status', 1)
+            ->where('language_id', $languageId)
+            ->orderBy('serial_number', 'asc')
+            ->get();
 
         return view('front.home.index', $data);
     }
@@ -235,34 +251,6 @@ class HomeController extends Controller
     {
         return view('frontend.about');
     }
-
-    public function shop(Request $request)
-    {
-        $languageId = $this->getCurrentLanguageId();
-
-        $data['categories'] = CategoryService::getHomeFeaturedCategories($languageId);
-
-        $data['products'] = ProductService::getShopProducts($languageId, [
-            'category' => $request->query('category'),
-            'search' => $request->query('search'),
-            'sort' => $request->query('sort', 'latest'),
-            'min_price' => $request->query('min_price'),
-            'max_price' => $request->query('max_price'),
-        ]);
-
-        $data['filters'] = [
-            'category' => $request->query('category'),
-            'search' => $request->query('search'),
-            'sort' => $request->query('sort', 'latest'),
-            'min_price' => $request->query('min_price'),
-            'max_price' => $request->query('max_price'),
-        ];
-
-        return view('front.shop', $data);
-    }
-
-
-
 
     public function invoice()
     {

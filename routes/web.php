@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\FrontEnd\CheckoutController;
-use App\Http\Controllers\FrontEnd\HomeController;
-use App\Http\Controllers\FrontEnd\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FrontEnd\HomeController;
+use App\Http\Controllers\FrontEnd\ShopController;
+use App\Http\Controllers\FrontEnd\UserController;
+use App\Http\Controllers\FrontEnd\CheckoutController;
 /*
 |--------------------------------------------------------------------------
 | frontend route
@@ -21,7 +22,6 @@ Route::prefix('/admin')->middleware('guest:admin')->group(function () {
 });
 Route::prefix('/')->controller(HomeController::class)->group(function () {
     Route::get('', 'index')->name('front.index');
-    Route::get('/shop', 'shop')->name('frontend.shop');
     Route::get('/product-details/{product?}', 'productDetails')->name('frontend.product.details');
     Route::get('/product-details.html', function (Request $request) {
         $product = $request->query('product', $request->query('id'));
@@ -35,6 +35,12 @@ Route::prefix('/')->controller(HomeController::class)->group(function () {
     Route::get('/about', 'about')->name('frontend.about');
     Route::get('/change-language/{code}', 'changeLanguage')->name('frontend.change_language');
 });
+
+/*============================
+      shop management routes
+     =============================*/
+Route::get('/shop', [ShopController::class, 'shop'])->name('frontend.shop');
+
 
 /*============================
       membership purchase routes

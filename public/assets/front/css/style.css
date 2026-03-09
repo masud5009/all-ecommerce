@@ -147,7 +147,7 @@ img {
   transform: translateY(0) scale(1);
 }
 
-.hero-gradient-text {
+.hero-title span {
   background: linear-gradient(110deg, #047857 0%, #16a34a 52%, #84cc16 100%);
   -webkit-background-clip: text;
   background-clip: text;

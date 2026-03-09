@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin\Language;
-use App\Models\Admin\Package;
-use App\Models\User\UserLanguage;
 use PDF;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
+use App\Models\Admin\Package;
+use App\Models\Admin\Language;
+use App\Models\User\UserLanguage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+
+
 
     public function requestLang($code)
     {

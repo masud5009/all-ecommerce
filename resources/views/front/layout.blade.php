@@ -110,40 +110,6 @@
     </div>
 
     <script>
-        (() => {
-            const track = document.querySelector('[data-category-track]');
-            const prev = document.querySelector('[data-category-prev]');
-            const next = document.querySelector('[data-category-next]');
-            if (!track) return;
-
-            const getScrollAmount = () => Math.min(420, track.clientWidth * 0.8);
-            const scrollByAmount = (amount) => {
-                track.scrollBy({
-                    left: amount,
-                    behavior: 'smooth'
-                });
-            };
-
-            prev?.addEventListener('click', () => scrollByAmount(-getScrollAmount()));
-            next?.addEventListener('click', () => scrollByAmount(getScrollAmount()));
-
-            track.addEventListener(
-                'wheel',
-                (event) => {
-                    if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
-                    event.preventDefault();
-                    track.scrollBy({
-                        left: event.deltaY,
-                        behavior: 'smooth'
-                    });
-                }, {
-                    passive: false
-                }
-            );
-        })();
-    </script>
-
-    <script>
         window.frontRoutes = window.frontRoutes || {};
         window.frontRoutes.productDetails = @json(route('frontend.product.details', ['product' => '__PRODUCT_ID__']));
     </script>
