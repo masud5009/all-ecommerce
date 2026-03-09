@@ -34,6 +34,7 @@ Route::prefix('/')->controller(HomeController::class)->group(function () {
      =============================*/
 Route::get('/shop', [ShopController::class, 'shop'])->name('frontend.shop');
 Route::get('/shop/details/{id}', [ShopController::class, 'details'])->name('frontend.shop.details');
+Route::get('/shop/quick-view/{id}', [ShopController::class, 'quickView'])->name('frontend.shop.quickview');
 
 /*============================
       cart management routes

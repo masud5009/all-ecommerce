@@ -191,5 +191,172 @@
     initHeroSlider();
     initCategoryScroll();
 
+    /*========================== Quick View Start ===========================*/
+    const initQuickView = () => {
+        const modal = qs('[data-quickview-modal]');
+        const backdrop = qs('[data-quickview-backdrop]');
+        const content = qs('[data-quickview-content]');
+
+        if (!modal || !content) return;
+
+        const openModal = () => {
+            modal.classList.remove('hidden');
+            backdrop?.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeModal = () => {
+            modal.classList.add('hidden');
+            backdrop?.classList.add('hidden');
+            document.body.style.overflow = '';
+            // Reset content to loading state
+            content.innerHTML = '<div class="flex items-center justify-center py-20"><div class="h-10 w-10 animate-spin rounded-full border-4 border-green-200 border-t-green-600"></div></div>';
+        };
+
+        const loadProduct = async (productId) => {
+            openModal();
+            try {
+                const response = await fetch(`/shop/quick-view/${productId}`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                });
+                const data = await response.json();
+                if (data.success && data.html) {
+                    content.innerHTML = data.html;
+                    initQuickViewActions();
+                } else {
+                    content.innerHTML = '<div class="text-center py-20 text-slate-500">Product not found</div>';
+                }
+            } catch (error) {
+                console.error('Quick view error:', error);
+                content.innerHTML = '<div class="text-center py-20 text-slate-500">Error loading product</div>';
+            }
+        };
+
+        // Quick view actions (quantity, add to cart, magnify)
+        const initQuickViewActions = () => {
+            const qtyInput = qs('[data-quickview-qty]', content);
+            const decBtn = qs('[data-quickview-qty-dec]', content);
+            const incBtn = qs('[data-quickview-qty-inc]', content);
+            const addBtn = qs('[data-quickview-add-cart]', content);
+
+            // Initialize magnify for quickview
+            const magnifyContainer = qs('[data-magnify]', content);
+            if (magnifyContainer) {
+                const img = qs('[data-magnify-image]', magnifyContainer) || qs('img', magnifyContainer);
+                if (img) {
+                    const setBackground = () => {
+                        const source = img.currentSrc || img.src;
+                        if (source) magnifyContainer.style.backgroundImage = `url("${source}")`;
+                    };
+
+                    const updatePosition = (e) => {
+                        const rect = magnifyContainer.getBoundingClientRect();
+                        const x = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+                        const y = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
+                        magnifyContainer.style.backgroundPosition = `${x}% ${y}%`;
+                    };
+
+                    magnifyContainer.addEventListener('pointerenter', (e) => {
+                        if (e.pointerType === 'touch') return;
+                        setBackground();
+                        magnifyContainer.classList.add('is-magnifying');
+                        updatePosition(e);
+                    });
+
+                    magnifyContainer.addEventListener('pointermove', (e) => {
+                        if (magnifyContainer.classList.contains('is-magnifying')) updatePosition(e);
+                    });
+
+                    magnifyContainer.addEventListener('pointerleave', () => {
+                        magnifyContainer.classList.remove('is-magnifying');
+                        magnifyContainer.style.backgroundImage = '';
+                        magnifyContainer.style.backgroundPosition = '';
+                    });
+
+                    img.addEventListener('load', () => {
+                        if (magnifyContainer.classList.contains('is-magnifying')) setBackground();
+                    });
+                }
+            }
+
+            if (decBtn && qtyInput) {
+                decBtn.addEventListener('click', () => {
+                    let val = parseInt(qtyInput.value) || 1;
+                    if (val > 1) qtyInput.value = val - 1;
+                });
+            }
+
+            if (incBtn && qtyInput) {
+                incBtn.addEventListener('click', () => {
+                    let val = parseInt(qtyInput.value) || 1;
+                    if (val < 99) qtyInput.value = val + 1;
+                });
+            }
+
+            if (addBtn) {
+                addBtn.addEventListener('click', () => {
+                    const productData = window.quickViewProductData;
+                    if (!productData) return;
+
+                    const quantity = parseInt(qtyInput?.value) || 1;
+                    const selectedRadio = qs('input[name="quickviewUnit"]:checked', content);
+
+                    let variantId = null;
+                    let variantLabel = null;
+                    let price = productData.units?.[0]?.price || 0;
+
+                    if (selectedRadio) {
+                        const index = parseInt(selectedRadio.value);
+                        const unit = productData.units?.[index];
+                        if (unit) {
+                            variantId = unit.variant_id || null;
+                            variantLabel = unit.label;
+                            price = unit.price;
+                        }
+                    } else if (productData.units?.[0]) {
+                        variantId = productData.units[0].variant_id || null;
+                        variantLabel = productData.units[0].label;
+                        price = productData.units[0].price;
+                    }
+
+                    // Use cart.js add function if available
+                    if (window.FreshCart?.cart?.add) {
+                        window.FreshCart.cart.add(productData.id, quantity, variantId, variantLabel, price);
+                        closeModal();
+                    }
+                });
+            }
+        };
+
+        // Event delegation for quick view buttons
+        document.addEventListener('click', (e) => {
+            // Open quick view
+            const quickViewBtn = e.target.closest('[data-action="quick-view"]');
+            if (quickViewBtn) {
+                e.preventDefault();
+                const productId = quickViewBtn.dataset.productId;
+                if (productId) loadProduct(productId);
+            }
+
+            // Close quick view
+            if (e.target.closest('[data-quickview-close]') || e.target === backdrop) {
+                closeModal();
+            }
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+    };
+
+    initQuickView();
+    /*========================== Quick View End ===========================*/
+
 
 })();

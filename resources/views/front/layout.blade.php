@@ -56,6 +56,7 @@
 <body class="bg-white text-slate-900" data-page="@yield('page', 'home')">
     @include('front.partials.navbar')
     @include('front.partials.cart-offcanvas')
+    @include('front.partials.quickview-modal')
 
     <main class="pb-24 md:pb-0">
         @yield('content')

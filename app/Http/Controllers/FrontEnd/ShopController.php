@@ -161,4 +161,102 @@ class ShopController extends Controller
 
         return view('front.product-details', $data);
     }
+
+    /**
+     * Quick view product details (AJAX)
+     */
+    public function quickView($id)
+    {
+        $languageId = $this->currentLang->id;
+
+        $product = Product::with([
+            'content' => function ($q) use ($languageId) {
+                $q->where('language_id', $languageId);
+            },
+            'sliderImage',
+            'variants.variantValues.optionValue',
+        ])
+            ->where('id', $id)
+            ->first();
+
+        if (!$product) {
+            return response()->json(['success' => false, 'message' => 'Product not found'], 404);
+        }
+
+        $content = $product->content->first();
+
+        // Build images array
+        $images = [];
+        if (!empty($product->thumbnail)) {
+            $images[] = asset('assets/img/product/' . $product->thumbnail);
+        }
+        if ($product->sliderImage && $product->sliderImage->count() > 0) {
+            foreach ($product->sliderImage as $sliderImg) {
+                if (!empty($sliderImg->image)) {
+                    $images[] = asset('assets/img/product/gallery/' . $sliderImg->image);
+                }
+            }
+        }
+
+        // Build units/variants
+        $units = [];
+        if ($product->variants && $product->variants->count() > 0) {
+            foreach ($product->variants as $index => $variant) {
+                $variantParts = collect($variant->variantValues ?? [])
+                    ->map(fn($vv) => $vv->optionValue?->value)
+                    ->filter()
+                    ->values();
+
+                $units[] = [
+                    'variant_id' => $variant->id,
+                    'label' => $variantParts->isNotEmpty() ? $variantParts->implode(', ') : ('Option ' . ($index + 1)),
+                    'price' => (float) ($variant->price ?? $product->current_price ?? 0),
+                    'oldPrice' => (float) ($product->previous_price ?? 0),
+                    'stock' => (int) ($variant->stock ?? 0),
+                ];
+            }
+        }
+
+        // Default unit if no variants
+        if (empty($units)) {
+            $units[] = [
+                'variant_id' => null,
+                'label' => '1 unit',
+                'price' => (float) ($product->current_price ?? 0),
+                'oldPrice' => (float) ($product->previous_price ?? 0),
+                'stock' => (int) ($product->stock ?? 0),
+            ];
+        }
+
+        // Get category name
+        $categoryName = 'Featured';
+        if (!empty($content?->category_id)) {
+            $categoryName = ProductCategory::where('id', $content->category_id)->value('name') ?: $categoryName;
+        }
+
+        $summaryText = strip_tags($content?->summary ?? '');
+
+        $productDetail = [
+            'id' => (string) $product->id,
+            'name' => $content?->title ?: ('Product #' . $product->id),
+            'category' => $categoryName,
+            'rating' => 4.7,
+            'reviews' => 142,
+            'badge' => $categoryName,
+            'image' => $images[0] ?? asset('assets/img/product/placeholder.png'),
+            'images' => $images,
+            'summary' => $summaryText,
+            'units' => $units,
+            'isDeal' => ((float) ($product->previous_price ?? 0) > (float) ($product->current_price ?? 0)),
+            'stock' => (int) ($product->stock ?? 0),
+            'url' => route('frontend.shop.details', ['id' => $product->id]),
+        ];
+
+        $html = view('front.partials.quickview-content', ['productDetail' => $productDetail])->render();
+
+        return response()->json([
+            'success' => true,
+            'html' => $html,
+        ]);
+    }
 }
