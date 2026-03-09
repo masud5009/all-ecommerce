@@ -255,11 +255,17 @@ $("#updateBtn").on('click', function (e) {
 
                 for (let key in errors) {
                     // Show the error message
-                    document.getElementById('editErr_' + key).innerHTML = errors[key][0];
+                    const errorField = document.getElementById('editErr_' + key);
+                    if (errorField) {
+                        errorField.innerHTML = errors[key][0];
+                    }
 
                     // Set the border color to red for invalid fields
-                    $('[name="' + key + '"]').css('border-color', '#dc3545');
-                    $('input[name="' + key + '"], select[name="' + key + '"]').addClass('is-invalid');
+                    const $field = $('[name="' + key + '"]');
+                    if ($field.length > 0) {
+                        $field.css('border-color', '#dc3545');
+                        $('input[name="' + key + '"], select[name="' + key + '"], textarea[name="' + key + '"]').addClass('is-invalid');
+                    }
                 }
             } else {
                 $('.request-loader').hide();

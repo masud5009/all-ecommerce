@@ -2,7 +2,7 @@
     <div class="form-group">
         @foreach ($languages as $lang)
             <label>
-                <input type="checkbox" @checked($lang->id == $defaultLang->id || $lang->is_added == true)
+                <input type="checkbox" @checked($lang->is_default == 1 || $lang->is_added == true)
                     onchange="toggleLanguage({{ $lang->id }})">{{ $lang->name }}
             </label>
         @endforeach

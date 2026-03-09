@@ -6,26 +6,26 @@ use App\Models\Product;
 use App\Models\SliderImage;
 use Illuminate\Http\Request;
 use App\Models\ProductOption;
+use App\Imports\ProductImport;
 use App\Models\Admin\Language;
 use App\Models\ProductContent;
 use App\Models\ProductSetting;
 use App\Models\ProductVariant;
-use App\Models\ProductVariantSerialBatch;
+use Illuminate\Support\Carbon;
 use App\Models\ProductCategory;
-use App\Imports\ProductImport;
-use App\Exports\ProductImportTemplate;
 use App\Http\Helpers\ImageUpload;
 use App\Models\ProductOptionValue;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProductVariantValue;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Services\Shop\ProductService;
+use App\Exports\ProductImportTemplate;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Session;
+use App\Models\ProductVariantSerialBatch;
 use App\Http\Requests\Product\StoreRequest;
 use App\Http\Requests\Product\UpdateRequest;
-use App\Services\Shop\ProductService;
 
 class ProductController extends Controller
 {
@@ -184,7 +184,7 @@ class ProductController extends Controller
 
     public function create(Request $request)
     {
-        $default_language = app('defaultLang');
+        $dashboard_default_language = app('defaultLang');
 
         $productSetting = ProductSetting::first();
         $type = request('type');
@@ -201,7 +201,7 @@ class ProductController extends Controller
 
         // UI sends 'physical'/'digital' lowercase
         if ($request->type != 'physical' && $request->type != 'digital') {
-            return redirect()->route('admin.product', ['language' => $default_language->code]);
+            return redirect()->route('admin.product', ['language' => $dashboard_default_language->code]);
         }
 
         $languages = app('languages');

@@ -194,22 +194,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        {{-- <!-- featured image -->
-                        <div class="col-lg-3">
-                            <div class="card upload-card h-100">
-                                <div class="card-body">
-                                    <div class="form-group text-center">
-                                        <label class="d-block mb-2">{{ __('Thumbnail') }}*</label>
-                                        <div class="thumb-preview mb-3">
-                                            <img src="{{ asset('assets/admin/noimage.jpg') }}" alt="..."
-                                                class="uploaded-img">
-                                        </div>
-                                        <input type="file" class="img-input" name="thumbnail" id="thumbnailInput">
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
                     </div>
 
                     <div class="language-card">
