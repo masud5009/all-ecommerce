@@ -2,59 +2,50 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\HomeSectionSetting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Admin\Language;
+use App\Models\HomeSectionSetting;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class HomeSecController extends Controller
 {
     public function index(Request $request)
     {
-        $data = HomeSectionSetting::pluck('value', 'key')->toArray();
-        return view('admin.home.imagetext', compact('data'));
+        $language_id = Language::where('code', $request->language)->first()->id;
+        $data = HomeSectionSetting::where('language_id', $language_id)->first();
+        return view('admin.home.imagetext', compact('data','language_id'));
     }
 
     public function update(Request $request)
     {
-        $sections = config('website');
+        $rules = [
+            'category_title' => 'nullable|max:255',
+            'featured_product_title' => 'nullable|max:255',
+            'featured_product_subtitle' => 'nullable|max:255',
+            'popular_product_title' => 'nullable|max:255',
+            'popular_product_subtitle' => 'nullable|max:255',
+            'flash_title' => 'nullable|max:255',
+            'flash_subtitle' => 'nullable|max:255',
+            'features_image' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg,avif|max:2048|max:255',
+            'features_title' => 'nullable|max:255',
+            'features_subtitle' => 'nullable|max:255',
+            'features_text' => 'nullable|max:255',
+        ];
 
-        DB::transaction(function () use ($request, $sections) {
-            foreach ($sections as $sectionName => $fields) {
-                foreach ($fields as $key => $meta) {
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->getMessageBag()->toArray(),
+            ], 422);
+        }
 
-                    $type = $meta['type'] ?? 'text';
-
-                    // FILE: upload only if file provided
-                    if ($type === 'file') {
-                        if ($request->hasFile($key)) {
-                            $path = $request->file($key)->store('home', 'public');
-                            $this->upsertSetting($sectionName, $key, $path, $type);
-                        }
-                        continue;
-                    }
-
-                    // TEXT / URL / TEXTAREA
-                    if ($request->has($key)) {
-                        $value = $request->input($key);
-                        $this->upsertSetting($sectionName, $key, $value, $type);
-                    }
-                }
-            }
-        });
-
-        return back()->with('success', 'Home section updated successfully.');
-    }
-
-    private function upsertSetting(string $section, string $key, $value, ?string $type = null): void
-    {
         HomeSectionSetting::updateOrCreate(
-            ['key' => $key],
-            [
-                'section' => $section,
-                'value'   => is_null($value) ? null : (string) $value,
-                'type'    => $type,
-            ]
+            ['language_id' => $request->language_id],
+            $request->except('_token', 'language_id')
         );
+
+        session()->flash('success',__('Update successful'));
+        return response()->json(['status' => 'success'], 200);
     }
 }
