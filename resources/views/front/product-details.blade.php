@@ -63,10 +63,10 @@
                 {{-- Left: Images --}}
                 <div class="space-y-4">
                     {{-- Main Image --}}
-                    <div
+                    <div data-magnify
                         class="magnify overflow-hidden rounded-3xl border border-green-100 bg-white shadow-[0_22px_55px_rgba(15,23,42,0.12)]">
                         <img src="{{ $productImage }}" alt="{{ $productName }}"
-                            class="h-[360px] w-full object-cover sm:h-[430px] lg:h-[520px]" id="mainProductImage">
+                            class="h-[360px] w-full object-cover sm:h-[430px] lg:h-[520px]" id="mainProductImage" data-magnify-image>
                     </div>
 
                     {{-- Thumbnails --}}
@@ -77,7 +77,7 @@
                                     class="group overflow-hidden rounded-2xl border {{ $index === 0 ? 'border-green-500 ring-2 ring-green-200' : 'border-green-100' }} bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200"
                                     aria-label="View image {{ $index + 1 }}"
                                     aria-pressed="{{ $index === 0 ? 'true' : 'false' }}" data-thumb
-                                    onclick="document.getElementById('mainProductImage').src='{{ $img }}'; document.querySelectorAll('[data-thumb]').forEach(function(b){b.classList.remove('border-green-500','ring-2','ring-green-200');b.classList.add('border-green-100');}); this.classList.remove('border-green-100'); this.classList.add('border-green-500','ring-2','ring-green-200');">
+                                    onclick="var img=document.getElementById('mainProductImage'); img.src='{{ $img }}'; var c=document.querySelector('[data-magnify]'); if(c){c.style.backgroundImage='url({{ $img }})'} document.querySelectorAll('[data-thumb]').forEach(function(b){b.classList.remove('border-green-500','ring-2','ring-green-200');b.classList.add('border-green-100');}); this.classList.remove('border-green-100'); this.classList.add('border-green-500','ring-2','ring-green-200');">
                                     <img src="{{ $img }}"
                                         alt="{{ $productName }} thumbnail {{ $index + 1 }}" loading="lazy"
                                         decoding="async"
@@ -194,40 +194,6 @@
                                 Continue Shopping
                             </a>
                         </div>
-
-                        {{-- Quick Features --}}
-                        <div class="mt-6 grid grid-cols-2 gap-3 border-t border-green-100 pt-6">
-                            <div class="flex items-center gap-2 text-xs text-slate-600">
-                                <svg class="h-4 w-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" aria-hidden="true">
-                                    <path d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span>Fresh & Quality</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-xs text-slate-600">
-                                <svg class="h-4 w-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" aria-hidden="true">
-                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                </svg>
-                                <span>Fast Delivery</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-xs text-slate-600">
-                                <svg class="h-4 w-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" aria-hidden="true">
-                                    <path d="M12 22s8-4 8-10V6l-8-4-8 4v6c0 6 8 10 8 10Z"></path>
-                                </svg>
-                                <span>Secure Payment</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-xs text-slate-600">
-                                <svg class="h-4 w-4 text-green-600" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" aria-hidden="true">
-                                    <path
-                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                                    </path>
-                                </svg>
-                                <span>Easy Returns</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -342,4 +308,47 @@
             window.serverProductDetail = @json($productDetail);
         </script>
     @endif
+
+    <script>
+        (function() {
+            const container = document.querySelector('[data-magnify]');
+            if (!container) return;
+
+            const img = container.querySelector('[data-magnify-image]') || container.querySelector('img');
+            if (!img) return;
+
+            const setBackground = () => {
+                const source = img.currentSrc || img.src;
+                if (source) container.style.backgroundImage = `url("${source}")`;
+            };
+
+            const updatePosition = (e) => {
+                const rect = container.getBoundingClientRect();
+                const x = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+                const y = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
+                container.style.backgroundPosition = `${x}% ${y}%`;
+            };
+
+            container.addEventListener('pointerenter', (e) => {
+                if (e.pointerType === 'touch') return;
+                setBackground();
+                container.classList.add('is-magnifying');
+                updatePosition(e);
+            });
+
+            container.addEventListener('pointermove', (e) => {
+                if (container.classList.contains('is-magnifying')) updatePosition(e);
+            });
+
+            container.addEventListener('pointerleave', () => {
+                container.classList.remove('is-magnifying');
+                container.style.backgroundImage = '';
+                container.style.backgroundPosition = '';
+            });
+
+            img.addEventListener('load', () => {
+                if (container.classList.contains('is-magnifying')) setBackground();
+            });
+        })();
+    </script>
 @endsection
