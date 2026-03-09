@@ -6,7 +6,6 @@ use App\Models\HomeSlider;
 use Illuminate\Http\Request;
 use App\Http\Helpers\ImageUpload;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,7 +18,7 @@ class SliderController extends Controller
      */
     public function index(Request $request)
     {
-        $sliders = HomeSlider::orderBy('serial_number', 'ASC')->get();
+        $sliders = HomeSlider::latest()->get();
         return view('admin.home.slider', compact('sliders'));
     }
 
@@ -81,114 +80,13 @@ class SliderController extends Controller
         return response()->json(['status' => 'success'], 200);
     }
 
+    /**
+     * update slider data
+     */
     public function update(Request $request)
     {
-        $tableCheck = $this->ensureSliderTableExists();
-        if ($tableCheck) {
-            return $tableCheck;
-        }
-
-        $rules = array_merge($this->sliderRules(true), [
-            'id' => 'required|exists:home_sliders,id',
-        ]);
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            return Response::json([
-                'errors' => $validator->getMessageBag()->toArray(),
-            ], 422);
-        }
-
-        $slider = HomeSlider::findOrFail((int) $request->id);
-        $uploadResult = $this->saveSlider($slider, $request, true);
-
-        if ($uploadResult !== true) {
-            return $uploadResult;
-        }
-
-        session()->flash('success', __('Slider updated successfully'));
-
-        return response()->json(['status' => 'success'], 200);
-    }
-
-    public function delete(Request $request)
-    {
-        if ($this->ensureSliderTableExists()) {
-            return redirect()->back()->with('error', __('The home slider table is not available yet.'));
-        }
-
-        $request->validate([
-            'slider_id' => 'required|exists:home_sliders,id',
-        ]);
-
-        $slider = HomeSlider::findOrFail((int) $request->slider_id);
-        $this->deleteSliderImage($slider->image);
-        $slider->delete();
-
-        return redirect()->back()->with('success', __('Slider deleted successfully'));
-    }
-
-    public function bulkDelete(Request $request)
-    {
-        $tableCheck = $this->ensureSliderTableExists();
-        if ($tableCheck) {
-            return $tableCheck;
-        }
-
-        $validator = Validator::make($request->all(), [
-            'ids' => 'required|array',
-            'ids.*' => 'required|integer|exists:home_sliders,id',
-        ]);
-
-        if ($validator->fails()) {
-            return Response::json([
-                'errors' => $validator->getMessageBag()->toArray(),
-            ], 422);
-        }
-
-        $sliders = HomeSlider::whereIn('id', $request->ids)->get();
-
-        foreach ($sliders as $slider) {
-            $this->deleteSliderImage($slider->image);
-            $slider->delete();
-        }
-
-        session()->flash('success', __('Sliders deleted successfully'));
-
-        return response()->json(['status' => 'success'], 200);
-    }
-
-    public function changeStatus(Request $request)
-    {
-        if ($this->ensureSliderTableExists()) {
-            return 'error';
-        }
-
-        $validator = Validator::make($request->all(), [
-            'id' => 'required|exists:home_sliders,id',
-            'status' => 'required|in:0,1',
-        ]);
-
-        if ($validator->fails()) {
-            return 'error';
-        }
-
-        HomeSlider::where('id', (int) $request->id)->update([
-            'status' => (int) $request->status,
-        ]);
-
-        return 'success';
-    }
-
-    private function sliderRules(bool $isUpdate = false): array
-    {
-        $imageRule = $isUpdate
-            ? 'nullable|image|mimes:jpg,jpeg,png,webp,svg|max:2048'
-            : 'required|image|mimes:jpg,jpeg,png,webp,svg|max:2048';
-
         $rules = [
-            'image' => $imageRule,
+            'image' => 'nullable|mimes:jpg,jpeg,png,webp,svg,avif|max:2048',
             'title' => 'required|string|max:255',
             'sub_title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -204,24 +102,23 @@ class SliderController extends Controller
             'serial_number' => 'required|integer|min:0',
         ];
 
-        if (Schema::hasColumn('home_sliders', 'language_id')) {
-            $rules['language_id'] = $isUpdate
-                ? 'nullable|exists:languages,id'
-                : 'required|exists:languages,id';
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return Response::json([
+                'errors' => $validator->getMessageBag()->toArray(),
+            ], 422);
         }
 
-        return $rules;
-    }
+        $slider = HomeSlider::findOrFail($request->id);
 
-    private function saveSlider(Request $request)
-    {
+        $imageName = $slider->image;
         if ($request->hasFile('image')) {
             $directory = public_path($this->imageDirectory);
-            $imageName = ImageUpload::store($directory, $request->file('image'));
+            $imageName = ImageUpload::update($directory, $request->file('image'), $slider->image);
         }
 
-        $slider = new HomeSlider();
-        $slider->language_id = $request->language_id;
+        $slider->language_id = $slider->language_id;
         $slider->image = $imageName;
         $slider->title = $request->title;
         $slider->sub_title = $request->sub_title;
@@ -238,26 +135,45 @@ class SliderController extends Controller
         $slider->serial_number = $request->serial_number;
         $slider->save();
 
-        return true;
+        session()->flash('success', __('Slider updated successfully'));
+
+        return response()->json(['status' => 'success'], 200);
     }
 
-    private function deleteSliderImage(?string $image): void
+    /**
+     * delete slider data
+     */
+    public function delete(Request $request)
     {
-        if (!empty($image)) {
-            @unlink(public_path($this->imageDirectory) . $image);
-        }
+        $slider = HomeSlider::findOrFail($request->slider_id);
+        @unlink(public_path($this->imageDirectory) . $slider->image);
+        $slider->delete();
+
+        return redirect()->back()->with('success', __('Slider deleted successfully'));
     }
 
-    private function ensureSliderTableExists()
+    /**
+     * bulk delete sliders
+     */
+    public function bulkDelete(Request $request)
     {
-        if (!Schema::hasTable('home_sliders')) {
-            return Response::json([
-                'errors' => [
-                    'slider' => [__('The home slider table is not available yet. Run the migration first.')],
-                ],
-            ], 422);
-        }
+        $ids = $request->ids;
 
-        return null;
+        foreach ($ids as $id) {
+            $slider = HomeSlider::findOrFail($id);
+            $slider->delete();
+        }
+        session()->flash('success', __('Sliders deleted successfully'));
+
+        return response()->json(['status' => 'success'], 200);
+    }
+
+    /**
+     * change slider status
+     */
+    public function changeStatus(Request $request)
+    {
+        HomeSlider::where('id', $request->id)->update(['status' => $request->status]);
+        return 'success';
     }
 }
