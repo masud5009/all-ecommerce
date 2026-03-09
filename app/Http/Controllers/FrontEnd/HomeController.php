@@ -12,6 +12,7 @@ use App\Models\Admin\Package;
 use App\Models\Admin\Language;
 use App\Models\ProductContent;
 use App\Models\ProductCategory;
+use App\Models\HomeSectionSetting;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Schema;
@@ -92,6 +93,7 @@ class HomeController extends Controller
             ->where('language_id', $languageId)
             ->orderBy('serial_number', 'asc')
             ->get();
+        $data['sectionTitles'] = HomeSectionSetting::where('language_id', $languageId)->first();
 
         return view('front.home.index', $data);
     }

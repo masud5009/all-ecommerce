@@ -102,8 +102,9 @@
         data-reveal>
         <div class="flex flex-wrap items-center justify-between gap-4" data-reveal-child>
             <div>
-                <h2 id="category-heading" class="text-2xl font-semibold text-slate-900">Browse By Categories</h2>
-                <p class="mt-2 text-sm text-slate-600">Hand-picked aisles for quick grocery runs.</p>
+                <h2 id="category-heading" class="text-2xl font-semibold text-slate-900">
+                    {{ @$sectionTitles->category_title ?? 'Categories section title' }}
+                </h2>
             </div>
             <div class="hidden items-center gap-2 sm:flex">
                 <button type="button" aria-label="Scroll categories previous" data-category-prev
@@ -167,12 +168,16 @@
             class="rounded-3xl border border-green-100 bg-gradient-to-br from-green-50/70 via-white to-emerald-50/60 p-6 shadow-sm sm:p-8">
             <div class="flex flex-wrap items-end justify-between gap-4" data-reveal-child>
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-wide text-green-700">Featured Products</p>
-                    <h2 class="mt-2 text-2xl font-semibold text-slate-900">Handpicked picks for today</h2>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-green-700">
+                        {{ @$sectionTitles->featured_product_title ?? 'Featured products section title' }}
+                    </p>
+                    <h2 class="mt-2 text-2xl font-semibold text-slate-900">
+                        {{ @$sectionTitles->featured_product_sub_title ?? 'Featured products section sub title' }}
+                    </h2>
                 </div>
                 <a href="{{ route('frontend.shop') }}"
                     class="inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
-                    View all products
+                    {{ __('View all products') }}
                 </a>
             </div>
 
@@ -196,10 +201,15 @@
     <section class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
         <div class="flex flex-wrap items-end justify-between gap-4" data-reveal-child>
             <div>
-                <h2 class="text-2xl font-semibold text-slate-900">Popular right now</h2>
-                <p class="mt-2 text-sm text-slate-600">Most loved picks across produce, pantry, and seafood.</p>
+                <h2 class="text-2xl font-semibold text-slate-900">
+                    {{ @$sectionTitles->popular_product_title ?? 'Popular products section title' }}
+                </h2>
+                <p class="mt-2 text-sm text-slate-600">
+                    {{ @$sectionTitles->popular_product_sub_title ?? 'Popular products section sub title' }}
+                </p>
             </div>
-            <a href="{{ route('frontend.shop') }}" class="text-sm font-semibold text-green-700">Shop all</a>
+            <a href="{{ route('frontend.shop') }}" class="text-sm font-semibold text-green-700">
+                {{ __('Shop all') }}</a>
         </div>
         @if (count($popularProducts) > 0)
             <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -210,7 +220,7 @@
         @else
             <div class="mt-8 rounded-2xl border border-dashed border-green-200 bg-white p-8 text-center text-sm text-slate-500"
                 data-reveal-child>
-                No popular products found.
+                {{ __('NO PRODUCT FOUND!') }}
             </div>
         @endif
     </section>
@@ -221,9 +231,11 @@
         <section id="deals" class="flash-sale-section mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
             <div class="flash-sale-head flex flex-wrap items-end justify-between gap-4" data-reveal-child>
                 <div>
-                    <p class="flash-sale-kicker text-xs font-semibold uppercase tracking-wide text-green-700">Flash sale
+                    <p class="flash-sale-kicker text-xs font-semibold uppercase tracking-wide text-green-700">
+                        {{ @$sectionTitles->flash_title ?? 'Flash sale section title' }}
                     </p>
-                    <h2 class="flash-sale-title mt-2 text-2xl font-semibold text-slate-900">{{ $flashSaleDeal->title }}
+                    <h2 class="flash-sale-title mt-2 text-2xl font-semibold text-slate-900">
+                        {{ @$sectionTitles->flash_sub_title ?? 'Flash sale section sub title' }}
                     </h2>
                 </div>
                 <div class="flash-sale-head-actions flex items-center gap-3" data-reveal-child>
@@ -239,7 +251,7 @@
                     </span>
                     <a href="{{ route('frontend.shop') }}"
                         class="flash-sale-all-deals inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
-                        Show more products
+                        {{ __('Show more products') }}
                     </a>
                 </div>
             </div>
@@ -437,7 +449,7 @@
 
     <div class="mx-auto mt-16 h-px max-w-5xl bg-gradient-to-r from-transparent via-green-200 to-transparent"></div>
 
-    <section class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
+    <section class="mx-auto mb-16 mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
         <div class="relative overflow-hidden rounded-3xl border border-green-100 bg-white p-8 shadow-sm sm:p-10">
             <div class="pointer-events-none absolute -left-20 top-10 h-44 w-44 rounded-full bg-green-100/60 blur-3xl"
                 aria-hidden="true"></div>
@@ -445,10 +457,14 @@
                 aria-hidden="true"></div>
             <div class="relative">
                 <div class="text-center" data-reveal-child>
-                    <p class="text-xs font-semibold uppercase tracking-wide text-green-700">Why FreshCart</p>
-                    <h2 class="mt-3 text-2xl font-semibold text-slate-900">Freshness you can feel.</h2>
-                    <p class="mt-3 text-sm text-slate-600">Hand-picked produce, secure payment, and fast
-                        delivery—every time.
+                    <p class="text-xs font-semibold uppercase tracking-wide text-green-700">
+                        {{ @$sectionTitles->features_title ?? 'Freshness section title' }}
+                    </p>
+                    <h2 class="mt-3 text-2xl font-semibold text-slate-900">
+                        {{ @$sectionTitles->features_sub_title ?? 'Freshness section sub title' }}
+                    </h2>
+                    <p class="mt-3 text-sm text-slate-600">
+                        {{ @$sectionTitles->features_text ?? 'Freshness section description' }}
                     </p>
                 </div>
                 <div class="mt-10 grid gap-10 lg:grid-cols-[1fr_auto_1fr] lg:items-center">
@@ -566,190 +582,4 @@
             </div>
         </div>
     </section>
-
-    <!-- Testimonials Section -->
-    <section class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
-        <div class="flex flex-wrap items-center justify-between gap-4" data-reveal-child>
-            <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-green-700">Testimonials</p>
-                <h2 class="mt-2 text-2xl font-semibold text-slate-900">Loved by busy households.</h2>
-                <p class="mt-2 text-sm text-slate-600">Real feedback from families who shop every week.</p>
-            </div>
-            <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                <span class="rounded-full bg-green-100 px-3 py-1 font-semibold text-green-700">4.9/5 rating</span>
-                <span>2,300+ reviews</span>
-                <span class="rounded-full border border-green-200 bg-white px-3 py-1 font-semibold text-green-700">Trusted
-                    by
-                    10k+ families</span>
-            </div>
-        </div>
-        <div class="mt-8 grid gap-6 lg:grid-cols-3">
-            <div class="group rounded-2xl border border-green-100 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-                data-reveal-child>
-                <div class="flex items-center gap-4">
-                    <div
-                        class="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-sm font-semibold text-green-700">
-                        AK
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-slate-900">Ayesha K.</p>
-                        <p class="text-xs text-slate-500">Brooklyn, NY</p>
-                    </div>
-                    <div class="ml-auto flex items-center gap-1 text-amber-400">
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                            </path>
-                        </svg>
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                            </path>
-                        </svg>
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                            </path>
-                        </svg>
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                            </path>
-                        </svg>
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-                <p class="mt-4 text-sm text-slate-600">"Everything arrives crisp and chilled. The 90-minute window
-                    is a game
-                    changer."</p>
-            </div>
-            <div class="group rounded-2xl border border-green-100 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-                data-reveal-child>
-                <div class="flex items-center gap-4">
-                    <div
-                        class="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-sm font-semibold text-green-700">
-                        MR
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-slate-900">Miguel R.</p>
-                        <p class="text-xs text-slate-500">Austin, TX</p>
-                    </div>
-                    <div class="ml-auto flex items-center gap-1 text-amber-400">
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                            </path>
-                        </svg>
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                            </path>
-                        </svg>
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                            </path>
-                        </svg>
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                            </path>
-                        </svg>
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-                <p class="mt-4 text-sm text-slate-600">"Love the substitution approvals. I always know what I am
-                    getting."</p>
-            </div>
-            <div class="group rounded-2xl border border-green-100 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-                data-reveal-child>
-                <div class="flex items-center gap-4">
-                    <div
-                        class="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-sm font-semibold text-green-700">
-                        NS
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-slate-900">Nina S.</p>
-                        <p class="text-xs text-slate-500">San Jose, CA</p>
-                    </div>
-                    <div class="ml-auto flex items-center gap-1 text-amber-400">
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                            </path>
-                        </svg>
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                            </path>
-                        </svg>
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                            </path>
-                        </svg>
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                            </path>
-                        </svg>
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-                <p class="mt-4 text-sm text-slate-600">"The bundles and recipes keep us inspired all week long."
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!--about section -->
-    <section class="mx-auto mt-16 max-w-7xl px-4 pb-16 sm:px-6 lg:px-8" data-reveal>
-        <div class="flex flex-wrap items-center justify-between gap-4" data-reveal-child>
-            <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-green-700">Why choose us</p>
-                <h2 class="mt-2 text-2xl font-semibold text-slate-900">Why shoppers stay with FreshCart.</h2>
-                <p class="mt-2 text-sm text-slate-600">Premium service backed by real-time support and transparent
-                    standards.
-                </p>
-            </div>
-            <span
-                class="rounded-full border border-green-200 bg-green-50 px-4 py-2 text-xs font-semibold text-green-700">Trusted
-                by 12k+ families</span>
-        </div>
-        <div class="mt-8 grid gap-6 lg:grid-cols-3">
-            <div class="group rounded-2xl border border-green-100 bg-white p-6 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-                data-reveal-child>
-                <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-green-100 text-green-700">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        aria-hidden="true">
-                        <path d="M12 22s8-4 8-10V6l-8-4-8 4v6c0 6 8 10 8 10Z"></path>
-                    </svg>
-                </span>
-                <h3 class="mt-4 text-lg font-semibold text-slate-900">Freshness you can taste</h3>
-                <p class="mt-2 text-sm text-slate-600">Local farms, careful handling, zero compromise.</p>
-            </div>
-            <div class="group rounded-2xl border border-green-100 bg-white p-6 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-                data-reveal-child>
-                <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-green-100 text-green-700">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        aria-hidden="true">
-                        <path d="M12 8v8"></path>
-                        <path d="M8 12h8"></path>
-                        <circle cx="12" cy="12" r="9"></circle>
-                    </svg>
-                </span>
-                <h3 class="mt-4 text-lg font-semibold text-slate-900">Smart substitutions</h3>
-                <p class="mt-2 text-sm text-slate-600">Approve swaps instantly, stay in control.</p>
-            </div>
-            <div class="group rounded-2xl border border-green-100 bg-white p-6 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-                data-reveal-child>
-                <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-green-100 text-green-700">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        aria-hidden="true">
-                        <path d="M3 12h4l2 4 4-8 2 4h6"></path>
-                    </svg>
-                </span>
-                <h3 class="mt-4 text-lg font-semibold text-slate-900">Fast, tracked delivery</h3>
-                <p class="mt-2 text-sm text-slate-600">Precise windows with live tracking.</p>
-            </div>
-        </div>
-    </section>
-
 @endsection
