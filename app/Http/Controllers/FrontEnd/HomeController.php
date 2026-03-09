@@ -39,9 +39,44 @@ class HomeController extends Controller
         $data['flashSaleCardProducts'] = $flashSaleCardProducts;
         $data['popularProducts'] = $popularProducts;
 
-        $data['serverFeaturedProducts'] = ProductService::mapHomeProductsForQuickView($featuredProducts, 'Featured');
-        $data['serverPopularProducts'] = ProductService::mapHomeProductsForQuickView($popularProducts, 'Popular');
-        $data['serverFlashSaleProducts'] = ProductService::mapHomeProductsForQuickView($flashSaleCardProducts, 'Flash Sale');
+        // Build flash sale deal hero card from first flash sale product
+        $data['flashSaleDeal'] = null;
+        if ($flashSaleCardProducts->isNotEmpty()) {
+            $firstFlash = $flashSaleCardProducts->first();
+            $flashContent = $firstFlash->content->first();
+            $flashTitle = $flashContent->title ?? 'Flash Sale Deal';
+            $flashSummary = trim(preg_replace('/\s+/', ' ', strip_tags((string) ($flashContent->summary ?? $flashContent->description ?? 'Limited time offer on selected items.'))));
+
+            $currentPrice = (float) ($firstFlash->current_price ?? 0);
+            $flashAmount = (float) ($firstFlash->flash_sale_price ?? 0);
+            $salePrice = max($currentPrice - $flashAmount, 0);
+            $oldPrice = $currentPrice;
+            $saveAmount = $oldPrice - $salePrice;
+            $savePercent = $oldPrice > 0 ? round(($saveAmount / $oldPrice) * 100) : 0;
+
+            $endAt = \Carbon\Carbon::parse($firstFlash->flash_sale_end_at);
+            $countdownSeconds = max(0, now()->diffInSeconds($endAt, false));
+
+            $thumbnail = !empty($firstFlash->thumbnail)
+                ? asset('assets/img/product/' . $firstFlash->thumbnail)
+                : '';
+
+            $stockLabel = ($firstFlash->stock ?? 0) > 0 ? __('In Stock') : __('Stock Out');
+
+            $data['flashSaleDeal'] = (object) [
+                'title' => $flashTitle,
+                'summary' => $flashSummary ?: 'Limited time offer on selected items.',
+                'sale_price' => $salePrice,
+                'old_price' => $oldPrice,
+                'save_amount' => $saveAmount,
+                'save_percent' => $savePercent,
+                'countdown_seconds' => (int) $countdownSeconds,
+                'image' => $thumbnail,
+                'stock_label' => $stockLabel,
+                'details_url' => route('frontend.product.details', ['product' => $firstFlash->id]),
+            ];
+        }
+
         return view('front.home.index', $data);
     }
 
@@ -187,11 +222,6 @@ class HomeController extends Controller
             })
             ->take(4)
             ->values();
-
-        $data['serverPopularProducts'] = ProductService::mapHomeProductsForQuickView(
-            $data['youMayAlsoLikeProducts'],
-            'Popular'
-        );
 
         return view('front.home.product-details', $data);
     }

@@ -43,6 +43,51 @@
     $stockLabel = $product->has_variants == 0
         ? (($product->stock ?? 0) > 0 ? __('In Stock') : __('Stock Out'))
         : $variantStock;
+
+    // Build quick-view data for JS (modal, cart, variation change)
+    $quickViewUnits = [];
+    if ($product->has_variants == 0 || $variations->isEmpty()) {
+        $quickViewUnits[] = [
+            'label' => '1 unit',
+            'price' => (float) $displayPrice,
+            'oldPrice' => (float) ($oldPrice ?? 0),
+        ];
+    } else {
+        foreach ($variations as $vIdx => $variation) {
+            $variantParts = collect($variation->variantValues ?? [])
+                ->sortBy(fn($vv) => optional(optional($vv->optionValue)->option)->position ?? PHP_INT_MAX)
+                ->map(function ($vv) {
+                    $option = optional($vv->optionValue)->option;
+                    $value = optional($vv->optionValue)->value;
+                    if (!$option || $value === null) return null;
+                    return $option->name . ': ' . $value;
+                })
+                ->filter()
+                ->values();
+
+            $quickViewUnits[] = [
+                'label' => $variantParts->isNotEmpty() ? $variantParts->implode(', ') : __('Option') . ' ' . ($vIdx + 1),
+                'price' => (float) ($variation->price ?? $product->current_price ?? 0),
+                'oldPrice' => (float) ($product->previous_price ?? 0),
+            ];
+        }
+    }
+
+    $productImage = !empty($product->thumbnail) ? asset('assets/img/product/' . $product->thumbnail) : '';
+    $summaryText = trim(preg_replace('/\s+/', ' ', strip_tags((string) ($productContent->summary ?? $productContent->description ?? ''))));
+
+    $quickViewData = [
+        'id' => (string) $product->id,
+        'name' => $productTitle,
+        'image' => $productImage,
+        'images' => $productImage ? [$productImage] : [],
+        'description' => $summaryText ?: 'Product from our catalog.',
+        'rating' => 4.7,
+        'reviews' => 142,
+        'badge' => $isFlashSaleActive ? 'Flash Sale' : 'Featured',
+        'units' => $quickViewUnits,
+        'isDeal' => $isFlashSaleActive || (!empty($oldPrice) && (float) $oldPrice > (float) ($displayPrice ?? 0)),
+    ];
 @endphp
 
 <article
@@ -50,7 +95,8 @@
     data-reveal-child
     data-featured-card
     data-product-id="{{ $product->id }}"
-    data-product-name="{{ $productTitle }}">
+    data-product-name="{{ $productTitle }}"
+    data-product-json="{{ json_encode($quickViewData) }}">
 
     @if($isFlashSaleActive)
         <span

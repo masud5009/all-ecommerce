@@ -844,3 +844,23 @@ body[data-reveal-ready="true"] [data-reveal].is-visible [data-reveal-child] {
     transform: none;
   }
 }
+
+/* ── Cart Offcanvas Drawer ─────────────────────────────────────────── */
+[data-cart-offcanvas-panel] {
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+[data-cart-offcanvas-overlay] {
+  transition: opacity 0.3s ease;
+}
+
+[data-cart-offcanvas].hidden [data-cart-offcanvas-overlay] {
+  opacity: 0;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

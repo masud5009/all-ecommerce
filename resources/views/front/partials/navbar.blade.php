@@ -108,7 +108,7 @@
                     </select>
                 </div>
                 <div class="ml-auto flex items-center gap-2">
-                    <a href="cart.html"
+                    <button type="button" data-action="open-cart-offcanvas"
                         class="relative inline-flex items-center gap-2 rounded-2xl border border-green-100 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200"
                         aria-label="View cart">
                         <svg class="h-5 w-5 text-green-700" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -121,7 +121,7 @@
                         <span
                             class="absolute -right-2 -top-2 hidden min-w-[1.5rem] rounded-full bg-green-600 px-1.5 py-0.5 text-center text-xs font-semibold text-white tabular-nums"
                             data-cart-count>0</span>
-                    </a>
+                    </button>
                     <button
                         class="hidden rounded-2xl border border-green-100 bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 md:inline-flex"
                         aria-label="Account">

@@ -151,7 +151,6 @@
 
     @if (!empty($productDetailData))
         <script>
-            window.serverPopularProducts = @json($serverPopularProducts ?? []);
             window.serverProductDetail = @json($productDetailData);
         </script>
     @endif

@@ -84,7 +84,7 @@
                     </svg>
                     Categories
                 </a>
-                <a href="cart.html" data-nav="shop"
+                <button type="button" data-action="open-cart-offcanvas" data-nav="shop"
                     class="relative flex flex-col items-center gap-1 rounded-2xl px-2 py-2 transition hover:bg-green-50 hover:text-green-700">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         aria-hidden="true">
@@ -95,7 +95,7 @@
                     <span
                         class="absolute right-3 top-1 hidden min-w-[1.25rem] rounded-full bg-green-600 px-1 py-0.5 text-[10px] font-semibold text-white tabular-nums"
                         data-cart-count>0</span>
-                </a>
+                </button>
                 <a href="checkout.html" data-nav="account"
                     class="flex flex-col items-center gap-1 rounded-2xl px-2 py-2 transition hover:bg-green-50 hover:text-green-700">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"

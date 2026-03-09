@@ -2,187 +2,6 @@
 
   const products = [];
 
-  const serverFeaturedProducts =
-    typeof window !== 'undefined' && Array.isArray(window.serverFeaturedProducts)
-      ? window.serverFeaturedProducts
-      : [];
-
-  if (serverFeaturedProducts.length) {
-    serverFeaturedProducts.forEach((raw) => {
-      const id = raw && raw.id !== undefined && raw.id !== null ? String(raw.id) : '';
-      if (!id || products.some((item) => String(item.id) === id)) return;
-
-      const basePrice = Number(raw.price || raw.current_price || 0);
-      const baseOldPrice = Number(raw.oldPrice || raw.previous_price || 0);
-      const normalizedImages = Array.isArray(raw.images)
-        ? raw.images.filter((src) => typeof src === 'string' && src.trim() !== '')
-        : [];
-      const primaryImage =
-        (typeof raw.image === 'string' && raw.image.trim() !== '' ? raw.image : normalizedImages[0]) || '';
-      if (!primaryImage) return;
-      const normalizedUnits =
-        Array.isArray(raw.units) && raw.units.length
-          ? raw.units.map((unit, idx) => ({
-              label: unit.label || `Option ${idx + 1}`,
-              price: Number(unit.price || basePrice || 0),
-              oldPrice: Number(unit.oldPrice || unit.previous_price || baseOldPrice || 0)
-            }))
-          : [{ label: '1 unit', price: basePrice, oldPrice: baseOldPrice }];
-
-      products.unshift({
-        id,
-        name: raw.name || `Product #${id}`,
-        category: raw.category || 'Featured',
-        rating: Number(raw.rating || 4.7),
-        reviews: Number(raw.reviews || 142),
-        badge: raw.badge || raw.category || 'Featured',
-        image: primaryImage,
-        images: normalizedImages.length ? normalizedImages : [primaryImage],
-        isDeal: Boolean(raw.isDeal || (baseOldPrice > basePrice)),
-        popular: raw.popular !== false,
-        description: raw.description || 'Featured product from our catalog.',
-        nutrition:
-          Array.isArray(raw.nutrition) && raw.nutrition.length
-            ? raw.nutrition
-            : ['Fresh stock', 'Quality checked'],
-        reviewList:
-          Array.isArray(raw.reviewList) && raw.reviewList.length
-            ? raw.reviewList
-            : [{ name: 'Customer', rating: 5, text: 'Great quality product.' }],
-        units: normalizedUnits
-      });
-    });
-  }
-
-  const serverPopularProducts =
-    typeof window !== 'undefined' && Array.isArray(window.serverPopularProducts)
-      ? window.serverPopularProducts
-      : [];
-
-  if (serverPopularProducts.length) {
-    serverPopularProducts.forEach((raw) => {
-      const id = raw && raw.id !== undefined && raw.id !== null ? String(raw.id) : '';
-      if (!id) return;
-
-      const basePrice = Number(raw.price || raw.current_price || 0);
-      const baseOldPrice = Number(raw.oldPrice || raw.previous_price || 0);
-      const normalizedImages = Array.isArray(raw.images)
-        ? raw.images.filter((src) => typeof src === 'string' && src.trim() !== '')
-        : [];
-      const primaryImage =
-        (typeof raw.image === 'string' && raw.image.trim() !== '' ? raw.image : normalizedImages[0]) || '';
-      if (!primaryImage) return;
-      const normalizedUnits =
-        Array.isArray(raw.units) && raw.units.length
-          ? raw.units.map((unit, idx) => ({
-              label: unit.label || `Option ${idx + 1}`,
-              price: Number(unit.price || basePrice || 0),
-              oldPrice: Number(unit.oldPrice || unit.previous_price || baseOldPrice || 0)
-            }))
-          : [{ label: '1 unit', price: basePrice, oldPrice: baseOldPrice }];
-
-      const normalizedProduct = {
-        id,
-        name: raw.name || `Product #${id}`,
-        category: raw.category || 'Featured',
-        rating: Number(raw.rating || 4.7),
-        reviews: Number(raw.reviews || 142),
-        badge: raw.badge || raw.category || 'Featured',
-        image: primaryImage,
-        images: normalizedImages.length ? normalizedImages : [primaryImage],
-        isDeal: Boolean(raw.isDeal || (baseOldPrice > basePrice)),
-        popular: raw.popular !== false,
-        description: raw.description || 'Popular product from our catalog.',
-        nutrition:
-          Array.isArray(raw.nutrition) && raw.nutrition.length
-            ? raw.nutrition
-            : ['Fresh stock', 'Quality checked'],
-        reviewList:
-          Array.isArray(raw.reviewList) && raw.reviewList.length
-            ? raw.reviewList
-            : [{ name: 'Customer', rating: 5, text: 'Great quality product.' }],
-        units: normalizedUnits
-      };
-
-      const existingIndex = products.findIndex((item) => String(item.id) === id);
-
-      if (existingIndex >= 0) {
-        const existingProduct = products.splice(existingIndex, 1)[0];
-        products.push({
-          ...existingProduct,
-          ...normalizedProduct
-        });
-      } else {
-        products.push(normalizedProduct);
-      }
-    });
-  }
-
-  const serverFlashSaleProducts =
-    typeof window !== 'undefined' && Array.isArray(window.serverFlashSaleProducts)
-      ? window.serverFlashSaleProducts
-      : [];
-
-  if (serverFlashSaleProducts.length) {
-    serverFlashSaleProducts.forEach((raw) => {
-      const id = raw && raw.id !== undefined && raw.id !== null ? String(raw.id) : '';
-      if (!id) return;
-
-      const basePrice = Number(raw.price || raw.current_price || 0);
-      const baseOldPrice = Number(raw.oldPrice || raw.previous_price || 0);
-      const normalizedImages = Array.isArray(raw.images)
-        ? raw.images.filter((src) => typeof src === 'string' && src.trim() !== '')
-        : [];
-      const primaryImage =
-        (typeof raw.image === 'string' && raw.image.trim() !== '' ? raw.image : normalizedImages[0]) || '';
-      if (!primaryImage) return;
-      const normalizedUnits =
-        Array.isArray(raw.units) && raw.units.length
-          ? raw.units.map((unit, idx) => ({
-              label: unit.label || `Option ${idx + 1}`,
-              price: Number(unit.price || basePrice || 0),
-              oldPrice: Number(unit.oldPrice || unit.previous_price || baseOldPrice || 0)
-            }))
-          : [{ label: '1 unit', price: basePrice, oldPrice: baseOldPrice }];
-
-      const normalizedProduct = {
-        id,
-        name: raw.name || `Product #${id}`,
-        category: raw.category || 'Featured',
-        rating: Number(raw.rating || 4.7),
-        reviews: Number(raw.reviews || 142),
-        badge: raw.badge || raw.category || 'Featured',
-        image: primaryImage,
-        images: normalizedImages.length ? normalizedImages : [primaryImage],
-        isDeal: true,
-        popular: raw.popular !== false,
-        description: raw.description || 'Limited flash offer from our catalog.',
-        nutrition:
-          Array.isArray(raw.nutrition) && raw.nutrition.length
-            ? raw.nutrition
-            : ['Fresh stock', 'Quality checked'],
-        reviewList:
-          Array.isArray(raw.reviewList) && raw.reviewList.length
-            ? raw.reviewList
-            : [{ name: 'Customer', rating: 5, text: 'Great quality product.' }],
-        units: normalizedUnits
-      };
-
-      const existingIndex = products.findIndex((item) => String(item.id) === id);
-
-      if (existingIndex >= 0) {
-        const existingProduct = products.splice(existingIndex, 1)[0];
-        products.unshift({
-          ...existingProduct,
-          ...normalizedProduct,
-          isDeal: true
-        });
-      } else {
-        products.unshift(normalizedProduct);
-      }
-    });
-  }
-
   const storeKey = 'grocery_cart';
   const modalState = {
     element: null,
@@ -193,6 +12,46 @@
 
   const qs = (selector, scope = document) => scope.querySelector(selector);
   const qsa = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
+
+  /**
+   * Scan product cards in the DOM for data-product-json attributes
+   * and populate the products array for quick view, cart, and variation features.
+   */
+  const initProductsFromDOM = () => {
+    document.querySelectorAll('[data-product-json]').forEach((el) => {
+      try {
+        const raw = JSON.parse(el.dataset.productJson);
+        const id = String(raw.id ?? '');
+        if (!id || products.some((p) => p.id === id)) return;
+
+        const normalizedUnits =
+          Array.isArray(raw.units) && raw.units.length
+            ? raw.units.map((unit, idx) => ({
+                label: unit.label || `Option ${idx + 1}`,
+                price: Number(unit.price || 0),
+                oldPrice: Number(unit.oldPrice || 0)
+              }))
+            : [{ label: '1 unit', price: Number(raw.price || 0), oldPrice: Number(raw.oldPrice || 0) }];
+
+        products.push({
+          id,
+          name: raw.name || `Product #${id}`,
+          category: raw.category || 'Featured',
+          rating: Number(raw.rating || 4.7),
+          reviews: Number(raw.reviews || 142),
+          badge: raw.badge || 'Featured',
+          image: raw.image || '',
+          images: Array.isArray(raw.images) && raw.images.length ? raw.images : (raw.image ? [raw.image] : []),
+          isDeal: Boolean(raw.isDeal),
+          popular: true,
+          description: raw.description || 'Product from our catalog.',
+          nutrition: Array.isArray(raw.nutrition) ? raw.nutrition : ['Fresh stock', 'Quality checked'],
+          reviewList: Array.isArray(raw.reviewList) ? raw.reviewList : [{ name: 'Customer', rating: 5, text: 'Great quality product.' }],
+          units: normalizedUnits
+        });
+      } catch (e) { /* skip invalid entries */ }
+    });
+  };
 
   const productDetailsRouteTemplate =
     typeof window !== 'undefined' &&
@@ -1152,6 +1011,147 @@
     });
   };
 
+  /* ─── Cart Offcanvas Drawer ────────────────────────────────────────── */
+  let cartOffcanvasEl = null;
+
+  const ensureCartOffcanvas = () => {
+    if (cartOffcanvasEl) return cartOffcanvasEl;
+    const existing = qs('[data-cart-offcanvas]');
+    if (existing) { cartOffcanvasEl = existing; return existing; }
+
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = `
+      <div class="fixed inset-0 z-[110] hidden" data-cart-offcanvas aria-modal="true" role="dialog" aria-label="Shopping cart">
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" data-cart-offcanvas-overlay></div>
+        <div class="absolute inset-y-0 right-0 flex max-w-full">
+          <div class="relative w-screen max-w-md transform transition-transform translate-x-full" data-cart-offcanvas-panel>
+            <div class="flex h-full flex-col bg-white shadow-2xl">
+              <div class="flex items-center justify-between border-b border-green-100 px-6 py-4">
+                <h2 class="text-lg font-semibold text-slate-900">Shopping Cart</h2>
+                <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-green-100 bg-white text-slate-500 shadow-sm transition hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200" data-cart-offcanvas-close aria-label="Close cart">
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M6 6l12 12"></path>
+                    <path d="M18 6l-12 12"></path>
+                  </svg>
+                </button>
+              </div>
+              <div class="flex-1 overflow-y-auto px-6 py-4" data-cart-offcanvas-items></div>
+              <div class="border-t border-green-100 px-6 py-4" data-cart-offcanvas-footer>
+                <div class="flex items-center justify-between text-sm text-slate-600">
+                  <span>Subtotal</span>
+                  <span class="font-semibold text-slate-900" data-cart-offcanvas-subtotal>$0.00</span>
+                </div>
+                <div class="mt-1 flex items-center justify-between text-sm text-slate-600">
+                  <span>Delivery</span>
+                  <span class="font-semibold text-slate-900" data-cart-offcanvas-delivery>$0.00</span>
+                </div>
+                <div class="mt-2 flex items-center justify-between border-t border-green-100 pt-2 text-base font-semibold text-slate-900">
+                  <span>Total</span>
+                  <span data-cart-offcanvas-total>$0.00</span>
+                </div>
+                <button type="button" class="mt-4 w-full rounded-2xl bg-green-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" data-cart-offcanvas-checkout>Proceed to Checkout</button>
+                <button type="button" class="mt-2 w-full text-center text-sm font-semibold text-green-700 transition hover:text-green-800" data-cart-offcanvas-close>Continue shopping</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.append(wrapper.firstElementChild);
+    cartOffcanvasEl = qs('[data-cart-offcanvas]');
+    return cartOffcanvasEl;
+  };
+
+  const renderCartOffcanvas = () => {
+    const offcanvas = cartOffcanvasEl || qs('[data-cart-offcanvas]');
+    if (!offcanvas) return;
+    const container = qs('[data-cart-offcanvas-items]', offcanvas);
+    if (!container) return;
+    const cart = getCart();
+
+    if (!cart.length) {
+      container.innerHTML = `
+        <div class="flex flex-col items-center justify-center py-16 text-center">
+          <svg class="h-16 w-16 text-green-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.7 12.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.5l1.6-7.5H6"></path>
+          </svg>
+          <p class="mt-4 text-sm text-slate-500">Your cart is empty</p>
+          <p class="mt-1 text-xs text-slate-400">Add some fresh picks to get started.</p>
+        </div>
+      `;
+      const footer = qs('[data-cart-offcanvas-footer]', offcanvas);
+      if (footer) footer.classList.add('hidden');
+      return;
+    }
+
+    const footer = qs('[data-cart-offcanvas-footer]', offcanvas);
+    if (footer) footer.classList.remove('hidden');
+
+    container.innerHTML = cart
+      .map((item) => {
+        const product = findProduct(item.id);
+        if (!product) return '';
+        const unit = findUnit(product, item.unit);
+        return `
+          <div class="flex items-start gap-3 rounded-2xl border border-green-100 bg-white p-3 shadow-sm mb-3" data-cart-offcanvas-item data-product-id="${item.id}" data-unit="${item.unit}">
+            <img src="${product.image}" alt="${product.name}" class="h-16 w-16 flex-shrink-0 rounded-xl object-cover">
+            <div class="flex-1 min-w-0">
+              <a href="${getProductDetailsUrl(product.id)}" class="text-sm font-semibold text-slate-900 hover:text-green-700 line-clamp-1">${product.name}</a>
+              <p class="mt-0.5 text-xs text-slate-500">${item.unit}</p>
+              <div class="mt-2 flex items-center justify-between">
+                <div class="flex items-center gap-1.5 rounded-xl border border-green-100 bg-white px-2 py-1">
+                  <button class="h-6 w-6 rounded-full bg-green-50 text-green-700 text-xs" type="button" aria-label="Decrease" data-action="dec">-</button>
+                  <span class="min-w-[1.25rem] text-center text-xs font-semibold text-slate-700" data-qty>${item.qty}</span>
+                  <button class="h-6 w-6 rounded-full bg-green-600 text-white text-xs" type="button" aria-label="Increase" data-action="inc">+</button>
+                </div>
+                <span class="text-sm font-semibold text-slate-900">${formatCurrency(unit.price * item.qty)}</span>
+              </div>
+            </div>
+            <button class="flex-shrink-0 mt-0.5 text-slate-300 hover:text-rose-500 transition" type="button" data-action="remove" aria-label="Remove ${product.name}">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M6 6l12 12"></path>
+                <path d="M18 6l-12 12"></path>
+              </svg>
+            </button>
+          </div>
+        `;
+      })
+      .join('');
+
+    // Update totals
+    const totals = calculateTotals(cart);
+    const subtotalEl = qs('[data-cart-offcanvas-subtotal]', offcanvas);
+    const deliveryEl = qs('[data-cart-offcanvas-delivery]', offcanvas);
+    const totalEl = qs('[data-cart-offcanvas-total]', offcanvas);
+    if (subtotalEl) subtotalEl.textContent = formatCurrency(totals.subtotal);
+    if (deliveryEl) deliveryEl.textContent = formatCurrency(totals.deliveryFee);
+    if (totalEl) totalEl.textContent = formatCurrency(totals.total);
+  };
+
+  const openCartOffcanvas = () => {
+    const offcanvas = ensureCartOffcanvas();
+    renderCartOffcanvas();
+    offcanvas.classList.remove('hidden');
+    lockBodyScroll();
+    requestAnimationFrame(() => {
+      const panel = qs('[data-cart-offcanvas-panel]', offcanvas);
+      if (panel) panel.classList.remove('translate-x-full');
+    });
+  };
+
+  const closeCartOffcanvas = () => {
+    const offcanvas = cartOffcanvasEl || qs('[data-cart-offcanvas]');
+    if (!offcanvas) return;
+    const panel = qs('[data-cart-offcanvas-panel]', offcanvas);
+    if (panel) panel.classList.add('translate-x-full');
+    setTimeout(() => {
+      offcanvas.classList.add('hidden');
+      unlockBodyScroll();
+    }, 300);
+  };
+
   const renderCart = () => {
     const container = qs('[data-cart-items]');
     if (!container) return;
@@ -1256,6 +1256,63 @@
   });
 
   document.addEventListener('click', (event) => {
+    /* ── Cart Offcanvas triggers ─────────────────────────────────────── */
+    const openCartBtn = event.target.closest('[data-action="open-cart-offcanvas"]');
+    if (openCartBtn) {
+      event.preventDefault();
+      openCartOffcanvas();
+      return;
+    }
+
+    const cartOffcanvasClose = event.target.closest('[data-cart-offcanvas-close]');
+    if (cartOffcanvasClose) {
+      closeCartOffcanvas();
+      return;
+    }
+
+    const cartOffcanvasOverlay = event.target.closest('[data-cart-offcanvas-overlay]');
+    if (cartOffcanvasOverlay) {
+      closeCartOffcanvas();
+      return;
+    }
+
+    /* ── Cart offcanvas item actions (inc / dec / remove) ─────────── */
+    const offcanvasItem = event.target.closest('[data-cart-offcanvas-item]');
+    if (offcanvasItem) {
+      const incBtn = event.target.closest('[data-action="inc"]');
+      const decBtn = event.target.closest('[data-action="dec"]');
+      const removeBtn = event.target.closest('[data-action="remove"]');
+      const pid = offcanvasItem.dataset.productId;
+      const punit = offcanvasItem.dataset.unit;
+
+      if (incBtn) {
+        updateCartItem(pid, punit, 1);
+        renderCartOffcanvas();
+        renderCart();
+        renderCheckoutSummary();
+        updateCartBadges();
+        return;
+      }
+      if (decBtn) {
+        updateCartItem(pid, punit, -1);
+        renderCartOffcanvas();
+        renderCart();
+        renderCheckoutSummary();
+        updateCartBadges();
+        return;
+      }
+      if (removeBtn) {
+        removeCartItem(pid, punit);
+        renderCartOffcanvas();
+        renderCart();
+        renderCheckoutSummary();
+        updateCartBadges();
+        return;
+      }
+      // Allow link clicks inside the item to pass through
+      return;
+    }
+
     const modalClose = event.target.closest('[data-modal-close]');
     const modalOverlay = event.target.closest('[data-modal-overlay]');
     if (modalClose || modalOverlay) {
@@ -1327,6 +1384,8 @@
 
         closeProductModal();
         updateCartBadges();
+        renderCartOffcanvas();
+        openCartOffcanvas();
         return;
       }
 
@@ -1422,12 +1481,20 @@
 
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
+    // Close cart offcanvas first if open
+    const cartOff = cartOffcanvasEl || qs('[data-cart-offcanvas]');
+    if (cartOff && !cartOff.classList.contains('hidden')) {
+      closeCartOffcanvas();
+      return;
+    }
     const modal = modalState.element || qs('[data-modal="product"]');
     if (!modal || modal.classList.contains('hidden')) return;
     closeProductModal();
   });
 
+  initProductsFromDOM();
   ensureProductModal();
+  ensureCartOffcanvas();
   initMagnify();
   updateNavActive();
   initStickyHeader();
