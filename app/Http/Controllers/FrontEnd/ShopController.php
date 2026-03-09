@@ -96,6 +96,7 @@ class ShopController extends Controller
                     ->values();
 
                 $units[] = [
+                    'variant_id' => $variant->id,
                     'label' => $variantParts->isNotEmpty() ? $variantParts->implode(', ') : ('Option ' . ($index + 1)),
                     'price' => (float) ($variant->price ?? $product->current_price ?? 0),
                     'oldPrice' => (float) ($product->previous_price ?? 0),
@@ -108,6 +109,7 @@ class ShopController extends Controller
         // Default unit if no variants
         if (empty($units)) {
             $units[] = [
+                'variant_id' => null,
                 'label' => '1 unit',
                 'price' => (float) ($product->current_price ?? 0),
                 'oldPrice' => (float) ($product->previous_price ?? 0),

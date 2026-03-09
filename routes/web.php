@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontEnd\HomeController;
 use App\Http\Controllers\FrontEnd\ShopController;
+use App\Http\Controllers\FrontEnd\CartController;
 use App\Http\Controllers\FrontEnd\UserController;
 use App\Http\Controllers\FrontEnd\CheckoutController;
 /*
@@ -33,6 +34,17 @@ Route::prefix('/')->controller(HomeController::class)->group(function () {
      =============================*/
 Route::get('/shop', [ShopController::class, 'shop'])->name('frontend.shop');
 Route::get('/shop/details/{id}', [ShopController::class, 'details'])->name('frontend.shop.details');
+
+/*============================
+      cart management routes
+     =============================*/
+Route::prefix('cart')->controller(CartController::class)->group(function () {
+    Route::get('/', 'index')->name('cart.index');
+    Route::post('/add', 'add')->name('cart.add');
+    Route::post('/update', 'update')->name('cart.update');
+    Route::post('/remove', 'remove')->name('cart.remove');
+    Route::post('/clear', 'clear')->name('cart.clear');
+});
 
 
 /*============================

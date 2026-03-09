@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'FreshCart | Premium Grocery')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,6 +55,7 @@
 
 <body class="bg-white text-slate-900" data-page="@yield('page', 'home')">
     @include('front.partials.navbar')
+    @include('front.partials.cart-offcanvas')
 
     <main class="pb-24 md:pb-0">
         @yield('content')
@@ -110,6 +112,7 @@
     </div>
 
     <script src="{{ asset('assets/front/js/app.js') }}"></script>
+    <script src="{{ asset('assets/front/js/cart.js') }}"></script>
 </body>
 
 </html>

@@ -155,8 +155,9 @@
                             <div class="mt-3 grid gap-2">
                                 @foreach ($productUnits as $index => $unit)
                                     <label class="group relative flex cursor-pointer items-center gap-3">
-                                        <input class="peer sr-only" type="radio" name="detail-unit"
-                                            value="{{ $unit['label'] }}" data-detail-unit
+                                        <input class="peer sr-only" type="radio" name="productUnit"
+                                            value="{{ $index }}" data-detail-unit
+                                            data-variant-id="{{ $unit['variant_id'] ?? '' }}"
                                             data-price="{{ $unit['price'] }}"
                                             data-old-price="{{ $unit['oldPrice'] ?? '' }}"
                                             {{ $index === 0 ? 'checked' : '' }}>
