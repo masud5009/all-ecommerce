@@ -184,9 +184,36 @@
 
                         {{-- Add to Cart & Actions --}}
                         <div class="mt-6 flex flex-wrap items-center gap-3">
+                            {{-- Quantity Selector --}}
+                            <div class="inline-flex items-center rounded-2xl border border-green-200 bg-white">
+                                <button type="button"
+                                    class="flex h-12 w-12 items-center justify-center rounded-l-2xl text-slate-600 transition hover:bg-green-50 hover:text-green-700 focus:outline-none"
+                                    onclick="var q=document.getElementById('productQty'); var v=parseInt(q.value)||1; if(v>1){q.value=v-1;}"
+                                    aria-label="Decrease quantity">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path d="M5 12h14"></path>
+                                    </svg>
+                                </button>
+                                <input type="number" id="productQty" value="1" min="1" max="99"
+                                    class="h-12 w-14 border-x border-green-200 bg-transparent text-center text-sm font-semibold text-slate-900 focus:outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                                    readonly>
+                                <button type="button"
+                                    class="flex h-12 w-12 items-center justify-center rounded-r-2xl text-slate-600 transition hover:bg-green-50 hover:text-green-700 focus:outline-none"
+                                    onclick="var q=document.getElementById('productQty'); var v=parseInt(q.value)||1; if(v<99){q.value=v+1;}"
+                                    aria-label="Increase quantity">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path d="M12 5v14M5 12h14"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
                             <button type="button"
-                                class="inline-flex items-center justify-center rounded-2xl bg-green-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200"
+                                class="inline-flex items-center justify-center gap-2 rounded-2xl bg-green-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200"
                                 data-action="add">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M6 7h12l1 12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L6 7Z"></path>
+                                    <path d="M9 7V6a3 3 0 0 1 6 0v1"></path>
+                                </svg>
                                 Add to cart
                             </button>
                             <a href="{{ route('frontend.shop') }}"
