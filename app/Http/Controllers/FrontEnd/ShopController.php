@@ -75,13 +75,13 @@ class ShopController extends Controller
 
         // Build images array
         $images = [];
-        if (!empty($product->feature_image)) {
-            $images[] = asset('assets/img/products/' . $product->feature_image);
+        if (!empty($product->thumbnail)) {
+            $images[] = asset('assets/img/product/' . $product->thumbnail);
         }
         if ($product->sliderImage && $product->sliderImage->count() > 0) {
             foreach ($product->sliderImage as $sliderImg) {
                 if (!empty($sliderImg->image)) {
-                    $images[] = asset('assets/img/products/slider_images/' . $sliderImg->image);
+                    $images[] = asset('assets/img/product/gallery/' . $sliderImg->image);
                 }
             }
         }
