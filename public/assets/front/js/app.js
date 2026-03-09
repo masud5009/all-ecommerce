@@ -225,6 +225,8 @@
                 const data = await response.json();
                 if (data.success && data.html) {
                     content.innerHTML = data.html;
+                    // Set product data from JSON (script tags in innerHTML don't execute)
+                    window.quickViewProductData = data.product;
                     initQuickViewActions();
                 } else {
                     content.innerHTML = '<div class="text-center py-20 text-slate-500">Product not found</div>';
@@ -322,8 +324,8 @@
                         price = productData.units[0].price;
                     }
 
-                    // Use cart.js add function if available
-                    if (window.FreshCart?.cart?.add) {
+                    // Use cart.js add function
+                    if (window.FreshCart && window.FreshCart.cart && window.FreshCart.cart.add) {
                         window.FreshCart.cart.add(productData.id, quantity, variantId, variantLabel, price);
                         closeModal();
                     }

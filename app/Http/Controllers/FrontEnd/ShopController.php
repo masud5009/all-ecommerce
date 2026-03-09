@@ -257,6 +257,7 @@ class ShopController extends Controller
         return response()->json([
             'success' => true,
             'html' => $html,
+            'product' => $productDetail,
         ]);
     }
 }

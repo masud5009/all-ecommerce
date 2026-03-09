@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 07, 2026 at 06:20 PM
+-- Generation Time: Mar 09, 2026 at 06:54 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.29
 
@@ -102,6 +102,33 @@ INSERT INTO `blog_contents` (`id`, `category_id`, `language_id`, `blog_id`, `aut
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `carts`
+--
+
+CREATE TABLE `carts` (
+  `id` bigint UNSIGNED NOT NULL,
+  `session_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `variant_id` bigint UNSIGNED DEFAULT NULL,
+  `variant_label` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `quantity` int NOT NULL DEFAULT '1',
+  `price` decimal(10,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `carts`
+--
+
+INSERT INTO `carts` (`id`, `session_id`, `user_id`, `product_id`, `variant_id`, `variant_label`, `quantity`, `price`, `created_at`, `updated_at`) VALUES
+(4, 'cart_69af1209f15d26.82961188', NULL, 51, 115, 'Metallic Silver, Dolby Atmos', 1, 499.99, '2026-03-09 12:53:20', '2026-03-09 12:53:20'),
+(5, 'cart_69af1209f15d26.82961188', NULL, 50, NULL, '1 unit', 1, 99.99, '2026-03-09 12:53:41', '2026-03-09 12:53:41');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `categories`
 --
 
@@ -195,13 +222,63 @@ INSERT INTO `footers` (`id`, `copyright`, `content`, `created_at`, `updated_at`)
 
 CREATE TABLE `home_section_settings` (
   `id` bigint UNSIGNED NOT NULL,
-  `section` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `language_id` bigint NOT NULL,
+  `category_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `featured_product_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `featured_product_subtitle` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `popular_product_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `popular_product_subtitle` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `flash_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `flash_subtitle` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `features_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `features_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `features_subtitle` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `features_text` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `home_section_settings`
+--
+
+INSERT INTO `home_section_settings` (`id`, `language_id`, `category_title`, `featured_product_title`, `featured_product_subtitle`, `popular_product_title`, `popular_product_subtitle`, `flash_title`, `flash_subtitle`, `features_image`, `features_title`, `features_subtitle`, `features_text`, `created_at`, `updated_at`) VALUES
+(11, 6, 'Browse By Categories', 'Featured Products', 'Handpicked picks for today', 'Popular right now', 'Most loved picks across produce, pantry, and seafood.', 'Flash sale', 'Adidas Ultraboost 22 Performance Gym Shoes', NULL, 'Why FreshCart', 'Freshness you can feel.', 'Hand-picked produce, secure payment, and fast delivery—every time.', '2026-03-09 11:07:26', '2026-03-09 11:09:09');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `home_sliders`
+--
+
+CREATE TABLE `home_sliders` (
+  `id` bigint UNSIGNED NOT NULL,
+  `language_id` bigint NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_left_badge_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_left_badge_sub_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_right_badge_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_right_badge_sub_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sub_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `button_text_1` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `button_url_1` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `button_text_2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `button_url_2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `serial_number` int NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `home_sliders`
+--
+
+INSERT INTO `home_sliders` (`id`, `language_id`, `image`, `image_left_badge_title`, `image_left_badge_sub_title`, `image_right_badge_title`, `image_right_badge_sub_title`, `title`, `sub_title`, `description`, `button_text_1`, `button_url_1`, `button_text_2`, `button_url_2`, `status`, `serial_number`, `created_at`, `updated_at`) VALUES
+(1, 6, '69aef3839bf3c.avif', 'Curated Daily', 'Market fresh produce', 'Next Slot', '7:30 PM delivery', 'Exclusive launch week', 'Groceries That Feel <span>Premium</span> Every Day', 'Chef grade produce, artisanal pantry staples, and dairy delivered with white-glove care in under 90 minutes.', 'Start Shopping', '/shop', 'View Deals', '/shop', 1, 1, '2026-03-09 10:21:23', '2026-03-09 10:21:23'),
+(2, 6, '69aef3f30f351.avif', 'Transport Quality', 'Temperature controlled', 'Delivery ETA', 'Expected in 42 minutes', 'Fast lane delivery', 'Farm to Fridge With <span>Live Tracking</span>', 'Keep your schedule smooth with precise ETA updates, temperature-safe transport, and dedicated rider support.', 'Shop Fresh', '/shop', 'Explore Weekly Deals', '/shop', 1, 2, '2026-03-09 10:23:15', '2026-03-09 10:41:56');
 
 -- --------------------------------------------------------
 
@@ -241,8 +318,8 @@ CREATE TABLE `languages` (
 --
 
 INSERT INTO `languages` (`id`, `name`, `code`, `is_default`, `dashboard_default`, `direction`, `created_at`, `updated_at`) VALUES
-(6, 'English', 'en', 0, 1, 'ltr', '2026-01-26 17:23:11', '2026-03-07 10:05:39'),
-(7, 'বাংলা', 'bn', 1, 0, 'LTR', '2026-01-28 12:09:55', '2026-03-07 10:05:39');
+(6, 'English', 'en', 1, 1, 'ltr', '2026-01-26 17:23:11', '2026-03-09 11:21:04'),
+(7, 'বাংলা', 'bn', 0, 0, 'LTR', '2026-01-28 12:09:55', '2026-03-09 09:21:13');
 
 -- --------------------------------------------------------
 
@@ -409,7 +486,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (76, '2026_03_02_000001_add_icon_to_product_categories_table', 43),
 (77, '2026_03_02_000002_add_flash_sale_fields_to_products_table', 44),
 (78, '2026_03_07_000001_add_sslcommerz_to_payment_gateways_table', 45),
-(79, '2026_03_07_000002_add_featured_field_to_products_table', 45);
+(79, '2026_03_07_000002_add_featured_field_to_products_table', 45),
+(80, '2026_03_08_072950_create_home_sliders_table', 46),
+(81, '2026_03_09_182256_create_carts_table', 47);
 
 -- --------------------------------------------------------
 
@@ -1399,6 +1478,15 @@ ALTER TABLE `blog_contents`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `carts`
+--
+ALTER TABLE `carts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `carts_product_id_foreign` (`product_id`),
+  ADD KEY `carts_session_id_index` (`session_id`),
+  ADD KEY `carts_user_id_index` (`user_id`);
+
+--
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
@@ -1428,8 +1516,14 @@ ALTER TABLE `footers`
 --
 ALTER TABLE `home_section_settings`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `home_section_settings_key_unique` (`key`),
-  ADD KEY `home_section_settings_section_index` (`section`);
+  ADD UNIQUE KEY `home_section_settings_key_unique` (`featured_product_title`),
+  ADD KEY `home_section_settings_section_index` (`category_title`);
+
+--
+-- Indexes for table `home_sliders`
+--
+ALTER TABLE `home_sliders`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `jobs`
@@ -1676,6 +1770,12 @@ ALTER TABLE `blog_contents`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
+-- AUTO_INCREMENT for table `carts`
+--
+ALTER TABLE `carts`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
@@ -1703,7 +1803,13 @@ ALTER TABLE `footers`
 -- AUTO_INCREMENT for table `home_section_settings`
 --
 ALTER TABLE `home_section_settings`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `home_sliders`
+--
+ALTER TABLE `home_sliders`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -1739,7 +1845,7 @@ ALTER TABLE `menu_builders`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -1902,6 +2008,16 @@ ALTER TABLE `vendors`
 --
 ALTER TABLE `vendor_infos`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `carts`
+--
+ALTER TABLE `carts`
+  ADD CONSTRAINT `carts_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

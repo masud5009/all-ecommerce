@@ -112,8 +112,8 @@
         </div>
     </div>
 
-    <script src="{{ asset('assets/front/js/app.js') }}"></script>
     <script src="{{ asset('assets/front/js/cart.js') }}"></script>
+    <script src="{{ asset('assets/front/js/app.js') }}"></script>
 </body>
 
 </html>
