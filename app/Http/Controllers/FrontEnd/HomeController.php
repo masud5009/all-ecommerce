@@ -85,7 +85,7 @@ class HomeController extends Controller
                 'countdown_seconds' => (int) $countdownSeconds,
                 'image' => $thumbnail,
                 'stock_label' => $stockLabel,
-                'details_url' => route('frontend.product.details', ['product' => $firstFlash->id]),
+                'details_url' => route('frontend.shop.details', ['id' => $firstFlash->id]),
             ];
         }
 

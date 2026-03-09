@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Admin\Language;
 use App\Http\Controllers\Controller;
@@ -46,5 +47,24 @@ class ShopController extends Controller
         ];
 
         return view('front.shop', $data);
+    }
+
+    /**
+     * product details load
+     */
+    public function details($id)
+    {
+        $languageId = $this->currentLang->id;
+
+        $data['product'] = Product::with([
+            'content' => function ($q) use ($languageId) {
+                $q->where('language_id', $languageId);
+            },
+            'sliderImage'
+        ])
+            ->where('id', $id)
+            ->first();
+
+        return view('front.product-details', $data);
     }
 }

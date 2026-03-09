@@ -106,7 +106,7 @@
     @endif
 
     <div class="relative overflow-hidden rounded-2xl bg-green-50">
-        <a href="{{ route('frontend.product.details', ['product' => $product->id]) }}" class="block">
+        <a href="{{ route('frontend.shop.details', ['id' => $product->id]) }}" class="block">
             <img src="{{ asset('assets/img/product/' . $product->thumbnail) }}"
                 alt="{{ $productTitle }}"
                 class="h-40 w-full object-cover transition duration-500 group-hover:scale-105"
@@ -128,7 +128,7 @@
 
     <div class="mt-4 space-y-2">
         <div class="flex items-start justify-between gap-2">
-            <a href="{{ route('frontend.product.details', ['product' => $product->id]) }}"
+            <a href="{{ route('frontend.shop.details', ['id' => $product->id]) }}"
                 class="text-sm font-semibold text-slate-900 transition hover:text-green-700">
                 {{ $productTitle }}
             </a>

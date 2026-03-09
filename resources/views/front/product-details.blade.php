@@ -29,8 +29,7 @@
 
             <div class="grid gap-8 lg:grid-cols-[1.08fr_0.92fr]" data-product-detail>
                 <div class="space-y-4">
-                    <div
-                        class="magnify overflow-hidden rounded-3xl border border-green-100 bg-white shadow-[0_22px_55px_rgba(15,23,42,0.12)]"
+                    <div class="magnify overflow-hidden rounded-3xl border border-green-100 bg-white shadow-[0_22px_55px_rgba(15,23,42,0.12)]"
                         data-magnify>
                         <img src="{{ $productDetailData['image'] ?? 'about:blank' }}"
                             alt="{{ $productDetailData['name'] ?? 'Product preview' }}"
@@ -43,14 +42,14 @@
                 </div>
 
                 <div>
-                    <div class="rounded-3xl border border-green-100 bg-white p-6 shadow-[0_16px_45px_rgba(15,23,42,0.1)] sm:p-8">
+                    <div
+                        class="rounded-3xl border border-green-100 bg-white p-6 shadow-[0_16px_45px_rgba(15,23,42,0.1)] sm:p-8">
                         <div class="flex items-center text-xs">
                             <span class="rounded-full bg-green-100 px-3 py-1 font-semibold text-green-700"
                                 data-detail-category>Category</span>
                         </div>
 
-                        <h1 class="mt-4 text-3xl font-semibold leading-tight text-slate-900 sm:text-4xl"
-                            data-detail-name>
+                        <h1 class="mt-4 text-3xl font-semibold leading-tight text-slate-900 sm:text-4xl" data-detail-name>
                             Product Name
                         </h1>
 
@@ -100,8 +99,7 @@
 
             <section class="mt-10 rounded-3xl border border-green-100 bg-white p-6 shadow-sm sm:p-8" data-tabs>
                 <div class="flex flex-wrap items-center gap-2 border-b border-green-100 pb-3">
-                    <button
-                        class="rounded-full border-b-2 border-green-600 px-4 py-2 text-sm font-semibold text-green-700"
+                    <button class="rounded-full border-b-2 border-green-600 px-4 py-2 text-sm font-semibold text-green-700"
                         type="button" data-tab-target="description">
                         Description
                     </button>
@@ -141,7 +139,8 @@
                         @endforeach
                     </div>
                 @else
-                    <div class="mt-6 rounded-2xl border border-dashed border-green-200 bg-white p-8 text-center text-sm text-slate-500">
+                    <div
+                        class="mt-6 rounded-2xl border border-dashed border-green-200 bg-white p-8 text-center text-sm text-slate-500">
                         {{ __('No products available right now.') }}
                     </div>
                 @endif

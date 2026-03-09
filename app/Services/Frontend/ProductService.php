@@ -31,6 +31,7 @@ class ProductService
             ->get();
     }
 
+
     public static function getHomeFlashSaleProducts($languageId = null)
     {
         if (!$languageId) {

@@ -126,7 +126,8 @@
         <div class="category-scroll mt-8 flex gap-4 overflow-x-auto pb-4 scroll-px-4 scroll-smooth snap-x snap-mandatory"
             data-category-track>
             @forelse ($homeCategories as $category)
-                <a href="#" aria-label="Browse {{ $category->name }}" data-reveal-child
+                <a href="{{ route('frontend.shop', ['category' => $category->id]) }}"
+                    aria-label="Browse {{ $category->name }}" data-reveal-child
                     class="group flex min-w-[150px] flex-col items-center rounded-2xl border border-green-100 bg-white px-4 py-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-300 hover:bg-green-50/70 hover:shadow-[0_16px_32px_rgba(16,185,129,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:min-w-[160px] lg:min-w-[170px] snap-start">
                     <div class="brush-ring flex h-20 w-20 items-center justify-center">
                         <span

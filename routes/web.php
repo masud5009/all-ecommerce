@@ -22,14 +22,6 @@ Route::prefix('/admin')->middleware('guest:admin')->group(function () {
 });
 Route::prefix('/')->controller(HomeController::class)->group(function () {
     Route::get('', 'index')->name('front.index');
-    Route::get('/product-details/{product?}', 'productDetails')->name('frontend.product.details');
-    Route::get('/product-details.html', function (Request $request) {
-        $product = $request->query('product', $request->query('id'));
-
-        return redirect()->route('frontend.product.details', [
-            'product' => $product,
-        ]);
-    })->name('frontend.product.details.legacy');
     Route::get('/contact', 'contact')->name('frontend.contact');
     Route::get('/blog', 'blog')->name('frontend.blog');
     Route::get('/about', 'about')->name('frontend.about');
@@ -40,6 +32,7 @@ Route::prefix('/')->controller(HomeController::class)->group(function () {
       shop management routes
      =============================*/
 Route::get('/shop', [ShopController::class, 'shop'])->name('frontend.shop');
+Route::get('/shop/details/{id}', [ShopController::class, 'details'])->name('frontend.shop.details');
 
 
 /*============================

@@ -175,6 +175,12 @@ body[data-background-color="dark"] .sidebar-light .card[class*=bg-]:not(.bg-ligh
     color: var(--white-color);
 }
 
+body[data-background-color="dark"] .bg-white{
+    background-color: var(--background-color) !important;
+    color: var(--white-color);
+    border: var(--border-color);
+}
+
 body[data-background-color="dark"] .sidebar-dark .nav-sidebar .nav-link:not(.disabled):hover,
 body[data-background-color="dark"] .sidebar-light .card[class*=bg-]:not(.bg-light):not(.bg-white):not(.bg-transparent) .nav-sidebar .nav-link:not(.disabled):hover {
     color: var(--white-color);
