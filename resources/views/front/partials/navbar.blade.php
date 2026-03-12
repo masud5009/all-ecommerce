@@ -12,82 +12,46 @@
                     FreshCart
                 </a>
                 <div class="hidden lg:flex items-center gap-6">
-                    <a href="{{ route('front.index') }}" data-nav="home"
-                        class="nav-link rounded-full px-3 py-1 text-sm font-medium text-slate-600 transition hover:bg-green-50 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200">
-                        Home
-                    </a>
-                    <a href="{{ route('frontend.shop') }}" data-nav="shop"
-                        class="nav-link rounded-full px-3 py-1 text-sm font-medium text-slate-600 transition hover:bg-green-50 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200">
-                        Shop
-                    </a>
-                    <a href="#categories"
-                        class="nav-link rounded-full px-3 py-1 text-sm font-medium text-slate-600 transition hover:bg-green-50 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200">
-                        Categories
-                    </a>
-                    <a href="#deals"
-                        class="nav-link rounded-full px-3 py-1 text-sm font-medium text-slate-600 transition hover:bg-green-50 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200">
-                        Deals
-                    </a>
-                    <a href="#rewards"
-                        class="nav-link rounded-full px-3 py-1 text-sm font-medium text-slate-600 transition hover:bg-green-50 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200">
-                        Rewards
-                    </a>
-                    <div class="group relative">
-                        <button type="button"
-                            class="inline-flex items-center gap-2 text-sm font-medium text-slate-600 transition hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200"
-                            aria-haspopup="true" aria-expanded="false">
-                            More
-                            <svg class="h-4 w-4 text-slate-400" viewBox="0 0 20 20" fill="none" stroke="currentColor"
-                                stroke-width="1.8" aria-hidden="true">
-                                <path d="M6 8l4 4 4-4"></path>
-                            </svg>
-                        </button>
-                        <span class="absolute left-0 right-0 top-full h-3" aria-hidden="true"></span>
-                        <div
-                            class="absolute left-1/2 top-full z-40 mt-2 w-[640px] -translate-x-1/2 rounded-3xl border border-green-100 bg-white p-6 shadow-xl opacity-0 invisible translate-y-2 transition duration-200 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0">
-                            <div class="grid gap-6 sm:grid-cols-2">
-                                <div>
-                                    <p class="text-xs font-semibold uppercase tracking-wide text-green-700">Legal</p>
-                                    <ul class="mt-4 space-y-3 text-sm text-slate-600">
-                                        <li>
-                                            <a href="products.html"
-                                                class="flex items-center justify-between rounded-2xl border border-green-100 px-4 py-3 transition hover:border-green-300 hover:text-green-700">
-                                                Privacy Policy
-                                                <span class="text-xs text-slate-400">Updated</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="products.html"
-                                                class="flex items-center justify-between rounded-2xl border border-green-100 px-4 py-3 transition hover:border-green-300 hover:text-green-700">
-                                                Terms & Conditions
-                                                <span class="text-xs text-slate-400">Updated</span>
-                                            </a>
-                                        </li>
-                                    </ul>
+                    @if (!empty($menus))
+                        @foreach ($menus as $menu)
+                            @if (!empty($menu['children']))
+                                {{-- Menu item with submenu --}}
+                                <div class="group relative">
+                                    <button type="button"
+                                        class="inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium text-slate-600 transition hover:bg-green-50 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        {{ $menu['title'] }}
+                                        <svg class="h-4 w-4 text-slate-400" viewBox="0 0 20 20" fill="none" stroke="currentColor"
+                                            stroke-width="1.8" aria-hidden="true">
+                                            <path d="M6 8l4 4 4-4"></path>
+                                        </svg>
+                                    </button>
+                                    <span class="absolute left-0 right-0 top-full h-3" aria-hidden="true"></span>
+                                    <div
+                                        class="absolute left-1/2 top-full z-40 mt-2 w-56 -translate-x-1/2 rounded-2xl border border-green-100 bg-white p-3 shadow-xl opacity-0 invisible translate-y-2 transition duration-200 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0">
+                                        <ul class="space-y-1 text-sm text-slate-600">
+                                            @foreach ($menu['children'] as $child)
+                                                <li>
+                                                    <a href="{{ url($child['url'] ?? '#') }}"
+                                                        target="{{ $child['target'] ?? '_self' }}"
+                                                        class="block rounded-xl px-4 py-2.5 transition hover:bg-green-50 hover:text-green-700">
+                                                        {{ $child['title'] }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </div>
-                                <div class="rounded-2xl bg-green-50 p-5">
-                                    <p class="text-sm font-semibold text-slate-900">Trust and transparency</p>
-                                    <p class="mt-2 text-xs text-slate-600">Clear policies so you always know how we
-                                        handle data, orders,
-                                        and refunds.</p>
-                                    <ul class="mt-4 space-y-2 text-xs text-slate-600">
-                                        <li class="flex items-center gap-2">
-                                            <span class="h-2 w-2 rounded-full bg-green-500"></span>
-                                            Secure checkout and data handling.
-                                        </li>
-                                        <li class="flex items-center gap-2">
-                                            <span class="h-2 w-2 rounded-full bg-green-500"></span>
-                                            Transparent delivery standards.
-                                        </li>
-                                        <li class="flex items-center gap-2">
-                                            <span class="h-2 w-2 rounded-full bg-green-500"></span>
-                                            Easy returns on quality issues.
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                            @else
+                                {{-- Simple menu link --}}
+                                <a href="{{ url($menu['url'] ?? '#') }}"
+                                    target="{{ $menu['target'] ?? '_self' }}"
+                                    class="nav-link rounded-full px-3 py-1 text-sm font-medium text-slate-600 transition hover:bg-green-50 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200">
+                                    {{ $menu['title'] }}
+                                </a>
+                            @endif
+                        @endforeach
+                    @endif
                 </div>
                 <div class="relative hidden flex-1 items-center md:flex">
                     <label class="sr-only" for="search">Search groceries</label>
@@ -103,12 +67,16 @@
                     </span>
                 </div>
                 <div class="hidden md:block">
-                    <label class="sr-only" for="location">Delivery location</label>
-                    <select id="location"
+                    <label class="sr-only" for="lang-switch">{{ __('Language') }}</label>
+                    <select id="lang-switch"
+                        onchange="window.location.href='{{ url('/change-language') }}/'+this.value"
                         class="rounded-full border border-green-100 bg-white px-4 py-3 text-sm text-slate-600 shadow-sm focus:border-green-300 focus:ring-2 focus:ring-green-100">
-                        <option>Downtown</option>
-                        <option>Riverside</option>
-                        <option>Uptown</option>
+                        @foreach (app('languages') as $language)
+                            <option value="{{ $language->code }}"
+                                 {{ (session('lang', optional(app('languages')->where('is_default',1)->first())->code) == $language->code) ? 'selected' : '' }}>
+                                {{ $language->name }}
+                            </option>
+                         @endforeach
                     </select>
                 </div>
                 <div class="ml-auto flex items-center gap-2">
@@ -147,12 +115,16 @@
                         </span>
                     </div>
                     <div class="mt-3">
-                        <label class="sr-only" for="location-mobile">Delivery location</label>
-                        <select id="location-mobile"
+                        <label class="sr-only" for="lang-switch-mobile">{{ __('Language') }}</label>
+                        <select id="lang-switch-mobile"
+                            onchange="window.location.href='{{ url('/change-language') }}/'+this.value"
                             class="w-full rounded-full border border-green-100 bg-white px-4 py-3 text-sm text-slate-600 shadow-sm focus:border-green-300 focus:ring-2 focus:ring-green-100">
-                            <option>Downtown</option>
-                            <option>Riverside</option>
-                            <option>Uptown</option>
+                         @foreach (app('languages') as $language)
+                            <option value="{{ $language->code }}"
+                                 {{ (session('lang', optional(app('languages')->where('is_default',1)->first())->code) == $language->code) ? 'selected' : '' }}>
+                                {{ $language->name }}
+                            </option>
+                         @endforeach
                         </select>
                     </div>
                 </div>
