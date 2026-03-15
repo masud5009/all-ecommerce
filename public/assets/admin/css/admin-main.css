@@ -1738,3 +1738,116 @@ div.dt-container .dt-paging .dt-paging-button {
     text-align: center;
     color: #94a3b8;
 }
+
+.shipping-charge-modal .modal-dialog {
+    max-width: 760px;
+}
+
+.shipping-charge-modal .modal-body {
+    padding: 1.25rem;
+}
+
+.shipping-charge-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.shipping-language-fieldset {
+    margin: 0;
+    padding: 0.9rem 1rem 0.75rem;
+    border: 1px solid #d8e3f1;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #fbfdff 0%, #f5f8ff 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.shipping-language-fieldset.is-default {
+    border-color: #bfd1ff;
+    background: linear-gradient(180deg, #ffffff 0%, #eef4ff 100%);
+}
+
+.shipping-language-fieldset.shipping-charge-meta {
+    background: #ffffff;
+    border-style: dashed;
+}
+
+.shipping-language-fieldset legend {
+    float: none;
+    width: auto;
+    margin: 0 0 0.35rem;
+    padding: 0 0.7rem;
+    border: 1px solid #d8e3f1;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #183153;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.shipping-language-fieldset legend small {
+    padding: 0.24rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.shipping-language-fieldset.is-default legend small {
+    background: #e0ebff;
+    color: #3256c7;
+}
+
+.shipping-language-fieldset.is-optional legend small {
+    background: #eef1f6;
+    color: #667085;
+}
+
+.shipping-language-fieldset .form-group {
+    padding: 0.55rem 0;
+}
+
+.shipping-language-fieldset .form-group label {
+    margin-bottom: 0.55rem;
+    color: #233a5c;
+    font-weight: 600;
+}
+
+.shipping-language-fieldset .form-control,
+.shipping-language-fieldset .form-select {
+    min-height: 48px;
+    border-radius: 12px;
+    border-color: #d3dceb;
+    background-color: #ffffff;
+}
+
+.shipping-language-fieldset textarea.form-control {
+    min-height: 114px;
+    resize: vertical;
+}
+
+.shipping-language-fieldset .form-control:focus,
+.shipping-language-fieldset .form-select:focus {
+    border-color: #8aa7ff;
+    box-shadow: 0 0 0 0.18rem rgba(79, 110, 233, 0.12);
+}
+
+@media (max-width: 575.98px) {
+    .shipping-charge-modal .modal-body {
+        padding: 0.9rem;
+    }
+
+    .shipping-language-fieldset {
+        padding: 0.8rem 0.85rem 0.65rem;
+        border-radius: 14px;
+    }
+
+    .shipping-language-fieldset legend {
+        font-size: 0.88rem;
+        flex-wrap: wrap;
+    }
+}

@@ -1,26 +1,46 @@
-<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade shipping-charge-modal" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">{{ __('Add Charge') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="ajaxForm" action="{{ route('admin.shop.shipping_charge_store') }}" method="post">
+                <form id="ajaxForm" class="shipping-charge-form"
+                    action="{{ route('admin.shop.shipping_charge_store') }}" method="post">
                     @csrf
                     @foreach ($languages as $lang)
-                        <x-text-input col="12" placeholder="Enter title" name="{{ $lang->code }}_title"
-                            type="text" label="Title ({{ $lang->name }})" required="*"
-                            language="{{ $lang->code }}" action="store" />
+                        <fieldset
+                            class="shipping-language-fieldset {{ $lang->is_default == 1 ? 'is-default' : 'is-optional' }}">
+                            <legend>
+                                <span>{{ $lang->name }}</span>
+                                <small>{{ $lang->is_default == 1 ? __('Default') : __('Optional') }}</small>
+                            </legend>
+                            <div class="row">
+                                <x-text-input col="12" placeholder="Enter title" name="{{ $lang->code }}_title"
+                                    type="text" label="Title ({{ $lang->name }})"
+                                    required="{{ $lang->is_default == 1 ? '*' : '' }}"
+                                    language="{{ $lang->code }}" action="store" />
+                                <x-text-input col="12" placeholder="Enter text" name="{{ $lang->code }}_text"
+                                    type="textarea" label="Text ({{ $lang->name }})"
+                                    required="{{ $lang->is_default == 1 ? '*' : '' }}" action="store" />
+                            </div>
+                        </fieldset>
                     @endforeach
-                    <x-text-input col="12" placeholder="Enter text" name="text" type="textarea" label="Text"
-                        required="*" action="store" />
 
-                    <x-text-input col="12" placeholder="Enter charge" name="charge" type="number"
-                        label="Charge({{ $websiteInfo->currency_text }})" required="*" action="store" />
+                    <fieldset class="shipping-language-fieldset shipping-charge-meta">
+                        <legend>
+                            <span>{{ __('Charge Details') }}</span>
+                        </legend>
+                        <div class="row">
+                            <x-text-input col="12" placeholder="Enter charge" name="charge" type="number"
+                                label="Charge({{ $websiteInfo->currency_text }})" required="*" action="store" />
 
-                    <x-text-input col="12" placeholder="Serial Number" name="serial_number" type="text"
-                        label="Serial Number" required="*" action="store" action="store" />
+                            <x-text-input col="12" placeholder="Serial Number" name="serial_number" type="text"
+                                label="Serial Number" required="*" action="store" />
+                        </div>
+                    </fieldset>
                 </form>
             </div>
             <div class="modal-footer">

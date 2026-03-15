@@ -24,15 +24,19 @@ class ShippingChargeController extends Controller
         $rules = [
             'charge' => 'required|max:255',
             'serial_number' => 'required',
-            'text' => 'required'
         ];
 
         $languages = app('languages');
+        $defaultLanguage = $languages->firstWhere('is_default', 1) ?? Language::where('is_default', 1)->firstOrFail();
         $messages = [];
         foreach ($languages as $language) {
-            $rules[$language->code . '_title'] = 'required|max:255';
+            $rules[$language->code . '_title'] = 'nullable|max:255';
+            $rules[$language->code . '_text'] = 'nullable';
             $messages[$language->code . '_title.required'] = __('The title field is required for') . ' ' . $language->name . ' ' . __('language.');
+            $messages[$language->code . '_text.required'] = __('The text field is required for') . ' ' . $language->name . ' ' . __('language.');
         }
+        $rules[$defaultLanguage->code . '_title'] = 'required|max:255';
+        $rules[$defaultLanguage->code . '_text'] = 'required';
 
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -45,12 +49,16 @@ class ShippingChargeController extends Controller
 
 
         $index_id = uniqid();
+        $defaultTitle = $request->input($defaultLanguage->code . '_title');
+        $defaultText = $request->input($defaultLanguage->code . '_text');
         foreach ($languages as $language) {
             $data = new ShippingCharge();
             $data->unique_id = $index_id;
             $data->language_id = $language->id;
-            $data->title = $request[$language->code . '_title'];
-            $data->text = $request->text;
+            $title = $request->input($language->code . '_title');
+            $text = $request->input($language->code . '_text');
+            $data->title = filled($title) ? $title : $defaultTitle;
+            $data->text = filled($text) ? $text : $defaultText;
             $data->charge = $request->charge;
             $data->serial_number = $request->serial_number;
             $data->save();
@@ -73,15 +81,19 @@ class ShippingChargeController extends Controller
         $rules = [
             'charge' => 'required|max:255',
             'serial_number' => 'required',
-            'text' => 'required'
         ];
 
         $languages = app('languages');
+        $defaultLanguage = $languages->firstWhere('is_default', 1) ?? Language::where('is_default', 1)->firstOrFail();
         $messages = [];
         foreach ($languages as $language) {
-            $rules[$language->code . '_title'] = 'required|max:255';
+            $rules[$language->code . '_title'] = 'nullable|max:255';
+            $rules[$language->code . '_text'] = 'nullable';
             $messages[$language->code . '_title.required'] = __('The title field is required for') . ' ' . $language->name . ' ' . __('language.');
+            $messages[$language->code . '_text.required'] = __('The text field is required for') . ' ' . $language->name . ' ' . __('language.');
         }
+        $rules[$defaultLanguage->code . '_title'] = 'required|max:255';
+        $rules[$defaultLanguage->code . '_text'] = 'required';
 
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -94,6 +106,8 @@ class ShippingChargeController extends Controller
 
         $sCharge = ShippingCharge::findOrFail($request->charge_id);
         $unique_id = is_null($sCharge->unique_id) ? uniqid() : $sCharge->unique_id;
+        $defaultTitle = $request->input($defaultLanguage->code . '_title');
+        $defaultText = $request->input($defaultLanguage->code . '_text');
 
         foreach ($languages as $language) {
             $data = ShippingCharge::where('id', $request[$language->code . '_id'])->first();
@@ -102,8 +116,10 @@ class ShippingChargeController extends Controller
             }
             $data->unique_id = $unique_id;
             $data->language_id = $language->id;
-            $data->title = $request[$language->code . '_title'];
-            $data->text = $request->text;
+            $title = $request->input($language->code . '_title');
+            $text = $request->input($language->code . '_text');
+            $data->title = filled($title) ? $title : $defaultTitle;
+            $data->text = filled($text) ? $text : $defaultText;
             $data->charge = $request->charge;
             $data->serial_number = $request->serial_number;
             $data->save();

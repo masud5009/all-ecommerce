@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\LanguageStore;
-use App\Http\Requests\Admin\LanguageUpdate;
+use Illuminate\Http\Request;
 use App\Models\Admin\Language;
-use App\Models\User\UserLanguage;
-use Illuminate\Support\Facades\File;
 use App\Services\LanguageService;
 use App\Services\TranslateService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\Admin\LanguageStore;
+use App\Http\Requests\Admin\LanguageUpdate;
 
 class LanguageController extends Controller
 {
@@ -192,10 +191,6 @@ class LanguageController extends Controller
 
         File::deleteDirectory(resource_path('lang/') . 'admin_' . $language->code);
         File::deleteDirectory(resource_path('lang/') . 'user_' . $language->code);
-
-        //deleting user_language wich added by admin
-        UserLanguage::where('created_by', 'admin')->where('code', $language->code)->delete();
-
         $language->delete();
 
         Session::flash('success', $language->name . ' language deleted successfully!');

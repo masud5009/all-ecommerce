@@ -37,36 +37,53 @@
             </div>
             <div class="card-body">
                 <div class="col-lg-8 m-auto">
-                    <form id="ajaxEditForm" action="{{ route('admin.shop.shipping_charge_update', ['id' => $data->id]) }}"
+                    <form id="ajaxEditForm" class="shipping-charge-form"
+                        action="{{ route('admin.shop.shipping_charge_update', ['id' => $data->id]) }}"
                         method="post">
                         @csrf
-                        <div class="row">
-                            @foreach ($languages as $lang)
-                                @php
-                                    $sData = App\Models\ShippingCharge::where([
-                                        ['language_id', $lang->id],
-                                        ['unique_id', $data->unique_id],
-                                    ])
-                                        ->select('title', 'id')
-                                        ->first();
-                                @endphp
-                                <input type="hidden" name="{{ $lang->code }}_id" value="{{ @$sData->id }}">
-                                <x-text-input col="12" placeholder="Enter title" name="{{ $lang->code }}_title"
-                                    type="text" label="Title ({{ $lang->name }})" required="*"
-                                    language="{{ $lang->code }}" value="{{ $sData->title }}" />
-                            @endforeach
-                            <input type="hidden" name="charge_id" value="{{ $data->id }}">
-                            <x-text-input col="12" placeholder="Enter text" name="text" type="textarea"
-                                label="Text" required="*" value="{{ $data->text }}" />
+                        @foreach ($languages as $lang)
+                            @php
+                                $sData = App\Models\ShippingCharge::where([
+                                    ['language_id', $lang->id],
+                                    ['unique_id', $data->unique_id],
+                                ])
+                                    ->select('title', 'text', 'id')
+                                    ->first();
+                            @endphp
+                            <fieldset
+                                class="shipping-language-fieldset {{ $lang->is_default == 1 ? 'is-default' : 'is-optional' }}">
+                                <legend>
+                                    <span>{{ $lang->name }}</span>
+                                    <small>{{ $lang->is_default == 1 ? __('Default') : __('Optional') }}</small>
+                                </legend>
+                                <input type="hidden" name="{{ $lang->code }}_id" value="{{ $sData->id ?? '' }}">
+                                <div class="row">
+                                    <x-text-input col="12" placeholder="Enter title" name="{{ $lang->code }}_title"
+                                        type="text" label="Title ({{ $lang->name }})"
+                                        required="{{ $lang->is_default == 1 ? '*' : '' }}"
+                                        language="{{ $lang->code }}" value="{{ $sData->title ?? '' }}" />
+                                    <x-text-input col="12" placeholder="Enter text" name="{{ $lang->code }}_text"
+                                        type="textarea" label="Text ({{ $lang->name }})"
+                                        required="{{ $lang->is_default == 1 ? '*' : '' }}"
+                                        value="{{ $sData->text ?? '' }}" />
+                                </div>
+                            </fieldset>
+                        @endforeach
+                        <input type="hidden" name="charge_id" value="{{ $data->id }}">
 
+                        <fieldset class="shipping-language-fieldset shipping-charge-meta">
+                            <legend>
+                                <span>{{ __('Charge Details') }}</span>
+                            </legend>
+                            <div class="row">
+                                <x-text-input col="12" placeholder="Enter charge" name="charge" type="number"
+                                    label="Charge({{ $websiteInfo->currency_text }})" required="*"
+                                    value="{{ $data->charge }}" />
 
-                            <x-text-input col="12" placeholder="Enter charge" name="charge" type="number"
-                                label="Charge({{ $websiteInfo->currency_text }})" required="*"
-                                value="{{ $data->charge }}" />
-
-                            <x-text-input col="12" placeholder="Serial Number" name="serial_number" type="text"
-                                label="Serial Number" required="*" value="{{ $data->serial_number }}" />
-                        </div>
+                                <x-text-input col="12" placeholder="Serial Number" name="serial_number" type="text"
+                                    label="Serial Number" required="*" value="{{ $data->serial_number }}" />
+                            </div>
+                        </fieldset>
                     </form>
                 </div>
             </div>
