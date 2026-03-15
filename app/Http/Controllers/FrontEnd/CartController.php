@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\Cart;
-use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Admin\Language;
+use App\Models\ShippingCharge;
 use App\Services\Shop\OrderService;
 use App\Http\Controllers\Controller;
 
@@ -228,7 +228,7 @@ class CartController extends Controller
     /**
      * Checkout page
      */
-    public function checkout()
+    public function checkout(Request $request)
     {
         $sessionId = $this->getSessionId();
         $languageId = $this->currentLang->id;
@@ -272,7 +272,12 @@ class CartController extends Controller
 
         $data['cartItems'] = $items;
         $data['subtotal'] = $subtotal;
-        $data['shipping'] = 50; // Fixed shipping for now
+        $shippingOptions = ShippingCharge::where('language_id', $languageId)
+            ->orderBy('serial_number', 'ASC')
+            ->get(['id', 'title', 'charge']);
+
+        $data['shippingOptions'] = $shippingOptions;
+        $data['shipping'] = $shippingOptions->isNotEmpty() ? (float) $shippingOptions->first()->charge : 50;
         $data['total'] = $subtotal + $data['shipping'];
 
         return view('front.checkout', $data);
@@ -290,6 +295,7 @@ class CartController extends Controller
             'address' => 'required|string|max:500',
             'city' => 'required|string|max:100',
             'zip' => 'nullable|string|max:20',
+            'shipping_charge_id' => 'nullable|integer|exists:shipping_charges,id',
             'payment_method' => 'required|in:cod,online',
         ]);
 
@@ -297,9 +303,16 @@ class CartController extends Controller
         $orderResponse = OrderService::createOrder($request, $sessionId);
 
         if ($orderResponse['status'] == 'success') {
-            return redirect()->route('cart.order.success', ['order' => $orderResponse['order']]);
+            return response()->json([
+                'status' => 'success',
+                'action' => 'redirect',
+                'url' => route('cart.order.success', ['order' => $orderResponse['order']])
+            ]);
         } else {
-            return redirect()->route('cart.checkout')->with('error', $orderResponse['message']);
+            return response()->json([
+                'status' => 'error',
+                'message' => $orderResponse['message'] ?? 'An error occurred while placing the order',
+            ], 400);
         }
     }
 
@@ -308,6 +321,7 @@ class CartController extends Controller
      */
     public function orderSuccess($order)
     {
+        $order = \App\Models\Order::with('items.product.content')->where('id', $order)->first();
         if (!$order) {
             return redirect()->route('frontend.shop');
         }

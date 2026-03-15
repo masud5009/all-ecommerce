@@ -4,6 +4,7 @@ namespace App\Services\Shop;
 
 use App\Models\Cart;
 use Illuminate\Http\Request;
+use App\Models\ShippingCharge;
 
 class OrderService
 {
@@ -12,10 +13,10 @@ class OrderService
         $cartItems = Cart::where('session_id', $sessionId)->get();
 
         if ($cartItems->isEmpty()) {
-            return response()->json([
-                'success' => 'error',
-                'message' =>  __('Your cart is empty'),
-            ], 400);
+            return [
+                'status' => 'error',
+                'message' => 'Your cart is empty',
+            ];
         }
 
         // Calculate totals
@@ -23,6 +24,12 @@ class OrderService
             return $item->price * $item->quantity;
         });
         $shipping = 50;
+        if ($request->filled('shipping_charge_id')) {
+            $shippingOption = ShippingCharge::find($request->shipping_charge_id);
+            if ($shippingOption) {
+                $shipping = (float) $shippingOption->charge;
+            }
+        }
         $total = $subtotal + $shipping;
 
         // Create order
