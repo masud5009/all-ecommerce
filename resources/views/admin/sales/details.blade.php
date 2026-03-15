@@ -225,6 +225,11 @@
                                             <th scope="col">{{ __('Line Total') }}</th>
                                         </tr>
                                     </thead>
+                                    @php
+                                        $itemsGrandTotal = $order_items->sum(function ($orderItem) {
+                                            return ($orderItem->product_price ?? 0) * ((int) $orderItem->qty);
+                                        });
+                                    @endphp
                                     <tbody>
 
                                         @foreach ($order_items as $item)
@@ -284,10 +289,21 @@
                                                             {{ __('Variations') }} :
                                                             <br>
                                                             @foreach ($variations as $k => $vitm)
+                                                                @php
+                                                                    $variationName = data_get($vitm, 'variation_name')
+                                                                        ?? data_get($vitm, 'name')
+                                                                        ?? data_get($vitm, 'variation')
+                                                                        ?? __('Option');
+                                                                    $optionName = data_get($vitm, 'option_name')
+                                                                        ?? data_get($vitm, 'value')
+                                                                        ?? data_get($vitm, 'option')
+                                                                        ?? __('N/A');
+                                                                    $variationPrice = data_get($vitm, 'price') ?? 0;
+                                                                @endphp
                                                                 <span>
-                                                                    <span>{{ $vitm->variation_name }}:</span>
-                                                                    <span class="gry-color">{{ $vitm->option_name }} -
-                                                                        {{ $order->currency_symbol . $vitm->price }}</span>
+                                                                    <span>{{ $variationName }}:</span>
+                                                                    <span class="gry-color">{{ $optionName }} -
+                                                                        {{ $order->currency_symbol . $variationPrice }}</span>
                                                                 </span>
                                                             @endforeach
                                                         @endif
@@ -297,6 +313,12 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="4" class="text-end fw-bold">{{ __('Total') }}:</td>
+                                            <td class="fw-bold">{{ currency_symbol_order($itemsGrandTotal ?? 0, $symbol ?? '', $position ?? 'left') }}</td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         @endif

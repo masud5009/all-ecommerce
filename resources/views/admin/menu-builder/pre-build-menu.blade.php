@@ -6,35 +6,21 @@
         <ul class="list-group list-group-flush" id="staticMenuList">
             <li class="list-group-item d-flex justify-content-between align-items-center" data-title="Home" data-url="/"
                 data-target="_self">
-                Home
+                 {{ __('Home') }}
                 <button class="btn btn-sm btn-primary addToMenu" title="Add to Menu">
                     <i class="fa fa-plus me-1"></i>{{ __('Add') }}
                 </button>
             </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center" data-title="About"
-                data-url="/about" data-target="_self">
-                About
+            <li class="list-group-item d-flex justify-content-between align-items-center" data-title="Shop"
+                data-url="/shop" data-target="_self">
+                 {{ __('Shop') }}
                 <button class="btn btn-sm btn-primary addToMenu" title="Add to Menu">
                     <i class="fa fa-plus me-1"></i>{{ __('Add') }}
                 </button>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center" data-title="Contact"
                 data-url="/contact" data-target="_self">
-                Contact
-                <button class="btn btn-sm btn-primary addToMenu" title="Add to Menu">
-                    <i class="fa fa-plus me-1"></i>{{ __('Add') }}
-                </button>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center" data-title="Pricing"
-                data-url="/pricing" data-target="_self">
-                Pricing
-                <button class="btn btn-sm btn-primary addToMenu" title="Add to Menu">
-                    <i class="fa fa-plus me-1"></i>{{ __('Add') }}
-                </button>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center" data-title="Blog"
-                data-url="/blog" data-target="_self">
-                Blog
+                 {{ __('Contact') }}
                 <button class="btn btn-sm btn-primary addToMenu" title="Add to Menu">
                     <i class="fa fa-plus me-1"></i>{{ __('Add') }}
                 </button>

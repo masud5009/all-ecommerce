@@ -8,7 +8,7 @@
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
-                    Our <span class="text-green-600">Products</span>
+                     {{ __('Our') }} <span class="text-green-600"> {{ __('Products') }}</span>
                 </h1>
                 <p class="mt-4 text-base text-slate-600 sm:text-lg">
                     Fresh groceries, premium quality, delivered to your doorstep

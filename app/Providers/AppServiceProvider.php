@@ -2,15 +2,15 @@
 
 namespace App\Providers;
 
-use App\Models\Admin\Language;
-use App\Models\Admin\MenuBuilder;
 use App\Models\Footer;
 use App\Models\Setting;
+use App\Models\Admin\Language;
+use App\Models\Admin\MenuBuilder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\View;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -79,7 +79,7 @@ class AppServiceProvider extends ServiceProvider
             /**
              * frontend blade view
              */
-            View::composer('frontend.*', function ($view) {
+            View::composer('front.*', function ($view) {
                 $websiteSettings = Setting::select('website_logo', 'favicon', 'website_title', 'website_color')->first();
 
                 if (session()->has('lang')) {
@@ -91,6 +91,7 @@ class AppServiceProvider extends ServiceProvider
                 $menus = [];
                 $menu = MenuBuilder::where('language_id', $currentLang->id)->value('menu');
                 $menus = json_decode($menu, true);
+
 
                 $view->with([
                     'menus' => $menus,

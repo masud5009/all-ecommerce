@@ -163,19 +163,19 @@
         <div class="flex items-end justify-between gap-3">
             @if ($product->has_variants == 0 || $variations->isEmpty())
                 <div>
-                    <p class="text-3xl font-semibold text-slate-900">
+                    <p class="text-lg font-semibold text-slate-900">
                         {{ currency_symbol($displayPrice) }}
                     </p>
 
                     @if (!empty($oldPrice) && $oldPrice > $displayPrice)
-                        <p class="text-sm text-slate-400 line-through">
+                        <p class="text-xs text-slate-400 line-through">
                             {{ currency_symbol($oldPrice) }}
                         </p>
                     @endif
                 </div>
             @else
                 <div>
-                    <p class="text-3xl font-semibold text-slate-900">
+                    <p class="text-lg font-semibold text-slate-900">
                         {{ currency_symbol($min_variant_price) }} - {{ currency_symbol($max_variant_price) }}
                     </p>
                 </div>
