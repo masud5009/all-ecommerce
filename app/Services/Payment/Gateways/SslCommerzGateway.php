@@ -2,12 +2,13 @@
 
 namespace App\Services\Payment\Gateways;
 
-use App\Models\Admin\PaymentGateway;
-use App\Services\Payment\PaymentGatewayInterface;
-use App\Services\Payment\PaymentService;
 use Illuminate\Http\Request;
+use App\Models\Admin\PaymentGateway;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
+use App\Services\Payment\PaymentService;
+use App\Services\Payment\PaymentGatewayInterface;
 
 class SslCommerzGateway implements PaymentGatewayInterface
 {
@@ -30,6 +31,12 @@ class SslCommerzGateway implements PaymentGatewayInterface
                 'currency' => $payload['currency'],
             ]
         ));
+
+        Cache::put(
+            $this->paymentCacheKey($payload['tran_id']),
+            Session::get(PaymentService::SESSION_KEY, []),
+            now()->addHours(2)
+        );
 
         $response = Http::asForm()
             ->timeout(30)
@@ -59,7 +66,15 @@ class SslCommerzGateway implements PaymentGatewayInterface
             throw new \Exception('Payment was not approved by SSLCommerz.');
         }
 
-        $sessionData = Session::get(PaymentService::SESSION_KEY);
+        $sessionData = null;
+
+        if (! empty($payload['tran_id'])) {
+            $sessionData = Cache::get($this->paymentCacheKey((string) $payload['tran_id']));
+        }
+
+        if (! $sessionData) {
+            $sessionData = Session::get(PaymentService::SESSION_KEY);
+        }
 
         if (! $sessionData) {
             throw new \Exception('Payment session data is missing.');
@@ -70,9 +85,16 @@ class SslCommerzGateway implements PaymentGatewayInterface
         }
 
         $config = $this->getConfig();
+        $hasSignature = ! empty($payload['verify_sign']) && ! empty($payload['verify_key']);
+        $isLiveMode = in_array($config['mode'], ['live', 'production', '1'], true);
 
-        if (! $this->hasValidSignature($payload, $config['store_password'])) {
+        if ($isLiveMode && $hasSignature && ! $this->hasValidSignature($payload, $config['store_password'])) {
             throw new \Exception('Invalid SSLCommerz callback signature.');
+        }
+
+        // Sandbox callbacks may not always include signature fields on browser redirects.
+        if ($isLiveMode && ! $hasSignature) {
+            throw new \Exception('Missing SSLCommerz callback signature in live mode.');
         }
 
         $validationData = $this->validateTransaction($payload['val_id'] ?? null, $config);
@@ -86,6 +108,8 @@ class SslCommerzGateway implements PaymentGatewayInterface
             'callback' => $payload,
             'validation' => $validationData,
         ]);
+
+        Cache::forget($this->paymentCacheKey((string) $payload['tran_id']));
 
         return (object) $sessionData;
     }
@@ -171,7 +195,10 @@ class SslCommerzGateway implements PaymentGatewayInterface
         $newData['store_passwd'] = md5($storePassword);
         ksort($newData);
 
-        return md5(http_build_query($newData)) === $payload['verify_sign'];
+        $generated = md5(http_build_query($newData));
+        $incoming = strtolower(trim((string) $payload['verify_sign']));
+
+        return hash_equals(strtolower($generated), $incoming);
     }
 
     private function isValidValidationResponse(array $validationData, array $sessionData): bool
@@ -205,6 +232,10 @@ class SslCommerzGateway implements PaymentGatewayInterface
         $information = json_decode($gateway?->information ?? '{}', true) ?: [];
         $storeId = $information['store_id'] ?? null;
         $storePassword = $information['store_password'] ?? ($information['store_passwd'] ?? null);
+        $rawMode = $information['mode']
+            ?? $information['sslcommerz_mode']
+            ?? $information['sandbox_status']
+            ?? 'sandbox';
 
         if (! $gateway || ! $storeId || ! $storePassword) {
             throw new \Exception('SSLCommerz gateway is not configured.');
@@ -213,9 +244,20 @@ class SslCommerzGateway implements PaymentGatewayInterface
         return [
             'store_id' => $storeId,
             'store_password' => $storePassword,
-            'mode' => strtolower((string) ($information['mode'] ?? 'sandbox')),
+            'mode' => $this->normalizeMode((string) $rawMode),
             'currency' => strtoupper((string) ($information['currency'] ?? 'BDT')),
         ];
+    }
+
+    private function normalizeMode(string $mode): string
+    {
+        $normalized = strtolower(trim($mode));
+
+        if (in_array($normalized, ['live', 'production', 'prod', '1'], true)) {
+            return 'live';
+        }
+
+        return 'sandbox';
     }
 
     private function apiBaseUrl(array $config): string
@@ -228,5 +270,10 @@ class SslCommerzGateway implements PaymentGatewayInterface
     private function appendQuery(string $url, array $query): string
     {
         return $url . (str_contains($url, '?') ? '&' : '?') . http_build_query($query);
+    }
+
+    private function paymentCacheKey(string $transactionId): string
+    {
+        return 'payment_data_' . $transactionId;
     }
 }

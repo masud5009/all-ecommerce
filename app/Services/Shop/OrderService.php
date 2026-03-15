@@ -31,6 +31,8 @@ class OrderService
             }
         }
         $total = $subtotal + $shipping;
+        $isOnlinePayment = $request->payment_method === 'online';
+        $paymentStatus = $request->input('payment_status', 'pending');
 
         // Create order
         $order = \App\Models\Order::create([
@@ -41,12 +43,13 @@ class OrderService
             'billing_address' => $request->address,
             'billing_city' => $request->city,
             'shipping_address' => $request->address . ', ' . $request->city . ($request->zip ? ', ' . $request->zip : ''),
-            'payment_method' => $request->payment_method === 'cod' ? 'Cash Payment' : 'Online Payment',
+            'payment_method' => $isOnlinePayment ? 'Online Payment' : 'Cash Payment',
+            'gateway' => $isOnlinePayment ? 'SSLCommerz' : 'Manual',
             'cart_total' => $subtotal,
             'shipping_charge' => $shipping,
             'pay_amount' => $total,
             'order_status' => 'pending',
-            'payment_status' => 'pending',
+            'payment_status' => $paymentStatus,
         ]);
 
         // Create order items

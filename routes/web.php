@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Http\Controllers\FrontEnd\CartController;
 use App\Http\Controllers\FrontEnd\HomeController;
 use App\Http\Controllers\FrontEnd\ShopController;
-use App\Http\Controllers\FrontEnd\CartController;
 use App\Http\Controllers\FrontEnd\UserController;
 use App\Http\Controllers\FrontEnd\CheckoutController;
 /*
@@ -47,6 +48,12 @@ Route::prefix('cart')->controller(CartController::class)->group(function () {
     Route::post('/clear', 'clear')->name('cart.clear');
     Route::get('/checkout', 'checkout')->name('cart.checkout');
     Route::post('/place-order', 'placeOrder')->name('cart.place.order');
+    Route::match(['get', 'post'], '/payment/success', 'paymentSuccess')
+        ->withoutMiddleware([StartSession::class, ShareErrorsFromSession::class])
+        ->name('cart.payment.success');
+    Route::match(['get', 'post'], '/payment/cancel', 'paymentCancel')
+        ->withoutMiddleware([StartSession::class, ShareErrorsFromSession::class])
+        ->name('cart.payment.cancel');
     Route::get('/order-success/{order}', 'orderSuccess')->name('cart.order.success');
 });
 
