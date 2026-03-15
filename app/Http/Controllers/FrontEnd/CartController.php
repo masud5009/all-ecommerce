@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Admin\Language;
+use App\Services\Shop\OrderService;
 use App\Http\Controllers\Controller;
 
 class CartController extends Controller
@@ -289,65 +290,17 @@ class CartController extends Controller
             'address' => 'required|string|max:500',
             'city' => 'required|string|max:100',
             'zip' => 'nullable|string|max:20',
-            'notes' => 'nullable|string|max:1000',
             'payment_method' => 'required|in:cod,online',
         ]);
 
         $sessionId = $this->getSessionId();
-        $cartItems = Cart::where('session_id', $sessionId)->get();
+        $orderResponse = OrderService::createOrder($request, $sessionId);
 
-        if ($cartItems->isEmpty()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Your cart is empty',
-            ], 400);
+        if ($orderResponse['status'] == 'success') {
+            return redirect()->route('cart.order.success', ['order' => $orderResponse['order']]);
+        } else {
+            return redirect()->route('cart.checkout')->with('error', $orderResponse['message']);
         }
-
-        // Calculate totals
-        $subtotal = $cartItems->sum(function ($item) {
-            return $item->price * $item->quantity;
-        });
-        $shipping = 50;
-        $total = $subtotal + $shipping;
-
-        // Create order
-        $order = \App\Models\Order::create([
-            'order_number' => strtoupper(substr(uniqid(), -8)),
-            'billing_name' => $request->name,
-            'billing_email' => $request->email,
-            'billing_phone' => $request->phone,
-            'billing_address' => $request->address,
-            'billing_city' => $request->city,
-            'shipping_address' => $request->address . ', ' . $request->city . ($request->zip ? ', ' . $request->zip : ''),
-            'payment_method' => $request->payment_method === 'cod' ? 'Cash Payment' : 'Online Payment',
-            'cart_total' => $subtotal,
-            'shipping_charge' => $shipping,
-            'pay_amount' => $total,
-            'order_status' => 'pending',
-            'payment_status' => 'pending',
-        ]);
-
-        // Create order items
-        foreach ($cartItems as $item) {
-            \App\Models\OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $item->product_id,
-                'variant_id' => $item->variant_id,
-                'product_price' => $item->price,
-                'qty' => $item->quantity,
-                'variations' => $item->variant_label ? json_encode([['label' => $item->variant_label]]) : null,
-            ]);
-        }
-
-        // Clear cart
-        Cart::where('session_id', $sessionId)->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Order placed successfully!',
-            'order_number' => $order->order_number,
-            'redirect' => route('cart.order.success', ['order' => $order->order_number]),
-        ]);
     }
 
     /**
@@ -355,12 +308,10 @@ class CartController extends Controller
      */
     public function orderSuccess($order)
     {
-        $orderData = \App\Models\Order::where('order_number', $order)->first();
-
-        if (!$orderData) {
+        if (!$order) {
             return redirect()->route('frontend.shop');
         }
 
-        return view('front.order-success', ['order' => $orderData]);
+        return view('front.order-success', ['order' => $order]);
     }
 }

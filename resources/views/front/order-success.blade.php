@@ -17,26 +17,26 @@
                     </div>
                 </div>
 
-                <h1 class="text-3xl font-bold text-slate-900 sm:text-4xl">Order Confirmed!</h1>
-                <p class="mt-3 text-lg text-slate-600">Thank you for your order. We're preparing it for delivery.</p>
+                <h1 class="text-3xl font-bold text-slate-900 sm:text-4xl"> {{ __('Order Confirmed') }}!</h1>
+                <p class="mt-3 text-lg text-slate-600"> {{ __("Thank you for your order. We're preparing it for delivery") }}</p>
             </div>
 
             {{-- Order Details Card --}}
             <div class="mt-10 rounded-2xl border border-green-100 bg-white p-6 shadow-sm sm:p-8">
                 <div class="flex flex-col items-center justify-between gap-4 border-b border-green-100 pb-6 sm:flex-row">
                     <div>
-                        <p class="text-sm text-slate-500">Order Number</p>
+                        <p class="text-sm text-slate-500"> {{ __('Order Number') }}</p>
                         <p class="text-xl font-bold text-green-700">#{{ str_pad($order->id, 6, '0', STR_PAD_LEFT) }}</p>
                     </div>
                     <div class="text-center sm:text-right">
-                        <p class="text-sm text-slate-500">Order Date</p>
+                        <p class="text-sm text-slate-500"> {{ __('Order Date') }}</p>
                         <p class="font-medium text-slate-900">{{ $order->created_at->format('M d, Y h:i A') }}</p>
                     </div>
                 </div>
 
                 {{-- Items --}}
                 <div class="mt-6">
-                    <h3 class="font-semibold text-slate-900">Order Items</h3>
+                    <h3 class="font-semibold text-slate-900"> {{ __('Order Items') }}</h3>
                     <div class="mt-4 space-y-4">
                         @foreach ($order->items as $item)
                             @php

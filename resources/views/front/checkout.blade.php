@@ -80,16 +80,6 @@
                             </div>
                         </div>
 
-                        {{-- Order Notes --}}
-                        <div class="rounded-2xl border border-green-100 bg-white p-6 shadow-sm">
-                            <h2 class="text-lg font-semibold text-slate-900">Order Notes</h2>
-                            <div class="mt-4">
-                                <textarea id="notes" name="notes" rows="3"
-                                    class="w-full rounded-xl border border-green-200 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-200"
-                                    placeholder="Special instructions for delivery (optional)"></textarea>
-                            </div>
-                        </div>
-
                         {{-- Payment Method --}}
                         <div class="rounded-2xl border border-green-100 bg-white p-6 shadow-sm">
                             <h2 class="text-lg font-semibold text-slate-900">Payment Method</h2>
