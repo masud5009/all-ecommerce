@@ -91,7 +91,7 @@
                                     <p id="err_bypass_token" class="text-danger em"></p>
                                     <p class="text-info">
                                         {{ __('During maintenance, you can access the system through this token.') }}</p>
-                                    <span class="text-warning">{{ route('front.index') }}/{bypass_token}</span>
+                                    <span class="text-warning">{{ route('frontend.index') }}/{bypass_token}</span>
                                     <p class="text-danger">{{ __('Don not use special character in token.') }}</p>
                                 </div>
                             </div>

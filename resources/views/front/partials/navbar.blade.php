@@ -1,7 +1,7 @@
     <nav class="site-header sticky top-0 z-50 border-b border-green-100 bg-white/90 backdrop-blur" data-header>
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex flex-wrap items-center gap-4 py-4">
-                <a href="{{ route('front.index') }}" class="flex items-center gap-2 text-xl font-semibold text-green-700">
+                <a href="{{ route('frontend.index') }}" class="flex items-center gap-2 text-xl font-semibold text-green-700">
                     <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-green-100">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             aria-hidden="true">
@@ -124,7 +124,7 @@
 
                                 <ul class="space-y-0.5 text-sm text-slate-600 py-1" role="none">
                                     <li role="none">
-                                        <a href="{{ route('front.index') }}" role="menuitem"
+                                        <a href="{{ route('frontend.index') }}" role="menuitem"
                                             class="flex items-center gap-3 rounded-xl px-3 py-2.5 transition hover:bg-green-50 hover:text-green-700">
                                             <svg class="h-4 w-4 text-slate-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clip-rule="evenodd"/></svg>
                                             Dashboard

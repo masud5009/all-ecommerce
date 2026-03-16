@@ -1,6 +1,6 @@
 <div class="navbar navbar-expand-md bg-nav">
     <div class="navbar-logo">
-        <a href="{{ route('front.index') }}" class="logo" target="_blank">
+        <a href="{{ route('frontend.index') }}" class="logo" target="_blank">
             <img src="{{ asset('assets/front/img/' . $websiteInfo->website_logo) }}" alt="" class="navbar-brand"
                 width="120px">
         </a>

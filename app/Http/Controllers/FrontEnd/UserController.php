@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\User;
+use App\Models\Cart;
+use App\Models\Order;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Rules\MatchEmailRule;
 use App\Http\Helpers\MailConfig;
@@ -21,7 +24,38 @@ class UserController extends Controller
      */
     public function dashboard()
     {
-        return redirect()->route('frontend.index');
+        $user = Auth::guard('web')->user();
+
+        $ordersQuery = Order::query()->where(function ($query) use ($user) {
+            $query->where('user_id', $user->id)
+                ->orWhere(function ($subQuery) use ($user) {
+                    $subQuery->whereNull('user_id')
+                        ->where('billing_email', $user->email);
+                });
+        });
+
+        $totalOrders = (clone $ordersQuery)->count();
+        $completedOrders = (clone $ordersQuery)->where('order_status', 'completed')->count();
+        $pendingOrders = (clone $ordersQuery)->where('order_status', 'pending')->count();
+        $totalSpent = (float) ((clone $ordersQuery)->where('payment_status', 'completed')->sum('pay_amount') ?? 0);
+        $cartItems = (int) (Cart::query()->where('user_id', $user->id)->sum('quantity') ?? 0);
+
+        $latestOrders = (clone $ordersQuery)
+            ->latest('id')
+            ->limit(5)
+            ->get(['order_number', 'pay_amount', 'order_status', 'payment_status', 'created_at']);
+
+        return view('frontend.user.dashboard', [
+            'user' => $user,
+            'stats' => [
+                'totalOrders' => $totalOrders,
+                'completedOrders' => $completedOrders,
+                'pendingOrders' => $pendingOrders,
+                'totalSpent' => $totalSpent,
+                'cartItems' => $cartItems,
+            ],
+            'latestOrders' => $latestOrders,
+        ]);
     }
     /**
      * Show register page
@@ -43,13 +77,15 @@ class UserController extends Controller
         $user->email = $validated['email'];
         $user->status = 1;
         $user->password = Hash::make($validated['password']);
+        $user->remember_token = Str::random(64);
         $user->save();
 
         // get the mail template information from db
         $mailTemplate = MailTemplate::query()->where('type', '=', 'verify_email')->first();
         $mailData['subject'] = $mailTemplate->subject;
         $mailBody = $mailTemplate->body;
-        $link = '<a href=' . url("user/signup-verify/" . $user->id) . '>Click Here</a>';
+        $verificationUrl = route('user.signup_verify', ['token' => $user->remember_token]);
+        $link = '<a href="' . $verificationUrl . '">Click Here</a>';
 
         $mailBody = str_replace('{customer_name}', $user->username, $mailBody);
         $mailBody = str_replace('{verification_link}', $link, $mailBody);

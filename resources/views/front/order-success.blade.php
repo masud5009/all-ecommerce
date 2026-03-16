@@ -155,7 +155,7 @@
                     </svg>
                     Continue Shopping
                 </a>
-                <a href="{{ route('front.index') }}"
+                <a href="{{ route('frontend.index') }}"
                     class="inline-flex items-center gap-2 rounded-2xl border border-green-200 bg-white px-6 py-3 font-semibold text-green-700 transition hover:-translate-y-0.5 hover:border-green-300 hover:shadow-md">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path

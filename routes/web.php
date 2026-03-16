@@ -2,12 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Http\Controllers\FrontEnd\CartController;
 use App\Http\Controllers\FrontEnd\HomeController;
 use App\Http\Controllers\FrontEnd\ShopController;
 use App\Http\Controllers\FrontEnd\UserController;
 use App\Http\Controllers\FrontEnd\CheckoutController;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 /*
 |--------------------------------------------------------------------------
 | frontend route
@@ -23,7 +23,7 @@ Route::prefix('/admin')->middleware('guest:admin')->group(function () {
     Route::get('/forget-password', 'Admin\AdminController@forgetPassword')->name('admin.forget_password');
 });
 Route::prefix('/')->controller(HomeController::class)->group(function () {
-    Route::get('', 'index')->name('front.index');
+    Route::get('', 'index')->name('frontend.index');
     Route::get('/contact', 'contact')->name('frontend.contact');
     Route::get('/blog', 'blog')->name('frontend.blog');
     Route::get('/about', 'about')->name('frontend.about');
@@ -95,8 +95,9 @@ Route::prefix('user')->middleware('guest:web')->controller(UserController::class
     Route::post('/reset-password/submit', 'resetPasswordSubmit')->name('user.reset_password');
 });
 
-Route::prefix('user')->middleware('auth:web')->group(function () {
-    Route::get('/logout', 'FrontEnd\UserController@logout')->name('user.logout');
+Route::prefix('user')->middleware('auth:web')->controller(UserController::class)->group(function () {
+    Route::get('/dashboard', 'dashboard')->name('user.dashboard');
+    Route::get('/logout', 'logout')->name('user.logout');
 });
 
 

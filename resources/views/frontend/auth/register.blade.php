@@ -12,7 +12,7 @@
 
             {{-- Logo --}}
             <div class="flex flex-col items-center mb-8">
-                <a href="{{ route('front.index') }}" class="flex items-center gap-2 text-2xl font-bold text-green-700 mb-2">
+                <a href="{{ route('frontend.index') }}" class="flex items-center gap-2 text-2xl font-bold text-green-700 mb-2">
                     <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-green-100">
                         <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M4 14c6-1 10-5 12-10 3 5 4 10 3 14-2 6-10 8-13 3-1-2-1-5-1-7Z"/>

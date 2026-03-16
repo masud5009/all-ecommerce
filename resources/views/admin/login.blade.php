@@ -22,7 +22,7 @@
         <div class="login-form">
             <div class="card">
                 <div class="card-body">
-                    <a href="{{ route('front.index') }}" target="_blank" class="text-center mb-4">
+                    <a href="{{ route('frontend.index') }}" target="_blank" class="text-center mb-4">
                         <img src="{{ asset('assets/img/' . $websiteInfo->website_logo) }}" alt="website-image">
                     </a>
                     @if (session()->has('alert'))
