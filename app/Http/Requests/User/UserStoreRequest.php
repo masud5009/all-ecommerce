@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\User;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
@@ -25,13 +25,9 @@ class UserStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'full_name' => 'required|max:100',
+            'name' => 'required|max:100',
             'username' => 'required|max:20|alpha_num|unique:users,username',
-            'payment_method' => 'required|exists:payment_gateways,keyword',
             'email' => 'required|email|unique:users,email',
-            'company_name' => 'nullable|max:100',
-            'country' => 'nullable|max:255',
-            'package_id' => 'required|exists:packages,id',
             'password' => [
                 'required',
                 'min:8',

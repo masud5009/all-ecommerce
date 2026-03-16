@@ -153,10 +153,6 @@
                 Sign in instead
             </a>
         </div>
-
-        <p class="mt-6 text-center text-xs text-slate-400">
-            By creating an account, you agree to our <a href="#" class="underline hover:text-green-600">Terms</a> and <a href="#" class="underline hover:text-green-600">Privacy Policy</a>.
-        </p>
     </div>
 </section>
 @endsection
