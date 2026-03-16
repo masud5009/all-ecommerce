@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
-use App\Http\Controllers\Controller;
-use App\Http\Helpers\MailConfig;
-use App\Http\Requests\User\StoreRequest;
-use App\Models\Admin\MailTemplate;
 use App\Models\User;
-use App\Rules\MatchEmailRule;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Rules\MatchEmailRule;
+use App\Http\Helpers\MailConfig;
+use App\Models\Admin\MailTemplate;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use App\Http\Requests\User\StoreRequest;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -37,11 +36,13 @@ class UserController extends Controller
      */
     public function signup_submit(StoreRequest $request)
     {
+        $validated = $request->validated();
+
         $user = new User();
-        $user->username = $request->username;
-        $user->email = $request->email;
+        $user->username = $validated['username'];
+        $user->email = $validated['email'];
         $user->status = 1;
-        $user->password = Hash::make($request->password);
+        $user->password = Hash::make($validated['password']);
         $user->save();
 
         // get the mail template information from db
@@ -60,8 +61,16 @@ class UserController extends Controller
 
         MailConfig::send($mailData);
 
-        $queryResult['authUser'] = $user;
-        return back()->with('success', __('A verification mail has been sent to your email address'));
+        $successMessage = __('A verification mail has been sent to your email address');
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $successMessage,
+            ]);
+        }
+
+        return back()->with('success', $successMessage);
     }
     /**
      * Show login page
@@ -95,7 +104,7 @@ class UserController extends Controller
         $password = $request->input('password');
 
         // Determine if login input is email or username
-        $field = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $field = filter_var($loginInput, \FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
         $user = User::where($field, $loginInput)->first();
 
@@ -157,18 +166,37 @@ class UserController extends Controller
             $emailAddress = $request->session()->get('userEmail');
 
             $rules = [
-                'new_password' => 'required|confirmed',
-                'new_password_confirmation' => 'required'
+                'new_password' => [
+                    'required',
+                    'string',
+                    'min:8',
+                    'max:64',
+                    'confirmed',
+                    'regex:/[A-Z]/',
+                    'regex:/[a-z]/',
+                    'regex:/[0-9]/',
+                    'regex:/[^A-Za-z0-9]/',
+                ],
+                'new_password_confirmation' => 'required|string'
             ];
 
             $messages = [
                 'new_password.confirmed' => 'Password confirmation failed.',
+                'new_password.regex' => 'Password must include uppercase, lowercase, number and special character.',
                 'new_password_confirmation.required' => 'The confirm new password field is required.'
             ];
 
             $validator = Validator::make($request->all(), $rules, $messages);
 
             if ($validator->fails()) {
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Validation failed',
+                        'errors' => $validator->errors(),
+                    ], 422);
+                }
+
                 return redirect()->back()->withErrors($validator->errors());
             }
 
@@ -178,8 +206,23 @@ class UserController extends Controller
                 'password' => Hash::make($request->new_password)
             ]);
 
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Password updated successfully.',
+                    'redirect_url' => route('user.login'),
+                ]);
+            }
+
             Session::flash('success', 'Password updated successfully.');
         } else {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Something went wrong!',
+                ], 400);
+            }
+
             Session::flash('error', 'Something went wrong!');
         }
 
@@ -194,6 +237,8 @@ class UserController extends Controller
         $rules = [
             'email' => [
                 'required',
+                'string',
+                'max:255',
                 'email:rfc,dns',
                 new MatchEmailRule('user')
             ]

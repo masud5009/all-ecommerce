@@ -27,14 +27,18 @@
 
             {{-- Success message --}}
             @if (session('success'))
-                <div class="mb-5 flex items-start gap-3 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                <div id="register-success" class="mb-5 flex items-start gap-3 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
                     <svg class="mt-0.5 h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
                     {{ session('success') }}
                 </div>
+            @else
+                <div id="register-success" class="mb-5 hidden items-start gap-3 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700"></div>
             @endif
 
+            <div id="register-general-error" class="mb-5 hidden items-start gap-3 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"></div>
+
             {{-- Form --}}
-            <form action="{{ route('user.signup_submit') }}" method="POST" novalidate>
+            <form id="register-form" action="{{ route('user.signup_submit') }}" method="POST" novalidate>
                 @csrf
 
                 {{-- Username --}}
@@ -136,7 +140,7 @@
                 </div>
 
                 {{-- Submit --}}
-                <button type="submit"
+                <button type="submit" id="register-submit-btn"
                     class="w-full rounded-xl bg-green-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 active:translate-y-0">
                     Create account
                 </button>
@@ -158,57 +162,5 @@
 @endsection
 
 @section('script')
-<script>
-(function () {
-    // Toggle password visibility
-    const toggleBtn = document.getElementById('toggle-password');
-    const passwordInput = document.getElementById('password');
-    const eyeIcon = document.getElementById('eye-icon');
-    const eyeOffSVG = `<path fill-rule="evenodd" d="M3.28 2.22a.75.75 0 00-1.06 1.06l14.5 14.5a.75.75 0 101.06-1.06l-1.745-1.745a10.029 10.029 0 003.3-4.38 1.651 1.651 0 000-1.185A10.004 10.004 0 009.999 3a9.956 9.956 0 00-4.744 1.194L3.28 2.22zM7.752 6.69l1.092 1.092a2.5 2.5 0 013.374 3.373l1.091 1.092a4 4 0 00-5.557-5.557z" clip-rule="evenodd"/><path d="M10.748 13.93l2.523 2.523a9.987 9.987 0 01-3.27.547c-4.258 0-7.894-2.66-9.337-6.41a1.651 1.651 0 010-1.186A10.007 10.007 0 012.839 6.02L6.07 9.252a4 4 0 004.678 4.678z"/>`;
-    const eyeOnSVG = `<path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/><path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>`;
-
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', function () {
-            const isHidden = passwordInput.type === 'password';
-            passwordInput.type = isHidden ? 'text' : 'password';
-            eyeIcon.innerHTML = isHidden ? eyeOffSVG : eyeOnSVG;
-        });
-    }
-
-    // Password strength checker
-    const bars = [
-        document.getElementById('bar-1'),
-        document.getElementById('bar-2'),
-        document.getElementById('bar-3'),
-        document.getElementById('bar-4'),
-    ];
-    const strengthLabel = document.getElementById('strength-label');
-
-    const colors = ['bg-red-400', 'bg-orange-400', 'bg-yellow-400', 'bg-green-500'];
-    const labels = ['Weak', 'Fair', 'Good', 'Strong'];
-
-    function checkStrength(pwd) {
-        let score = 0;
-        if (pwd.length >= 8)  score++;
-        if (/[A-Z]/.test(pwd))  score++;
-        if (/[0-9]/.test(pwd))  score++;
-        if (/[^A-Za-z0-9]/.test(pwd)) score++;
-        return score;
-    }
-
-    passwordInput.addEventListener('input', function () {
-        const score = checkStrength(this.value);
-        bars.forEach((bar, i) => {
-            bar.className = 'h-1 flex-1 rounded-full transition-all';
-            if (i < score) {
-                bar.classList.add(colors[score - 1]);
-            } else {
-                bar.classList.add('bg-slate-200');
-            }
-        });
-        strengthLabel.textContent = this.value.length > 0 ? labels[score - 1] || '' : '';
-        strengthLabel.className = 'mt-1 text-xs ' + (score > 0 ? ['text-red-500','text-orange-500','text-yellow-600','text-green-600'][score-1] : 'text-slate-400');
-    });
-})();
-</script>
+    <script src="{{ asset('assets/front/js/auth.js') }}"></script>
 @endsection
