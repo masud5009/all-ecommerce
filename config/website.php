@@ -69,33 +69,4 @@ return [
             'col'   => 6,
         ],
     ],
-
-        /*
-    |--------------------------------------------------------------------------
-    | FEATURES SECTION
-    |--------------------------------------------------------------------------
-    */
-    'features_section' => [
-        'features_image' => [
-            'label' => 'Image',
-            'type'  => 'file',
-            'col'   => 12,
-        ],
-        'features_title' => [
-            'label' => 'Title',
-            'type'  => 'text',
-            'col'   => 6,
-        ],
-        'features_subtitle' => [
-            'label' => 'Subtitle',
-            'type'  => 'text',
-            'col'   => 6,
-        ],
-        'features_text' => [
-            'label' => 'Description',
-            'type'  => 'textarea',
-            'rows'  => 4,
-            'col'   => 12,
-        ],
-    ],
 ];

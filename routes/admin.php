@@ -86,6 +86,17 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
     Route::post('home-page-content/sliders/status-change', 'Admin\SliderController@changeStatus')->name('admin.home.slider.status_change');
     Route::post('home-page-content/sliders-bulk-delete', 'Admin\SliderController@bulkDelete')->name('admin.home.slider.bulk_delete');
 
+        /*============================
+            freshness section routes
+         =============================*/
+        Route::get('home-page-content/features', 'Admin\HomeFreshnessController@index')->name('admin.home.freshness');
+        Route::post('home-page-content/features/section-update', 'Admin\HomeFreshnessController@updateSection')->name('admin.home.freshness.section_update');
+        Route::post('home-page-content/features/store', 'Admin\HomeFreshnessController@store')->name('admin.home.freshness.store');
+        Route::post('home-page-content/features/update', 'Admin\HomeFreshnessController@update')->name('admin.home.freshness.update');
+        Route::post('home-page-content/features/delete', 'Admin\HomeFreshnessController@delete')->name('admin.home.freshness.delete');
+        Route::post('home-page-content/features/status-change', 'Admin\HomeFreshnessController@changeStatus')->name('admin.home.freshness.status_change');
+        Route::post('home-page-content/features-bulk-delete', 'Admin\HomeFreshnessController@bulkDelete')->name('admin.home.freshness.bulk_delete');
+
     /*============================
       user managment route
      =============================*/

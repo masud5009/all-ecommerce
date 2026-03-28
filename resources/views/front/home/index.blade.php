@@ -462,7 +462,7 @@
                         {{ @$sectionTitles->features_title ?? 'Freshness section title' }}
                     </p>
                     <h2 class="mt-3 text-2xl font-semibold text-slate-900">
-                        {{ @$sectionTitles->features_sub_title ?? 'Freshness section sub title' }}
+                        {{ @$sectionTitles->features_subtitle ?? 'Freshness section sub title' }}
                     </h2>
                     <p class="mt-3 text-sm text-slate-600">
                         {{ @$sectionTitles->features_text ?? 'Freshness section description' }}
@@ -470,51 +470,26 @@
                 </div>
                 <div class="mt-10 grid gap-10 lg:grid-cols-[1fr_auto_1fr] lg:items-center">
                     <div class="order-2 space-y-6 lg:order-none" data-reveal-child>
-                        <div class="flex items-start gap-4">
-                            <span
-                                class="flex h-12 w-12 items-center justify-center rounded-2xl border border-green-100 bg-white text-green-600 shadow-sm">
-                                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="1.8" aria-hidden="true">
-                                    <path d="M3 7l9 5 9-5"></path>
-                                    <path d="M3 7l9-4 9 4v10l-9 5-9-5z"></path>
-                                    <path d="M12 12v10"></path>
-                                </svg>
-                            </span>
-                            <div>
-                                <p class="text-sm font-semibold text-slate-900">Handmade Products</p>
-                                <p class="mt-1 text-xs text-slate-600">We collect fresh natural fruits for your
-                                    healthy life.</p>
+                        @forelse ($freshnessLeftItems as $item)
+                            <div class="flex items-start gap-4">
+                                <span
+                                    class="flex h-12 w-12 items-center justify-center rounded-2xl border border-green-100 bg-white text-green-600 shadow-sm">
+                                    @if (!empty($item->icon))
+                                        <i class="{{ $item->icon }} text-lg"></i>
+                                    @else
+                                        <i class="fas fa-seedling text-lg"></i>
+                                    @endif
+                                </span>
+                                <div>
+                                    <p class="text-sm font-semibold text-slate-900">{{ $item->title }}</p>
+                                    <p class="mt-1 text-xs text-slate-600">{{ $item->text }}</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="flex items-start gap-4">
-                            <span
-                                class="flex h-12 w-12 items-center justify-center rounded-2xl border border-green-100 bg-white text-green-600 shadow-sm">
-                                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="1.8" aria-hidden="true">
-                                    <path d="M12 7c-3 0-5 2-5 5 0 4 2 7 5 7s5-3 5-7c0-3-2-5-5-5Z"></path>
-                                    <path d="M12 7c0-2 2-4 4-4"></path>
-                                </svg>
-                            </span>
-                            <div>
-                                <p class="text-sm font-semibold text-slate-900">Organic and Fresh</p>
-                                <p class="mt-1 text-xs text-slate-600">Our products are 100% natural and fresh.</p>
+                        @empty
+                            <div class="rounded-2xl border border-dashed border-green-200 bg-white p-6 text-sm text-slate-500">
+                                {{ __('No left side feature items found.') }}
                             </div>
-                        </div>
-                        <div class="flex items-start gap-4">
-                            <span
-                                class="flex h-12 w-12 items-center justify-center rounded-2xl border border-green-100 bg-white text-green-600 shadow-sm">
-                                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="1.8" aria-hidden="true">
-                                    <path d="M12 3c4 3 6 6 6 9 0 4-3 7-6 9-3-2-6-5-6-9 0-3 2-6 6-9Z"></path>
-                                    <path d="M12 7v10"></path>
-                                </svg>
-                            </span>
-                            <div>
-                                <p class="text-sm font-semibold text-slate-900">150+ Organic Items</p>
-                                <p class="mt-1 text-xs text-slate-600">We stock 150+ organic food items for your
-                                    pantry.</p>
-                            </div>
-                        </div>
+                        @endforelse
                     </div>
                     <div class="order-1 mx-auto flex w-64 items-center justify-center sm:w-72 lg:order-none lg:w-80"
                         data-reveal-child>
@@ -522,62 +497,33 @@
                             <div
                                 class="absolute inset-0 rounded-full bg-green-50 shadow-[0_25px_80px_rgba(16,185,129,0.2)]">
                             </div>
-                            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=640&q=80"
+                            <img src="{{ !empty($sectionTitles?->features_image) ? asset('assets/img/home_section/' . $sectionTitles->features_image) : 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=640&q=80' }}"
                                 alt="Fresh vegetables assortment"
                                 class="relative h-auto w-full object-contain drop-shadow-2xl" loading="lazy"
                                 width="420" height="420">
                         </div>
                     </div>
                     <div class="order-3 space-y-6 lg:order-none" data-reveal-child>
-                        <div class="flex items-start gap-4">
-                            <span
-                                class="flex h-12 w-12 items-center justify-center rounded-2xl border border-green-100 bg-white text-green-600 shadow-sm">
-                                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="1.8" aria-hidden="true">
-                                    <rect x="3" y="6" width="18" height="12" rx="2"></rect>
-                                    <path d="M3 10h18"></path>
-                                    <path d="M7 15h4"></path>
-                                </svg>
-                            </span>
-                            <div>
-                                <p class="text-sm font-semibold text-slate-900">100% Secure Payment</p>
-                                <p class="mt-1 text-xs text-slate-600">We make sure your payment method stays
-                                    secure.</p>
+                        @forelse ($freshnessRightItems as $item)
+                            <div class="flex items-start gap-4">
+                                <span
+                                    class="flex h-12 w-12 items-center justify-center rounded-2xl border border-green-100 bg-white text-green-600 shadow-sm">
+                                    @if (!empty($item->icon))
+                                        <i class="{{ $item->icon }} text-lg"></i>
+                                    @else
+                                        <i class="fas fa-seedling text-lg"></i>
+                                    @endif
+                                </span>
+                                <div>
+                                    <p class="text-sm font-semibold text-slate-900">{{ $item->title }}</p>
+                                    <p class="mt-1 text-xs text-slate-600">{{ $item->text }}</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="flex items-start gap-4">
-                            <span
-                                class="flex h-12 w-12 items-center justify-center rounded-2xl border border-green-100 bg-white text-green-600 shadow-sm">
-                                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="1.8" aria-hidden="true">
-                                    <path d="M12 4v10"></path>
-                                    <circle cx="12" cy="16" r="4"></circle>
-                                    <path d="M12 8a2 2 0 0 0-2 2"></path>
-                                </svg>
-                            </span>
-                            <div>
-                                <p class="text-sm font-semibold text-slate-900">Temperature Control</p>
-                                <p class="mt-1 text-xs text-slate-600">We keep every item cool and fresh in
-                                    transit.</p>
+                        @empty
+                            <div class="rounded-2xl border border-dashed border-green-200 bg-white p-6 text-sm text-slate-500">
+                                {{ __('No right side feature items found.') }}
                             </div>
-                        </div>
-                        <div class="flex items-start gap-4">
-                            <span
-                                class="flex h-12 w-12 items-center justify-center rounded-2xl border border-green-100 bg-white text-green-600 shadow-sm">
-                                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="1.8" aria-hidden="true">
-                                    <path d="M3 16h8"></path>
-                                    <path d="M13 16h4l3-3v-4h-7v7Z"></path>
-                                    <circle cx="7" cy="18" r="2"></circle>
-                                    <circle cx="17" cy="18" r="2"></circle>
-                                </svg>
-                            </span>
-                            <div>
-                                <p class="text-sm font-semibold text-slate-900">Super Fast Delivery</p>
-                                <p class="mt-1 text-xs text-slate-600">Fast delivery services, safe and secure from
-                                    damage.</p>
-                            </div>
-                        </div>
+                        @endforelse
                     </div>
                 </div>
             </div>

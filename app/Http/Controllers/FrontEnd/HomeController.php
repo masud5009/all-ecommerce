@@ -12,6 +12,7 @@ use App\Models\Admin\Package;
 use App\Models\Admin\Language;
 use App\Models\ProductContent;
 use App\Models\ProductCategory;
+use App\Models\HomeFreshnessItem;
 use App\Models\HomeSectionSetting;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -94,6 +95,16 @@ class HomeController extends Controller
             ->orderBy('serial_number', 'asc')
             ->get();
         $data['sectionTitles'] = HomeSectionSetting::where('language_id', $languageId)->first();
+        $data['freshnessLeftItems'] = HomeFreshnessItem::where('language_id', $languageId)
+            ->where('status', 1)
+            ->where('position', 'left')
+            ->orderBy('serial_number', 'asc')
+            ->get();
+        $data['freshnessRightItems'] = HomeFreshnessItem::where('language_id', $languageId)
+            ->where('status', 1)
+            ->where('position', 'right')
+            ->orderBy('serial_number', 'asc')
+            ->get();
 
         return view('front.home.index', $data);
     }

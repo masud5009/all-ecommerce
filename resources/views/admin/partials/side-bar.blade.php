@@ -158,6 +158,7 @@
                     class="nav-item nav-item-submenu
                             @if (request()->routeIs('admin.home_section')) nav-item-expanded nav-item-open @endif
                             @if (request()->routeIs('admin.home.slider')) nav-item-expanded nav-item-open @endif
+                            @if (request()->routeIs('admin.home.freshness')) nav-item-expanded nav-item-open @endif
                             ">
                     <a href="#" class="nav-link">
                         <i class="fas fa-home"></i>
@@ -180,6 +181,14 @@
                         @if (request()->routeIs('admin.home.slider')) active @endif
                         ">
                                 <span>{{ __('Sliders') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.home.freshness', ['language' => $defaultLang->code]) }}"
+                                class="nav-link
+                        @if (request()->routeIs('admin.home.freshness')) active @endif
+                        ">
+                                <span>{{ __('Features Section') }}</span>
                             </a>
                         </li>
                     </ul>
@@ -284,7 +293,7 @@
                     </ul>
                 </li>
 
-            
+
 
                 <!-- language managment -->
                 <li class="nav-item">

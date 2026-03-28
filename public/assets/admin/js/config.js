@@ -154,6 +154,101 @@ $("#submitBtn").on('click', function (e) {
     });
 });
 
+$("#submitBtn3").on('click', function (e) {
+    e.preventDefault();
+    $('.request-loader').show();
+
+    // Reset previous errors
+    $('.em').html('');
+    $('.form-control').removeClass('is-invalid').removeClass('is-valid');
+
+    let ajaxForm3 = document.getElementById('ajaxForm3');
+    let fd = new FormData(ajaxForm3);
+    let url = $("#ajaxForm3").attr('action');
+    let method = $("#ajaxForm3").attr('method');
+
+    // Handle summernote content
+    $('.summernote').each(function () {
+        let tmcId = $(this).attr('id');
+        let content = tinyMCE.get(tmcId) ? tinyMCE.get(tmcId).getContent() : '';
+        fd.set($(this).attr('name'), content);
+    });
+
+    $.ajax({
+        url: url,
+        method: method,
+        data: fd,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            $('.request-loader').hide();
+
+            if (data.status == 'success') {
+                hideActiveOverlays();
+                location.reload();
+            }
+        },
+        error: function (error) {
+            $('.request-loader').hide();
+
+            if (error.status === 422 || error.status === 400) {
+                const errors = error.responseJSON.errors;
+
+                for (let key in errors) {
+                    // Show error message
+                    $('#err_' + key).html(errors[key][0]);
+
+                    // Add invalid class
+                    $('[name="' + key + '"]').addClass('is-invalid').removeClass('is-valid');
+                }
+            } else {
+                $.toast({
+                    heading: 'Error',
+                    text: 'An unexpected error occurred. Please try again later.',
+                    showHideTransition: 'plain',
+                    icon: 'error',
+                    allowToastClose: true,
+                    position: 'top-right',
+                    hideAfter: 4000
+                })
+            }
+        }
+    });
+    // Real-time validation
+    $('.form-control').on('input', function () {
+        if ($(this).val().trim() !== '') {
+            $(this).removeClass('is-invalid').addClass('is-valid');
+            $('#err_' + $(this).attr('name')).html('');
+        } else {
+            $(this).removeClass('is-valid');
+        }
+    });
+
+    $('.form-control, .form-select').on('input change', function () {
+        let fieldName = $(this).attr('name');
+        let fieldValue = $(this).val();
+
+        // For select dropdowns
+        if ($(this).is('select')) {
+            if (fieldValue && fieldValue !== '') {
+                $(this).removeClass('is-invalid').addClass('is-valid');
+                $('#err_' + fieldName).html('');
+            } else {
+                $(this).removeClass('is-valid').addClass('is-invalid');
+            }
+        }
+        // For text inputs, textareas etc.
+        else {
+            if (fieldValue.trim() !== '') {
+                $(this).removeClass('is-invalid').addClass('is-valid');
+                $('#err_' + fieldName).html('');
+            } else {
+                $(this).removeClass('is-valid');
+            }
+        }
+    });
+});
+
 $("#minorBtn").on('click', function (e) {
     e.preventDefault();
     $('.request-loader').show();
