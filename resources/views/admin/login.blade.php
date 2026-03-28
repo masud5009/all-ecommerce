@@ -33,14 +33,14 @@
                     <form action="{{ route('admin.auth') }}" method="post">
                         @csrf
                         <div class="form-group">
-                            <label>Enter Username</label>
+                            <label>Username <span class="text-danger">**</span></label>
                             <input type="text" class="form-control {{customValid('username',$errors)}}" name="username" value="{{old('username')}}"  placeholder="Enter Username">
                             @if ($errors->has('username'))
                                 <p class="text-danger text-left">{{ $errors->first('username') }}</p>
                             @endif
                         </div>
                         <div class="form-group">
-                            <label>Enter Password</label>
+                            <label>Password <span class="text-danger">**</span></label>
                             <input type="password" class="form-control {{customValid('password',$errors)}}" name="password" placeholder="Enter Password">
                             @if ($errors->has('password'))
                                 <p class="text-danger text-left">{{ $errors->first('password') }}</p>

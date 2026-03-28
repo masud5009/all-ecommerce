@@ -44,7 +44,7 @@ main {
 }
 
 .login-form .card {
-    background-color: #042b59;
+    background-color: #fff;
     box-shadow: 0 0px 0 rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.24);
     border: none;
     height: 100%;
@@ -71,6 +71,7 @@ main {
 
 label {
     margin-bottom: 5px;
+    color: var(--dark-theme);
 }
 
 .login-form .form-group {
@@ -78,11 +79,10 @@ label {
 }
 
 .login-form .form-control {
-    background-color: var(--dark-theme);
     padding: .5rem;
     margin-bottom: .5rem;
-    border: 1px solid #ced4da3b;
-    color: var(--light);
+    border: 1px solid var(--dark-theme);
+    color: var(--dark-theme);
 }
 
 .submit-btn {
@@ -92,13 +92,13 @@ label {
     background-color: var(--bs-green);
 }
 
-.form-control:focus {
+/* .form-control:focus {
     color: var(--light);
     background-color: var(--dark-theme);
     border-color: #042b59;
     outline: 0;
     box-shadow: none;
-}
+} */
 
 @media (max-width:576px) {
     .login-image {
