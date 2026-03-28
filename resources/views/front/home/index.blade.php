@@ -255,12 +255,37 @@
                             $cardTitle = $content->title ?? ('Product #' . $product->id);
                             $cardSummaryRaw = $content->summary ?? $content->description ?? 'Limited time offer on selected items.';
                             $cardSummary = trim(preg_replace('/\s+/', ' ', strip_tags((string) $cardSummaryRaw)));
-                            $currentPrice = (float) ($product->current_price ?? 0);
-                            $flashAmount = (float) ($product->flash_sale_price ?? 0);
-                            $salePrice = max($currentPrice - $flashAmount, 0);
-                            $oldPrice = $currentPrice;
-                            $saveAmount = max($oldPrice - $salePrice, 0);
-                            $savePercent = $oldPrice > 0 ? round(($saveAmount / $oldPrice) * 100) : 0;
+                            $discountPercent = min(max((float) ($product->flash_sale_price ?? 0), 0), 100);
+                            $variations = $product->variations ?? collect();
+
+                            if ((int) ($product->has_variants ?? 0) === 1 && $variations->isNotEmpty()) {
+                                $variantPrices = $variations->map(function ($variation) use ($product) {
+                                    return (float) ($variation->price ?? $product->current_price ?? 0);
+                                })->values();
+
+                                $oldMinPrice = (float) ($variantPrices->min() ?? 0);
+                                $oldMaxPrice = (float) ($variantPrices->max() ?? 0);
+                                $saleMinPrice = max($oldMinPrice * (1 - ($discountPercent / 100)), 0);
+                                $saleMaxPrice = max($oldMaxPrice * (1 - ($discountPercent / 100)), 0);
+
+                                $salePriceLabel = $saleMinPrice === $saleMaxPrice
+                                    ? currency_symbol($saleMinPrice)
+                                    : currency_symbol($saleMinPrice) . ' - ' . currency_symbol($saleMaxPrice);
+
+                                $oldPriceLabel = $oldMinPrice === $oldMaxPrice
+                                    ? currency_symbol($oldMinPrice)
+                                    : currency_symbol($oldMinPrice) . ' - ' . currency_symbol($oldMaxPrice);
+
+                                $savePercent = round($discountPercent);
+                            } else {
+                                $currentPrice = (float) ($product->current_price ?? 0);
+                                $salePrice = max($currentPrice * (1 - ($discountPercent / 100)), 0);
+                                $oldPrice = $currentPrice;
+                                $saveAmount = max($oldPrice - $salePrice, 0);
+                                $savePercent = $oldPrice > 0 ? round(($saveAmount / $oldPrice) * 100) : 0;
+                                $salePriceLabel = currency_symbol($salePrice);
+                                $oldPriceLabel = currency_symbol($oldPrice);
+                            }
                             $stockLabel = ($product->stock ?? 0) > 0 ? __('In Stock') : __('Stock Out');
                             $image = !empty($product->thumbnail) ? asset('assets/img/product/' . $product->thumbnail) : '';
                             $countdownSeconds = 0;
@@ -300,9 +325,9 @@
                             <p class="relative mt-2 text-sm text-slate-600">{{ truncateString($cardSummary,100) }}</p>
 
                             <div class="relative mt-4 flex items-end gap-3">
-                                <span class="text-2xl font-semibold text-slate-900">{{ currency_symbol($salePrice) }}</span>
-                                @if ($oldPrice > $salePrice)
-                                    <span class="text-sm text-slate-400 line-through">{{ currency_symbol($oldPrice) }}</span>
+                                <span class="text-2xl font-semibold text-slate-900">{{ $salePriceLabel }}</span>
+                                @if (!empty($oldPriceLabel) && $oldPriceLabel !== $salePriceLabel)
+                                    <span class="text-sm text-slate-400 line-through">{{ $oldPriceLabel }}</span>
                                 @endif
                             </div>
 

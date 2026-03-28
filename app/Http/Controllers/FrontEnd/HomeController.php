@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\Order;
 use App\Models\Product;
+use Carbon\Carbon;
 use App\Models\OrderItem;
 use App\Models\HomeSlider;
 use Illuminate\Support\Str;
@@ -61,8 +62,8 @@ class HomeController extends Controller
             $flashSummary = trim(preg_replace('/\s+/', ' ', strip_tags((string) ($flashContent->summary ?? $flashContent->description ?? 'Limited time offer on selected items.'))));
 
             $currentPrice = (float) ($firstFlash->current_price ?? 0);
-            $flashAmount = (float) ($firstFlash->flash_sale_price ?? 0);
-            $salePrice = max($currentPrice - $flashAmount, 0);
+            $flashDiscountPercent = min(max((float) ($firstFlash->flash_sale_price ?? 0), 0), 100);
+            $salePrice = max($currentPrice * (1 - ($flashDiscountPercent / 100)), 0);
             $oldPrice = $currentPrice;
             $saveAmount = $oldPrice - $salePrice;
             $savePercent = $oldPrice > 0 ? round(($saveAmount / $oldPrice) * 100) : 0;
@@ -153,6 +154,20 @@ class HomeController extends Controller
         }
 
         $content = $product->content->first();
+        $flashDiscountPercent = (float) ($product->flash_sale_price ?? 0);
+        $isFlashSaleActive =
+            (int) ($product->flash_sale_status ?? 0) === 1 &&
+            $flashDiscountPercent > 0 &&
+            !empty($product->flash_sale_start_at) &&
+            !empty($product->flash_sale_end_at) &&
+            Carbon::now()->between(
+                Carbon::parse($product->flash_sale_start_at),
+                Carbon::parse($product->flash_sale_end_at)
+            );
+
+        if ($isFlashSaleActive) {
+            $flashDiscountPercent = min($flashDiscountPercent, 100);
+        }
 
         if (!$content) {
             $content = ProductContent::where('product_id', $product->id)
@@ -212,15 +227,23 @@ class HomeController extends Controller
 
                 $units[] = [
                     'label' => $variantParts->isNotEmpty() ? $variantParts->implode(', ') : ('Option ' . ($index + 1)),
-                    'price' => (float) ($variant->price ?? $product->current_price ?? 0),
-                    'oldPrice' => (float) ($product->previous_price ?? 0),
+                    'price' => $isFlashSaleActive
+                        ? max(((float) ($variant->price ?? $product->current_price ?? 0)) * (1 - ($flashDiscountPercent / 100)), 0)
+                        : (float) ($variant->price ?? $product->current_price ?? 0),
+                    'oldPrice' => $isFlashSaleActive
+                        ? (float) ($variant->price ?? $product->current_price ?? 0)
+                        : (float) ($product->previous_price ?? 0),
                 ];
             }
         } else {
             $units[] = [
                 'label' => '1 unit',
-                'price' => (float) ($product->current_price ?? 0),
-                'oldPrice' => (float) ($product->previous_price ?? 0),
+                'price' => $isFlashSaleActive
+                    ? max(((float) ($product->current_price ?? 0)) * (1 - ($flashDiscountPercent / 100)), 0)
+                    : (float) ($product->current_price ?? 0),
+                'oldPrice' => $isFlashSaleActive
+                    ? (float) ($product->current_price ?? 0)
+                    : (float) ($product->previous_price ?? 0),
             ];
         }
 
@@ -241,7 +264,9 @@ class HomeController extends Controller
                 ['name' => 'Chris', 'rating' => 4, 'text' => 'Satisfied with the quality and packaging.'],
             ],
             'units' => $units,
-            'isDeal' => ((float) ($product->previous_price ?? 0) > (float) ($product->current_price ?? 0)),
+            'isDeal' => $isFlashSaleActive || collect($units)->contains(function ($unit) {
+                return (float) ($unit['oldPrice'] ?? 0) > (float) ($unit['price'] ?? 0);
+            }),
             'popular' => true,
         ];
 

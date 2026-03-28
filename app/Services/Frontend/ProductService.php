@@ -48,6 +48,7 @@ class ProductService
         ])
             ->where('flash_sale_status', 1)
             ->whereNotNull('flash_sale_price')
+            ->where('flash_sale_price', '>', 0)
             ->whereNotNull('flash_sale_start_at')
             ->whereNotNull('flash_sale_end_at')
             ->where('flash_sale_start_at', '<=', $now)
@@ -183,9 +184,11 @@ class ProductService
 
                 $variations = $product->variations ?? collect();
 
+                $flashDiscountPercent = (float) ($product->flash_sale_price ?? 0);
+
                 $isFlashSaleActive =
                     (int) ($product->flash_sale_status ?? 0) === 1 &&
-                    !is_null($product->flash_sale_price) &&
+                    $flashDiscountPercent > 0 &&
                     !empty($product->flash_sale_start_at) &&
                     !empty($product->flash_sale_end_at) &&
                     $now->between(
@@ -193,10 +196,14 @@ class ProductService
                         Carbon::parse($product->flash_sale_end_at)
                     );
 
+                if ($isFlashSaleActive) {
+                    $flashDiscountPercent = min($flashDiscountPercent, 100);
+                }
+
                 if ((int) ($product->has_variants ?? 0) === 1 && $variations->isNotEmpty()) {
                     $units = $variations
                         ->values()
-                        ->map(function ($variation, $index) use ($product) {
+                        ->map(function ($variation, $index) use ($product, $isFlashSaleActive, $flashDiscountPercent) {
                             $variantParts = collect($variation->variantValues ?? [])
                                 ->sortBy(function ($variantValue) {
                                     return optional(optional($variantValue->optionValue)->option)->position ?? PHP_INT_MAX;
@@ -214,24 +221,38 @@ class ProductService
                                 ->filter()
                                 ->values();
 
+                            $baseVariantPrice = (float) ($variation->price ?? $product->current_price ?? 0);
+
                             return [
                                 'label' => $variantParts->isNotEmpty()
                                     ? $variantParts->implode(', ')
                                     : __('Option') . ' ' . ($index + 1),
-                                'price' => (float) ($variation->price ?? $product->current_price ?? 0),
-                                'oldPrice' => (float) ($product->previous_price ?? 0),
+                                'price' => $isFlashSaleActive
+                                    ? max($baseVariantPrice * (1 - ($flashDiscountPercent / 100)), 0)
+                                    : $baseVariantPrice,
+                                'oldPrice' => $isFlashSaleActive
+                                    ? $baseVariantPrice
+                                    : (float) ($product->previous_price ?? 0),
                             ];
                         })
                         ->all();
 
-                    $price = (float) ($variations->min('price') ?? 0);
-                    $oldPrice = (float) ($product->previous_price ?? 0);
+                    $variantBasePrices = $variations->map(function ($variation) use ($product) {
+                        return (float) ($variation->price ?? $product->current_price ?? 0);
+                    });
+
+                    $minBasePrice = (float) ($variantBasePrices->min() ?? 0);
+                    $price = $isFlashSaleActive
+                        ? max($minBasePrice * (1 - ($flashDiscountPercent / 100)), 0)
+                        : $minBasePrice;
+                    $oldPrice = $isFlashSaleActive
+                        ? $minBasePrice
+                        : (float) ($product->previous_price ?? 0);
                 } else {
                     $currentPrice = (float) ($product->current_price ?? 0);
-                    $flashSaleAmount = (float) ($product->flash_sale_price ?? 0);
 
                     $price = $isFlashSaleActive
-                        ? max($currentPrice - $flashSaleAmount, 0)
+                        ? max($currentPrice * (1 - ($flashDiscountPercent / 100)), 0)
                         : $currentPrice;
 
                     $oldPrice = $isFlashSaleActive

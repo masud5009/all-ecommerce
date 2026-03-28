@@ -7,7 +7,7 @@
     $productImage = $p['image'] ?? 'about:blank';
     $productImages = $p['images'] ?? [$productImage];
     $productSummary = $p['summary'] ?? '';
-    $productRating = $p['rating'] ?? 4.7;
+    $productRating = $p['rating'] ?? 0;
     $productReviews = $p['reviews'] ?? 0;
     $productUnits = $p['units'] ?? [];
     $isDeal = $p['isDeal'] ?? false;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Admin\Language;
 use App\Http\Controllers\Controller;
@@ -72,6 +73,20 @@ class ShopController extends Controller
         }
 
         $content = $product->content->first();
+        $flashDiscountPercent = (float) ($product->flash_sale_price ?? 0);
+        $isFlashSaleActive =
+            (int) ($product->flash_sale_status ?? 0) === 1 &&
+            $flashDiscountPercent > 0 &&
+            !empty($product->flash_sale_start_at) &&
+            !empty($product->flash_sale_end_at) &&
+            Carbon::now()->between(
+                Carbon::parse($product->flash_sale_start_at),
+                Carbon::parse($product->flash_sale_end_at)
+            );
+
+        if ($isFlashSaleActive) {
+            $flashDiscountPercent = min($flashDiscountPercent, 100);
+        }
 
         // Build images array
         $images = [];
@@ -98,8 +113,12 @@ class ShopController extends Controller
                 $units[] = [
                     'variant_id' => $variant->id,
                     'label' => $variantParts->isNotEmpty() ? $variantParts->implode(', ') : ('Option ' . ($index + 1)),
-                    'price' => (float) ($variant->price ?? $product->current_price ?? 0),
-                    'oldPrice' => (float) ($product->previous_price ?? 0),
+                    'price' => $isFlashSaleActive
+                        ? max(((float) ($variant->price ?? $product->current_price ?? 0)) * (1 - ($flashDiscountPercent / 100)), 0)
+                        : (float) ($variant->price ?? $product->current_price ?? 0),
+                    'oldPrice' => $isFlashSaleActive
+                        ? (float) ($variant->price ?? $product->current_price ?? 0)
+                        : (float) ($product->previous_price ?? 0),
                     'stock' => (int) ($variant->stock ?? 0),
                     'sku' => $variant->sku ?? '',
                 ];
@@ -111,8 +130,12 @@ class ShopController extends Controller
             $units[] = [
                 'variant_id' => null,
                 'label' => '1 unit',
-                'price' => (float) ($product->current_price ?? 0),
-                'oldPrice' => (float) ($product->previous_price ?? 0),
+                'price' => $isFlashSaleActive
+                    ? max(((float) ($product->current_price ?? 0)) * (1 - ($flashDiscountPercent / 100)), 0)
+                    : (float) ($product->current_price ?? 0),
+                'oldPrice' => $isFlashSaleActive
+                    ? (float) ($product->current_price ?? 0)
+                    : (float) ($product->previous_price ?? 0),
                 'stock' => (int) ($product->stock ?? 0),
                 'sku' => $product->sku ?? '',
             ];
@@ -146,7 +169,9 @@ class ShopController extends Controller
                 ['name' => 'Chris', 'rating' => 4, 'text' => 'Satisfied with the quality and packaging.'],
             ],
             'units' => $units,
-            'isDeal' => ((float) ($product->previous_price ?? 0) > (float) ($product->current_price ?? 0)),
+            'isDeal' => $isFlashSaleActive || collect($units)->contains(function ($unit) {
+                return (float) ($unit['oldPrice'] ?? 0) > (float) ($unit['price'] ?? 0);
+            }),
             'popular' => (bool) $product->is_popular,
             'stock' => (int) ($product->stock ?? 0),
         ];
@@ -184,6 +209,20 @@ class ShopController extends Controller
         }
 
         $content = $product->content->first();
+        $flashDiscountPercent = (float) ($product->flash_sale_price ?? 0);
+        $isFlashSaleActive =
+            (int) ($product->flash_sale_status ?? 0) === 1 &&
+            $flashDiscountPercent > 0 &&
+            !empty($product->flash_sale_start_at) &&
+            !empty($product->flash_sale_end_at) &&
+            Carbon::now()->between(
+                Carbon::parse($product->flash_sale_start_at),
+                Carbon::parse($product->flash_sale_end_at)
+            );
+
+        if ($isFlashSaleActive) {
+            $flashDiscountPercent = min($flashDiscountPercent, 100);
+        }
 
         // Build images array
         $images = [];
@@ -210,8 +249,12 @@ class ShopController extends Controller
                 $units[] = [
                     'variant_id' => $variant->id,
                     'label' => $variantParts->isNotEmpty() ? $variantParts->implode(', ') : ('Option ' . ($index + 1)),
-                    'price' => (float) ($variant->price ?? $product->current_price ?? 0),
-                    'oldPrice' => (float) ($product->previous_price ?? 0),
+                    'price' => $isFlashSaleActive
+                        ? max(((float) ($variant->price ?? $product->current_price ?? 0)) * (1 - ($flashDiscountPercent / 100)), 0)
+                        : (float) ($variant->price ?? $product->current_price ?? 0),
+                    'oldPrice' => $isFlashSaleActive
+                        ? (float) ($variant->price ?? $product->current_price ?? 0)
+                        : (float) ($product->previous_price ?? 0),
                     'stock' => (int) ($variant->stock ?? 0),
                 ];
             }
@@ -222,8 +265,12 @@ class ShopController extends Controller
             $units[] = [
                 'variant_id' => null,
                 'label' => '1 unit',
-                'price' => (float) ($product->current_price ?? 0),
-                'oldPrice' => (float) ($product->previous_price ?? 0),
+                'price' => $isFlashSaleActive
+                    ? max(((float) ($product->current_price ?? 0)) * (1 - ($flashDiscountPercent / 100)), 0)
+                    : (float) ($product->current_price ?? 0),
+                'oldPrice' => $isFlashSaleActive
+                    ? (float) ($product->current_price ?? 0)
+                    : (float) ($product->previous_price ?? 0),
                 'stock' => (int) ($product->stock ?? 0),
             ];
         }
@@ -247,7 +294,9 @@ class ShopController extends Controller
             'images' => $images,
             'summary' => $summaryText,
             'units' => $units,
-            'isDeal' => ((float) ($product->previous_price ?? 0) > (float) ($product->current_price ?? 0)),
+            'isDeal' => $isFlashSaleActive || collect($units)->contains(function ($unit) {
+                return (float) ($unit['oldPrice'] ?? 0) > (float) ($unit['price'] ?? 0);
+            }),
             'stock' => (int) ($product->stock ?? 0),
             'url' => route('frontend.shop.details', ['id' => $product->id]),
         ];

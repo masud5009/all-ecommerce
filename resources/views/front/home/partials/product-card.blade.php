@@ -9,14 +9,20 @@
     $totalVariantStock = $variations->sum('stock');
     $variantStock = $totalVariantStock > 0 ? __('In Stock') : __('Stock Out');
 
-    $min_variant_price = $variations->isNotEmpty() ? $variations->min('price') : 0;
-    $max_variant_price = $variations->isNotEmpty() ? $variations->max('price') : 0;
+    $variantBasePrices = $variations->map(function ($variation) use ($product) {
+        return (float) ($variation->price ?? $product->current_price ?? 0);
+    })->values();
+
+    $min_variant_price = $variantBasePrices->isNotEmpty() ? (float) $variantBasePrices->min() : 0;
+    $max_variant_price = $variantBasePrices->isNotEmpty() ? (float) $variantBasePrices->max() : 0;
 
     $now = Carbon::now();
 
+    $flashDiscountPercent = (float) ($product->flash_sale_price ?? 0);
+
     $isFlashSaleActive =
         (int) ($product->flash_sale_status ?? 0) === 1 &&
-        !is_null($product->flash_sale_price) &&
+        $flashDiscountPercent > 0 &&
         !empty($product->flash_sale_start_at) &&
         !empty($product->flash_sale_end_at) &&
         $now->between(
@@ -24,20 +30,28 @@
             Carbon::parse($product->flash_sale_end_at)
         );
 
+    if ($isFlashSaleActive) {
+        $flashDiscountPercent = min($flashDiscountPercent, 100);
+    }
+
     if ($product->has_variants == 0 || $variations->isEmpty()) {
         $currentPrice = (float) ($product->current_price ?? 0);
-        $flashSaleAmount = (float) ($product->flash_sale_price ?? 0);
-
         $displayPrice = $isFlashSaleActive
-            ? max($currentPrice - $flashSaleAmount, 0)
+            ? max($currentPrice * (1 - ($flashDiscountPercent / 100)), 0)
             : $currentPrice;
 
         $oldPrice = $isFlashSaleActive
             ? $currentPrice
             : ($product->previous_price ?? null);
     } else {
-        $displayPrice = null;
-        $oldPrice = null;
+        $displayPrice = $isFlashSaleActive
+            ? max($min_variant_price * (1 - ($flashDiscountPercent / 100)), 0)
+            : $min_variant_price;
+        $oldPrice = $isFlashSaleActive ? $min_variant_price : null;
+
+        $max_variant_price = $isFlashSaleActive
+            ? max($max_variant_price * (1 - ($flashDiscountPercent / 100)), 0)
+            : $max_variant_price;
     }
 
     $stockLabel = $product->has_variants == 0
@@ -67,8 +81,12 @@
 
             $quickViewUnits[] = [
                 'label' => $variantParts->isNotEmpty() ? $variantParts->implode(', ') : __('Option') . ' ' . ($vIdx + 1),
-                'price' => (float) ($variation->price ?? $product->current_price ?? 0),
-                'oldPrice' => (float) ($product->previous_price ?? 0),
+                'price' => $isFlashSaleActive
+                    ? max(((float) ($variation->price ?? $product->current_price ?? 0)) * (1 - ($flashDiscountPercent / 100)), 0)
+                    : (float) ($variation->price ?? $product->current_price ?? 0),
+                'oldPrice' => $isFlashSaleActive
+                    ? (float) ($variation->price ?? $product->current_price ?? 0)
+                    : (float) ($product->previous_price ?? 0),
             ];
         }
     }
@@ -178,6 +196,15 @@
                     <p class="text-lg font-semibold text-slate-900">
                         {{ currency_symbol($min_variant_price) }} - {{ currency_symbol($max_variant_price) }}
                     </p>
+                    @if ($isFlashSaleActive)
+                        @php
+                            $oldMinVariantPrice = $variantBasePrices->isNotEmpty() ? (float) $variantBasePrices->min() : 0;
+                            $oldMaxVariantPrice = $variantBasePrices->isNotEmpty() ? (float) $variantBasePrices->max() : 0;
+                        @endphp
+                        <p class="text-xs text-slate-400 line-through">
+                            {{ currency_symbol($oldMinVariantPrice) }} - {{ currency_symbol($oldMaxVariantPrice) }}
+                        </p>
+                    @endif
                 </div>
             @endif
         </div>
