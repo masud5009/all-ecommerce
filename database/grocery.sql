@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 16, 2026 at 08:27 AM
+-- Generation Time: Mar 28, 2026 at 05:41 PM
 -- Server version: 8.0.30
--- PHP Version: 8.3.22
+-- PHP Version: 8.3.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -107,11 +107,11 @@ INSERT INTO `blog_contents` (`id`, `category_id`, `language_id`, `blog_id`, `aut
 
 CREATE TABLE `carts` (
   `id` bigint UNSIGNED NOT NULL,
-  `session_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `session_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` bigint UNSIGNED DEFAULT NULL,
   `product_id` bigint UNSIGNED NOT NULL,
   `variant_id` bigint UNSIGNED DEFAULT NULL,
-  `variant_label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `variant_label` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `quantity` int NOT NULL DEFAULT '1',
   `price` decimal(10,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -123,8 +123,15 @@ CREATE TABLE `carts` (
 --
 
 INSERT INTO `carts` (`id`, `session_id`, `user_id`, `product_id`, `variant_id`, `variant_label`, `quantity`, `price`, `created_at`, `updated_at`) VALUES
-(4, 'cart_69af1209f15d26.82961188', NULL, 51, 115, 'Metallic Silver, Dolby Atmos', 1, '499.99', '2026-03-09 12:53:20', '2026-03-09 12:53:20'),
-(5, 'cart_69af1209f15d26.82961188', NULL, 50, NULL, '1 unit', 1, '99.99', '2026-03-09 12:53:41', '2026-03-09 12:53:41');
+(8, 'cart_69b6c0bed3e710.02060244', NULL, 54, 129, '500gm', 3, 900.00, '2026-03-15 09:44:43', '2026-03-15 09:44:50'),
+(9, 'cart_69b6d83e8fc6d0.26091137', NULL, 54, 129, '500gm', 1, 900.00, '2026-03-15 10:03:15', '2026-03-15 10:03:15'),
+(10, 'cart_69b6d85a406256.83261885', NULL, 54, 129, '500gm', 1, 900.00, '2026-03-15 10:03:44', '2026-03-15 10:03:44'),
+(11, 'cart_69b6d8b62d5b02.19588697', NULL, 54, 129, '500gm', 1, 900.00, '2026-03-15 10:06:55', '2026-03-15 10:06:55'),
+(12, 'cart_69b6d97f2744c8.69571657', NULL, 53, 120, '23.5 cm, Black', 1, 199.99, '2026-03-15 10:13:11', '2026-03-15 10:13:11'),
+(13, 'cart_69b6daaa7dbce0.56648714', NULL, 54, 129, '500gm', 1, 900.00, '2026-03-15 10:14:42', '2026-03-15 10:14:42'),
+(14, 'cart_69b6dbcc68cd60.15915978', NULL, 53, 120, '23.5 cm, Black', 1, 199.99, '2026-03-15 10:18:29', '2026-03-15 10:18:29'),
+(16, 'cart_69c7f61ce67821.53970039', NULL, 54, 129, '500gm', 1, 630.00, '2026-03-28 11:31:08', '2026-03-28 11:31:08'),
+(17, 'cart_69c7f61ce67821.53970039', NULL, 54, 130, '1Kg', 2, 1120.00, '2026-03-28 11:41:10', '2026-03-28 11:41:12');
 
 -- --------------------------------------------------------
 
@@ -217,6 +224,37 @@ INSERT INTO `footers` (`id`, `copyright`, `content`, `created_at`, `updated_at`)
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `home_freshness_items`
+--
+
+CREATE TABLE `home_freshness_items` (
+  `id` bigint UNSIGNED NOT NULL,
+  `language_id` bigint UNSIGNED DEFAULT NULL,
+  `icon` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `text` text COLLATE utf8mb4_unicode_ci,
+  `position` enum('left','right') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'left',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `serial_number` int NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `home_freshness_items`
+--
+
+INSERT INTO `home_freshness_items` (`id`, `language_id`, `icon`, `title`, `text`, `position`, `status`, `serial_number`, `created_at`, `updated_at`) VALUES
+(1, 6, 'fas fa-seedling', 'Handmade Products', 'We collect fresh natural fruits for your healthy life.', 'left', 1, 1, '2026-03-28 10:15:54', '2026-03-28 10:15:54'),
+(2, 6, 'fas fa-seedling', 'Organic and Fresh', 'Our products are 100% natural and fresh.', 'left', 1, 2, '2026-03-28 10:16:12', '2026-03-28 10:16:12'),
+(3, 6, 'fas fa-seedling', '150+ Organic Items', 'We stock 150+ organic food items for your pantry.', 'left', 1, 3, '2026-03-28 10:16:27', '2026-03-28 10:16:27'),
+(4, 6, 'fas fa-seedling', '100% Secure Payment', 'We make sure your payment method stays secure.', 'right', 1, 1, '2026-03-28 10:16:47', '2026-03-28 10:20:23'),
+(5, 6, 'fas fa-seedling', 'Temperature Control', 'We keep every item cool and fresh in transit.', 'right', 1, 2, '2026-03-28 10:17:04', '2026-03-28 10:17:04'),
+(6, 6, 'fas fa-seedling', 'Super Fast Delivery', 'Fast delivery services, safe and secure from damage.', 'right', 1, 3, '2026-03-28 10:17:23', '2026-03-28 10:17:23');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `home_section_settings`
 --
 
@@ -227,13 +265,13 @@ CREATE TABLE `home_section_settings` (
   `featured_product_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `featured_product_subtitle` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `popular_product_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `popular_product_subtitle` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `flash_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `flash_subtitle` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `features_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `features_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `features_subtitle` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `features_text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `popular_product_subtitle` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `flash_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `flash_subtitle` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `features_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `features_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `features_subtitle` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `features_text` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -243,7 +281,7 @@ CREATE TABLE `home_section_settings` (
 --
 
 INSERT INTO `home_section_settings` (`id`, `language_id`, `category_title`, `featured_product_title`, `featured_product_subtitle`, `popular_product_title`, `popular_product_subtitle`, `flash_title`, `flash_subtitle`, `features_image`, `features_title`, `features_subtitle`, `features_text`, `created_at`, `updated_at`) VALUES
-(11, 6, 'Browse By Categories', 'Featured Products', 'Handpicked picks for today', 'Popular right now', 'Most loved picks across produce, pantry, and seafood.', 'Flash sale', 'Adidas Ultraboost 22 Performance Gym Shoes', NULL, 'Why FreshCart', 'Freshness you can feel.', 'Hand-picked produce, secure payment, and fast delivery—every time.', '2026-03-09 11:07:26', '2026-03-09 11:09:09');
+(11, 6, 'Browse By Categories', 'Featured Products', 'Handpicked picks for today', 'Popular right now', 'Most loved picks across produce, pantry, and seafood.', 'Flash sale', 'Adidas Ultraboost 22 Performance Gym Shoes', '69c7fe0488086.png', 'Why FreshCart', 'Freshness you can feel.', 'Hand-picked produce, secure payment, and fast delivery—every time.', '2026-03-09 11:07:26', '2026-03-28 10:12:52');
 
 -- --------------------------------------------------------
 
@@ -254,18 +292,18 @@ INSERT INTO `home_section_settings` (`id`, `language_id`, `category_title`, `fea
 CREATE TABLE `home_sliders` (
   `id` bigint UNSIGNED NOT NULL,
   `language_id` bigint NOT NULL,
-  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image_left_badge_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image_left_badge_sub_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image_right_badge_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image_right_badge_sub_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sub_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `button_text_1` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `button_url_1` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `button_text_2` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `button_url_2` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_left_badge_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_left_badge_sub_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_right_badge_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_right_badge_sub_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sub_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `button_text_1` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `button_url_1` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `button_text_2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `button_url_2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `serial_number` int NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -318,7 +356,8 @@ CREATE TABLE `languages` (
 --
 
 INSERT INTO `languages` (`id`, `name`, `code`, `is_default`, `dashboard_default`, `direction`, `created_at`, `updated_at`) VALUES
-(6, 'English', 'en', 1, 1, 'ltr', '2026-01-26 17:23:11', '2026-03-16 00:42:39');
+(6, 'English', 'en', 1, 1, 'ltr', '2026-01-26 17:23:11', '2026-03-15 08:44:24'),
+(8, 'Bangla', 'bn', 0, 0, 'LTR', '2026-03-28 09:52:00', '2026-03-28 09:52:00');
 
 -- --------------------------------------------------------
 
@@ -347,6 +386,45 @@ INSERT INTO `mail_templates` (`id`, `type`, `subject`, `body`, `updated_at`) VAL
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `memberships`
+--
+
+CREATE TABLE `memberships` (
+  `id` bigint UNSIGNED NOT NULL,
+  `discount` double DEFAULT NULL,
+  `coupon_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price` double DEFAULT NULL,
+  `currency_text` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `currency_symbol` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `currency_text_position` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `currency_symbol_position` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `payment_method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `transaction_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint DEFAULT '0',
+  `is_trial` tinyint DEFAULT '0',
+  `trial_days` int DEFAULT NULL,
+  `receipt` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `transaction_details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `settings` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `package_id` bigint DEFAULT NULL,
+  `user_id` bigint DEFAULT NULL,
+  `start_date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `expire_date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `modified` tinyint DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `memberships`
+--
+
+INSERT INTO `memberships` (`id`, `discount`, `coupon_code`, `price`, `currency_text`, `currency_symbol`, `currency_text_position`, `currency_symbol_position`, `payment_method`, `transaction_id`, `status`, `is_trial`, `trial_days`, `receipt`, `transaction_details`, `settings`, `package_id`, `user_id`, `start_date`, `expire_date`, `modified`, `created_at`, `updated_at`) VALUES
+(66, NULL, NULL, 299, 'USD', '$', 'left', 'left', 'instamojo', '0', 1, 0, NULL, NULL, NULL, '{\"website_logo\":\"6792620a5426d.png\",\"website_color\":\"#FF0000FF\",\"maintenance_image\":\"6706bc36b9811.jpg\",\"maintenance_message\":\"<p>Maintenance MessageMaintenance Message<\\/p>\",\"website_title\":\"Business Validator\",\"favicon\":\"6792620a5379d.png\",\"currency_text\":\"USD\",\"currency_symbol\":\"$\",\"currency_symbol_position\":\"left\",\"currency_rate\":\"1\",\"package_expire_day\":4,\"email_verification_approval\":1}', 19, 59, '2025-11-21 12:24:12', '275816-08-03 12:24:12', 0, '2025-11-21 06:24:12', '2025-11-21 06:24:12');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `menu_builders`
 --
 
@@ -363,7 +441,7 @@ CREATE TABLE `menu_builders` (
 --
 
 INSERT INTO `menu_builders` (`id`, `language_id`, `menu`, `created_at`, `updated_at`) VALUES
-(3, 6, '[{\"title\":\"Home\",\"url\":\"\\/\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Shop\",\"url\":\"\\/shop\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Contact\",\"url\":\"\\/contact\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Custom Menu\",\"url\":\"\\/custom-menu\",\"target\":\"_self\",\"type\":\"custom\",\"children\":[{\"title\":\"submenu\",\"url\":\"\\/submenu\",\"target\":\"_self\",\"type\":\"custom\"},{\"title\":\"submenu2\",\"url\":\"\\/submenu\",\"target\":\"_self\",\"type\":\"custom\"}]}]', '2025-11-09 13:16:55', '2026-03-12 03:32:23');
+(3, 6, '[{\"title\":\"Home\",\"url\":\"\\/\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Shop\",\"url\":\"\\/shop\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Contact\",\"url\":\"\\/contact\",\"target\":\"_self\",\"type\":\"prebuilt\"}]', '2025-11-09 13:16:55', '2026-03-15 08:59:49');
 
 -- --------------------------------------------------------
 
@@ -448,7 +526,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (78, '2026_03_07_000001_add_sslcommerz_to_payment_gateways_table', 45),
 (79, '2026_03_07_000002_add_featured_field_to_products_table', 45),
 (80, '2026_03_08_072950_create_home_sliders_table', 46),
-(81, '2026_03_09_182256_create_carts_table', 47);
+(81, '2026_03_09_182256_create_carts_table', 47),
+(82, '2026_03_28_170000_create_home_freshness_items_table', 48);
 
 -- --------------------------------------------------------
 
@@ -458,7 +537,6 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 
 CREATE TABLE `orders` (
   `id` bigint UNSIGNED NOT NULL,
-  `user_id` bigint DEFAULT NULL,
   `order_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `billing_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `billing_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -496,9 +574,8 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `user_id`, `order_number`, `billing_name`, `billing_email`, `billing_phone`, `billing_address`, `billing_city`, `shipping_address`, `payment_method`, `gateway`, `cart_total`, `pay_amount`, `discount_amount`, `tax`, `shipping_charge`, `invoice_number`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `payment_status`, `order_status`, `receipt`, `delivery_date`, `stedfast_consignment_id`, `stedfast_tracking_code`, `stedfast_status`, `stedfast_message`, `stedfast_payload`, `stedfast_response`, `created_at`, `updated_at`) VALUES
-(158, NULL, '640B05EC', 'Masud Rana', 'ranaahmed269205@gmail.com', '+8801306084771', 'Pabna', 'pabna', 'Pabna, pabna, 6670', 'Cash Payment', NULL, '2500.00', '2550', NULL, NULL, '50', NULL, NULL, NULL, NULL, NULL, 'pending', 'pending', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-12 03:24:16', '2026-03-12 03:24:16'),
-(159, NULL, 'YY838SZC', 'Masud Rana', 'ranaahmed269205@gmail.com', '01306084771', 'Pabna', 'pabna', NULL, 'Cash Payment', 'Offline', '1999.99', '2000', '0.00', '0.00', '0', '2Uv01773307658.pdf', '৳', 'left', 'TK', 'right', 'completed', 'completed', NULL, '2026-10-10', NULL, NULL, 'error', NULL, '{\"invoice\":\"YY838SZC\",\"recipient_name\":\"Masud Rana\",\"recipient_phone\":\"01306084771\",\"recipient_address\":\"Pabna\",\"cod_amount\":0,\"note\":\"Order #YY838SZC\",\"recipient_city\":\"pabna\"}', '{\"raw\":\"Account is not active!\"}', '2026-03-12 03:27:38', '2026-03-12 03:27:43');
+INSERT INTO `orders` (`id`, `order_number`, `billing_name`, `billing_email`, `billing_phone`, `billing_address`, `billing_city`, `shipping_address`, `payment_method`, `gateway`, `cart_total`, `pay_amount`, `discount_amount`, `tax`, `shipping_charge`, `invoice_number`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `payment_status`, `order_status`, `receipt`, `delivery_date`, `stedfast_consignment_id`, `stedfast_tracking_code`, `stedfast_status`, `stedfast_message`, `stedfast_payload`, `stedfast_response`, `created_at`, `updated_at`) VALUES
+(160, 'D7BA07CF', 'rana ahmedc', 'ranaahmed269205@gmail.com', '+8801306084771', 'Dhaka\r\nDhaka', 'Pabna', 'Dhaka\r\nDhaka, Pabna, 6613', 'Online Payment', 'SSLCommerz', 900.00, 970, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, 'completed', 'pending', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-15 10:25:31', '2026-03-15 10:25:31');
 
 -- --------------------------------------------------------
 
@@ -524,10 +601,48 @@ CREATE TABLE `order_items` (
 --
 
 INSERT INTO `order_items` (`id`, `order_id`, `customer_id`, `product_id`, `variant_id`, `product_price`, `qty`, `variations`, `created_at`, `updated_at`) VALUES
-(178, 158, NULL, 54, 129, '900', 1, '[{\"label\":\"500gm\"}]', '2026-03-12 03:24:16', '2026-03-12 03:24:16'),
-(179, 158, NULL, 54, 130, '1600', 1, '[{\"label\":\"1Kg\"}]', '2026-03-12 03:24:16', '2026-03-12 03:24:16'),
-(180, 159, NULL, 53, 121, '200', 1, '[{\"product_id\":53,\"variation_id\":132,\"variation_name\":\"Size\",\"option_name\":\"23.5 cm\",\"price\":0,\"option_key\":0,\"qty\":1},{\"product_id\":53,\"variation_id\":136,\"variation_name\":\"Color\",\"option_name\":\"White\",\"price\":0,\"option_key\":1,\"qty\":1}]', '2026-03-12 03:27:38', '2026-03-12 03:27:38'),
-(181, 159, NULL, 54, 129, '900', 2, '[{\"product_id\":54,\"variation_id\":138,\"variation_name\":\"Size\",\"option_name\":\"500gm\",\"price\":0,\"option_key\":0,\"qty\":2}]', '2026-03-12 03:27:38', '2026-03-12 03:27:38');
+(176, 156, NULL, 34, 62, 50, 1, '[{\"product_id\":34,\"variation_id\":69,\"variation_name\":\"Size\",\"option_name\":\"M\",\"price\":0,\"option_key\":0,\"qty\":1}]', '2026-02-05 11:35:41', '2026-02-05 11:35:41'),
+(181, 160, NULL, 54, 129, 900, 1, '[{\"label\":\"500gm\"}]', '2026-03-15 10:25:31', '2026-03-15 10:25:31');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `packages`
+--
+
+CREATE TABLE `packages` (
+  `id` bigint UNSIGNED NOT NULL,
+  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price` decimal(8,2) NOT NULL,
+  `term` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `trial_days` int DEFAULT NULL,
+  `is_trial` tinyint(1) NOT NULL DEFAULT '0',
+  `status` tinyint NOT NULL DEFAULT '0',
+  `recomended` tinyint NOT NULL DEFAULT '0',
+  `is_featured` tinyint(1) NOT NULL DEFAULT '0',
+  `features` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `custom_feature` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `packages`
+--
+
+INSERT INTO `packages` (`id`, `icon`, `title`, `slug`, `price`, `term`, `trial_days`, `is_trial`, `status`, `recomended`, `is_featured`, `features`, `custom_feature`, `created_at`, `updated_at`) VALUES
+(13, 'fas fa-star', 'Basic', 'basic', 9.00, 'monthly', NULL, 0, 1, 0, 0, '[\"Custom Domain\"]', NULL, '2025-11-11 10:30:38', '2025-11-11 10:30:38'),
+(14, 'fas fa-star', 'Standard', 'standard', 90.00, 'monthly', NULL, 0, 1, 1, 0, '[\"Hostel Management\"]', NULL, '2025-11-11 10:31:02', '2025-11-11 10:48:50'),
+(15, 'fas fa-star', 'Premium', 'premium', 199.00, 'monthly', NULL, 0, 1, 0, 0, '[\"Hostel Management\",\"Course Management\",\"Student Management\"]', NULL, '2025-11-11 10:31:20', '2025-11-11 10:49:07'),
+(16, 'fas fa-star', 'Basic', 'basic', 99.00, 'yearly', NULL, 0, 1, 0, 0, 'null', NULL, '2025-11-11 10:54:00', '2025-11-11 10:54:00'),
+(17, 'fas fa-star', 'Standard', 'standard', 199.00, 'yearly', NULL, 0, 1, 1, 0, '[\"Custom Domain\"]', NULL, '2025-11-11 10:54:33', '2025-11-11 10:54:33'),
+(18, 'fas fa-star', 'Premium', 'premium', 299.00, 'yearly', NULL, 0, 1, 0, 0, '[\"Custom Domain\",\"Subdomain\",\"Custom Page\"]', NULL, '2025-11-11 10:54:51', '2025-11-11 10:54:51'),
+(19, 'fas fa-star', 'Basic', 'basic', 299.00, 'lifetime', NULL, 0, 1, 0, 0, '[\"Custom Domain\"]', NULL, '2025-11-11 10:56:02', '2025-11-11 10:56:02'),
+(20, 'fas fa-star', 'Standard', 'standard', 299.00, 'lifetime', NULL, 0, 1, 1, 0, '[\"Custom Domain\",\"Subdomain\"]', NULL, '2025-11-11 10:56:30', '2025-11-11 10:56:30'),
+(21, 'fas fa-star', 'Premium', 'premium', 499.00, 'lifetime', NULL, 0, 1, 0, 0, '[\"Custom Domain\",\"Subdomain\",\"Custom Page\"]', NULL, '2025-11-11 10:56:50', '2025-11-14 06:58:08'),
+(24, NULL, 'Free', 'free', 0.00, 'yearly', 10, 1, 1, 0, 0, 'null', NULL, '2025-11-14 07:47:58', '2025-11-14 07:53:32');
 
 -- --------------------------------------------------------
 
@@ -587,7 +702,7 @@ INSERT INTO `payment_gateways` (`id`, `name`, `text`, `type`, `information`, `ke
 (2, 'Paypal', NULL, 'automatic', '{\"sandbox_status\":\"1\",\"client_id\":\"AVYKFEw63FtDt9aeYOe9biyifNI56s2Hc2F1Us11hWoY5GMuegipJRQBfWLiIKNbwQ5tmqKSrQTU3zB3\",\"client_secret\":\"EJY0qOKliVg7wKsR3uPN7lngr9rL1N7q4WV0FulT1h4Fw3_e5Itv1mxSdbtSUwAaQoXQFgq-RLlk_sQu\",\"text\":\"Pay via your Credit account.\"}', 'paypal', 1, NULL, '2025-02-12 13:01:46'),
 (3, 'Paytm', NULL, 'automatic', '{\"environment\":\"production\",\"merchant_key\":\"sdasdfasdf\",\"merchant_mid\":\"asdfasdfasdf\",\"merchant_website\":\"asdfasdfdasf\",\"industry_type\":\"Retail\",\"text\":\"Pay via your Credit account.\"}', 'paytm', 1, NULL, '2025-02-12 13:09:48'),
 (4, 'Instamojo', NULL, 'automatic', '{\"sandbox_status\":\"production\",\"key\":\"sdfsdf\",\"token\":\"sdfsdaf\",\"text\":\"Pay via your Credit account.\"}', 'instamojo', 1, NULL, '2025-02-12 13:18:21'),
-(5, 'SSLCommerz', NULL, 'automatic', '{\"mode\":\"sandbox\",\"store_id\":\"\",\"store_password\":\"\",\"currency\":\"BDT\",\"text\":\"Pay securely via SSLCommerz.\"}', 'sslcommerz', 0, '2026-03-07 10:33:02', '2026-03-07 10:33:02');
+(5, 'SSLCommerz', NULL, 'automatic', '{\"mode\":\"sandbox\",\"store_id\":\"kreat69abf86160419\",\"store_password\":\"kreat69abf86160419@ssl\",\"currency\":\"BDT\",\"text\":\"Pay securely via SSLCommerz.\"}', 'sslcommerz', 1, '2026-03-07 10:33:02', '2026-03-15 09:59:20');
 
 -- --------------------------------------------------------
 
@@ -623,7 +738,7 @@ CREATE TABLE `products` (
   `current_price` decimal(8,2) DEFAULT NULL,
   `previous_price` decimal(8,2) DEFAULT NULL,
   `flash_sale_status` tinyint NOT NULL DEFAULT '0',
-  `flash_sale_price` decimal(8,2) DEFAULT NULL,
+  `flash_sale_price` decimal(8,2) DEFAULT NULL COMMENT 'This price will be calculated as a percentage.',
   `flash_sale_start_at` timestamp NULL DEFAULT NULL,
   `flash_sale_end_at` timestamp NULL DEFAULT NULL,
   `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -644,11 +759,11 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `stock`, `last_restock_qty`, `sku`, `thumbnail`, `current_price`, `previous_price`, `flash_sale_status`, `flash_sale_price`, `flash_sale_start_at`, `flash_sale_end_at`, `type`, `file_type`, `download_link`, `download_file`, `status`, `featured`, `rating`, `created_at`, `updated_at`, `order`, `has_variants`) VALUES
-(50, 100, 100, '1111111', '69a1ced3db594.png', '99.99', '120.99', 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-02-27 11:05:23', '2026-03-07 10:33:18', 0, 0),
-(51, 0, 0, NULL, '69a1cfd5bc6cc.png', '0.00', NULL, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-02-27 11:09:41', '2026-03-07 10:33:17', 0, 1),
-(52, 0, 0, NULL, '69a1d0e6b4237.png', '0.00', NULL, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-02-27 11:14:14', '2026-03-07 10:33:16', 0, 1),
-(53, 0, 0, NULL, '69a1d1bc06f73.png', '0.00', NULL, 1, '200.00', '2026-03-01 04:00:00', '2026-03-10 04:00:00', 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-02-27 11:17:48', '2026-03-07 11:32:45', 0, 1),
-(54, 0, 0, NULL, '69ac500560dd7.jpg', '0.00', NULL, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-03-07 10:19:17', '2026-03-07 10:33:12', 0, 1);
+(50, 100, 100, '1111111', '69a1ced3db594.png', 99.99, 120.99, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-02-27 11:05:23', '2026-03-07 10:33:18', 0, 0),
+(51, 0, 0, NULL, '69a1cfd5bc6cc.png', 0.00, NULL, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-02-27 11:09:41', '2026-03-07 10:33:17', 0, 1),
+(52, 0, 0, NULL, '69a1d0e6b4237.png', 0.00, NULL, 1, 20.00, '2026-03-27 16:36:00', '2026-09-08 16:36:00', 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-02-27 11:14:14', '2026-03-28 11:35:27', 0, 1),
+(53, 0, 0, NULL, '69a1d1bc06f73.png', 0.00, NULL, 1, 18.00, '2026-03-27 04:00:00', '2026-09-09 04:00:00', 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-02-27 11:17:48', '2026-03-28 11:35:34', 0, 1),
+(54, 0, 0, NULL, '69ac500560dd7.jpg', 0.00, NULL, 1, 30.00, '2026-03-27 16:35:00', '2026-08-12 16:35:00', 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-03-07 10:19:17', '2026-03-28 11:18:47', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -661,7 +776,7 @@ CREATE TABLE `product_categories` (
   `language_id` bigint DEFAULT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `icon` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `serial_number` int NOT NULL,
   `status` tinyint NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -679,12 +794,12 @@ INSERT INTO `product_categories` (`id`, `language_id`, `name`, `slug`, `icon`, `
 (20, 7, 'Electronics', 'electronics-bn', NULL, 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47'),
 (21, 7, 'Fashion', 'fashion-bn', NULL, 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47'),
 (22, 7, 'Grocery', 'grocery-bn', NULL, 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47'),
-(23, 6, 'Tv & Audio', 'tv-&-audio', NULL, 1, 1, '2026-02-27 11:03:42', '2026-03-07 07:30:15'),
-(24, 6, 'Media Production', 'media-production', NULL, 2, 1, '2026-02-27 11:03:51', '2026-02-27 12:04:14'),
-(25, 6, 'Mobile Device', 'mobile-device', NULL, 3, 1, '2026-02-27 11:04:08', '2026-02-27 12:04:14'),
-(26, 6, 'Home Appliances', 'home-appliances', NULL, 4, 1, '2026-02-27 11:04:19', '2026-02-27 12:04:13'),
-(27, 6, 'Pure Spices', 'pure-spices', NULL, 5, 1, '2026-02-27 11:11:59', '2026-02-27 12:04:12'),
-(28, 6, 'Sportswear', 'sportswear', NULL, 6, 1, '2026-02-27 11:15:08', '2026-02-27 12:04:12');
+(23, 6, 'Tv & Audio', 'tv-&-audio', 'fas fa-tv', 1, 1, '2026-02-27 11:03:42', '2026-03-28 09:49:27'),
+(24, 6, 'Media Production', 'media-production', 'fas fa-camera', 2, 1, '2026-02-27 11:03:51', '2026-03-28 09:49:38'),
+(25, 6, 'Mobile Device', 'mobile-device', 'fas fa-mobile', 3, 1, '2026-02-27 11:04:08', '2026-03-28 09:49:45'),
+(26, 6, 'Home Appliances', 'home-appliances', 'fas fa-utensils', 4, 1, '2026-02-27 11:04:19', '2026-03-28 09:50:21'),
+(27, 6, 'Pure Spices', 'pure-spices', 'fas fa-h-square', 5, 1, '2026-02-27 11:11:59', '2026-03-28 09:50:57'),
+(28, 6, 'Sportswear', 'sportswear', 'fas fa-bolt', 6, 1, '2026-02-27 11:15:08', '2026-03-28 09:51:10');
 
 -- --------------------------------------------------------
 
@@ -743,7 +858,7 @@ CREATE TABLE `product_coupons` (
 --
 
 INSERT INTO `product_coupons` (`id`, `name`, `code`, `type`, `value`, `start_date`, `end_date`, `amount_spend`, `created_at`, `updated_at`) VALUES
-(4, 'SUPER99', 'SUPER99', 'fixed', '100.00', '2026-02-27', '2026-04-24', '399.00', '2026-02-27 11:18:41', '2026-02-27 11:18:41');
+(4, 'SUPER99', 'SUPER99', 'fixed', 100.00, '2026-02-27', '2026-04-24', 399.00, '2026-02-27 11:18:41', '2026-02-27 11:18:41');
 
 -- --------------------------------------------------------
 
@@ -857,25 +972,25 @@ CREATE TABLE `product_variants` (
 --
 
 INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `image`, `price`, `stock`, `status`, `track_serial`, `serial_start`, `serial_end`, `created_at`, `updated_at`) VALUES
-(112, 51, 'LED-TV-1', NULL, '399.99', 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(113, 51, 'LED-TV-2', NULL, '299.99', 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(114, 51, 'LED-TV-3', NULL, '199.99', 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(115, 51, 'LED-TV-4', NULL, '499.99', 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(116, 52, 'CHILI-4', NULL, '100.00', 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(117, 52, 'CHILI-1', NULL, '120.00', 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(118, 52, 'CHILI-3', NULL, '110.00', 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(119, 52, 'CHILI-2', NULL, '90.00', 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(120, 53, 'SHOE-1', NULL, '199.99', 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(121, 53, 'SHOE-2', NULL, '199.99', 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(122, 53, 'SHOE-3', NULL, '199.99', 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(123, 53, 'SHOE-4', NULL, '199.99', 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(124, 53, 'SHOE-5', NULL, '199.99', 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(125, 53, 'SHOE-6', NULL, '199.99', 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(126, 53, 'SHOE-7', NULL, '199.99', 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(127, 53, 'SHOE-8', NULL, '199.99', 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(128, 53, 'SHOE-9', NULL, '199.99', 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(129, 54, NULL, NULL, '900.00', 3, 1, 0, NULL, NULL, '2026-03-07 10:19:17', '2026-03-12 03:27:38'),
-(130, 54, NULL, NULL, '1600.00', 5, 1, 0, NULL, NULL, '2026-03-07 10:19:17', '2026-03-07 10:19:17');
+(112, 51, 'LED-TV-1', NULL, 399.99, 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(113, 51, 'LED-TV-2', NULL, 299.99, 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(114, 51, 'LED-TV-3', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(115, 51, 'LED-TV-4', NULL, 499.99, 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
+(116, 52, 'CHILI-4', NULL, 100.00, 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(117, 52, 'CHILI-1', NULL, 120.00, 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(118, 52, 'CHILI-3', NULL, 110.00, 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(119, 52, 'CHILI-2', NULL, 90.00, 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
+(120, 53, 'SHOE-1', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(121, 53, 'SHOE-2', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(122, 53, 'SHOE-3', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(123, 53, 'SHOE-4', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(124, 53, 'SHOE-5', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(125, 53, 'SHOE-6', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(126, 53, 'SHOE-7', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(127, 53, 'SHOE-8', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(128, 53, 'SHOE-9', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
+(129, 54, NULL, NULL, 900.00, 5, 1, 0, NULL, NULL, '2026-03-07 10:19:17', '2026-03-07 10:19:17'),
+(130, 54, NULL, NULL, 1600.00, 5, 1, 0, NULL, NULL, '2026-03-07 10:19:17', '2026-03-07 10:19:17');
 
 -- --------------------------------------------------------
 
@@ -1004,9 +1119,9 @@ CREATE TABLE `settings` (
   `stedfast_secret_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `stedfast_status` tinyint NOT NULL DEFAULT '0',
   `gemini_status` tinyint NOT NULL DEFAULT '0',
-  `gemini_api_key` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `gemini_image_model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `gemini_text_model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gemini_api_key` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gemini_image_model` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gemini_text_model` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1016,7 +1131,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `uniqid`, `website_logo`, `logo_two`, `footer_logo`, `favicon`, `website_title`, `email_address`, `contact_number`, `address`, `smtp_host`, `smtp_port`, `smtp_username`, `smtp_password`, `encryption`, `sender_mail`, `sender_name`, `smtp_status`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `currency_rate`, `timezone`, `website_color`, `maintenance_image`, `maintenance_status`, `maintenance_message`, `bypass_token`, `package_expire_day`, `admin_approval`, `email_verification_approval`, `admin_approval_notice`, `pusher_app_id`, `pusher_status`, `pusher_app_key`, `pusher_app_secret`, `pusher_app_cluster`, `stedfast_api_key`, `stedfast_secret_key`, `stedfast_status`, `gemini_status`, `gemini_api_key`, `gemini_image_model`, `gemini_text_model`, `created_at`, `updated_at`) VALUES
-(1, 1234, '6792620a5426d.png', NULL, '6623f11a26d49.png', '6792620a5379d.png', 'Business Validator', NULL, NULL, NULL, 'smtp.gmail.com', '587', 'airdrop446646@gmail.com', 'lwee cjer feik pdof', 'TLS', 'airdrop446646@gmail.com', 'Myapp', 1, '৳', 'left', 'TK', 'right', '1', 'Europe/Andorra', '#FF0000FF', '6706bc36b9811.jpg', 0, '<p>Maintenance MessageMaintenance Message</p>', '-1', 4, 1, 1, 'You need to permission from admin to access this panel', '1942636', 1, 'e58380d6ebb048e6feb4', '24a208922bc018ef9b37', 'ap2', 'xnwbyhhhyuycs6ckslp9v0qlylzwflps', 'dw8wwhnqcaiajhpk93lsfrms', 1, 1, 'AIzaSyBiPZPJu6xLOd5lE8H_tjCI7Ufa7Pas0YM', 'imagen-4.0-generate', 'Gemini 2.5 Pro', NULL, '2024-12-09 11:41:33');
+(1, 1234, '6792620a5426d.png', NULL, '6623f11a26d49.png', '6792620a5379d.png', 'Business Validator', NULL, NULL, NULL, 'smtp.gmail.com', '587', 'airdrop446646@gmail.com', 'lwee cjer feik pdof', 'TLS', 'airdrop446646@gmail.com', 'Myapp', 1, '৳', 'left', 'TK', 'right', 1, 'Europe/Andorra', '#FF0000FF', '6706bc36b9811.jpg', 0, '<p>Maintenance MessageMaintenance Message</p>', '-1', 4, 1, 1, 'You need to permission from admin to access this panel', '1942636', 1, 'e58380d6ebb048e6feb4', '24a208922bc018ef9b37', 'ap2', 'xnwbyhhhyuycs6ckslp9v0qlylzwflps', 'dw8wwhnqcaiajhpk93lsfrms', 1, 1, 'AIzaSyBiPZPJu6xLOd5lE8H_tjCI7Ufa7Pas0YM', 'imagen-4.0-generate', 'Gemini 2.5 Pro', NULL, '2024-12-09 11:41:33');
 
 -- --------------------------------------------------------
 
@@ -1035,6 +1150,16 @@ CREATE TABLE `shipping_charges` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `shipping_charges`
+--
+
+INSERT INTO `shipping_charges` (`id`, `language_id`, `unique_id`, `title`, `text`, `charge`, `serial_number`, `created_at`, `updated_at`) VALUES
+(29, 6, 0x36396236633562653935386639, 'Inside Dhaka City', 'Delivery charge for locations inside Dhaka city.', 70.00, 1, '2026-03-15 08:44:14', '2026-03-15 08:44:14'),
+(30, 7, 0x36396236633562653935386639, 'ঢাকার ভিতরে ডেলিভারি', 'ঢাকা শহরের ভিতরে ডেলিভারির জন্য প্রযোজ্য চার্জ।', 70.00, 1, '2026-03-15 08:44:14', '2026-03-15 08:57:06'),
+(31, 6, 0x36396236633865643062393863, 'Outside Dhaka City', 'Delivery charge for locations outside Dhaka city.', 120.00, 2, '2026-03-15 08:57:49', '2026-03-15 08:57:49'),
+(32, 7, 0x36396236633865643062393863, 'ঢাকার বাইরে ডেলিভারি', 'ঢাকা শহরের বাইরে ডেলিভারির জন্য প্রযোজ্য চার্জ।', 120.00, 2, '2026-03-15 08:57:49', '2026-03-15 08:57:49');
 
 -- --------------------------------------------------------
 
@@ -1148,70 +1273,69 @@ CREATE TABLE `transactions` (
 --
 
 INSERT INTO `transactions` (`id`, `transaction_id`, `pre_balance`, `actual_total`, `after_balance`, `currency_symbol`, `currency_symbol_position`, `payment_status`, `payment_method`, `transaction_type`, `created_at`, `updated_at`) VALUES
-(1, 'eiZegNVj7z', '0.00', '12.00', '12.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 03:41:49', '2025-01-24 03:41:49'),
-(2, 'vkHJu3OZEW', '12.00', '141.00', '153.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 03:44:07', '2025-01-24 03:44:07'),
-(3, 'c1uKwQWHxB', '153.00', '12.00', '165.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 03:45:08', '2025-01-24 03:45:08'),
-(4, 'iBnbmQKprE', '165.00', '152.00', '317.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:22:36', '2025-01-24 07:22:36'),
-(5, 'HR1wy13DzT', '317.00', '4549.00', '4866.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:22:50', '2025-01-24 07:22:50'),
-(6, 'ipq4Xw6fIz', '4866.00', '152.00', '5018.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:23:05', '2025-01-24 07:23:05'),
-(7, 'f5Hj32QQG4', '5018.00', '12.00', '5030.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:23:15', '2025-01-24 07:23:15'),
-(8, 'o2RLvQwJSt', '5030.00', '12.00', '5042.00', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:25:01', '2025-01-24 07:25:01'),
-(9, 't14gle3FgS', '5042.00', '399.98', '5441.98', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-27 12:02:51', '2025-01-27 12:02:51'),
-(10, 'ubh7kRpSC8', '5441.98', '299.97', '5741.95', '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-27 12:15:39', '2025-01-27 12:15:39'),
-(11, 'AMD3D5Z0', '5741.95', '99.99', '5841.94', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 12:56:07', '2025-01-27 12:56:07'),
-(12, 'QYZ8AAOW', '5841.94', '399.98', '6241.92', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 13:03:38', '2025-01-27 13:03:38'),
-(13, '0PIHS2R2', '6241.92', '299.99', '6541.91', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 13:05:11', '2025-01-27 13:05:11'),
-(14, '9PJ5N8ZQ', '6541.91', '99.99', '6641.90', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 13:06:13', '2025-01-27 13:06:13'),
-(15, '45X32O2B', '6641.90', '79.00', '6720.90', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-31 01:01:07', '2025-01-31 01:01:07'),
-(16, 'TDPPCEB7', '6720.90', '319.20', '7040.10', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-02 11:05:48', '2025-02-02 11:05:48'),
-(17, 'OXPSJN1G', '7040.10', '358.99', '7399.09', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-02 12:16:11', '2025-02-02 12:16:11'),
-(18, 'A4X2IHZO', '7399.09', '259.00', '7658.09', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 02:48:48', '2025-02-14 02:48:48'),
-(19, 'N6N8XA4V', '7658.09', '650.98', '8309.07', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 07:56:29', '2025-02-14 07:56:29'),
-(20, 'V77CNFTM', '8309.07', '673.08', '8982.15', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 07:58:50', '2025-02-14 07:58:50'),
-(21, 'ISU9M8Q9', '8982.15', '658.98', '9641.13', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 08:34:37', '2025-02-14 08:34:37'),
-(22, 'KNASWBSR', '9641.13', '299.99', '9941.12', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:06:59', '2025-02-14 09:06:59'),
-(23, 'XTNSU6DO', '9941.12', '558.99', '10500.11', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:20:24', '2025-02-14 09:20:24'),
-(24, '4260IO95', '10500.11', '299.99', '10800.10', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:22:26', '2025-02-14 09:22:26'),
-(25, 'PDFLJO3D', '10800.10', '299.99', '11100.09', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:26:52', '2025-02-14 09:26:52'),
-(26, '7KSMGOU1', '11100.09', '251.00', '11351.09', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:30:24', '2025-02-14 09:30:24'),
-(27, 'TOBFESWA', '11351.09', '299.99', '11651.08', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:33:28', '2025-02-14 09:33:28'),
-(28, 'LMVQS0TO', '11651.08', '299.99', '11951.07', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:36:34', '2025-02-14 09:36:34'),
-(29, '0Q9G2QMA', '11951.07', '299.99', '12251.06', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:44:03', '2025-02-14 09:44:03'),
-(30, 'M6N9SXL8', '12251.06', '299.99', '12551.05', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:46:02', '2025-02-14 09:46:02'),
-(31, 'E60O3XHO', '12551.05', '299.99', '12851.04', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:50:34', '2025-02-14 09:50:34'),
-(32, 'C1288N59', '12851.04', '299.99', '13151.03', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:56:12', '2025-02-14 09:56:12'),
-(33, '8X4FD2J2', '13151.03', '299.99', '13451.02', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:58:46', '2025-02-14 09:58:46'),
-(34, '6VYZKETT', '13451.02', '299.99', '13751.01', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 10:00:07', '2025-02-14 10:00:07'),
-(35, 'AFG34V7O', '13751.01', '299.99', '14051.00', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 10:04:08', '2025-02-14 10:04:08'),
-(36, 'Y0WIKIFC', '14051.00', '299.99', '14350.99', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 10:06:04', '2025-02-14 10:06:04'),
-(37, '4EUQ9CVL', '14350.99', '299.99', '14650.98', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:19:07', '2025-02-14 11:19:07'),
-(38, '2K4M5CCZ', '14650.98', '299.99', '14950.97', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:30:10', '2025-02-14 11:30:10'),
-(39, '1AYCOS9H', '14950.97', '299.99', '15250.96', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:37:11', '2025-02-14 11:37:11'),
-(40, '9AUPZOK1', '15250.96', '299.99', '15550.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:47:05', '2025-02-14 11:47:05'),
-(41, 'O0KX6I0D', '15550.95', '300.00', '15850.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:55:54', '2025-02-14 11:55:54'),
-(42, 'JNAGIML7', '15850.95', '559.00', '16409.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:57:25', '2025-02-14 11:57:25'),
-(43, 'G7QN0BGL', '16409.95', '400.00', '16809.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:01:59', '2025-02-14 12:01:59'),
-(44, 'B6BISCZL', '16809.95', '300.00', '17109.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:02:00', '2025-02-14 12:02:00'),
-(45, 'U9Q2PAMQ', '17109.95', '300.00', '17409.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:07:38', '2025-02-14 12:07:38'),
-(46, 'PHJ116YG', '17409.95', '300.00', '17709.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:16:29', '2025-02-14 12:16:29'),
-(47, '2EKVK9TQ', '17709.95', '300.00', '18009.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:22:42', '2025-02-14 12:22:42'),
-(48, 'IZLTFVA2', '18009.95', '559.00', '18568.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:30:01', '2025-02-14 12:30:01'),
-(49, 'Y8FACDZL', '18568.95', '300.00', '18868.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:33:04', '2025-02-14 12:33:04'),
-(50, 'TQOPGCAV', '18868.95', '400.00', '19268.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:34:17', '2025-02-14 12:34:17'),
-(51, '2CMNMEC3', '19268.95', '300.00', '19568.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:02:56', '2025-02-15 01:02:56'),
-(52, '2S8LHS63', '19568.95', '300.00', '19868.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:03:00', '2025-02-15 01:03:00'),
-(53, 'A41V83DY', '19868.95', '300.00', '20168.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:05:04', '2025-02-15 01:05:04'),
-(54, 'N8TAU16P', '20168.95', '100.00', '20268.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:06:10', '2025-02-15 01:06:10'),
-(55, 'TDNEMYYS', '20268.95', '300.00', '20568.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:06:51', '2025-02-15 01:06:51'),
-(56, 'AHLJNGV2', '20568.95', '300.00', '20868.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:07:00', '2025-02-15 01:07:00'),
-(57, '2TON346J', '20868.95', '300.00', '21168.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:48:54', '2025-02-15 03:48:54'),
-(58, '6AKW8LR6', '21168.95', '300.00', '21468.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:50:50', '2025-02-15 03:50:50'),
-(59, '5OVCYHMM', '21468.95', '300.00', '21768.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:53:45', '2025-02-15 03:53:45'),
-(60, 'A9UEWQAG', '21768.95', '300.00', '22068.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:54:52', '2025-02-15 03:54:52'),
-(61, 'ESLBDTWW', '22068.95', '100.00', '22168.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:55:17', '2025-02-15 03:55:17'),
-(62, 'A76RQHZK', '22168.95', '300.00', '22468.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:55:29', '2025-02-15 03:55:29'),
-(63, 'NHTL472M', '22468.95', '120.00', '22588.95', '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2026-02-05 11:35:44', '2026-02-05 11:35:44'),
-(64, 'YY838SZC', '22588.95', '2000.00', '24588.95', '৳', 'left', 'completed', 'Cash Payment', 'product_purchase', '2026-03-12 03:27:41', '2026-03-12 03:27:41');
+(1, 'eiZegNVj7z', 0.00, 12.00, 12.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 03:41:49', '2025-01-24 03:41:49'),
+(2, 'vkHJu3OZEW', 12.00, 141.00, 153.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 03:44:07', '2025-01-24 03:44:07'),
+(3, 'c1uKwQWHxB', 153.00, 12.00, 165.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 03:45:08', '2025-01-24 03:45:08'),
+(4, 'iBnbmQKprE', 165.00, 152.00, 317.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:22:36', '2025-01-24 07:22:36'),
+(5, 'HR1wy13DzT', 317.00, 4549.00, 4866.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:22:50', '2025-01-24 07:22:50'),
+(6, 'ipq4Xw6fIz', 4866.00, 152.00, 5018.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:23:05', '2025-01-24 07:23:05'),
+(7, 'f5Hj32QQG4', 5018.00, 12.00, 5030.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:23:15', '2025-01-24 07:23:15'),
+(8, 'o2RLvQwJSt', 5030.00, 12.00, 5042.00, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-24 07:25:01', '2025-01-24 07:25:01'),
+(9, 't14gle3FgS', 5042.00, 399.98, 5441.98, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-27 12:02:51', '2025-01-27 12:02:51'),
+(10, 'ubh7kRpSC8', 5441.98, 299.97, 5741.95, '$', 'left', 'completed', 'Cash', 'product_purchase', '2025-01-27 12:15:39', '2025-01-27 12:15:39'),
+(11, 'AMD3D5Z0', 5741.95, 99.99, 5841.94, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 12:56:07', '2025-01-27 12:56:07'),
+(12, 'QYZ8AAOW', 5841.94, 399.98, 6241.92, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 13:03:38', '2025-01-27 13:03:38'),
+(13, '0PIHS2R2', 6241.92, 299.99, 6541.91, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 13:05:11', '2025-01-27 13:05:11'),
+(14, '9PJ5N8ZQ', 6541.91, 99.99, 6641.90, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-27 13:06:13', '2025-01-27 13:06:13'),
+(15, '45X32O2B', 6641.90, 79.00, 6720.90, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-01-31 01:01:07', '2025-01-31 01:01:07'),
+(16, 'TDPPCEB7', 6720.90, 319.20, 7040.10, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-02 11:05:48', '2025-02-02 11:05:48'),
+(17, 'OXPSJN1G', 7040.10, 358.99, 7399.09, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-02 12:16:11', '2025-02-02 12:16:11'),
+(18, 'A4X2IHZO', 7399.09, 259.00, 7658.09, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 02:48:48', '2025-02-14 02:48:48'),
+(19, 'N6N8XA4V', 7658.09, 650.98, 8309.07, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 07:56:29', '2025-02-14 07:56:29'),
+(20, 'V77CNFTM', 8309.07, 673.08, 8982.15, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 07:58:50', '2025-02-14 07:58:50'),
+(21, 'ISU9M8Q9', 8982.15, 658.98, 9641.13, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 08:34:37', '2025-02-14 08:34:37'),
+(22, 'KNASWBSR', 9641.13, 299.99, 9941.12, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:06:59', '2025-02-14 09:06:59'),
+(23, 'XTNSU6DO', 9941.12, 558.99, 10500.11, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:20:24', '2025-02-14 09:20:24'),
+(24, '4260IO95', 10500.11, 299.99, 10800.10, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:22:26', '2025-02-14 09:22:26'),
+(25, 'PDFLJO3D', 10800.10, 299.99, 11100.09, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:26:52', '2025-02-14 09:26:52'),
+(26, '7KSMGOU1', 11100.09, 251.00, 11351.09, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:30:24', '2025-02-14 09:30:24'),
+(27, 'TOBFESWA', 11351.09, 299.99, 11651.08, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:33:28', '2025-02-14 09:33:28'),
+(28, 'LMVQS0TO', 11651.08, 299.99, 11951.07, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:36:34', '2025-02-14 09:36:34'),
+(29, '0Q9G2QMA', 11951.07, 299.99, 12251.06, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:44:03', '2025-02-14 09:44:03'),
+(30, 'M6N9SXL8', 12251.06, 299.99, 12551.05, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:46:02', '2025-02-14 09:46:02'),
+(31, 'E60O3XHO', 12551.05, 299.99, 12851.04, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:50:34', '2025-02-14 09:50:34'),
+(32, 'C1288N59', 12851.04, 299.99, 13151.03, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:56:12', '2025-02-14 09:56:12'),
+(33, '8X4FD2J2', 13151.03, 299.99, 13451.02, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 09:58:46', '2025-02-14 09:58:46'),
+(34, '6VYZKETT', 13451.02, 299.99, 13751.01, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 10:00:07', '2025-02-14 10:00:07'),
+(35, 'AFG34V7O', 13751.01, 299.99, 14051.00, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 10:04:08', '2025-02-14 10:04:08'),
+(36, 'Y0WIKIFC', 14051.00, 299.99, 14350.99, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 10:06:04', '2025-02-14 10:06:04'),
+(37, '4EUQ9CVL', 14350.99, 299.99, 14650.98, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:19:07', '2025-02-14 11:19:07'),
+(38, '2K4M5CCZ', 14650.98, 299.99, 14950.97, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:30:10', '2025-02-14 11:30:10'),
+(39, '1AYCOS9H', 14950.97, 299.99, 15250.96, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:37:11', '2025-02-14 11:37:11'),
+(40, '9AUPZOK1', 15250.96, 299.99, 15550.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:47:05', '2025-02-14 11:47:05'),
+(41, 'O0KX6I0D', 15550.95, 300.00, 15850.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:55:54', '2025-02-14 11:55:54'),
+(42, 'JNAGIML7', 15850.95, 559.00, 16409.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 11:57:25', '2025-02-14 11:57:25'),
+(43, 'G7QN0BGL', 16409.95, 400.00, 16809.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:01:59', '2025-02-14 12:01:59'),
+(44, 'B6BISCZL', 16809.95, 300.00, 17109.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:02:00', '2025-02-14 12:02:00'),
+(45, 'U9Q2PAMQ', 17109.95, 300.00, 17409.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:07:38', '2025-02-14 12:07:38'),
+(46, 'PHJ116YG', 17409.95, 300.00, 17709.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:16:29', '2025-02-14 12:16:29'),
+(47, '2EKVK9TQ', 17709.95, 300.00, 18009.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:22:42', '2025-02-14 12:22:42'),
+(48, 'IZLTFVA2', 18009.95, 559.00, 18568.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:30:01', '2025-02-14 12:30:01'),
+(49, 'Y8FACDZL', 18568.95, 300.00, 18868.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:33:04', '2025-02-14 12:33:04'),
+(50, 'TQOPGCAV', 18868.95, 400.00, 19268.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-14 12:34:17', '2025-02-14 12:34:17'),
+(51, '2CMNMEC3', 19268.95, 300.00, 19568.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:02:56', '2025-02-15 01:02:56'),
+(52, '2S8LHS63', 19568.95, 300.00, 19868.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:03:00', '2025-02-15 01:03:00'),
+(53, 'A41V83DY', 19868.95, 300.00, 20168.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:05:04', '2025-02-15 01:05:04'),
+(54, 'N8TAU16P', 20168.95, 100.00, 20268.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:06:10', '2025-02-15 01:06:10'),
+(55, 'TDNEMYYS', 20268.95, 300.00, 20568.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:06:51', '2025-02-15 01:06:51'),
+(56, 'AHLJNGV2', 20568.95, 300.00, 20868.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 01:07:00', '2025-02-15 01:07:00'),
+(57, '2TON346J', 20868.95, 300.00, 21168.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:48:54', '2025-02-15 03:48:54'),
+(58, '6AKW8LR6', 21168.95, 300.00, 21468.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:50:50', '2025-02-15 03:50:50'),
+(59, '5OVCYHMM', 21468.95, 300.00, 21768.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:53:45', '2025-02-15 03:53:45'),
+(60, 'A9UEWQAG', 21768.95, 300.00, 22068.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:54:52', '2025-02-15 03:54:52'),
+(61, 'ESLBDTWW', 22068.95, 100.00, 22168.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:55:17', '2025-02-15 03:55:17'),
+(62, 'A76RQHZK', 22168.95, 300.00, 22468.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2025-02-15 03:55:29', '2025-02-15 03:55:29'),
+(63, 'NHTL472M', 22468.95, 120.00, 22588.95, '$', 'left', 'completed', 'Cash Payment', 'product_purchase', '2026-02-05 11:35:44', '2026-02-05 11:35:44');
 
 -- --------------------------------------------------------
 
@@ -1249,7 +1373,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `company_name`, `username`, `email`, `image`, `status`, `phone`, `country`, `city`, `state`, `zip_code`, `address`, `email_verified_at`, `password`, `remember_token`, `database_name`, `database_username`, `database_password`, `created_at`, `updated_at`, `qr_menu_enabled`) VALUES
-(61, 'Masud Rana', NULL, 'masud', 'masud@gmail.com', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-16 02:25:35', '$2y$12$XbD.aQRABQFFlBEnwOHH9eCDb2zNdh7NitM3smS2IuKqAsKMdB1fu', NULL, NULL, NULL, NULL, '2026-03-16 02:25:32', '2026-03-16 02:25:37', 1);
+(59, NULL, 'Ballard and Sawyer Traders', 'vysidexud', 'dehat@mailinator.com', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-21 06:24:12', '$2y$12$RpYAqen.fCBNSFbY34jomOEWl.SFvnQOlzwMQWK0sM0rK80zTUfT.', 'ahVDR4CCllzUT9QMpI2srGHDzdaYl1KVzVnSzLqn26YXlgPxJU1nPvw2xzRI', NULL, NULL, NULL, '2025-11-21 06:24:12', '2025-11-25 10:46:09', 1);
 
 -- --------------------------------------------------------
 
@@ -1298,7 +1422,7 @@ INSERT INTO `variant_serial_batches` (`id`, `variant_id`, `batch_no`, `serial_st
 (13, 118, 'INIT-118-20260227171414', '1', '10', 10, 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
 (14, 119, 'INIT-119-20260227171414', '1', '10', 10, 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
 (15, 120, 'INIT-120-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(16, 121, 'INIT-121-20260227171748', '1', '10', 10, 1, '2026-02-27 11:17:48', '2026-03-12 03:27:38'),
+(16, 121, 'INIT-121-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
 (17, 122, 'INIT-122-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
 (18, 123, 'INIT-123-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
 (19, 124, 'INIT-124-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
@@ -1323,13 +1447,6 @@ CREATE TABLE `variant_sold_serials` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `variant_sold_serials`
---
-
-INSERT INTO `variant_sold_serials` (`id`, `order_item_id`, `variant_id`, `serial`, `status`, `returned_at`, `created_at`, `updated_at`) VALUES
-(2, 180, 121, '01', 'sold', NULL, '2026-03-12 03:27:38', '2026-03-12 03:27:38');
 
 -- --------------------------------------------------------
 
@@ -1445,6 +1562,14 @@ ALTER TABLE `footers`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `home_freshness_items`
+--
+ALTER TABLE `home_freshness_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `home_freshness_items_language_id_index` (`language_id`),
+  ADD KEY `home_freshness_items_position_index` (`position`);
+
+--
 -- Indexes for table `home_section_settings`
 --
 ALTER TABLE `home_section_settings`
@@ -1478,6 +1603,12 @@ ALTER TABLE `mail_templates`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `memberships`
+--
+ALTER TABLE `memberships`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `menu_builders`
 --
 ALTER TABLE `menu_builders`
@@ -1501,6 +1632,12 @@ ALTER TABLE `orders`
 ALTER TABLE `order_items`
   ADD PRIMARY KEY (`id`),
   ADD KEY `order_items_variant_id_index` (`variant_id`);
+
+--
+-- Indexes for table `packages`
+--
+ALTER TABLE `packages`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `page_headings`
@@ -1694,7 +1831,7 @@ ALTER TABLE `blog_contents`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -1721,6 +1858,12 @@ ALTER TABLE `footers`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `home_freshness_items`
+--
+ALTER TABLE `home_freshness_items`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT for table `home_section_settings`
 --
 ALTER TABLE `home_section_settings`
@@ -1742,13 +1885,19 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `languages`
 --
 ALTER TABLE `languages`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `mail_templates`
 --
 ALTER TABLE `mail_templates`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `memberships`
+--
+ALTER TABLE `memberships`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `menu_builders`
@@ -1760,19 +1909,25 @@ ALTER TABLE `menu_builders`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=161;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=182;
+
+--
+-- AUTO_INCREMENT for table `packages`
+--
+ALTER TABLE `packages`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `page_headings`
@@ -1862,7 +2017,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `shipping_charges`
 --
 ALTER TABLE `shipping_charges`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `slider_images`
@@ -1880,13 +2035,13 @@ ALTER TABLE `tables`
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `variant_serials`
@@ -1904,7 +2059,7 @@ ALTER TABLE `variant_serial_batches`
 -- AUTO_INCREMENT for table `variant_sold_serials`
 --
 ALTER TABLE `variant_sold_serials`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `vendors`

@@ -49,9 +49,7 @@
             : $min_variant_price;
         $oldPrice = $isFlashSaleActive ? $min_variant_price : null;
 
-        $max_variant_price = $isFlashSaleActive
-            ? max($max_variant_price * (1 - ($flashDiscountPercent / 100)), 0)
-            : $max_variant_price;
+        $min_variant_price = $displayPrice;
     }
 
     $stockLabel = $product->has_variants == 0
