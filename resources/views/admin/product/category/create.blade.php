@@ -8,27 +8,32 @@
             <div class="modal-body">
                 <form id="ajaxForm" action="{{ route('admin.product.category_store') }}" method="post">
                     @csrf
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>{{ __('Icon') }} <span class="text-danger">**</span></label>
+                            <div class="dropdown js-iconpicker">
+                                <button class="btn btn-primary dropdown-toggle" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i id="create_selectedIcon" data-iconpicker-selected class="fas fa-seedling"></i>
+                                </button>
+                                <div class="dropdown-menu p-3" style="width: 300px; max-height: 300px; overflow-y: auto;">
+                                    <input type="text" class="form-control mb-2" data-iconpicker-search
+                                        placeholder="{{ __('Search icons...') }}">
+                                    <div class="d-flex flex-wrap" data-iconpicker-list>
+                                    </div>
+                                </div>
+                                <p class="mb-0 text-info">{{ __('Select an icon from the list, then click outside to close the menu.') }}</p>
+                            </div>
+                            <input type="hidden" id="create_inputIcon" data-iconpicker-input name="icon" value="fas fa-seedling">
+                            <p id="err_icon" class="text-danger em"></p>
+                        </div>
+                    </div>
 
                     <x-text-input col="12" placeholder="Select a Language" name="language_id" type="select"
                         label="Language" required="*" :dataInfo="$languages" action="store" />
 
                     <x-text-input col="12" placeholder="Enter category name" name="name" type="text"
                         label="Name" required="*" action="store" />
-
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label>{{ __('Icon') }}</label>
-                            <div class="input-group">
-                                <input type="text" name="icon"
-                                    class="form-control icp-dd err_icon"
-                                    placeholder="{{ __('Pick an icon') }}" value="fas fa-seedling"
-                                    data-placement="bottomRight" data-input-search="true"
-                                    data-hide-on-select="true">
-                                <span class="input-group-text iconpicker-component"><i class="fas fa-seedling"></i></span>
-                            </div>
-                            <p id="err_icon" class="text-danger em"></p>
-                        </div>
-                    </div>
 
                     @php
                         $options = ['1' => 'Active', '0' => 'Dactive'];

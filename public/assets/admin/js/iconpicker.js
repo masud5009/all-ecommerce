@@ -78,39 +78,61 @@ document.addEventListener('DOMContentLoaded', function () {
         "fa-chess‑knight"
     ];
 
+    function initIconPicker(selectedIcon, inputIcon, iconSearch, iconList) {
+        if (!selectedIcon || !inputIcon || !iconSearch || !iconList) {
+            return;
+        }
 
-    const iconList = document.getElementById('iconList');
+        iconList.innerHTML = '';
 
-    if (iconList != null) {
-        const selectedIcon = document.getElementById('selectedIcon');
-        const inputIcon = document.getElementById('inputIcon');
-        const iconSearch = document.getElementById('iconSearch');
+        const setSelectedIcon = function (iconClass) {
+            const normalizedIconClass = (iconClass || '').trim() || 'fas fa-seedling';
+            selectedIcon.className = normalizedIconClass;
+            inputIcon.value = normalizedIconClass;
+        };
 
-        // Load icons into dropdown
-        icons.forEach(icon => {
+        const defaultIcon = inputIcon.value || selectedIcon.className;
+        setSelectedIcon(defaultIcon);
+
+        icons.forEach(function (icon) {
             const iconElement = document.createElement('div');
             iconElement.className = 'iconpicker';
             iconElement.style.cursor = 'pointer';
             iconElement.innerHTML = `<i class="fas ${icon} fa-lg"></i>`;
-            iconElement.addEventListener('click', () => {
-                selectedIcon.className = `fas ${icon}`;
-                inputIcon.value = `fas ${icon}`;
+            iconElement.addEventListener('click', function () {
+                setSelectedIcon(`fas ${icon}`);
             });
             iconList.appendChild(iconElement);
         });
 
-        // Search functionality
-        iconSearch.addEventListener('input', () => {
+        iconSearch.addEventListener('input', function () {
             const searchTerm = iconSearch.value.toLowerCase();
             const allIcons = iconList.querySelectorAll('div');
-            allIcons.forEach(icon => {
-                const iconClass = icon.querySelector('i').className;
-                if (iconClass.includes(searchTerm)) {
-                    icon.style.display = 'block';
-                } else {
-                    icon.style.display = 'none';
-                }
+
+            allIcons.forEach(function (icon) {
+                const iconClass = icon.querySelector('i').className.toLowerCase();
+                icon.style.display = iconClass.includes(searchTerm) ? 'block' : 'none';
             });
         });
+    }
+
+    const pickerWrappers = document.querySelectorAll('.js-iconpicker');
+    if (pickerWrappers.length > 0) {
+        pickerWrappers.forEach(function (wrapper) {
+            const selectedIcon = wrapper.querySelector('[data-iconpicker-selected]');
+            const iconSearch = wrapper.querySelector('[data-iconpicker-search]');
+            const iconList = wrapper.querySelector('[data-iconpicker-list]');
+            const inputIcon = wrapper.parentElement.querySelector('[data-iconpicker-input]');
+
+            initIconPicker(selectedIcon, inputIcon, iconSearch, iconList);
+        });
+    } else {
+        // Legacy support for pages still using fixed IDs.
+        const iconList = document.getElementById('iconList');
+        const selectedIcon = document.getElementById('selectedIcon');
+        const inputIcon = document.getElementById('inputIcon');
+        const iconSearch = document.getElementById('iconSearch');
+
+        initIconPicker(selectedIcon, inputIcon, iconSearch, iconList);
     }
 });

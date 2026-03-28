@@ -423,13 +423,19 @@ $(".editBtn").on('click', function () {
 
             if ($('#in_icon').length > 0) {
                 if ($('#in_icon').is('input,textarea,select')) {
-                    const iconClass = datas['icon'] || '';
+                    const iconClass = (datas['icon'] || '').trim().length > 0 ? datas['icon'].trim() : 'fas fa-seedling';
+                    $('#in_icon').val(iconClass);
+
+                    if ($('#in_selectedIcon').length > 0) {
+                        $('#in_selectedIcon').attr('class', iconClass);
+                    }
+
                     const $componentIcon = $('#in_icon').closest('.input-group').find('.iconpicker-component i');
                     if ($componentIcon.length > 0) {
-                        $componentIcon.attr('class', iconClass.length > 0 ? iconClass : 'fas fa-seedling');
+                        $componentIcon.attr('class', iconClass);
                     }
                 } else {
-                    $('#in_icon').attr('class', datas['icon']);
+                    $('#in_icon').attr('class', datas['icon'] || 'fas fa-seedling');
                 }
             }
         }

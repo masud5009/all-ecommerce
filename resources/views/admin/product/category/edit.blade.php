@@ -10,24 +10,28 @@
                     @csrf
                     <input type="hidden" id="in_id" name="id">
 
-                    <x-TextInput col="12" placeholder="Enter category name" name="name" type="text"
-                        label="Name" required="*" action="edit" />
-
-                    <div class="col-lg-12">
+                                        <div class="col-lg-12">
                         <div class="form-group">
                             <label>{{ __('Icon') }}</label>
-                            <div class="input-group">
-                                <input type="text" id="in_icon" name="icon"
-                                    class="form-control icp-dd editErr_icon"
-                                    placeholder="{{ __('Pick an icon') }}"
-                                    value="fas fa-seedling"
-                                    data-placement="bottomRight" data-input-search="true"
-                                    data-hide-on-select="true">
-                                <span class="input-group-text iconpicker-component"><i class="fas fa-seedling"></i></span>
+                            <div class="dropdown js-iconpicker">
+                                <button class="btn btn-primary dropdown-toggle" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i id="in_selectedIcon" data-iconpicker-selected class="fas fa-seedling"></i>
+                                </button>
+                                <div class="dropdown-menu p-3" style="width: 300px; max-height: 300px; overflow-y: auto;">
+                                    <input type="text" class="form-control mb-2" data-iconpicker-search
+                                        placeholder="{{ __('Search icons...') }}">
+                                    <div class="d-flex flex-wrap" data-iconpicker-list>
+                                    </div>
+                                </div>
                             </div>
+                            <input type="hidden" id="in_icon" data-iconpicker-input name="icon" value="fas fa-seedling">
                             <p id="editErr_icon" class="text-danger em"></p>
                         </div>
                     </div>
+
+                    <x-TextInput col="12" placeholder="Enter category name" name="name" type="text"
+                        label="Name" required="*" action="edit" />
 
                     @php
                         $options = ['1' => 'Active', '0' => 'Dactive'];
