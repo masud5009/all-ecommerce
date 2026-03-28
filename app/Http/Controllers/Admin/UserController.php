@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Http\Requests\User\UserStoreRequest;
-use App\Models\Admin\Package;
-use App\Models\Admin\PaymentGateway;
-use App\Models\User;
-use App\Services\Membership\MembershipService;
-use App\Services\UserService;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Order;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\User\UserStoreRequest;
 
 class UserController extends Controller
 {
@@ -22,44 +19,20 @@ class UserController extends Controller
     public function index()
     {
         $data['users'] = User::latest()->paginate(10);
-        $data['packages'] = Package::select('id', 'title', 'term')
-            ->where('status', 1)
-            ->get()
-            ->mapWithKeys(function ($item) {
-                return [$item->id => $item->title . ' (' . $item->term . ')'];
-            })
-            ->toArray();
-
-        $data['gateways'] = PaymentGateway::select('keyword', 'name')
-            ->where('status', 1)
-            ->get()
-            ->mapWithKeys(function ($item) {
-                return [$item->keyword => $item->name];
-            });
-
         return view('admin.user-managment.index', $data);
     }
 
     /**
      * user store
      */
-    public function store(UserStoreRequest $request, MembershipService $membershipService)
+    public function store(UserStoreRequest $request)
     {
-        $package = Package::findOrFail($request->package_id);
-        //send data for payment and store all nessary database data
-        $data = [
-            'added_by' => 'admin',
-            'package' => $package ?? [],
-            'purpose' => 'membership',
-            'email' => $request->email,
-            'name' => $request->fullname,
+        User::create([
+            'name' => $request->name,
             'username' => $request->username,
-            'password' => $request->password,
-            'payment_method' => $request->payment_method,
-            'company_name' => $request->company_name
-        ];
-        $dataObject = (object) $data;
-        $membershipService->createMembership($dataObject);
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
 
         session()->flash('success', __('Added successfully'));
         return response()->json(['status' => 'success'], 200);
@@ -104,9 +77,10 @@ class UserController extends Controller
     /**
      * delete user
      */
-    public function delete(Request $request, UserService $userService)
+    public function delete(Request $request)
     {
-        $userService->deleteUser($request->user_id);
+        Order::where('user_id', $request->user_id)->delete();
+        User::findOrFail($request->user_id)->delete();
         session()->flash('success', __('User delete successfully'));
         return back();
     }
@@ -114,11 +88,12 @@ class UserController extends Controller
     /**
      * bulk delete user
      */
-    public function bulkDelete(Request $request, UserService $userService)
+    public function bulkDelete(Request $request)
     {
         $ids = $request->ids;
         foreach ($ids as $id) {
-            $userService->deleteUser($id);
+            Order::where('user_id', $id)->delete();
+            User::findOrFail($id)->delete();
         }
         session()->flash('success', __('Users delete successfully'));
         return response()->json(['status' => 'success'], 200);

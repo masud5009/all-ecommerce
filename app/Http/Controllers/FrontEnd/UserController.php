@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
-use App\Http\Controllers\Controller;
-use App\Http\Helpers\MailConfig;
-use App\Http\Requests\User\StoreRequest;
-use App\Models\Admin\MailTemplate;
 use App\Models\User;
-use App\Rules\MatchEmailRule;
-use Carbon\Carbon;
+use App\Models\Cart;
+use App\Models\Order;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Rules\MatchEmailRule;
+use App\Http\Helpers\MailConfig;
+use App\Models\Admin\MailTemplate;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use App\Http\Requests\User\StoreRequest;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -22,7 +24,38 @@ class UserController extends Controller
      */
     public function dashboard()
     {
-        return redirect()->route('frontend.index');
+        $user = Auth::guard('web')->user();
+
+        $ordersQuery = Order::query()->where(function ($query) use ($user) {
+            $query->where('user_id', $user->id)
+                ->orWhere(function ($subQuery) use ($user) {
+                    $subQuery->whereNull('user_id')
+                        ->where('billing_email', $user->email);
+                });
+        });
+
+        $totalOrders = (clone $ordersQuery)->count();
+        $completedOrders = (clone $ordersQuery)->where('order_status', 'completed')->count();
+        $pendingOrders = (clone $ordersQuery)->where('order_status', 'pending')->count();
+        $totalSpent = (float) ((clone $ordersQuery)->where('payment_status', 'completed')->sum('pay_amount') ?? 0);
+        $cartItems = (int) (Cart::query()->where('user_id', $user->id)->sum('quantity') ?? 0);
+
+        $latestOrders = (clone $ordersQuery)
+            ->latest('id')
+            ->limit(5)
+            ->get(['order_number', 'pay_amount', 'order_status', 'payment_status', 'created_at']);
+
+        return view('frontend.user.dashboard', [
+            'user' => $user,
+            'stats' => [
+                'totalOrders' => $totalOrders,
+                'completedOrders' => $completedOrders,
+                'pendingOrders' => $pendingOrders,
+                'totalSpent' => $totalSpent,
+                'cartItems' => $cartItems,
+            ],
+            'latestOrders' => $latestOrders,
+        ]);
     }
     /**
      * Show register page
@@ -37,18 +70,22 @@ class UserController extends Controller
      */
     public function signup_submit(StoreRequest $request)
     {
+        $validated = $request->validated();
+
         $user = new User();
-        $user->username = $request->username;
-        $user->email = $request->email;
+        $user->username = $validated['username'];
+        $user->email = $validated['email'];
         $user->status = 1;
-        $user->password = Hash::make($request->password);
+        $user->password = Hash::make($validated['password']);
+        $user->remember_token = Str::random(64);
         $user->save();
 
         // get the mail template information from db
         $mailTemplate = MailTemplate::query()->where('type', '=', 'verify_email')->first();
         $mailData['subject'] = $mailTemplate->subject;
         $mailBody = $mailTemplate->body;
-        $link = '<a href=' . url("user/signup-verify/" . $user->id) . '>Click Here</a>';
+        $verificationUrl = route('user.signup_verify', ['token' => $user->remember_token]);
+        $link = '<a href="' . $verificationUrl . '">Click Here</a>';
 
         $mailBody = str_replace('{customer_name}', $user->username, $mailBody);
         $mailBody = str_replace('{verification_link}', $link, $mailBody);
@@ -60,8 +97,16 @@ class UserController extends Controller
 
         MailConfig::send($mailData);
 
-        $queryResult['authUser'] = $user;
-        return back()->with('success', __('A verification mail has been sent to your email address'));
+        $successMessage = __('A verification mail has been sent to your email address');
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $successMessage,
+            ]);
+        }
+
+        return back()->with('success', $successMessage);
     }
     /**
      * Show login page
@@ -95,7 +140,7 @@ class UserController extends Controller
         $password = $request->input('password');
 
         // Determine if login input is email or username
-        $field = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $field = filter_var($loginInput, \FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
         $user = User::where($field, $loginInput)->first();
 
@@ -157,18 +202,37 @@ class UserController extends Controller
             $emailAddress = $request->session()->get('userEmail');
 
             $rules = [
-                'new_password' => 'required|confirmed',
-                'new_password_confirmation' => 'required'
+                'new_password' => [
+                    'required',
+                    'string',
+                    'min:8',
+                    'max:64',
+                    'confirmed',
+                    'regex:/[A-Z]/',
+                    'regex:/[a-z]/',
+                    'regex:/[0-9]/',
+                    'regex:/[^A-Za-z0-9]/',
+                ],
+                'new_password_confirmation' => 'required|string'
             ];
 
             $messages = [
                 'new_password.confirmed' => 'Password confirmation failed.',
+                'new_password.regex' => 'Password must include uppercase, lowercase, number and special character.',
                 'new_password_confirmation.required' => 'The confirm new password field is required.'
             ];
 
             $validator = Validator::make($request->all(), $rules, $messages);
 
             if ($validator->fails()) {
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Validation failed',
+                        'errors' => $validator->errors(),
+                    ], 422);
+                }
+
                 return redirect()->back()->withErrors($validator->errors());
             }
 
@@ -178,8 +242,23 @@ class UserController extends Controller
                 'password' => Hash::make($request->new_password)
             ]);
 
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Password updated successfully.',
+                    'redirect_url' => route('user.login'),
+                ]);
+            }
+
             Session::flash('success', 'Password updated successfully.');
         } else {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Something went wrong!',
+                ], 400);
+            }
+
             Session::flash('error', 'Something went wrong!');
         }
 
@@ -194,6 +273,8 @@ class UserController extends Controller
         $rules = [
             'email' => [
                 'required',
+                'string',
+                'max:255',
                 'email:rfc,dns',
                 new MatchEmailRule('user')
             ]

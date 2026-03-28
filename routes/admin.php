@@ -103,20 +103,6 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
         Route::post('/update-password/{id}', 'updatePassword')->name('admin.user.update_password');
     });
 
-    //vendor management route
-    Route::prefix('vendor-managment')->group(function () {
-        Route::get('settings', 'Admin\VendorController@setting')->name('admin.vendor.setting');
-        Route::post('/update/settings', 'Admin\VendorController@settingUpdate')->name('admin.vendor.setting_update');
-        Route::get('vendors', 'Admin\VendorController@index')->name('admin.vendor');
-        Route::post('vendor/store', 'Admin\VendorController@store')->name('admin.vendor.store');
-        Route::get('vendor/edit/{username}', 'Admin\VendorController@edit')->name('admin.vendor.edit');
-        Route::post('vendor/update', 'Admin\VendorController@update')->name('admin.vendor.update');
-        Route::post('/email-status-change', 'Admin\VendorController@changeEmailStatus')->name('admin.vendor.email_status_change');
-        Route::post('/email-account-change', 'Admin\VendorController@changeAccountStatus')->name('admin.vendor.account_status_change');
-        Route::post('vendor/delete', 'Admin\VendorController@delete')->name('admin.vendor.delete');
-        Route::post('vendor/bulk-delete', 'Admin\VendorController@Bulkdelete')->name('admin.vendor.bulk_delete');
-    });
-
     //shipping charge route
     Route::prefix('shipping-charge')->group(function () {
         Route::get('/', 'Admin\ShippingChargeController@index')->name('admin.shop.shipping_charge');
@@ -197,24 +183,6 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
         Route::post('/plupusher_updategins', 'Admin\PluginController@pusher_update')->name('admin.plugin.pusher_update');
         Route::post('/stedfast/update', 'Admin\PluginController@stedfast_update')->name('admin.plugin.stedfast_update');
         Route::post('/gemini_update/update', 'Admin\PluginController@gemini_update')->name('admin.plugin.gemini_update');
-    });
-
-    /*============================
-      package managment route
-     =============================*/
-    Route::prefix('package-managment')->controller(PackageController::class)->group(function () {
-        Route::get('/packages', 'index')->name('admin.package');
-        Route::prefix('package')->group(function () {
-            Route::post('/store', 'store')->name('admin.package.store');
-            Route::get('/edit/{id}', 'edit')->name('admin.package.edit');
-            Route::post('/update/{id}', 'update')->name('admin.package.update');
-            Route::post('/changeStatus', 'changeStatus')->name('admin.package.status_change');
-            Route::post('/delete', 'delete')->name('admin.package.delete');
-            Route::post('bulk_delete', 'bulkDelete')->name('admin.package.bulk_delete');
-        });
-        // Settings routes
-        Route::get('settings', 'setting')->name('admin.package.setting');
-        Route::post('setting/update', 'settingUpdate')->name('admin.package.setting_update');
     });
 
     //blog managment route

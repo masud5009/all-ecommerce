@@ -22,10 +22,32 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => 'required|unique:users|max:255',
-            'email' => 'required|email:rfc,dns|unique:users|max:255',
-            'password' => 'required|confirmed',
-            'password_confirmation' => 'required'
+            'username' => 'required|string|min:3|max:20|alpha_num|unique:users,username',
+            'email' => 'required|string|email:rfc,dns|max:255|unique:users,email',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'max:64',
+                'confirmed',
+                'regex:/[A-Z]/',
+                'regex:/[a-z]/',
+                'regex:/[0-9]/',
+                'regex:/[^A-Za-z0-9]/',
+            ],
+            'password_confirmation' => 'required|string'
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     */
+    public function messages(): array
+    {
+        return [
+            'username.alpha_num' => __('Username may only contain letters and numbers.'),
+            'password.confirmed' => __('Password confirmation does not match.'),
+            'password.regex' => __('Password must include uppercase, lowercase, number and special character.'),
         ];
     }
 }

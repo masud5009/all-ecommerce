@@ -190,7 +190,6 @@
                 <!-- user managment -->
                 <li
                     class="nav-item nav-item-submenu
-                            @if (request()->routeIs('admin.vendor.setting')) nav-item-expanded nav-item-open @endif
                             @if (request()->routeIs('admin.user')) nav-item-expanded nav-item-open @endif
                             @if (request()->routeIs('admin.user.password_change')) nav-item-expanded nav-item-open @endif
                             @if (request()->routeIs('admin.vendor.edit')) nav-item-expanded nav-item-open @endif
@@ -199,11 +198,6 @@
                         <span>{{ __('User Management') }}</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="{{ __('User Management') }}">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.vendor.setting') }}"
-                                class="nav-link {{ request()->routeIs('admin.vendor.setting') ? 'active' : '' }}">
-                                {{ __('Settings') }}</a>
-                        </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.user') }}"
                                 class="nav-link
@@ -290,33 +284,7 @@
                     </ul>
                 </li>
 
-                <!-- package managment -->
-                <li
-                    class="nav-item nav-item-submenu
-                        @if (request()->routeIs('admin.package.setting')) nav-item-expanded nav-item-open @endif
-                        @if (request()->routeIs('admin.package.edit')) nav-item-expanded nav-item-open @endif
-        @if (request()->routeIs('admin.package')) nav-item-expanded nav-item-open @endif
-        ">
-                    <a href="#" class="nav-link"><i class="fas fa-user-lock"></i>
-                        <span>{{ __('Package Management') }}</span></a>
-
-                    <ul class="nav nav-group-sub" data-submenu-title="{{ __('Package Management') }}">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.package.setting') }}"
-                                class="nav-link {{ request()->routeIs('admin.package.setting') ? 'active' : '' }}">
-                                {{ __('Settings') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.package') }}"
-                                class="nav-link
-                               @if (request()->routeIs('admin.package')) active @endif
-                               @if (request()->routeIs('admin.package.edit')) active @endif
-                                 ">
-                                {{ __('Packages') }}</a>
-                        </li>
-                    </ul>
-                </li>
-
+            
 
                 <!-- language managment -->
                 <li class="nav-item">

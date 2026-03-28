@@ -68,7 +68,7 @@
         class="fixed bottom-0 inset-x-0 z-40 border-t border-green-100 bg-white/95 backdrop-blur shadow-[0_-8px_20px_rgba(15,23,42,0.08)] md:hidden">
         <div class="mx-auto max-w-7xl px-4">
             <div class="grid grid-cols-4 gap-2 py-2 text-[11px] text-slate-500">
-                <a href="{{ route('front.index') }}" data-nav="home"
+                <a href="{{ route('frontend.index') }}" data-nav="home"
                     class="flex flex-col items-center gap-1 rounded-2xl px-2 py-2 transition hover:bg-green-50 hover:text-green-700">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         aria-hidden="true">

@@ -8,7 +8,7 @@
         <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
             {{-- Breadcrumb --}}
             <nav class="mb-8 flex flex-wrap items-center gap-2 text-xs text-slate-500" aria-label="Breadcrumb">
-                <a href="{{ route('front.index') }}"
+                <a href="{{ route('frontend.index') }}"
                     class="rounded-full border border-green-100 bg-white px-3 py-1 transition hover:border-green-300 hover:text-green-700">
                     Home
                 </a>

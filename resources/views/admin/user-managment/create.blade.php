@@ -9,7 +9,7 @@
                 <form id="ajaxForm" action="{{ route('admin.user.store') }}" method="post">
                     @csrf
                     <div class="row">
-                        <x-text-input col="6" name="full_name" type="text" label="Full Name" required="*"
+                        <x-text-input col="6" name="name" type="text" label="Full Name" required="*"
                             action="store" />
 
                         <x-text-input col="6" name="username" type="text" label="Username" required="*"
@@ -18,20 +18,11 @@
                         <x-text-input col="6" name="email" type="text" label="Email" required="*"
                             action="store" />
 
-                        <x-text-input col="6" name="company_name" type="text" label="Company Name"
-                            action="store" />
-
                         <x-text-input col="6" name="password" type="password" label="Password" action="store"
                             required="*" />
 
                         <x-text-input col="6" name="password_confirmation" type="password"
                             label="Password Confirmation" action="store" required="*" />
-
-                        <x-text-input col="6" name="package_id" :dataInfo="$packages" type="custom-select"
-                            label="Package/Plan" action="store" required="*" />
-
-                        <x-text-input col="6" name="payment_method" :dataInfo="$gateways" type="custom-select"
-                            label="Payment Method" action="store" required="*" />
                     </div>
                 </form>
             </div>
