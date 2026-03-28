@@ -416,25 +416,16 @@ class ProductController extends Controller
 
     public function updateFlashSale(Request $request)
     {
-        $hasFlashSaleColumns = Schema::hasColumn('products', 'flash_sale_status')
-            && Schema::hasColumn('products', 'flash_sale_price')
-            && Schema::hasColumn('products', 'flash_sale_start_at')
-            && Schema::hasColumn('products', 'flash_sale_end_at');
-
-        if (!$hasFlashSaleColumns) {
-            return redirect()->back()->with('error', __('Please run migration first to enable flash sale.'));
-        }
-
         $validated = $request->validate([
             'product_id' => 'required|exists:products,id',
             'flash_sale_status' => 'required|in:0,1',
-            'flash_sale_price' => 'nullable|required_if:flash_sale_status,1|numeric|min:0',
+            'flash_sale_price' => 'nullable|required_if:flash_sale_status,1|numeric|min:1|max:100',
             'flash_sale_start_at' => 'nullable|date',
             'flash_sale_end_at' => 'nullable|date|after:flash_sale_start_at',
         ]);
 
-        $product = Product::findOrFail((int) $validated['product_id']);
-        $status = (int) $validated['flash_sale_status'];
+        $product = Product::findOrFail($validated['product_id']);
+        $status = $validated['flash_sale_status'];
 
         if ($status === 0) {
             $product->flash_sale_status = 0;
@@ -443,15 +434,11 @@ class ProductController extends Controller
             $product->flash_sale_end_at = null;
             $product->save();
 
-            return redirect()->back()->with('success', __('Flash sale disabled successfully'));
+            Session::flash('success', __('Flash sale disabled successfully'));
+            return response()->json(['status' => 'success'], 200);
         }
 
-        $flashSalePrice = (float) ($validated['flash_sale_price'] ?? 0);
-        $currentPrice = (float) ($product->current_price ?? 0);
-
-        if ($currentPrice > 0 && $flashSalePrice >= $currentPrice) {
-            return redirect()->back()->with('error', __('Flash sale price must be less than current price.'));
-        }
+        $flashSalePrice =  ($validated['flash_sale_price'] ?? 1);
 
         $product->flash_sale_status = 1;
         $product->flash_sale_price = $flashSalePrice;
@@ -463,10 +450,11 @@ class ProductController extends Controller
             : null;
         $product->save();
 
-        return redirect()->back()->with('success', __('Flash sale updated successfully'));
+        Session::flash('success', __('Flash sale enabled successfully'));
+        return response()->json(['status' => 'success'], 200);
     }
 
-    private function deleteProductData(Product $product): void
+    private function deleteProductData(Product $product)
     {
         // remove thumbnail
         if (!empty($product->thumbnail)) {

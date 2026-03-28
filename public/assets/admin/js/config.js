@@ -777,3 +777,84 @@ $('body').on('click', '.changeStatusBtn', function () {
         }
     });
 });
+
+/*===================  Flash Sale Form (AJAX) ================*/
+$(document).on('click', '.flashSaleBtn', function () {
+    const $btn = $(this);
+    const hasSavedValues = (($btn.attr('data-flash-sale-price') || '').toString().trim() !== '') ||
+        (($btn.attr('data-flash-sale-start-at') || '').toString().trim() !== '') ||
+        (($btn.attr('data-flash-sale-end-at') || '').toString().trim() !== '');
+    const savedStatus = $btn.attr('data-flash-sale-status') === '1' ? '1' : '0';
+    const initialStatus = savedStatus === '1' || !hasSavedValues ? '1' : '0';
+
+    $('#flash_product_id').val($btn.attr('data-product-id'));
+    $('#flash_product_title').val($btn.data('title') || '');
+    $('#flash_current_price').val($btn.attr('data-current-price') || 0);
+    $('#flash_sale_status').val(initialStatus);
+    $('#flash_sale_price').val($btn.attr('data-flash-sale-price') || '');
+    $('#flash_sale_start_at').val($btn.attr('data-flash-sale-start-at') || '');
+    $('#flash_sale_end_at').val($btn.attr('data-flash-sale-end-at') || '');
+
+    $('.em').html('');
+    $('#flashSaleForm .is-invalid, #flashSaleForm .is-valid').removeClass('is-invalid is-valid');
+});
+
+$(document).on('change', '#flash_sale_status', function () {
+    if ($(this).val() === '0') {
+        $('#flash_sale_price').val('');
+        $('#flash_sale_start_at').val('');
+        $('#flash_sale_end_at').val('');
+    }
+});
+
+$(document).on('submit', '#flashSaleForm', function (e) {
+    e.preventDefault();
+    $('.request-loader').show();
+
+    const $form = $(this);
+    const fd = new FormData(this);
+    const url = $form.attr('action');
+    const method = $form.attr('method') || 'POST';
+
+    $('.em').html('');
+    $form.find('.is-invalid, .is-valid').removeClass('is-invalid is-valid');
+
+    $.ajax({
+        url: url,
+        method: method,
+        data: fd,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            $('.request-loader').hide();
+
+            if (data.status === 'success' || data === 'success') {
+                hideActiveOverlays();
+                location.reload();
+            }
+        },
+        error: function (error) {
+            $('.request-loader').hide();
+
+            if (error.status === 422 || error.status === 400) {
+                const errors = (error.responseJSON && error.responseJSON.errors) ? error.responseJSON.errors : {};
+
+                for (let key in errors) {
+                    $('#err_' + key).html(errors[key][0]);
+                    const $field = $form.find('[name="' + key + '"]');
+                    $field.addClass('is-invalid').removeClass('is-valid');
+                }
+            } else {
+                $.toast({
+                    heading: 'Error',
+                    text: 'An unexpected error occurred. Please try again later.',
+                    showHideTransition: 'plain',
+                    icon: 'error',
+                    allowToastClose: true,
+                    position: 'top-right',
+                    hideAfter: 4000
+                });
+            }
+        }
+    });
+});

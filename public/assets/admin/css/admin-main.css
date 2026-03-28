@@ -17,8 +17,6 @@ select:disabled {
 
 input[readonly],
 textarea[readonly] {
-    background-color: #e4e8ec !important;
-    color: rgba(255, 255, 255, 0.7) !important;
     border-color: rgba(255, 255, 255, 0.12) !important;
     cursor: default !important;
 }

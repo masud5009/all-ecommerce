@@ -15,7 +15,8 @@
     </nav>
 
     @php
-        $hasProductFilter = request()->filled('search') ||
+        $hasProductFilter =
+            request()->filled('search') ||
             request()->filled('status') ||
             request()->filled('stock') ||
             request()->filled('variant_type') ||
@@ -53,7 +54,8 @@
                                 </a>
                             @endif
 
-                            <a href="{{ route('admin.product.variant.restock') }}" class="btn btn-outline-primary btn-sm me-2">
+                            <a href="{{ route('admin.product.variant.restock') }}"
+                                class="btn btn-outline-primary btn-sm me-2">
                                 <i class="fas fa-boxes"></i> {{ __('Restock Variant') }}
                             </a>
 
@@ -153,10 +155,11 @@
                                             </td>
                                             <td>
                                                 @if ($hasFeaturedColumn)
-                                                    <form action="{{ route('admin.product.featured_update') }}" method="post"
-                                                        class="d-inline-block">
+                                                    <form action="{{ route('admin.product.featured_update') }}"
+                                                        method="post" class="d-inline-block">
                                                         @csrf
-                                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                        <input type="hidden" name="product_id"
+                                                            value="{{ $product->id }}">
                                                         <input type="hidden" name="featured"
                                                             value="{{ (int) $product->featured === 1 ? 0 : 1 }}">
                                                         <button type="submit"
@@ -171,7 +174,8 @@
                                             </td>
                                             <td>
                                                 @php
-                                                    $displayStock = (int) ($product->available_stock ?? $product->stock);
+                                                    $displayStock =
+                                                        (int) ($product->available_stock ?? $product->stock);
                                                 @endphp
                                                 @if ($displayStock > 0)
                                                     <span class="badge bg-primary">{{ $displayStock }}</span>
@@ -191,9 +195,9 @@
                                                         data-bs-toggle="modal" data-bs-target="#flashSaleModal"
                                                         data-product-id="{{ $product->id }}"
                                                         data-title="{{ $product->title }}"
-                                                        data-current-price="{{ (float) ($product->current_price ?? 0) }}"
-                                                        data-flash-sale-status="{{ (int) ($product->flash_sale_status ?? 0) }}"
-                                                        data-flash-sale-price="{{ $product->flash_sale_price !== null ? (float) $product->flash_sale_price : '' }}"
+                                                        data-current-price="{{ $product->has_variants == 1 ? __("Variant Product") : $product->current_price }}"
+                                                        data-flash-sale-status="{{ $product->flash_sale_status ?? 0 }}"
+                                                        data-flash-sale-price="{{ $product->flash_sale_price !== null ? $product->flash_sale_price : '' }}"
                                                         data-flash-sale-start-at="{{ !empty($product->flash_sale_start_at) ? \Illuminate\Support\Carbon::parse($product->flash_sale_start_at)->format('Y-m-d\\TH:i') : '' }}"
                                                         data-flash-sale-end-at="{{ !empty($product->flash_sale_end_at) ? \Illuminate\Support\Carbon::parse($product->flash_sale_end_at)->format('Y-m-d\\TH:i') : '' }}">
                                                         <span class="fas fa-bolt"></span>
@@ -204,7 +208,8 @@
                                                         @csrf
                                                         <input type="hidden" value="{{ $product->id }}"
                                                             name="product_id">
-                                                        <button class="btn btn-sm deleteBtn delete-button product-action-btn"
+                                                        <button
+                                                            class="btn btn-sm deleteBtn delete-button product-action-btn"
                                                             type="button">
                                                             <span class="fas fa-trash"></span>
                                                             <span class="product-action-label">{{ __('Delete') }}</span>
@@ -225,14 +230,15 @@
         </div>
     </div>
 
-    <div class="modal fade" id="flashSaleModal" tabindex="-1" aria-labelledby="flashSaleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="flashSaleModal" tabindex="-1" aria-labelledby="flashSaleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="flashSaleModalLabel">{{ __('Update Flash Sale') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('admin.product.flash_sale_update') }}" method="post">
+                <form id="flashSaleForm" action="{{ route('admin.product.flash_sale_update') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <input type="hidden" name="product_id" id="flash_product_id">
@@ -248,29 +254,33 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <label>{{ __('Flash Sale Status') }}</label>
+                            <label>{{ __('Status') }} <span class="text-danger">**</span></label>
                             <select name="flash_sale_status" id="flash_sale_status" class="form-select" required>
                                 <option value="1">{{ __('Enable') }}</option>
                                 <option value="0">{{ __('Disable') }}</option>
                             </select>
+                            <p id="err_flash_sale_status" class="text-danger em"></p>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label>{{ __('Flash Sale Price') }}</label>
-                            <input type="number" step="0.01" min="0" name="flash_sale_price" id="flash_sale_price"
-                                class="form-control">
+                            <label>{{ __('Discount') }} (%)<span class="text-danger">**</span></label>
+                            <input type="number" step="1" min="1" name="flash_sale_price"
+                                id="flash_sale_price" class="form-control">
+                            <p id="err_flash_sale_price" class="text-danger em"></p>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label>{{ __('Start At') }}</label>
+                            <label>{{ __('Start Date') }}<span class="text-danger">**</span></label>
                             <input type="datetime-local" name="flash_sale_start_at" id="flash_sale_start_at"
                                 class="form-control">
+                            <p id="err_flash_sale_start_at" class="text-danger em"></p>
                         </div>
 
                         <div class="form-group mb-0">
-                            <label>{{ __('End At') }}</label>
+                            <label>{{ __('End Date') }} <span class="text-danger">**</span></label>
                             <input type="datetime-local" name="flash_sale_end_at" id="flash_sale_end_at"
                                 class="form-control">
+                            <p id="err_flash_sale_end_at" class="text-danger em"></p>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -286,38 +296,3 @@
     @include('admin.product.search')
 @endsection
 
-@section('script')
-    <script>
-        (function() {
-            const statusInput = document.getElementById('flash_sale_status');
-            const priceInput = document.getElementById('flash_sale_price');
-            const startInput = document.getElementById('flash_sale_start_at');
-            const endInput = document.getElementById('flash_sale_end_at');
-
-            $(document).on('click', '.flashSaleBtn', function() {
-                const $btn = $(this);
-                const hasSavedValues = (($btn.attr('data-flash-sale-price') || '').toString().trim() !== '') ||
-                    (($btn.attr('data-flash-sale-start-at') || '').toString().trim() !== '') ||
-                    (($btn.attr('data-flash-sale-end-at') || '').toString().trim() !== '');
-                const savedStatus = $btn.attr('data-flash-sale-status') === '1' ? '1' : '0';
-                const initialStatus = savedStatus === '1' || !hasSavedValues ? '1' : '0';
-
-                $('#flash_product_id').val($btn.attr('data-product-id'));
-                $('#flash_product_title').val($btn.data('title') || '');
-                $('#flash_current_price').val($btn.attr('data-current-price') || 0);
-                $('#flash_sale_status').val(initialStatus);
-                $('#flash_sale_price').val($btn.attr('data-flash-sale-price') || '');
-                $('#flash_sale_start_at').val($btn.attr('data-flash-sale-start-at') || '');
-                $('#flash_sale_end_at').val($btn.attr('data-flash-sale-end-at') || '');
-            });
-
-            statusInput?.addEventListener('change', function() {
-                if (this.value === '0') {
-                    if (priceInput) priceInput.value = '';
-                    if (startInput) startInput.value = '';
-                    if (endInput) endInput.value = '';
-                }
-            });
-        })();
-    </script>
-@endsection
