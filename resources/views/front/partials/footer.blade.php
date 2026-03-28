@@ -1,16 +1,15 @@
-<footer class="border-t border-green-100 bg-white">
+<footer class="border-t-2 border-emerald-200 bg-emerald-50/70 shadow-[inset_0_1px_0_rgba(16,185,129,0.08)]">
         <div class="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-12 lg:px-8">
             <div class="lg:col-span-4">
                 <h3 class="text-lg font-semibold text-slate-900">Stay stocked</h3>
                 <p class="mt-2 text-sm text-slate-600">Get weekly specials and new arrivals delivered to your inbox.
                 </p>
-                <form class="mt-4 flex flex-col gap-3 sm:flex-row">
+                <form class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
                     <label class="sr-only" for="newsletter">Email address</label>
                     <input id="newsletter" type="email" placeholder="you@example.com"
-                        class="w-full rounded-full border border-green-100 bg-white/90 px-4 py-3 text-sm shadow-sm outline-none transition focus:border-green-400 focus:bg-white focus:ring-2 focus:ring-green-200">
+                        class="w-full sm:flex-1 sm:w-auto rounded-full border border-emerald-200 bg-white px-4 py-3 text-sm shadow-sm outline-none transition focus:border-green-400 focus:bg-white focus:ring-2 focus:ring-green-200">
                     <button type="submit"
-                        class="rounded-full bg-green-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200">Notify
-                        me</button>
+                        class="shrink-0 whitespace-nowrap rounded-full bg-green-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200">Notify me</button>
                 </form>
             </div>
             <div class="lg:col-span-2">
@@ -76,7 +75,7 @@
                 </div>
             </div>
         </div>
-        <div class="border-t border-green-100 py-4 text-center text-xs text-slate-500">Copyright 2026 FreshCart. All
+        <div class="border-t border-emerald-200/80 bg-white/60 py-4 text-center text-xs text-slate-500">Copyright 2026 FreshCart. All
             rights
             reserved.</div>
     </footer>

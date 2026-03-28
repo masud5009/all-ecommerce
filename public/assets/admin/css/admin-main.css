@@ -74,6 +74,8 @@ button:focus:not(:focus-visible) {
 .btn-info:hover,
 button:focus:not(:focus-visible) {
     outline: none !important;
+    color: var(--border-color);
+    box-shadow: unset !important;
 }
 
 .navbar-toggler:focus {
