@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
-use App\Models\Product;
 use Carbon\Carbon;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Admin\Language;
+use App\Models\ProductCategory;
 use App\Http\Controllers\Controller;
 use App\Services\Frontend\ProductService;
-use App\Models\ProductCategory;
 use App\Services\Frontend\CategoryService;
 
 class ShopController extends Controller
@@ -65,6 +65,8 @@ class ShopController extends Controller
             'sliderImage',
             'variants.variantValues.optionValue',
         ])
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
             ->where('id', $id)
             ->first();
 
@@ -159,7 +161,7 @@ class ShopController extends Controller
             'rating' => 4.7,
             'reviews' => 142,
             'badge' => $categoryName,
-            'image' => $images[0] ?? asset('assets/img/products/placeholder.png'),
+            'image' => $images[0] ?? asset('assets/admin/noimage.jpg'),
             'images' => $images,
             'summary' => $summaryText,
             'description' => $descriptionText,
@@ -282,15 +284,19 @@ class ShopController extends Controller
         }
 
         $summaryText = strip_tags($content?->summary ?? '');
+        $reviewCount = (int) ($product->reviews_count ?? 0);
+        $averageRating = $reviewCount > 0
+            ? round((float) ($product->reviews_avg_rating ?? 0), 1)
+            : 0;
 
         $productDetail = [
             'id' => (string) $product->id,
             'name' => $content?->title ?: ('Product #' . $product->id),
             'category' => $categoryName,
-            'rating' => 4.7,
-            'reviews' => 142,
-            'badge' => $categoryName,
-            'image' => $images[0] ?? asset('assets/img/product/placeholder.png'),
+            'rating' => $averageRating,
+            'reviews' => $reviewCount,
+            'badge' => $isFlashSaleActive ? 'Flash Sales' : $categoryName,
+            'image' => $images[0] ?? asset('assets/admin/noimage.jpg'),
             'images' => $images,
             'summary' => $summaryText,
             'units' => $units,

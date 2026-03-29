@@ -13,6 +13,7 @@
     $isDeal = $p['isDeal'] ?? false;
     $productStock = $p['stock'] ?? 0;
     $productUrl = $p['url'] ?? '#';
+    $isFlashSaleBadge = in_array(strtolower(trim((string) $productBadge)), ['flash sale', 'flash sales'], true);
 
     if (empty($productUnits)) {
         $productUnits = [['label' => '1 unit', 'price' => 0, 'oldPrice' => 0, 'variant_id' => null]];
@@ -55,9 +56,9 @@
             <span class="rounded-full bg-green-100 px-3 py-1 font-semibold text-green-700">
                 {{ $productCategory }}
             </span>
-            @if ($isDeal)
+            @if ($isFlashSaleBadge)
                 <span class="rounded-full bg-red-100 px-3 py-1 font-semibold text-red-700">
-                    Hot Deal
+                    Flash Sales
                 </span>
             @endif
         </div>
@@ -78,7 +79,7 @@
                 @endfor
             </div>
             <span class="text-slate-600">{{ $productRating }}</span>
-            <span class="text-slate-400">({{ $productReviews }} reviews)</span>
+            <span class="text-slate-400">({{ $productReviews }} {{ \Illuminate\Support\Str::plural('review', $productReviews) }})</span>
         </div>
 
         {{-- Price Display --}}
