@@ -100,14 +100,27 @@
         ),
     );
 
+    $reviewCount = (int) ($product->reviews_count ?? 0);
+    $averageRating = $reviewCount > 0 ? round((float) ($product->reviews_avg_rating ?? 0), 1) : 0;
+
+    if (!isset($product->reviews_count) || !isset($product->reviews_avg_rating)) {
+        $reviewSummary = \App\Models\ProductReview::query()
+            ->where('product_id', $product->id)
+            ->selectRaw('COALESCE(AVG(rating), 0) as avg_rating, COUNT(*) as total_reviews')
+            ->first();
+
+        $reviewCount = (int) ($reviewSummary->total_reviews ?? 0);
+        $averageRating = $reviewCount > 0 ? round((float) ($reviewSummary->avg_rating ?? 0), 1) : 0;
+    }
+
     $quickViewData = [
         'id' => (string) $product->id,
         'name' => $productTitle,
         'image' => $productImage,
         'images' => $productImage ? [$productImage] : [],
-        'description' => $summaryText ?: 'Product from our catalog.',
-        'rating' => 4.7,
-        'reviews' => 142,
+        'description' => $summaryText ?? '',
+        'rating' => $averageRating,
+        'reviews' => $reviewCount,
         'badge' => $isFlashSaleActive ? 'Flash Sale' : 'Featured',
         'units' => $quickViewUnits,
         'isDeal' => $isFlashSaleActive || (!empty($oldPrice) && (float) $oldPrice > (float) ($displayPrice ?? 0)),
@@ -171,7 +184,8 @@
                 </svg>
             </span>
 
-            <span>4.7 (142 reviews)</span>
+            <span>{{ number_format($averageRating, 1) }} ({{ $reviewCount }}
+                {{ \Illuminate\Support\Str::plural('review', $reviewCount) }})</span>
 
             <span class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">
                 {{ $stockLabel }}

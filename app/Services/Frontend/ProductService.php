@@ -4,7 +4,6 @@ namespace App\Services\Frontend;
 
 use Carbon\Carbon;
 use App\Models\Product;
-use App\Models\Admin\Language;
 
 class ProductService
 {
@@ -19,6 +18,8 @@ class ProductService
             },
             'variations.variantValues.optionValue.option'
         ])
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
             ->where('featured', 1)
             ->whereHas('content', function ($query) use ($languageId) {
                 $query->where('language_id', $languageId)
@@ -43,6 +44,8 @@ class ProductService
             },
             'variations.variantValues.optionValue.option'
         ])
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
             ->where('flash_sale_status', 1)
             ->whereNotNull('flash_sale_price')
             ->where('flash_sale_price', '>', 0)
@@ -73,6 +76,8 @@ class ProductService
             },
             'variations.variantValues.optionValue.option'
         ])
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
             ->whereHas('content', function ($query) use ($languageId) {
                 $query->where('language_id', $languageId)
                     ->whereIn('category_id', function ($categoryQuery) {
@@ -97,6 +102,8 @@ class ProductService
             },
             'variations.variantValues.optionValue.option'
         ])
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
             ->where('status', 1)
             ->whereHas('content', function ($q) use ($languageId) {
                 $q->where('language_id', $languageId)
@@ -272,12 +279,17 @@ class ProductService
                     ];
                 }
 
+                $reviewCount = (int) ($product->reviews_count ?? 0);
+                $averageRating = $reviewCount > 0
+                    ? round((float) ($product->reviews_avg_rating ?? 0), 1)
+                    : 0;
+
                 return [
                     'id' => (string) $product->id,
                     'name' => $productTitle,
                     'category' => 'Featured',
-                    'rating' => 4.7,
-                    'reviews' => 142,
+                    'rating' => $averageRating,
+                    'reviews' => $reviewCount,
                     'badge' => $isFlashSaleActive ? 'Flash Sale' : $badgeLabel,
                     'image' => $thumbnail,
                     'images' => $thumbnail ? [$thumbnail] : [],

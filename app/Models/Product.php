@@ -13,11 +13,11 @@ class Product extends Model
 
     public function content()
     {
-        return $this->hasMany(ProductContent::class);
+        return $this->hasMany(\App\Models\ProductContent::class);
     }
     public function sliderImage()
     {
-        return $this->hasMany(SliderImage::class, 'item_id', 'id')->where('item_type', 'product');
+        return $this->hasMany(\App\Models\SliderImage::class, 'item_id', 'id')->where('item_type', 'product');
     }
 
     public function variations()
@@ -33,5 +33,10 @@ class Product extends Model
     public function variants()
     {
         return $this->hasMany(\App\Models\ProductVariant::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(\App\Models\ProductReview::class);
     }
 }
