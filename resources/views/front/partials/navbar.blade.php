@@ -124,10 +124,10 @@
 
                                 <ul class="space-y-0.5 text-sm text-slate-600 py-1" role="none">
                                     <li role="none">
-                                        <a href="{{ route('frontend.index') }}" role="menuitem"
+                                        <a href="{{ route('user.dashboard') }}" role="menuitem"
                                             class="flex items-center gap-3 rounded-xl px-3 py-2.5 transition hover:bg-green-50 hover:text-green-700">
                                             <svg class="h-4 w-4 text-slate-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clip-rule="evenodd"/></svg>
-                                            Dashboard
+                                             {{ __('Dashboard') }}
                                         </a>
                                     </li>
                                 </ul>
@@ -137,7 +137,7 @@
                                     <a href="{{ route('user.logout') }}" role="menuitem"
                                         class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-red-600 transition hover:bg-red-50">
                                         <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M6 10a.75.75 0 01.75-.75h9.546l-1.048-.943a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 11-1.004-1.114l1.048-.943H6.75A.75.75 0 016 10z" clip-rule="evenodd"/></svg>
-                                        Sign out
+                                         {{ __('Sign out') }}
                                     </a>
                                 </div>
                             </div>
@@ -147,7 +147,7 @@
                                 class="inline-flex items-center gap-2 rounded-2xl border border-green-100 bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200"
                                 aria-haspopup="true" aria-expanded="false" aria-controls="account-menu">
                                 <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z"/></svg>
-                                Account
+                                {{ __('Account') }}
                                 <svg class="h-4 w-4 opacity-70 transition-transform duration-200" id="account-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                                     <path d="M6 8l4 4 4-4"/>
                                 </svg>
@@ -161,14 +161,14 @@
                                         <a href="{{ route('user.login') }}" role="menuitem"
                                             class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-700 font-medium transition hover:bg-green-50 hover:text-green-700">
                                             <svg class="h-4 w-4 text-slate-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M19 10a.75.75 0 00-.75-.75H8.704l1.048-.943a.75.75 0 10-1.004-1.114l-2.5 2.25a.75.75 0 000 1.114l2.5 2.25a.75.75 0 101.004-1.114l-1.048-.943h9.546A.75.75 0 0019 10z" clip-rule="evenodd"/></svg>
-                                            Sign in
+                                            {{ __('Sign in') }}
                                         </a>
                                     </li>
                                     <li role="none">
                                         <a href="{{ route('user.signup') }}" role="menuitem"
                                             class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-700 font-medium transition hover:bg-green-50 hover:text-green-700">
-                                            <svg class="h-4 w-4 text-slate-400" viewBox="0 0 20 20" fill="currentColor"><path d="M11 5a3 3 0 11-6 0 3 3 0 016 0zM2.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 018 18a9.953 9.953 0 01-5.385-1.572zM16.25 5.75a.75.75 0 00-1.5 0v2h-2a.75.75 0 000 1.5h2v2a.75.75 0 001.5 0v-2h2a.75.75 0 000-1.5h-2v-2z"/></svg>
-                                            Create account
+                                            <svg class="h-4 w-4 text-slate-400" viewBox="0 0 20 20" fill="currentColor"><path d="M11 5a3 3 0 11-6 0 3 3 0 016 0zM2.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 018 18a9.953 9.953 0 01-5.385-1.572zM16.25 5.75a.75.75 0 00-1.5 0v2h-2a.75.75 0 000 1.5h2v2a.75.75 0 <PASSWORD>"/>
+                                            {{ __('Create account') }}
                                         </a>
                                     </li>
                                 </ul>

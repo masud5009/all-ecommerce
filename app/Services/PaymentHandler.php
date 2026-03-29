@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use App\Models\Membership;
-use App\Models\Order;
-use App\Models\FeaturedProduct;
 use App\Models\User;
-use App\Services\Membership\MembershipService;
+use App\Models\Order;
+use App\Models\Membership;
+use App\Models\FeaturedProduct;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Services\Membership\MembershipService;
 
 class PaymentHandler
 {
@@ -17,11 +17,6 @@ class PaymentHandler
         DB::transaction(function () use ($metadata) {
 
             switch ($metadata->purpose) {
-                case 'membership':
-                    $membershipService = new MembershipService();
-                    $membershipService->createMembership($metadata);
-                    break;
-
                 case 'product':
                     Order::create([
                         'user_id' => $metadata->user_id,

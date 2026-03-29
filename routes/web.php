@@ -102,6 +102,12 @@ Route::prefix('user')->middleware('guest:web')->controller(UserController::class
 
 Route::prefix('user')->middleware('auth:web')->controller(UserController::class)->group(function () {
     Route::get('/dashboard', 'dashboard')->name('user.dashboard');
+    Route::get('/orders', 'orders')->name('user.orders');
+    Route::get('/wishlist', 'wishlist')->name('user.wishlist');
+    Route::get('/edit-profile', 'editProfile')->name('user.edit_profile');
+    Route::post('/edit-profile', 'updateProfile')->name('user.update_profile');
+    Route::get('/change-password', 'changePassword')->name('user.change_password');
+    Route::post('/change-password', 'updatePassword')->name('user.update_password');
     Route::get('/logout', 'logout')->name('user.logout');
 });
 

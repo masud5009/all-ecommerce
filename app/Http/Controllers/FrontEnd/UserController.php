@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
-use App\Models\User;
 use App\Models\Cart;
+use App\Models\User;
 use App\Models\Order;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -56,6 +56,142 @@ class UserController extends Controller
             ],
             'latestOrders' => $latestOrders,
         ]);
+    }
+
+    /**
+     * Show Orders page
+     */
+    public function orders()
+    {
+        $user = Auth::guard('web')->user();
+
+        $orders = Order::query()->where(function ($query) use ($user) {
+            $query->where('user_id', $user->id)
+                ->orWhere(function ($subQuery) use ($user) {
+                    $subQuery->whereNull('user_id')
+                        ->where('billing_email', $user->email);
+                });
+        })
+        ->with('orderItems')
+        ->latest('id')
+        ->paginate(10);
+
+        return view('frontend.user.orders', [
+            'user' => $user,
+            'orders' => $orders,
+        ]);
+    }
+
+    /**
+     * Show Wishlist page
+     */
+    public function wishlist()
+    {
+        $user = Auth::guard('web')->user();
+
+        return view('frontend.user.wishlist', [
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * Show Edit Profile page
+     */
+    public function editProfile()
+    {
+        $user = Auth::guard('web')->user();
+
+        return view('frontend.user.edit-profile', [
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * Update Profile
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::guard('web')->user();
+
+        $rules = [
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $user->update([
+            'username' => $request->username,
+            'phone' => $request->phone,
+            'address' => $request->address,
+        ]);
+
+        return redirect()->back()->with('success', 'Profile updated successfully!');
+    }
+
+    /**
+     * Show Change Password page
+     */
+    public function changePassword()
+    {
+        $user = Auth::guard('web')->user();
+
+        return view('frontend.user.change-password', [
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * Update Password
+     */
+    public function updatePassword(Request $request)
+    {
+        $user = Auth::guard('web')->user();
+
+        $rules = [
+            'current_password' => 'required|string',
+            'new_password' => [
+                'required',
+                'string',
+                'min:8',
+                'max:64',
+                'confirmed',
+                'regex:/[A-Z]/',
+                'regex:/[a-z]/',
+                'regex:/[0-9]/',
+                'regex:/[^A-Za-z0-9]/',
+            ],
+            'new_password_confirmation' => 'required|string',
+        ];
+
+        $messages = [
+            'new_password.confirmed' => 'Password confirmation does not match.',
+            'new_password.regex' => 'Password must include uppercase, lowercase, number and special character.',
+            'new_password_confirmation.required' => 'The confirm new password field is required.',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Check current password
+        if (!Hash::check($request->current_password, $user->password)) {
+            return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.'])->withInput();
+        }
+
+        // Update password
+        $user->update([
+            'password' => Hash::make($request->new_password),
+        ]);
+
+        return redirect()->back()->with('success', 'Password updated successfully!');
     }
     /**
      * Show register page

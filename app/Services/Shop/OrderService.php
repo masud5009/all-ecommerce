@@ -5,6 +5,7 @@ namespace App\Services\Shop;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Models\ShippingCharge;
+use Illuminate\Support\Facades\Auth;
 
 class OrderService
 {
@@ -34,6 +35,7 @@ class OrderService
         $isOnlinePayment = $request->payment_method === 'online';
         $paymentStatus = $request->input('payment_status', 'pending');
 
+        $user_id = Auth::guard('web')->check() ? Auth::guard('web')->id() : null;
         // Create order
         $order = \App\Models\Order::create([
             'order_number' => strtoupper(substr(uniqid(), -8)),
@@ -50,6 +52,7 @@ class OrderService
             'pay_amount' => $total,
             'order_status' => 'pending',
             'payment_status' => $paymentStatus,
+            'user_id'=> $user_id
         ]);
 
         // Create order items
