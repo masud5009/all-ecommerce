@@ -2,10 +2,10 @@
     use Carbon\Carbon;
 
     $productContent = $product->content->first();
-    $productTitle = $productContent->title ?? __('Untitled Product');
+    $productTitle = $productContent->title;
+    $now = Carbon::now();
 
     $variations = $product->variations ?? collect();
-
     $totalVariantStock = $variations->sum('stock');
     $variantStock = $totalVariantStock > 0 ? __('In Stock') : __('Stock Out');
 
@@ -18,9 +18,7 @@
     $min_variant_price = $variantBasePrices->isNotEmpty() ? (float) $variantBasePrices->min() : 0;
     $max_variant_price = $variantBasePrices->isNotEmpty() ? (float) $variantBasePrices->max() : 0;
 
-    $now = Carbon::now();
-
-    $flashDiscountPercent = (float) ($product->flash_sale_price ?? 0);
+    $flashDiscountPercent = $product->flash_sale_price ?? 0;
 
     $isFlashSaleActive =
         (int) ($product->flash_sale_status ?? 0) === 1 &&
@@ -50,87 +48,13 @@
     $stockLabel =
         $product->has_variants == 0 ? (($product->stock ?? 0) > 0 ? __('In Stock') : __('Stock Out')) : $variantStock;
 
-    // Build quick-view data for JS (modal, cart, variation change)
-    $quickViewUnits = [];
-    if ($product->has_variants == 0 || $variations->isEmpty()) {
-        $quickViewUnits[] = [
-            'label' => '1 unit',
-            'price' => (float) $displayPrice,
-            'oldPrice' => (float) ($oldPrice ?? 0),
-        ];
-    } else {
-        foreach ($variations as $vIdx => $variation) {
-            $variantParts = collect($variation->variantValues ?? [])
-                ->sortBy(fn($vv) => optional(optional($vv->optionValue)->option)->position ?? PHP_INT_MAX)
-                ->map(function ($vv) {
-                    $option = optional($vv->optionValue)->option;
-                    $value = optional($vv->optionValue)->value;
-                    if (!$option || $value === null) {
-                        return null;
-                    }
-                    return $option->name . ': ' . $value;
-                })
-                ->filter()
-                ->values();
-
-            $quickViewUnits[] = [
-                'label' => $variantParts->isNotEmpty()
-                    ? $variantParts->implode(', ')
-                    : __('Option') . ' ' . ($vIdx + 1),
-                'price' => $isFlashSaleActive
-                    ? max(
-                        ((float) ($variation->price ?? ($product->current_price ?? 0))) *
-                            (1 - $flashDiscountPercent / 100),
-                        0,
-                    )
-                    : (float) ($variation->price ?? ($product->current_price ?? 0)),
-                'oldPrice' => $isFlashSaleActive
-                    ? (float) ($variation->price ?? ($product->current_price ?? 0))
-                    : (float) ($product->previous_price ?? 0),
-            ];
-        }
-    }
-
-    $productImage = !empty($product->thumbnail) ? asset('assets/img/product/' . $product->thumbnail) : '';
-    $summaryText = trim(
-        preg_replace(
-            '/\s+/',
-            ' ',
-            strip_tags((string) ($productContent->summary ?? ($productContent->description ?? ''))),
-        ),
-    );
-
     $reviewCount = (int) ($product->reviews_count ?? 0);
     $averageRating = $reviewCount > 0 ? round((float) ($product->reviews_avg_rating ?? 0), 1) : 0;
-
-    if (!isset($product->reviews_count) || !isset($product->reviews_avg_rating)) {
-        $reviewSummary = \App\Models\ProductReview::query()
-            ->where('product_id', $product->id)
-            ->selectRaw('COALESCE(AVG(rating), 0) as avg_rating, COUNT(*) as total_reviews')
-            ->first();
-
-        $reviewCount = (int) ($reviewSummary->total_reviews ?? 0);
-        $averageRating = $reviewCount > 0 ? round((float) ($reviewSummary->avg_rating ?? 0), 1) : 0;
-    }
-
-    $quickViewData = [
-        'id' => (string) $product->id,
-        'name' => $productTitle,
-        'image' => $productImage,
-        'images' => $productImage ? [$productImage] : [],
-        'description' => $summaryText ?? '',
-        'rating' => $averageRating,
-        'reviews' => $reviewCount,
-        'badge' => $isFlashSaleActive ? 'Flash Sale' : 'Featured',
-        'units' => $quickViewUnits,
-        'isDeal' => $isFlashSaleActive || (!empty($oldPrice) && (float) $oldPrice > (float) ($displayPrice ?? 0)),
-    ];
 @endphp
 
 <article
     class="group relative flex h-full flex-col rounded-2xl border border-green-100 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)]"
-    data-reveal-child data-featured-card data-product-id="{{ $product->id }}" data-product-name="{{ $productTitle }}"
-    data-product-json="{{ json_encode($quickViewData) }}">
+    data-reveal-child data-featured-card data-product-id="{{ $product->id }}">
 
     @if ($isFlashSaleActive)
         <span
