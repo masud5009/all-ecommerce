@@ -59,7 +59,7 @@
             @empty
                 <div class="w-full rounded-2xl border border-dashed border-green-200 bg-white p-8 text-center text-sm text-slate-500"
                     data-reveal-child>
-                    {{ __('NO FEATURED CATEGORY FOUND!') }}
+                    {{ __('NO CATEORIES FOUND!') }}
                 </div>
             @endforelse
         </div>

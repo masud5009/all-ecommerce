@@ -10,10 +10,12 @@
                         {{ @$sectionTitles->featured_product_sub_title ?? __('Featured products section sub title') }}
                     </h2>
                 </div>
-                <a href="{{ route('frontend.shop') }}"
-                    class="inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
-                    {{ __('View all products') }}
-                </a>
+                @if (count($featuredProducts) > 0)
+                    <a href="{{ route('frontend.shop') }}"
+                        class="inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
+                        {{ __('View all products') }}
+                    </a>
+                @endif
             </div>
 
             @if (count($featuredProducts) > 0)
@@ -25,7 +27,7 @@
             @else
                 <div class="mt-8 rounded-2xl border border-dashed border-green-200 bg-white p-8 text-center text-sm text-slate-500"
                     data-reveal-child>
-                    {{ __('NO FEATURED PRODUCTS FOUND!') }}
+                    {{ __('NO PRODUCT FOUND!') }}
                 </div>
             @endif
         </div>

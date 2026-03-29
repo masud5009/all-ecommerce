@@ -8,8 +8,12 @@
                     {{ @$sectionTitles->popular_product_sub_title ?? 'Popular products section sub title' }}
                 </p>
             </div>
-            <a href="{{ route('frontend.shop') }}" class="text-sm font-semibold text-green-700">
-                {{ __('Shop all') }}</a>
+            @if (count($popularProducts) > 0)
+                <a href="{{ route('frontend.shop') }}"
+                    class="inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
+                    {{ __('View all products') }}
+                </a>
+            @endif
         </div>
         @if (count($popularProducts) > 0)
             <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

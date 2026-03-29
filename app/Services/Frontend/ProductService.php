@@ -21,7 +21,12 @@ class ProductService
         ])
             ->where('featured', 1)
             ->whereHas('content', function ($query) use ($languageId) {
-                $query->where('language_id', $languageId);
+                $query->where('language_id', $languageId)
+                    ->whereIn('category_id', function ($categoryQuery) {
+                        $categoryQuery->select('id')
+                            ->from('product_categories')
+                            ->where('status', 1);
+                    });
             })
             ->orderByDesc('created_at')
             ->get();
@@ -46,7 +51,12 @@ class ProductService
             ->where('flash_sale_start_at', '<=', $now)
             ->where('flash_sale_end_at', '>=', $now)
             ->whereHas('content', function ($query) use ($languageId) {
-                $query->where('language_id', $languageId);
+                $query->where('language_id', $languageId)
+                    ->whereIn('category_id', function ($categoryQuery) {
+                        $categoryQuery->select('id')
+                            ->from('product_categories')
+                            ->where('status', 1);
+                    });
             })
             ->orderByDesc('created_at')
             ->get();
@@ -64,7 +74,12 @@ class ProductService
             'variations.variantValues.optionValue.option'
         ])
             ->whereHas('content', function ($query) use ($languageId) {
-                $query->where('language_id', $languageId);
+                $query->where('language_id', $languageId)
+                    ->whereIn('category_id', function ($categoryQuery) {
+                        $categoryQuery->select('id')
+                            ->from('product_categories')
+                            ->where('status', 1);
+                    });
             })
             ->orderByDesc('created_at')
             ->limit(10)
@@ -84,7 +99,12 @@ class ProductService
         ])
             ->where('status', 1)
             ->whereHas('content', function ($q) use ($languageId) {
-                $q->where('language_id', $languageId);
+                $q->where('language_id', $languageId)
+                    ->whereIn('category_id', function ($categoryQuery) {
+                        $categoryQuery->select('id')
+                            ->from('product_categories')
+                            ->where('status', 1);
+                    });
             });
 
         // Category filter

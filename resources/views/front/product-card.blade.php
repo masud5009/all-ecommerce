@@ -9,9 +9,11 @@
     $totalVariantStock = $variations->sum('stock');
     $variantStock = $totalVariantStock > 0 ? __('In Stock') : __('Stock Out');
 
-    $variantBasePrices = $variations->map(function ($variation) use ($product) {
-        return (float) ($variation->price ?? $product->current_price ?? 0);
-    })->values();
+    $variantBasePrices = $variations
+        ->map(function ($variation) use ($product) {
+            return (float) ($variation->price ?? ($product->current_price ?? 0));
+        })
+        ->values();
 
     $min_variant_price = $variantBasePrices->isNotEmpty() ? (float) $variantBasePrices->min() : 0;
     $max_variant_price = $variantBasePrices->isNotEmpty() ? (float) $variantBasePrices->max() : 0;
@@ -25,10 +27,7 @@
         $flashDiscountPercent > 0 &&
         !empty($product->flash_sale_start_at) &&
         !empty($product->flash_sale_end_at) &&
-        $now->between(
-            Carbon::parse($product->flash_sale_start_at),
-            Carbon::parse($product->flash_sale_end_at)
-        );
+        $now->between(Carbon::parse($product->flash_sale_start_at), Carbon::parse($product->flash_sale_end_at));
 
     if ($isFlashSaleActive) {
         $flashDiscountPercent = min($flashDiscountPercent, 100);
@@ -36,25 +35,20 @@
 
     if ($product->has_variants == 0 || $variations->isEmpty()) {
         $currentPrice = (float) ($product->current_price ?? 0);
-        $displayPrice = $isFlashSaleActive
-            ? max($currentPrice * (1 - ($flashDiscountPercent / 100)), 0)
-            : $currentPrice;
+        $displayPrice = $isFlashSaleActive ? max($currentPrice * (1 - $flashDiscountPercent / 100), 0) : $currentPrice;
 
-        $oldPrice = $isFlashSaleActive
-            ? $currentPrice
-            : ($product->previous_price ?? null);
+        $oldPrice = $isFlashSaleActive ? $currentPrice : $product->previous_price ?? null;
     } else {
         $displayPrice = $isFlashSaleActive
-            ? max($min_variant_price * (1 - ($flashDiscountPercent / 100)), 0)
+            ? max($min_variant_price * (1 - $flashDiscountPercent / 100), 0)
             : $min_variant_price;
         $oldPrice = $isFlashSaleActive ? $min_variant_price : null;
 
         $min_variant_price = $displayPrice;
     }
 
-    $stockLabel = $product->has_variants == 0
-        ? (($product->stock ?? 0) > 0 ? __('In Stock') : __('Stock Out'))
-        : $variantStock;
+    $stockLabel =
+        $product->has_variants == 0 ? (($product->stock ?? 0) > 0 ? __('In Stock') : __('Stock Out')) : $variantStock;
 
     // Build quick-view data for JS (modal, cart, variation change)
     $quickViewUnits = [];
@@ -71,26 +65,40 @@
                 ->map(function ($vv) {
                     $option = optional($vv->optionValue)->option;
                     $value = optional($vv->optionValue)->value;
-                    if (!$option || $value === null) return null;
+                    if (!$option || $value === null) {
+                        return null;
+                    }
                     return $option->name . ': ' . $value;
                 })
                 ->filter()
                 ->values();
 
             $quickViewUnits[] = [
-                'label' => $variantParts->isNotEmpty() ? $variantParts->implode(', ') : __('Option') . ' ' . ($vIdx + 1),
+                'label' => $variantParts->isNotEmpty()
+                    ? $variantParts->implode(', ')
+                    : __('Option') . ' ' . ($vIdx + 1),
                 'price' => $isFlashSaleActive
-                    ? max(((float) ($variation->price ?? $product->current_price ?? 0)) * (1 - ($flashDiscountPercent / 100)), 0)
-                    : (float) ($variation->price ?? $product->current_price ?? 0),
+                    ? max(
+                        ((float) ($variation->price ?? ($product->current_price ?? 0))) *
+                            (1 - $flashDiscountPercent / 100),
+                        0,
+                    )
+                    : (float) ($variation->price ?? ($product->current_price ?? 0)),
                 'oldPrice' => $isFlashSaleActive
-                    ? (float) ($variation->price ?? $product->current_price ?? 0)
+                    ? (float) ($variation->price ?? ($product->current_price ?? 0))
                     : (float) ($product->previous_price ?? 0),
             ];
         }
     }
 
     $productImage = !empty($product->thumbnail) ? asset('assets/img/product/' . $product->thumbnail) : '';
-    $summaryText = trim(preg_replace('/\s+/', ' ', strip_tags((string) ($productContent->summary ?? $productContent->description ?? ''))));
+    $summaryText = trim(
+        preg_replace(
+            '/\s+/',
+            ' ',
+            strip_tags((string) ($productContent->summary ?? ($productContent->description ?? ''))),
+        ),
+    );
 
     $quickViewData = [
         'id' => (string) $product->id,
@@ -108,13 +116,10 @@
 
 <article
     class="group relative flex h-full flex-col rounded-2xl border border-green-100 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)]"
-    data-reveal-child
-    data-featured-card
-    data-product-id="{{ $product->id }}"
-    data-product-name="{{ $productTitle }}"
+    data-reveal-child data-featured-card data-product-id="{{ $product->id }}" data-product-name="{{ $productTitle }}"
     data-product-json="{{ json_encode($quickViewData) }}">
 
-    @if($isFlashSaleActive)
+    @if ($isFlashSaleActive)
         <span
             class="absolute left-4 top-4 rounded-full bg-red-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-sm">
             {{ __('Flash Sale') }}
@@ -123,19 +128,16 @@
 
     <div class="relative overflow-hidden rounded-2xl bg-green-50">
         <a href="{{ route('frontend.shop.details', ['id' => $product->id]) }}" class="block">
-            <img src="{{ asset('assets/img/product/' . $product->thumbnail) }}"
-                alt="{{ $productTitle }}"
-                class="h-40 w-full object-cover transition duration-500 group-hover:scale-105"
-                loading="lazy"
+            <img src="{{ asset('assets/img/product/' . $product->thumbnail) }}" alt="{{ $productTitle }}"
+                class="h-40 w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy"
                 decoding="async">
         </a>
 
-        <button type="button"
-            data-action="quick-view"
-            data-product-id="{{ $product->id }}"
+        <button type="button" data-action="quick-view" data-product-id="{{ $product->id }}"
             class="absolute bottom-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition duration-300 hover:bg-green-700"
             aria-label="Quick view {{ $productTitle }}">
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
             </svg>
@@ -196,8 +198,12 @@
                     </p>
                     @if ($isFlashSaleActive)
                         @php
-                            $oldMinVariantPrice = $variantBasePrices->isNotEmpty() ? (float) $variantBasePrices->min() : 0;
-                            $oldMaxVariantPrice = $variantBasePrices->isNotEmpty() ? (float) $variantBasePrices->max() : 0;
+                            $oldMinVariantPrice = $variantBasePrices->isNotEmpty()
+                                ? (float) $variantBasePrices->min()
+                                : 0;
+                            $oldMaxVariantPrice = $variantBasePrices->isNotEmpty()
+                                ? (float) $variantBasePrices->max()
+                                : 0;
                         @endphp
                         <p class="text-xs text-slate-400 line-through">
                             {{ currency_symbol($oldMinVariantPrice) }} - {{ currency_symbol($oldMaxVariantPrice) }}
