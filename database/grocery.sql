@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 28, 2026 at 05:41 PM
+-- Generation Time: Mar 29, 2026 at 06:26 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.29
 
@@ -245,12 +245,12 @@ CREATE TABLE `home_freshness_items` (
 --
 
 INSERT INTO `home_freshness_items` (`id`, `language_id`, `icon`, `title`, `text`, `position`, `status`, `serial_number`, `created_at`, `updated_at`) VALUES
-(1, 6, 'fas fa-seedling', 'Handmade Products', 'We collect fresh natural fruits for your healthy life.', 'left', 1, 1, '2026-03-28 10:15:54', '2026-03-28 10:15:54'),
-(2, 6, 'fas fa-seedling', 'Organic and Fresh', 'Our products are 100% natural and fresh.', 'left', 1, 2, '2026-03-28 10:16:12', '2026-03-28 10:16:12'),
-(3, 6, 'fas fa-seedling', '150+ Organic Items', 'We stock 150+ organic food items for your pantry.', 'left', 1, 3, '2026-03-28 10:16:27', '2026-03-28 10:16:27'),
-(4, 6, 'fas fa-seedling', '100% Secure Payment', 'We make sure your payment method stays secure.', 'right', 1, 1, '2026-03-28 10:16:47', '2026-03-28 10:20:23'),
-(5, 6, 'fas fa-seedling', 'Temperature Control', 'We keep every item cool and fresh in transit.', 'right', 1, 2, '2026-03-28 10:17:04', '2026-03-28 10:17:04'),
-(6, 6, 'fas fa-seedling', 'Super Fast Delivery', 'Fast delivery services, safe and secure from damage.', 'right', 1, 3, '2026-03-28 10:17:23', '2026-03-28 10:17:23');
+(1, 6, 'fas fa-seedling', 'Handmade Products', 'We collect fresh natural fruits for your healthy life.', 'left', 1, 1, '2026-03-28 10:15:54', '2026-03-29 10:11:26'),
+(2, 6, 'fas fa-seedling', 'Organic and Fresh', 'Our products are 100% natural and fresh.', 'left', 1, 2, '2026-03-28 10:16:12', '2026-03-29 10:11:27'),
+(3, 6, 'fas fa-seedling', '150+ Organic Items', 'We stock 150+ organic food items for your pantry.', 'left', 1, 3, '2026-03-28 10:16:27', '2026-03-29 10:11:28'),
+(4, 6, 'fas fa-seedling', '100% Secure Payment', 'We make sure your payment method stays secure.', 'right', 1, 1, '2026-03-28 10:16:47', '2026-03-29 10:11:27'),
+(5, 6, 'fas fa-seedling', 'Temperature Control', 'We keep every item cool and fresh in transit.', 'right', 1, 2, '2026-03-28 10:17:04', '2026-03-29 10:11:28'),
+(6, 6, 'fas fa-seedling', 'Super Fast Delivery', 'Fast delivery services, safe and secure from damage.', 'right', 1, 3, '2026-03-28 10:17:23', '2026-03-29 10:11:29');
 
 -- --------------------------------------------------------
 
@@ -315,8 +315,8 @@ CREATE TABLE `home_sliders` (
 --
 
 INSERT INTO `home_sliders` (`id`, `language_id`, `image`, `image_left_badge_title`, `image_left_badge_sub_title`, `image_right_badge_title`, `image_right_badge_sub_title`, `title`, `sub_title`, `description`, `button_text_1`, `button_url_1`, `button_text_2`, `button_url_2`, `status`, `serial_number`, `created_at`, `updated_at`) VALUES
-(1, 6, '69aef3839bf3c.avif', 'Curated Daily', 'Market fresh produce', 'Next Slot', '7:30 PM delivery', 'Exclusive launch week', 'Groceries That Feel <span>Premium</span> Every Day', 'Chef grade produce, artisanal pantry staples, and dairy delivered with white-glove care in under 90 minutes.', 'Start Shopping', '/shop', 'View Deals', '/shop', 1, 1, '2026-03-09 10:21:23', '2026-03-09 10:21:23'),
-(2, 6, '69aef3f30f351.avif', 'Transport Quality', 'Temperature controlled', 'Delivery ETA', 'Expected in 42 minutes', 'Fast lane delivery', 'Farm to Fridge With <span>Live Tracking</span>', 'Keep your schedule smooth with precise ETA updates, temperature-safe transport, and dedicated rider support.', 'Shop Fresh', '/shop', 'Explore Weekly Deals', '/shop', 1, 2, '2026-03-09 10:23:15', '2026-03-09 10:41:56');
+(1, 6, '69aef3839bf3c.avif', 'Curated Daily', 'Market fresh produce', 'Next Slot', '7:30 PM delivery', 'Exclusive launch week', 'Groceries That Feel <span>Premium</span> Every Day', 'Chef grade produce, artisanal pantry staples, and dairy delivered with white-glove care in under 90 minutes.', 'Start Shopping', '/shop', 'View Deals', '/shop', 1, 1, '2026-03-09 10:21:23', '2026-03-29 09:57:29'),
+(2, 6, '69aef3f30f351.avif', 'Transport Quality', 'Temperature controlled', 'Delivery ETA', 'Expected in 42 minutes', 'Fast lane delivery', 'Farm to Fridge With <span>Live Tracking</span>', 'Keep your schedule smooth with precise ETA updates, temperature-safe transport, and dedicated rider support.', 'Shop Fresh', '/shop', 'Explore Weekly Deals', '/shop', 1, 2, '2026-03-09 10:23:15', '2026-03-29 09:57:28');
 
 -- --------------------------------------------------------
 
@@ -527,7 +527,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (79, '2026_03_07_000002_add_featured_field_to_products_table', 45),
 (80, '2026_03_08_072950_create_home_sliders_table', 46),
 (81, '2026_03_09_182256_create_carts_table', 47),
-(82, '2026_03_28_170000_create_home_freshness_items_table', 48);
+(82, '2026_03_28_170000_create_home_freshness_items_table', 48),
+(83, '2026_03_29_161316_create_product_reviews_table', 49),
+(84, '2026_03_29_200000_add_phone_address_to_users_table', 50),
+(85, '2026_03_30_000000_add_product_fields_to_order_items_table', 51);
 
 -- --------------------------------------------------------
 
@@ -537,6 +540,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 
 CREATE TABLE `orders` (
   `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint DEFAULT NULL,
   `order_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `billing_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `billing_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -574,8 +578,11 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `order_number`, `billing_name`, `billing_email`, `billing_phone`, `billing_address`, `billing_city`, `shipping_address`, `payment_method`, `gateway`, `cart_total`, `pay_amount`, `discount_amount`, `tax`, `shipping_charge`, `invoice_number`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `payment_status`, `order_status`, `receipt`, `delivery_date`, `stedfast_consignment_id`, `stedfast_tracking_code`, `stedfast_status`, `stedfast_message`, `stedfast_payload`, `stedfast_response`, `created_at`, `updated_at`) VALUES
-(160, 'D7BA07CF', 'rana ahmedc', 'ranaahmed269205@gmail.com', '+8801306084771', 'Dhaka\r\nDhaka', 'Pabna', 'Dhaka\r\nDhaka, Pabna, 6613', 'Online Payment', 'SSLCommerz', 900.00, 970, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, 'completed', 'pending', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-15 10:25:31', '2026-03-15 10:25:31');
+INSERT INTO `orders` (`id`, `user_id`, `order_number`, `billing_name`, `billing_email`, `billing_phone`, `billing_address`, `billing_city`, `shipping_address`, `payment_method`, `gateway`, `cart_total`, `pay_amount`, `discount_amount`, `tax`, `shipping_charge`, `invoice_number`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `payment_status`, `order_status`, `receipt`, `delivery_date`, `stedfast_consignment_id`, `stedfast_tracking_code`, `stedfast_status`, `stedfast_message`, `stedfast_payload`, `stedfast_response`, `created_at`, `updated_at`) VALUES
+(160, 59, 'D7BA07CF', 'rana ahmedc', 'ranaahmed269205@gmail.com', '+8801306084771', 'Dhaka\r\nDhaka', 'Pabna', 'Dhaka\r\nDhaka, Pabna, 6613', 'Online Payment', 'SSLCommerz', 900.00, 970, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, 'completed', 'pending', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-15 10:25:31', '2026-03-15 10:25:31'),
+(161, 59, '5C4951B8', 'Masud Rana', 'ranaahmed269205@gmail.com', '+8801306084771', 'Pabna', 'pabna', 'Pabna, pabna, 6670', 'Cash Payment', 'Manual', 163.99, 234, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, 'pending', 'pending', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-29 11:47:48', '2026-03-29 11:47:48'),
+(162, 59, '6B953D35', 'Masud Rana', 'ranaahmed269205@gmail.com', '+8801306084771', 'Pabna', 'pabna', 'Pabna, pabna, 6670', 'Cash Payment', 'Manual', 96.00, 166, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, 'pending', 'pending', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-29 11:51:53', '2026-03-29 11:51:53'),
+(163, 59, '93C03812', 'Masud Rana', 'ranaahmed269205@gmail.com', '+8801306084771', 'Pabna', 'pabna', 'Pabna, pabna, 6670', 'Cash Payment', 'Manual', 630.00, 700, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, 'pending', 'pending', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-29 12:02:36', '2026-03-29 12:02:36');
 
 -- --------------------------------------------------------
 
@@ -586,8 +593,12 @@ INSERT INTO `orders` (`id`, `order_number`, `billing_name`, `billing_email`, `bi
 CREATE TABLE `order_items` (
   `id` bigint UNSIGNED NOT NULL,
   `order_id` bigint DEFAULT NULL,
-  `customer_id` bigint DEFAULT NULL,
   `product_id` bigint DEFAULT NULL,
+  `product_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `product_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `unit_price` decimal(10,2) DEFAULT NULL,
+  `quantity` int DEFAULT NULL,
+  `product_option` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `variant_id` bigint UNSIGNED DEFAULT NULL,
   `product_price` decimal(10,0) DEFAULT NULL,
   `qty` int DEFAULT NULL,
@@ -600,9 +611,12 @@ CREATE TABLE `order_items` (
 -- Dumping data for table `order_items`
 --
 
-INSERT INTO `order_items` (`id`, `order_id`, `customer_id`, `product_id`, `variant_id`, `product_price`, `qty`, `variations`, `created_at`, `updated_at`) VALUES
-(176, 156, NULL, 34, 62, 50, 1, '[{\"product_id\":34,\"variation_id\":69,\"variation_name\":\"Size\",\"option_name\":\"M\",\"price\":0,\"option_key\":0,\"qty\":1}]', '2026-02-05 11:35:41', '2026-02-05 11:35:41'),
-(181, 160, NULL, 54, 129, 900, 1, '[{\"label\":\"500gm\"}]', '2026-03-15 10:25:31', '2026-03-15 10:25:31');
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `product_name`, `product_image`, `unit_price`, `quantity`, `product_option`, `variant_id`, `product_price`, `qty`, `variations`, `created_at`, `updated_at`) VALUES
+(176, 156, 34, NULL, NULL, NULL, NULL, NULL, 62, 50, 1, '[{\"product_id\":34,\"variation_id\":69,\"variation_name\":\"Size\",\"option_name\":\"M\",\"price\":0,\"option_key\":0,\"qty\":1}]', '2026-02-05 11:35:41', '2026-02-05 11:35:41'),
+(181, 160, 54, NULL, NULL, NULL, NULL, NULL, 129, 900, 1, '[{\"label\":\"500gm\"}]', '2026-03-15 10:25:31', '2026-03-15 10:25:31'),
+(182, 161, 53, NULL, NULL, NULL, NULL, NULL, 120, 164, 1, '[{\"label\":\"23.5 cm, Black\"}]', '2026-03-29 11:47:48', '2026-03-29 11:47:48'),
+(183, 162, 52, NULL, NULL, NULL, NULL, NULL, 117, 96, 1, '[{\"label\":\"500gm, Organic\"}]', '2026-03-29 11:51:53', '2026-03-29 11:51:53'),
+(184, 163, 54, 'Product', '69ac500560dd7.jpg', 630.00, 1, '500gm', 129, 630, 1, '[{\"label\":\"500gm\"}]', '2026-03-29 12:02:36', '2026-03-29 12:02:36');
 
 -- --------------------------------------------------------
 
@@ -794,12 +808,12 @@ INSERT INTO `product_categories` (`id`, `language_id`, `name`, `slug`, `icon`, `
 (20, 7, 'Electronics', 'electronics-bn', NULL, 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47'),
 (21, 7, 'Fashion', 'fashion-bn', NULL, 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47'),
 (22, 7, 'Grocery', 'grocery-bn', NULL, 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47'),
-(23, 6, 'Tv & Audio', 'tv-&-audio', 'fas fa-tv', 1, 1, '2026-02-27 11:03:42', '2026-03-28 09:49:27'),
-(24, 6, 'Media Production', 'media-production', 'fas fa-camera', 2, 1, '2026-02-27 11:03:51', '2026-03-28 09:49:38'),
-(25, 6, 'Mobile Device', 'mobile-device', 'fas fa-mobile', 3, 1, '2026-02-27 11:04:08', '2026-03-28 09:49:45'),
-(26, 6, 'Home Appliances', 'home-appliances', 'fas fa-utensils', 4, 1, '2026-02-27 11:04:19', '2026-03-28 09:50:21'),
-(27, 6, 'Pure Spices', 'pure-spices', 'fas fa-h-square', 5, 1, '2026-02-27 11:11:59', '2026-03-28 09:50:57'),
-(28, 6, 'Sportswear', 'sportswear', 'fas fa-bolt', 6, 1, '2026-02-27 11:15:08', '2026-03-28 09:51:10');
+(23, 6, 'Tv & Audio', 'tv-&-audio', 'fas fa-tv', 1, 1, '2026-02-27 11:03:42', '2026-03-29 10:11:35'),
+(24, 6, 'Media Production', 'media-production', 'fas fa-camera', 2, 1, '2026-02-27 11:03:51', '2026-03-29 10:11:35'),
+(25, 6, 'Mobile Device', 'mobile-device', 'fas fa-mobile', 3, 1, '2026-02-27 11:04:08', '2026-03-29 10:11:36'),
+(26, 6, 'Home Appliances', 'home-appliances', 'fas fa-utensils', 4, 1, '2026-02-27 11:04:19', '2026-03-29 10:11:36'),
+(27, 6, 'Pure Spices', 'pure-spices', 'fas fa-h-square', 5, 1, '2026-02-27 11:11:59', '2026-03-29 10:11:36'),
+(28, 6, 'Sportswear', 'sportswear', 'fas fa-bolt', 6, 1, '2026-02-27 11:15:08', '2026-03-29 10:11:37');
 
 -- --------------------------------------------------------
 
@@ -924,6 +938,29 @@ INSERT INTO `product_option_values` (`id`, `product_option_id`, `value`, `positi
 (137, 65, 'Gray', 2, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
 (138, 66, '500gm', 0, '2026-03-07 10:19:17', '2026-03-07 10:19:17'),
 (139, 66, '1Kg', 1, '2026-03-07 10:19:17', '2026-03-07 10:19:17');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_reviews`
+--
+
+CREATE TABLE `product_reviews` (
+  `id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `rating` tinyint UNSIGNED NOT NULL DEFAULT '0',
+  `comment` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `product_reviews`
+--
+
+INSERT INTO `product_reviews` (`id`, `product_id`, `user_id`, `rating`, `comment`, `created_at`, `updated_at`) VALUES
+(1, 54, 59, 4, 'dsfsadfsadf', '2026-03-29 11:07:25', '2026-03-29 11:36:03');
 
 -- --------------------------------------------------------
 
@@ -1346,7 +1383,6 @@ INSERT INTO `transactions` (`id`, `transaction_id`, `pre_balance`, `actual_total
 CREATE TABLE `users` (
   `id` bigint UNSIGNED NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `company_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1360,9 +1396,6 @@ CREATE TABLE `users` (
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `database_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `database_username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `database_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `qr_menu_enabled` tinyint(1) NOT NULL DEFAULT '1'
@@ -1372,8 +1405,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `company_name`, `username`, `email`, `image`, `status`, `phone`, `country`, `city`, `state`, `zip_code`, `address`, `email_verified_at`, `password`, `remember_token`, `database_name`, `database_username`, `database_password`, `created_at`, `updated_at`, `qr_menu_enabled`) VALUES
-(59, NULL, 'Ballard and Sawyer Traders', 'vysidexud', 'dehat@mailinator.com', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-21 06:24:12', '$2y$12$RpYAqen.fCBNSFbY34jomOEWl.SFvnQOlzwMQWK0sM0rK80zTUfT.', 'ahVDR4CCllzUT9QMpI2srGHDzdaYl1KVzVnSzLqn26YXlgPxJU1nPvw2xzRI', NULL, NULL, NULL, '2025-11-21 06:24:12', '2025-11-25 10:46:09', 1);
+INSERT INTO `users` (`id`, `name`, `username`, `email`, `image`, `status`, `phone`, `country`, `city`, `state`, `zip_code`, `address`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `qr_menu_enabled`) VALUES
+(59, 'Masud Rana', 'vysidexud', 'dehat@mailinator.com', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-21 06:24:12', '$2y$12$nMQkOTNbb3EwF3qVgd6pY.XrvtjMu.UPPhlnwkM6idUzOC7seDixK', 'ahVDR4CCllzUT9QMpI2srGHDzdaYl1KVzVnSzLqn26YXlgPxJU1nPvw2xzRI', '2025-11-21 06:24:12', '2026-03-29 11:06:50', 1);
 
 -- --------------------------------------------------------
 
@@ -1704,6 +1737,12 @@ ALTER TABLE `product_option_values`
   ADD KEY `product_option_values_product_option_id_value_index` (`product_option_id`,`value`);
 
 --
+-- Indexes for table `product_reviews`
+--
+ALTER TABLE `product_reviews`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `product_settings`
 --
 ALTER TABLE `product_settings`
@@ -1831,7 +1870,7 @@ ALTER TABLE `blog_contents`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -1909,19 +1948,19 @@ ALTER TABLE `menu_builders`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=161;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=164;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=182;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=185;
 
 --
 -- AUTO_INCREMENT for table `packages`
@@ -1982,6 +2021,12 @@ ALTER TABLE `product_options`
 --
 ALTER TABLE `product_option_values`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
+
+--
+-- AUTO_INCREMENT for table `product_reviews`
+--
+ALTER TABLE `product_reviews`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `product_settings`

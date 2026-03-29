@@ -12,6 +12,19 @@
             <p class="mt-2 text-slate-600">View and track all your orders below</p>
         </div>
 
+        <!-- Filter Buttons -->
+        <div class="mb-6 flex flex-wrap gap-2">
+            <a href="{{ route('user.orders') }}" class="rounded-lg px-4 py-2 text-sm font-medium transition {{ !request('status') ? 'bg-green-600 text-white' : 'border border-slate-300 bg-white text-slate-900 hover:bg-slate-50' }}">
+                All Orders
+            </a>
+            <a href="{{ route('user.orders', ['status' => 'pending']) }}" class="rounded-lg px-4 py-2 text-sm font-medium transition {{ request('status') === 'pending' ? 'bg-amber-600 text-white' : 'border border-slate-300 bg-white text-slate-900 hover:bg-slate-50' }}">
+                Pending
+            </a>
+            <a href="{{ route('user.orders', ['status' => 'completed']) }}" class="rounded-lg px-4 py-2 text-sm font-medium transition {{ request('status') === 'completed' ? 'bg-emerald-600 text-white' : 'border border-slate-300 bg-white text-slate-900 hover:bg-slate-50' }}">
+                Completed
+            </a>
+        </div>
+
         @if ($orders->isEmpty())
             <div class="rounded-3xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center">
                 <svg class="mx-auto h-16 w-16 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -81,7 +94,7 @@
 
                         <!-- Order Footer -->
                         <div class="border-t border-slate-100 px-6 py-4">
-                            <a href="{{ route('cart.order.success', ['order' => $order->id]) }}" class="text-sm font-medium text-green-600 transition hover:text-green-700">
+                            <a href="{{ route('user.order.details', ['id' => $order->id]) }}" class="text-sm font-medium text-green-600 transition hover:text-green-700">
                                 View Details →
                             </a>
                         </div>

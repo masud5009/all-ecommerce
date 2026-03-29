@@ -43,7 +43,7 @@ class UserController extends Controller
         $latestOrders = (clone $ordersQuery)
             ->latest('id')
             ->limit(5)
-            ->get(['order_number', 'pay_amount', 'order_status', 'payment_status', 'created_at']);
+            ->get(['id', 'order_number', 'pay_amount', 'order_status', 'payment_status', 'created_at']);
 
         return view('frontend.user.dashboard', [
             'user' => $user,
@@ -61,20 +61,27 @@ class UserController extends Controller
     /**
      * Show Orders page
      */
-    public function orders()
+    public function orders(Request $request)
     {
         $user = Auth::guard('web')->user();
 
-        $orders = Order::query()->where(function ($query) use ($user) {
+        $ordersQuery = Order::query()->where(function ($query) use ($user) {
             $query->where('user_id', $user->id)
                 ->orWhere(function ($subQuery) use ($user) {
                     $subQuery->whereNull('user_id')
                         ->where('billing_email', $user->email);
                 });
-        })
-        ->with('orderItems')
-        ->latest('id')
-        ->paginate(10);
+        });
+
+        // Filter by status if provided
+        if ($request->has('status') && $request->status) {
+            $ordersQuery->where('order_status', $request->status);
+        }
+
+        $orders = $ordersQuery
+            ->with('orderItems')
+            ->latest('id')
+            ->paginate(10);
 
         return view('frontend.user.orders', [
             'user' => $user,
@@ -193,6 +200,32 @@ class UserController extends Controller
 
         return redirect()->back()->with('success', 'Password updated successfully!');
     }
+
+    /**
+     * Show Order Details page
+     */
+    public function orderDetails($id)
+    {
+        $user = Auth::guard('web')->user();
+
+        $order = Order::query()
+            ->where('id', $id)
+            ->where(function ($query) use ($user) {
+                $query->where('user_id', $user->id)
+                    ->orWhere(function ($subQuery) use ($user) {
+                        $subQuery->whereNull('user_id')
+                            ->where('billing_email', $user->email);
+                    });
+            })
+            ->with('orderItems')
+            ->firstOrFail();
+
+        return view('frontend.user.order-details', [
+            'user' => $user,
+            'order' => $order,
+        ]);
+    }
+
     /**
      * Show register page
      */

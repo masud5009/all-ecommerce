@@ -21,22 +21,22 @@
             </div>
 
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-                <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Total Orders</p>
-                    <p class="mt-2 text-lg font-semibold text-slate-900">{{ $stats['totalOrders'] }}</p>
-                </div>
-                <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Completed</p>
-                    <p class="mt-2 text-lg font-semibold text-slate-900">{{ $stats['completedOrders'] }}</p>
-                </div>
-                <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Pending</p>
-                    <p class="mt-2 text-lg font-semibold text-slate-900">{{ $stats['pendingOrders'] }}</p>
-                </div>
-                <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Cart Items</p>
-                    <p class="mt-2 text-lg font-semibold text-slate-900">{{ $stats['cartItems'] }}</p>
-                </div>
+                <a href="{{ route('user.orders') }}" class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600">Total Orders</p>
+                    <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">{{ $stats['totalOrders'] }}</p>
+                </a>
+                <a href="{{ route('user.orders', ['status' => 'completed']) }}" class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600">Completed</p>
+                    <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">{{ $stats['completedOrders'] }}</p>
+                </a>
+                <a href="{{ route('user.orders', ['status' => 'pending']) }}" class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600">Pending</p>
+                    <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">{{ $stats['pendingOrders'] }}</p>
+                </a>
+                <a href="{{ route('cart.index') }}" class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600">Cart Items</p>
+                    <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">{{ $stats['cartItems'] }}</p>
+                </a>
                 <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                     <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Total Spent</p>
                     <p class="mt-2 text-lg font-semibold text-slate-900">{{ number_format($stats['totalSpent'], 2) }}</p>
@@ -63,26 +63,31 @@
                                     <th class="py-3 pr-4">Amount</th>
                                     <th class="py-3 pr-4">Order Status</th>
                                     <th class="py-3 pr-4">Payment</th>
-                                    <th class="py-3">Date</th>
+                                    <th class="py-3 pr-4">Date</th>
+                                    <th class="py-3">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($latestOrders as $order)
                                     <tr class="border-b border-slate-100 last:border-none">
-                                        <td class="py-3 pr-4 font-medium text-slate-800">{{ $order->order_number ?? 'N/A' }}
-                                        </td>
-                                        <td class="py-3 pr-4 text-slate-700">
-                                            {{ number_format((float) ($order->pay_amount ?? 0), 2) }}</td>
+                                        <td class="py-3 pr-4 font-medium text-slate-800">{{ $order->order_number ?? 'N/A' }}</td>
+                                        <td class="py-3 pr-4 text-slate-700">{{ number_format((float) ($order->pay_amount ?? 0), 2) }}</td>
                                         <td class="py-3 pr-4">
-                                            <span
-                                                class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ strtolower((string) $order->order_status) === 'completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">
+                                            <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ strtolower((string) $order->order_status) === 'completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">
                                                 {{ ucfirst((string) ($order->order_status ?? 'pending')) }}
                                             </span>
                                         </td>
-                                        <td class="py-3 pr-4 text-slate-700">
-                                            {{ ucfirst((string) ($order->payment_status ?? 'pending')) }}</td>
-                                        <td class="py-3 text-slate-700">
-                                            {{ optional($order->created_at)->format('d M Y, h:i A') }}</td>
+                                        <td class="py-3 pr-4 text-slate-700">{{ ucfirst((string) ($order->payment_status ?? 'pending')) }}</td>
+                                        <td class="py-3 pr-4 text-slate-700">{{ optional($order->created_at)->format('d M Y, h:i A') }}</td>
+                                        <td class="py-3">
+                                            <a href="{{ route('user.order.details', ['id' => $order->id]) }}" class="inline-flex items-center gap-1 rounded-md bg-green-100 px-3 py-1.5 text-xs font-medium text-green-700 transition hover:bg-green-200">
+                                                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                    <circle cx="12" cy="12" r="3"></circle>
+                                                </svg>
+                                                View
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

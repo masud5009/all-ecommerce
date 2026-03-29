@@ -103,6 +103,7 @@ Route::prefix('user')->middleware('guest:web')->controller(UserController::class
 Route::prefix('user')->middleware('auth:web')->controller(UserController::class)->group(function () {
     Route::get('/dashboard', 'dashboard')->name('user.dashboard');
     Route::get('/orders', 'orders')->name('user.orders');
+    Route::get('/orders/{id}', 'orderDetails')->name('user.order.details');
     Route::get('/wishlist', 'wishlist')->name('user.wishlist');
     Route::get('/edit-profile', 'editProfile')->name('user.edit_profile');
     Route::post('/edit-profile', 'updateProfile')->name('user.update_profile');

@@ -57,10 +57,20 @@ class OrderService
 
         // Create order items
         foreach ($cartItems as $item) {
+            $product = $item->product;
+            $productContent = $product?->content->first();
+            $productName = $productContent?->name ?? $product?->name ?? 'Product';
+            $productImage = $product?->thumbnail ?? null;
+
             \App\Models\OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $item->product_id,
                 'variant_id' => $item->variant_id,
+                'product_name' => $productName,
+                'product_image' => $productImage,
+                'unit_price' => $item->price,
+                'quantity' => $item->quantity,
+                'product_option' => $item->variant_label,
                 'product_price' => $item->price,
                 'qty' => $item->quantity,
                 'variations' => $item->variant_label ? json_encode([['label' => $item->variant_label]]) : null,
