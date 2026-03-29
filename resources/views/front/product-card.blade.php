@@ -85,27 +85,23 @@
         <div class="flex items-start justify-between gap-2">
             <a href="{{ route('frontend.shop.details', ['id' => $product->id]) }}"
                 class="text-sm font-semibold text-slate-900 transition hover:text-green-700">
-                {{ $productTitle }}
+                {{ truncateString($productTitle, 60) }}
             </a>
         </div>
 
         <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
             <span class="flex items-center gap-1">
-                <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
-                </svg>
-                <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
-                </svg>
-                <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
-                </svg>
-                <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
-                </svg>
-                <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
-                </svg>
+                @for ($i = 1; $i <= 5; $i++)
+                    @if ($i <= $averageRating)
+                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
+                        </svg>
+                    @else
+                        <svg class="h-4 w-4 text-slate-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
+                        </svg>
+                    @endif
+                @endfor
             </span>
 
             <span>{{ number_format($averageRating, 1) }} ({{ $reviewCount }}

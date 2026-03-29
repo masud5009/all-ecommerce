@@ -187,9 +187,52 @@
     };
     /*========================== Category Scroll End ===========================*/
 
+    /*========================== Tabs Start ===========================*/
+    const initTabs = () => {
+        qsa('[data-tabs]').forEach((container) => {
+            const buttons = qsa('[data-tab-target]', container);
+            const panels = qsa('[data-tab]', container);
+
+            if (!buttons.length || !panels.length) return;
+
+            const activateTab = (target) => {
+                buttons.forEach((btn) => {
+                    const isActive = btn.dataset.tabTarget === target;
+                    btn.classList.toggle('border-b-2', isActive);
+                    btn.classList.toggle('border-green-600', isActive);
+                    btn.classList.toggle('text-green-700', isActive);
+                    btn.classList.toggle('text-slate-500', !isActive);
+                    btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+                });
+
+                panels.forEach((panel) => {
+                    panel.classList.toggle('hidden', panel.dataset.tab !== target);
+                });
+            };
+
+            const hashTarget = window.location.hash ? window.location.hash.substring(1) : '';
+            const hasHashTab = buttons.some((btn) => btn.dataset.tabTarget === hashTarget);
+            const initialTarget = hasHashTab
+                ? hashTarget
+                : buttons.find((btn) =>
+                    btn.classList.contains('border-b-2') || btn.getAttribute('aria-selected') === 'true'
+                )?.dataset.tabTarget || buttons[0].dataset.tabTarget;
+
+            activateTab(initialTarget);
+
+            buttons.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    activateTab(btn.dataset.tabTarget);
+                });
+            });
+        });
+    };
+    /*========================== Tabs End ===========================*/
+
 
     initHeroSlider();
     initCategoryScroll();
+    initTabs();
 
     /*========================== Quick View Start ===========================*/
     const initQuickView = () => {
@@ -243,6 +286,56 @@
             const decBtn = qs('[data-quickview-qty-dec]', content);
             const incBtn = qs('[data-quickview-qty-inc]', content);
             const addBtn = qs('[data-quickview-add-cart]', content);
+            const priceEl = qs('[data-quickview-price]', content);
+            const oldPriceEl = qs('[data-quickview-oldprice]', content);
+            const unitRadios = qsa('input[name="quickviewUnit"]', content);
+
+            const formatPriceLikeTemplate = (amount, template = '') => {
+                const numeric = Number(amount) || 0;
+                const formatted = numeric.toFixed(2);
+                const sample = String(template || '').trim();
+                const numberPattern = /-?[\d,.]+/;
+
+                if (numberPattern.test(sample)) {
+                    return sample.replace(numberPattern, formatted);
+                }
+
+                return `৳${formatted}`;
+            };
+
+            const getSelectedUnit = (productData) => {
+                const selectedRadio = qs('input[name="quickviewUnit"]:checked', content);
+                if (!selectedRadio) return productData?.units?.[0] || null;
+
+                const index = parseInt(selectedRadio.value, 10);
+                return Number.isInteger(index) ? (productData?.units?.[index] || null) : null;
+            };
+
+            const updateDisplayedPricing = () => {
+                const productData = window.quickViewProductData;
+                if (!productData) return;
+
+                const selectedUnit = getSelectedUnit(productData);
+                if (!selectedUnit || !priceEl) return;
+
+                const priceTemplate = priceEl.textContent || '';
+                priceEl.textContent = formatPriceLikeTemplate(selectedUnit.price, priceTemplate);
+
+                if (!oldPriceEl) return;
+
+                const hasOldPrice =
+                    selectedUnit.oldPrice !== null &&
+                    selectedUnit.oldPrice !== undefined &&
+                    Number(selectedUnit.oldPrice) > Number(selectedUnit.price);
+
+                if (hasOldPrice) {
+                    const oldPriceTemplate = oldPriceEl.textContent || priceTemplate;
+                    oldPriceEl.textContent = formatPriceLikeTemplate(selectedUnit.oldPrice, oldPriceTemplate);
+                    oldPriceEl.classList.remove('hidden');
+                } else {
+                    oldPriceEl.classList.add('hidden');
+                }
+            };
 
             // Initialize magnify for quickview
             const magnifyContainer = qs('[data-magnify]', content);
@@ -331,6 +424,13 @@
                     }
                 });
             }
+
+            if (unitRadios.length) {
+                unitRadios.forEach((radio) => {
+                    radio.addEventListener('change', updateDisplayedPricing);
+                });
+                updateDisplayedPricing();
+            }
         };
 
         // Event delegation for quick view buttons
@@ -357,7 +457,90 @@
         });
     };
 
+    const initReviewAjaxSubmit = () => {
+        const getCsrfToken = () => {
+            const meta = qs('meta[name="csrf-token"]');
+            return meta ? meta.getAttribute('content') : '';
+        };
+
+        const renderErrors = (form, errors) => {
+            const errorBox = qs('[data-review-errors]', form);
+            if (!errorBox) return;
+
+            const messages = [];
+            Object.keys(errors || {}).forEach((key) => {
+                const fieldErrors = Array.isArray(errors[key]) ? errors[key] : [errors[key]];
+                fieldErrors.forEach((message) => {
+                    if (message) messages.push(message);
+                });
+            });
+
+            if (!messages.length) {
+                errorBox.classList.add('hidden');
+                errorBox.innerHTML = '';
+                return;
+            }
+
+            errorBox.classList.remove('hidden');
+            errorBox.innerHTML = messages.map((message) => `<p>${message}</p>`).join('');
+        };
+
+        document.addEventListener('submit', async (event) => {
+            const form = event.target.closest('[data-review-form]');
+            if (!form) return;
+
+            event.preventDefault();
+
+            const submitBtn = qs('[data-review-submit]', form);
+            const originalBtnText = submitBtn ? submitBtn.textContent : '';
+
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Submitting...';
+            }
+
+            renderErrors(form, {});
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': getCsrfToken(),
+                    },
+                    body: new FormData(form),
+                });
+
+                const data = await response.json();
+
+                if (response.status === 422) {
+                    renderErrors(form, data.errors || {});
+                    return;
+                }
+
+                if (!response.ok || !data.success) {
+                    renderErrors(form, { general: [data.message || 'Failed to submit review.'] });
+                    return;
+                }
+
+                const reviewsTab = form.closest('[data-tab="reviews"]');
+                if (reviewsTab && data.html) {
+                    reviewsTab.innerHTML = data.html;
+                }
+            } catch (error) {
+                renderErrors(form, { general: ['Something went wrong. Please try again.'] });
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText || 'Submit Review';
+                }
+            }
+        });
+    };
+
     initQuickView();
+    initReviewAjaxSubmit();
     /*========================== Quick View End ===========================*/
 
 

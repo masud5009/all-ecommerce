@@ -88,11 +88,9 @@
             <p class="text-2xl font-semibold text-slate-900" data-quickview-price>
                 {{ currency_symbol($firstUnit['price']) }}
             </p>
-            @if (!empty($firstUnit['oldPrice']) && $firstUnit['oldPrice'] > $firstUnit['price'])
-                <p class="text-sm text-slate-400 line-through" data-quickview-oldprice>
-                    {{ currency_symbol($firstUnit['oldPrice']) }}
-                </p>
-            @endif
+            <p class="text-sm text-slate-400 line-through {{ !empty($firstUnit['oldPrice']) && $firstUnit['oldPrice'] > $firstUnit['price'] ? '' : 'hidden' }}" data-quickview-oldprice>
+                {{ currency_symbol($firstUnit['oldPrice'] ?? 0) }}
+            </p>
         </div>
 
         {{-- Summary --}}

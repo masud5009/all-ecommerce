@@ -5,9 +5,11 @@ namespace App\Http\Controllers\FrontEnd;
 use Carbon\Carbon;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\ProductReview;
 use App\Models\Admin\Language;
 use App\Models\ProductCategory;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\ProductService;
 use App\Services\Frontend\CategoryService;
 
@@ -64,6 +66,9 @@ class ShopController extends Controller
             },
             'sliderImage',
             'variants.variantValues.optionValue',
+            'reviews' => function ($q) {
+                $q->latest('id')->take(12)->with('user');
+            },
         ])
             ->withCount('reviews')
             ->withAvg('reviews', 'rating')
@@ -152,24 +157,39 @@ class ShopController extends Controller
         // Summary and description
         $summaryText = $content?->summary ?? '';
         $descriptionText = $content?->description ?? $summaryText;
+        $reviewCount = (int) ($product->reviews_count ?? 0);
+        $averageRating = $reviewCount > 0
+            ? round((float) ($product->reviews_avg_rating ?? 0), 1)
+            : 0;
+        $reviewList = $product->reviews
+            ->map(function ($review) {
+                $reviewer = $review->user;
+
+                return [
+                    'name' => $reviewer->name ?? $reviewer->username ?? 'User',
+                    'rating' => (int) ($review->rating ?? 0),
+                    'text' => (string) ($review->comment ?? ''),
+                ];
+            })
+            ->filter(function ($review) {
+                return $review['text'] !== '';
+            })
+            ->values()
+            ->all();
 
         $data['product'] = $product;
         $data['productDetail'] = [
             'id' => (string) $product->id,
             'name' => $content?->title ?: ('Product #' . $product->id),
             'category' => $categoryName,
-            'rating' => 4.7,
-            'reviews' => 142,
-            'badge' => $categoryName,
+            'rating' => $averageRating,
+            'reviews' => $reviewCount,
+            'badge' => $isFlashSaleActive ? 'Flash Sales' : $categoryName,
             'image' => $images[0] ?? asset('assets/admin/noimage.jpg'),
             'images' => $images,
             'summary' => $summaryText,
             'description' => $descriptionText,
-            'nutrition' => ['Fresh stock', 'Quality checked', 'Fast delivery', 'Secure packaging'],
-            'reviewList' => [
-                ['name' => 'Ariana', 'rating' => 5, 'text' => 'Great product quality and fast delivery.'],
-                ['name' => 'Chris', 'rating' => 4, 'text' => 'Satisfied with the quality and packaging.'],
-            ],
+            'reviewList' => $reviewList,
             'units' => $units,
             'isDeal' => $isFlashSaleActive || collect($units)->contains(function ($unit) {
                 return (float) ($unit['oldPrice'] ?? 0) > (float) ($unit['price'] ?? 0);
@@ -203,6 +223,8 @@ class ShopController extends Controller
             'sliderImage',
             'variants.variantValues.optionValue',
         ])
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
             ->where('id', $id)
             ->first();
 
@@ -314,5 +336,78 @@ class ShopController extends Controller
             'html' => $html,
             'product' => $productDetail,
         ]);
+    }
+
+    public function storeReview(Request $request, $id)
+    {
+        $product = Product::query()->findOrFail($id);
+
+        $validated = $request->validate([
+            'rating' => ['required', 'integer', 'min:1', 'max:5'],
+            'comment' => ['required', 'string', 'min:5', 'max:1000'],
+        ]);
+
+        $user = Auth::guard('web')->user();
+
+        ProductReview::query()->updateOrCreate(
+            [
+                'product_id' => $product->id,
+                'user_id' => $user->id,
+            ],
+            [
+                'rating' => (int) $validated['rating'],
+                'comment' => trim((string) $validated['comment']),
+            ]
+        );
+
+        if ($request->ajax() || $request->expectsJson()) {
+            $updatedProduct = Product::with([
+                'reviews' => function ($q) {
+                    $q->latest('id')->take(12)->with('user');
+                },
+            ])
+                ->withCount('reviews')
+                ->withAvg('reviews', 'rating')
+                ->findOrFail($product->id);
+
+            $reviewCount = (int) ($updatedProduct->reviews_count ?? 0);
+            $averageRating = $reviewCount > 0
+                ? round((float) ($updatedProduct->reviews_avg_rating ?? 0), 1)
+                : 0;
+
+            $reviewList = $updatedProduct->reviews
+                ->map(function ($review) {
+                    $reviewer = $review->user;
+
+                    return [
+                        'name' => $reviewer->name ?? $reviewer->username ?? 'User',
+                        'rating' => (int) ($review->rating ?? 0),
+                        'text' => (string) ($review->comment ?? ''),
+                    ];
+                })
+                ->filter(function ($review) {
+                    return $review['text'] !== '';
+                })
+                ->values()
+                ->all();
+
+            $html = view('front.partials.product-reviews-tab', [
+                'productId' => (string) $updatedProduct->id,
+                'productRating' => $averageRating,
+                'productReviews' => $reviewCount,
+                'productReviewList' => $reviewList,
+                'successMessage' => 'Your review has been saved.',
+            ])->render();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Your review has been saved.',
+                'html' => $html,
+            ]);
+        }
+
+        return redirect()
+            ->to(route('frontend.shop.details', ['id' => $product->id]) . '#reviews')
+            ->with('success', 'Your review has been saved.');
     }
 }

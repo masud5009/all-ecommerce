@@ -15,4 +15,9 @@ class ProductReview extends Model
         'rating',
         'comment',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class);
+    }
 }
