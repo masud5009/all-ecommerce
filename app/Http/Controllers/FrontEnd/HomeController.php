@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\FrontEnd;
 
+use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\Product;
-use Carbon\Carbon;
 use App\Models\OrderItem;
 use App\Models\HomeSlider;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\Admin\Package;
 use App\Models\Admin\Language;
 use App\Models\ProductContent;
 use App\Models\ProductCategory;
@@ -17,7 +15,6 @@ use App\Models\HomeFreshnessItem;
 use App\Models\HomeSectionSetting;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Schema;
 use App\Services\Frontend\ProductService;
 use App\Services\Frontend\CategoryService;
 
@@ -33,13 +30,15 @@ class HomeController extends Controller
         }
     }
 
-    public function changeLanguage($code)
-    {
-        session()->put('lang', $code);
-        app()->setLocale($code);
-        return redirect()->back();
-    }
-
+    /**
+     * Display the home page with
+     * -featured products
+     * -flash sale products
+     * -popular products
+     * -all categories
+     * -hero sliders
+     * -features sections
+     */
     public function index()
     {
         $languageId = $this->currentLang->id;
@@ -52,44 +51,6 @@ class HomeController extends Controller
         $data['featuredProducts'] = $featuredProducts;
         $data['flashSaleCardProducts'] = $flashSaleCardProducts;
         $data['popularProducts'] = $popularProducts;
-
-        // Build flash sale deal hero card from first flash sale product
-        $data['flashSaleDeal'] = null;
-        if ($flashSaleCardProducts->isNotEmpty()) {
-            $firstFlash = $flashSaleCardProducts->first();
-            $flashContent = $firstFlash->content->first();
-            $flashTitle = $flashContent->title ?? 'Flash Sale Deal';
-            $flashSummary = trim(preg_replace('/\s+/', ' ', strip_tags((string) ($flashContent->summary ?? $flashContent->description ?? 'Limited time offer on selected items.'))));
-
-            $currentPrice = (float) ($firstFlash->current_price ?? 0);
-            $flashDiscountPercent = min(max((float) ($firstFlash->flash_sale_price ?? 0), 0), 100);
-            $salePrice = max($currentPrice * (1 - ($flashDiscountPercent / 100)), 0);
-            $oldPrice = $currentPrice;
-            $saveAmount = $oldPrice - $salePrice;
-            $savePercent = $oldPrice > 0 ? round(($saveAmount / $oldPrice) * 100) : 0;
-
-            $endAt = \Carbon\Carbon::parse($firstFlash->flash_sale_end_at);
-            $countdownSeconds = max(0, now()->diffInSeconds($endAt, false));
-
-            $thumbnail = !empty($firstFlash->thumbnail)
-                ? asset('assets/img/product/' . $firstFlash->thumbnail)
-                : '';
-
-            $stockLabel = ($firstFlash->stock ?? 0) > 0 ? __('In Stock') : __('Stock Out');
-
-            $data['flashSaleDeal'] = (object) [
-                'title' => $flashTitle,
-                'summary' => $flashSummary ?: 'Limited time offer on selected items.',
-                'sale_price' => $salePrice,
-                'old_price' => $oldPrice,
-                'save_amount' => $saveAmount,
-                'save_percent' => $savePercent,
-                'countdown_seconds' => (int) $countdownSeconds,
-                'image' => $thumbnail,
-                'stock_label' => $stockLabel,
-                'details_url' => route('frontend.shop.details', ['id' => $firstFlash->id]),
-            ];
-        }
 
         $data['homeSliders'] = HomeSlider::where('status', 1)
             ->where('language_id', $languageId)
@@ -107,7 +68,7 @@ class HomeController extends Controller
             ->orderBy('serial_number', 'asc')
             ->get();
 
-        return view('front.home.index', $data);
+        return view('front.grocery.index', $data);
     }
 
     public function contact()
@@ -122,7 +83,7 @@ class HomeController extends Controller
             return view('front.home.product-details');
         }
 
-        $languageId = $this->getCurrentLanguageId();
+        $languageId = $this->currentLang->id;
         $rawProductId = $product ?? $request->query('product', $request->query('id', 0));
         $productId = (int) $rawProductId;
 
@@ -305,19 +266,13 @@ class HomeController extends Controller
         return view('admin.invoices.product-invoice', $data);
     }
 
-    private function getCurrentLanguageId(): ?int
+    /**
+     * Change the current language of the application and store it in the session.
+     */
+    public function changeLanguage($code)
     {
-        $languageCode = session('lang');
-        $currentLanguage = null;
-
-        if (!empty($languageCode)) {
-            $currentLanguage = Language::where('code', $languageCode)->first();
-        }
-
-        if (!$currentLanguage) {
-            $currentLanguage = Language::where('is_default', 1)->first() ?? app('defaultLang');
-        }
-
-        return $currentLanguage?->id;
+        session()->put('lang', $code);
+        app()->setLocale($code);
+        return redirect()->back();
     }
 }

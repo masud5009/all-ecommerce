@@ -22,6 +22,8 @@ Route::prefix('/admin')->middleware('guest:admin')->group(function () {
     // admin forget password route
     Route::get('/forget-password', 'Admin\AdminController@forgetPassword')->name('admin.forget_password');
 });
+
+/*============================ Home Page Routes ============================*/
 Route::prefix('/')->controller(HomeController::class)->group(function () {
     Route::get('', 'index')->name('frontend.index');
     Route::get('/contact', 'contact')->name('frontend.contact');

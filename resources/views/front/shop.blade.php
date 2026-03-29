@@ -165,7 +165,7 @@
                     @if($products->count() > 0)
                         <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                             @foreach($products as $product)
-                                @include('front.home.partials.product-card', ['product' => $product])
+                                @include('front.product-card', ['product' => $product])
                             @endforeach
                         </div>
 

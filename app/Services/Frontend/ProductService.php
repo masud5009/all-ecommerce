@@ -9,14 +9,10 @@ use App\Models\Admin\Language;
 class ProductService
 {
     /**
-     * Get featured products for the frontend, including their category and content for a specific language.
+     * Get featured products for the frontend
      */
     public static function getHomeFeaturedProducts($languageId = null)
     {
-        if (!$languageId) {
-            $languageId = Language::where('is_default', 1)->value('id');
-        }
-
         return Product::with([
             'content' => function ($query) use ($languageId) {
                 $query->where('language_id', $languageId);
@@ -34,10 +30,6 @@ class ProductService
 
     public static function getHomeFlashSaleProducts($languageId = null)
     {
-        if (!$languageId) {
-            $languageId = Language::where('is_default', 1)->value('id');
-        }
-
         $now = Carbon::now();
 
         return Product::with([
@@ -65,10 +57,6 @@ class ProductService
      */
     public static function latestHomeProducts($languageId = null)
     {
-        if (!$languageId) {
-            $languageId = Language::where('is_default', 1)->value('id');
-        }
-
         return Product::with([
             'content' => function ($query) use ($languageId) {
                 $query->where('language_id', $languageId);
@@ -88,10 +76,6 @@ class ProductService
      */
     public static function getShopProducts($languageId = null, array $filters = [])
     {
-        if (!$languageId) {
-            $languageId = Language::where('is_default', 1)->value('id');
-        }
-
         $query = Product::with([
             'content' => function ($q) use ($languageId) {
                 $q->where('language_id', $languageId);
@@ -107,7 +91,7 @@ class ProductService
         if (!empty($filters['category'])) {
             $query->whereHas('content', function ($q) use ($filters, $languageId) {
                 $q->where('language_id', $languageId)
-                  ->where('category_id', $filters['category']);
+                    ->where('category_id', $filters['category']);
             });
         }
 
@@ -116,11 +100,11 @@ class ProductService
             $searchTerm = $filters['search'];
             $query->whereHas('content', function ($q) use ($searchTerm, $languageId) {
                 $q->where('language_id', $languageId)
-                  ->where(function ($q2) use ($searchTerm) {
-                      $q2->where('title', 'like', "%{$searchTerm}%")
-                         ->orWhere('summary', 'like', "%{$searchTerm}%")
-                         ->orWhere('description', 'like', "%{$searchTerm}%");
-                  });
+                    ->where(function ($q2) use ($searchTerm) {
+                        $q2->where('title', 'like', "%{$searchTerm}%")
+                            ->orWhere('summary', 'like', "%{$searchTerm}%")
+                            ->orWhere('description', 'like', "%{$searchTerm}%");
+                    });
             });
         }
 

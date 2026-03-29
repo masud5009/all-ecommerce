@@ -318,7 +318,7 @@
                 @if (!empty($youMayAlsoLikeProducts) && count($youMayAlsoLikeProducts) > 0)
                     <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                         @foreach ($youMayAlsoLikeProducts as $relatedProduct)
-                            @include('front.home.partials.product-card', ['product' => $relatedProduct])
+                            @include('front.product-card', ['product' => $relatedProduct])
                         @endforeach
                     </div>
                 @else

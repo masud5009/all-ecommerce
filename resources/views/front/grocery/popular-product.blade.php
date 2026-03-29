@@ -1,0 +1,28 @@
+    <section class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8" data-reveal>
+        <div class="flex flex-wrap items-end justify-between gap-4" data-reveal-child>
+            <div>
+                <h2 class="text-2xl font-semibold text-slate-900">
+                    {{ @$sectionTitles->popular_product_title ?? 'Popular products section title' }}
+                </h2>
+                <p class="mt-2 text-sm text-slate-600">
+                    {{ @$sectionTitles->popular_product_sub_title ?? 'Popular products section sub title' }}
+                </p>
+            </div>
+            <a href="{{ route('frontend.shop') }}" class="text-sm font-semibold text-green-700">
+                {{ __('Shop all') }}</a>
+        </div>
+        @if (count($popularProducts) > 0)
+            <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                @foreach ($popularProducts as $product)
+                    @include('front.product-card', ['product' => $product])
+                @endforeach
+            </div>
+        @else
+            <div class="mt-8 rounded-2xl border border-dashed border-green-200 bg-white p-8 text-center text-sm text-slate-500"
+                data-reveal-child>
+                {{ __('NO PRODUCT FOUND!') }}
+            </div>
+        @endif
+    </section>
+
+    <div class="mx-auto mt-16 h-px max-w-5xl bg-gradient-to-r from-transparent via-green-200 to-transparent"></div>
