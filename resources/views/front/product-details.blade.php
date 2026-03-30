@@ -1,33 +1,18 @@
 @extends('front.layout')
 
 @php
-    $p = $productDetail ?? [];
-    $productId = $p['id'] ?? '';
-    $productName = $p['name'] ?? 'Product';
-    $productCategory = $p['category'] ?? 'Category';
-    $productBadge = $p['badge'] ?? $productCategory;
-    $productImage = $p['image'] ?? 'about:blank';
-    $productImages = $p['images'] ?? [$productImage];
-    $productSummary = $p['summary'] ?? '';
-    $productDescription = $p['description'] ?? $productSummary;
-    $productRating = $p['rating'] ?? 4.7;
-    $productReviews = $p['reviews'] ?? 0;
-    $productUnits = $p['units'] ?? [];
-    $productReviewList = $p['reviewList'] ?? [];
-    $isDeal = $p['isDeal'] ?? false;
-    $isPopular = $p['popular'] ?? false;
-    $productStock = $p['stock'] ?? 0;
-    $isFlashSaleBadge = in_array(strtolower(trim((string) $productBadge)), ['flash sale', 'flash sales'], true);
-
+    $productName = $product_content->title ?? 'Product Name';
+    $productCategory = App\Models\ProductCategory::where('id', $product->category_id)->value('name') ?? 'Category';
+    $productId = $product->id;
     // Ensure at least one unit
-    if (empty($productUnits)) {
-        $productUnits = [['label' => '1 unit', 'price' => 0, 'oldPrice' => 0]];
+    if (empty($variants)) {
+        $variants = [['label' => '1 unit', 'price' => 0, 'oldPrice' => 0]];
     }
 
-    // Ensure images array
-    if (empty($productImages)) {
-        $productImages = [$productImage];
-    }
+    $productDetail = [
+        'id' => $productId,
+        'units' => $variants,
+    ];
 @endphp
 
 @section('title', $productName . ' | FreshCart')
@@ -45,12 +30,12 @@
             <nav class="mb-6 flex flex-wrap items-center gap-2 text-xs text-slate-500" aria-label="Breadcrumb">
                 <a href="{{ route('frontend.index') }}"
                     class="rounded-full border border-green-100 bg-white px-3 py-1 transition hover:border-green-300 hover:text-green-700">
-                    Home
+                    {{ __('Home') }}
                 </a>
                 <span>/</span>
                 <a href="{{ route('frontend.shop') }}"
                     class="rounded-full border border-green-100 bg-white px-3 py-1 transition hover:border-green-300 hover:text-green-700">
-                    Shop
+                    {{ __('Shop') }}
                 </a>
                 <span>/</span>
                 <span class="rounded-full bg-green-100 px-3 py-1 font-semibold text-green-700">
@@ -60,25 +45,25 @@
 
             {{-- Product Detail Grid --}}
             <div class="grid gap-8 lg:grid-cols-[1.08fr_0.92fr]" data-product-detail data-product-id="{{ $productId }}">
-                {{-- Left: Images --}}
                 <div class="space-y-4">
-                    {{-- Main Image --}}
+                    <!-- Thumbnail with Magnify -->
                     <div data-magnify
                         class="magnify overflow-hidden rounded-3xl border border-green-100 bg-white shadow-[0_22px_55px_rgba(15,23,42,0.12)]">
-                        <img src="{{ $productImage }}" alt="{{ $productName }}"
-                            class="h-[360px] w-full object-cover sm:h-[430px] lg:h-[520px]" id="mainProductImage" data-magnify-image>
+                        <img src="{{ asset('assets/img/product/' . $product->thumbnail) }}" alt="{{ $productName }}"
+                            class="h-[360px] w-full object-cover sm:h-[430px] lg:h-[520px]" id="mainProductImage"
+                            data-magnify-image>
                     </div>
 
-                    {{-- Thumbnails --}}
-                    @if (count($productImages) > 1)
+                    <!-- Slider Images -->
+                    @if ($product->sliderImage && $product->sliderImage->count() > 0)
                         <div class="grid grid-cols-4 gap-3 sm:grid-cols-6">
-                            @foreach ($productImages as $index => $img)
+                            @foreach ($product->sliderImage as $index => $sliderImg)
                                 <button type="button"
                                     class="group overflow-hidden rounded-2xl border {{ $index === 0 ? 'border-green-500 ring-2 ring-green-200' : 'border-green-100' }} bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200"
                                     aria-label="View image {{ $index + 1 }}"
                                     aria-pressed="{{ $index === 0 ? 'true' : 'false' }}" data-thumb
-                                    onclick="var img=document.getElementById('mainProductImage'); img.src='{{ $img }}'; var c=document.querySelector('[data-magnify]'); if(c){c.style.backgroundImage='url({{ $img }})'} document.querySelectorAll('[data-thumb]').forEach(function(b){b.classList.remove('border-green-500','ring-2','ring-green-200');b.classList.add('border-green-100');}); this.classList.remove('border-green-100'); this.classList.add('border-green-500','ring-2','ring-green-200');">
-                                    <img src="{{ $img }}"
+                                    onclick="var img=document.getElementById('mainProductImage'); img.src='{{ asset('assets/img/product/gallery/' . $sliderImg->image) }}'; var c=document.querySelector('[data-magnify]'); if(c){c.style.backgroundImage='url({{ asset('assets/img/product/gallery/' . $sliderImg->image) }})'} document.querySelectorAll('[data-thumb]').forEach(function(b){b.classList.remove('border-green-500','ring-2','ring-green-200');b.classList.add('border-green-100');}); this.classList.remove('border-green-100'); this.classList.add('border-green-500','ring-2','ring-green-200');">
+                                    <img src="{{ asset('assets/img/product/gallery/' . $sliderImg->image) }}"
                                         alt="{{ $productName }} thumbnail {{ $index + 1 }}" loading="lazy"
                                         decoding="async"
                                         class="h-20 w-full object-cover transition duration-300 group-hover:scale-105">
@@ -88,7 +73,6 @@
                     @endif
                 </div>
 
-                {{-- Right: Product Info --}}
                 <div>
                     <div
                         class="rounded-3xl border border-green-100 bg-white p-6 shadow-[0_16px_45px_rgba(15,23,42,0.1)] sm:p-8">
@@ -97,27 +81,13 @@
                             <span class="rounded-full bg-green-100 px-3 py-1 font-semibold text-green-700">
                                 {{ $productCategory }}
                             </span>
-                            @if ($isFlashSaleBadge)
+                            @if ($isFlashSaleActive)
                                 <span
                                     class="inline-flex items-center gap-1 rounded-full bg-red-100 px-3 py-1 font-semibold text-red-700">
                                     <svg class="h-3 w-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                         <path d="M13 2L4 14h7l-1 8 10-14h-7l0-6z" />
                                     </svg>
-                                    Flash Sales
-                                </span>
-                            @elseif ($isDeal)
-                                <span
-                                    class="inline-flex items-center gap-1 rounded-full bg-amber-100 px-3 py-1 font-semibold text-amber-700">
-                                    <svg class="h-3 w-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                        <path
-                                            d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" />
-                                    </svg>
-                                    Deal
-                                </span>
-                            @endif
-                            @if ($isPopular)
-                                <span class="rounded-full bg-blue-100 px-3 py-1 font-semibold text-blue-700">
-                                    Popular
+                                    {{ __('Flash Sales') }}
                                 </span>
                             @endif
                         </div>
@@ -131,7 +101,7 @@
                         <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-500">
                             <span class="flex items-center gap-1">
                                 @for ($i = 1; $i <= 5; $i++)
-                                    @if ($i <= floor($productRating))
+                                    @if ($i <= floor($averageRating))
                                         <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor"
                                             aria-hidden="true">
                                             <path
@@ -146,22 +116,22 @@
                                     @endif
                                 @endfor
                             </span>
-                            <span class="text-slate-500">{{ number_format($productRating, 1) }}
-                                ({{ $productReviews }} {{ \Illuminate\Support\Str::plural('review', $productReviews) }})</span>
+                            <span class="text-slate-500">{{ number_format($averageRating, 1) }}
+                                ({{ $reviewCount }}
+                                {{ \Illuminate\Support\Str::plural('review', $reviewCount) }})</span>
                         </div>
 
                         {{-- Summary --}}
-                        @if (!empty($productSummary))
+                        @if ($product_content->summary)
                             <p class="mt-4 text-sm leading-6 text-slate-600">
-                                {{ $productSummary }}
+                                {{ $product_content->summary }}
                             </p>
                         @endif
 
                         {{-- Units/Variants Selection --}}
                         <div class="mt-5">
-                            <p class="text-sm font-semibold text-slate-900">Choose size</p>
                             <div class="mt-3 grid max-h-80 gap-2 overflow-y-auto pr-1">
-                                @foreach ($productUnits as $index => $unit)
+                                @foreach ($variants as $index => $unit)
                                     <label class="group relative flex cursor-pointer items-center gap-3">
                                         <input class="peer sr-only" type="radio" name="productUnit"
                                             value="{{ $index }}" data-detail-unit
@@ -199,7 +169,8 @@
                                     class="flex h-12 w-12 items-center justify-center rounded-l-2xl text-slate-600 transition hover:bg-green-50 hover:text-green-700 focus:outline-none"
                                     onclick="var q=document.getElementById('productQty'); var v=parseInt(q.value)||1; if(v>1){q.value=v-1;}"
                                     aria-label="Decrease quantity">
-                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
                                         <path d="M5 12h14"></path>
                                     </svg>
                                 </button>
@@ -210,7 +181,8 @@
                                     class="flex h-12 w-12 items-center justify-center rounded-r-2xl text-slate-600 transition hover:bg-green-50 hover:text-green-700 focus:outline-none"
                                     onclick="var q=document.getElementById('productQty'); var v=parseInt(q.value)||1; if(v<99){q.value=v+1;}"
                                     aria-label="Increase quantity">
-                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
                                         <path d="M12 5v14M5 12h14"></path>
                                     </svg>
                                 </button>
@@ -219,7 +191,8 @@
                             <button type="button"
                                 class="inline-flex items-center justify-center gap-2 rounded-2xl bg-green-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200"
                                 data-action="add">
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
+                                    viewBox="0 0 24 24">
                                     <path d="M6 7h12l1 12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L6 7Z"></path>
                                     <path d="M9 7V6a3 3 0 0 1 6 0v1"></path>
                                 </svg>
@@ -240,12 +213,12 @@
                 <div class="flex flex-wrap items-center gap-2 border-b border-green-100 pb-3">
                     <button class="rounded-full border-b-2 border-green-600 px-4 py-2 text-sm font-semibold text-green-700"
                         type="button" data-tab-target="description">
-                        Description
+                        {{ __('Description') }}
                     </button>
                     <button
                         class="rounded-full px-4 py-2 text-sm font-semibold text-slate-500 transition hover:text-green-700"
                         type="button" data-tab-target="reviews">
-                        Reviews
+                        {{ __('Reviews') }}
                     </button>
                 </div>
 
@@ -253,16 +226,16 @@
                 <div class="mt-5 space-y-4">
                     {{-- Description Tab --}}
                     <div class="text-sm leading-7 text-slate-600" data-tab="description">
-                        {!! $productDescription !!}
+                        {!! $product_content->description !!}
                     </div>
 
                     {{-- Reviews Tab --}}
                     <div class="hidden space-y-5" data-tab="reviews">
                         @include('front.partials.product-reviews-tab', [
                             'productId' => $productId,
-                            'productRating' => $productRating,
-                            'productReviews' => $productReviews,
-                            'productReviewList' => $productReviewList,
+                            'productRating' => $averageRating,
+                            'productReviews' => $reviewCount,
+                            'productReviewList' => $reviewList,
                             'successMessage' => session('success'),
                         ])
                     </div>
@@ -295,13 +268,8 @@
             </section>
         </div>
     </div>
-
-    @if (!empty($productDetail))
-        <script>
-            window.serverProductDetail = @json($productDetail);
-        </script>
-    @endif
-
+@endsection
+@section('script')
     <script>
         (function() {
             const container = document.querySelector('[data-magnify]');
@@ -344,4 +312,9 @@
             });
         })();
     </script>
+    @if (!empty($productDetail))
+        <script>
+            window.serverProductDetail = @json($productDetail);
+        </script>
+    @endif
 @endsection

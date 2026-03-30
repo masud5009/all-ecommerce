@@ -33,9 +33,7 @@ Route::prefix('/')->controller(HomeController::class)->group(function () {
     Route::get('/change-language/{code}', 'changeLanguage')->name('frontend.change_language');
 });
 
-/*============================
-      shop management routes
-     =============================*/
+/*============================ Shop Management Routes ============================*/
 Route::get('/shop', [ShopController::class, 'shop'])->name('frontend.shop');
 Route::get('/shop/details/{id}', [ShopController::class, 'details'])->name('frontend.shop.details');
 Route::get('/shop/quick-view/{id}', [ShopController::class, 'quickView'])->name('frontend.shop.quickview');

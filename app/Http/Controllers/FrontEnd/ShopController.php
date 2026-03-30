@@ -59,7 +59,6 @@ class ShopController extends Controller
     public function details($id)
     {
         $languageId = $this->currentLang->id;
-
         $product = Product::with([
             'content' => function ($q) use ($languageId) {
                 $q->where('language_id', $languageId);
@@ -72,40 +71,47 @@ class ShopController extends Controller
         ])
             ->withCount('reviews')
             ->withAvg('reviews', 'rating')
-            ->where('id', $id)
-            ->first();
+            ->findOrFail($id);
 
-        if (!$product) {
-            abort(404);
+        // Get product content for the current language
+        $data['product_content'] = $product->content->first();
+
+        // Check if flash sale is active
+        $isFlashSaleActive = false;
+        if ($product->flash_sale_status == 1 && Carbon::now()->between(
+            Carbon::parse($product->flash_sale_start_at),
+            Carbon::parse($product->flash_sale_end_at)
+        )) {
+            $isFlashSaleActive = true;
         }
+        $data['isFlashSaleActive'] = $isFlashSaleActive;
 
-        $content = $product->content->first();
+        // Calculate average rating and review count
+        $reviewCount = ($product->reviews_count ?? 0);
+        $data['averageRating'] = $reviewCount > 0
+            ? round((float) ($product->reviews_avg_rating ?? 0), 1)
+            : 0;
+        $data['reviewCount'] = $reviewCount;
+        // Build review list
+        $data['reviewList'] = $product->reviews
+            ->map(function ($review) {
+                $reviewer = $review->user;
+
+                return [
+                    'name' => $reviewer->name ?? $reviewer->username ?? 'User',
+                    'rating' => (int) ($review->rating ?? 0),
+                    'text' => (string) ($review->comment ?? ''),
+                ];
+            })
+            ->filter(function ($review) {
+                return $review['text'] !== '';
+            })
+            ->values()
+            ->all();
+
         $flashDiscountPercent = (float) ($product->flash_sale_price ?? 0);
-        $isFlashSaleActive =
-            (int) ($product->flash_sale_status ?? 0) === 1 &&
-            $flashDiscountPercent > 0 &&
-            !empty($product->flash_sale_start_at) &&
-            !empty($product->flash_sale_end_at) &&
-            Carbon::now()->between(
-                Carbon::parse($product->flash_sale_start_at),
-                Carbon::parse($product->flash_sale_end_at)
-            );
-
         if ($isFlashSaleActive) {
             $flashDiscountPercent = min($flashDiscountPercent, 100);
-        }
-
-        // Build images array
-        $images = [];
-        if (!empty($product->thumbnail)) {
-            $images[] = asset('assets/img/product/' . $product->thumbnail);
-        }
-        if ($product->sliderImage && $product->sliderImage->count() > 0) {
-            foreach ($product->sliderImage as $sliderImg) {
-                if (!empty($sliderImg->image)) {
-                    $images[] = asset('assets/img/product/gallery/' . $sliderImg->image);
-                }
-            }
         }
 
         // Build units/variants
@@ -148,55 +154,8 @@ class ShopController extends Controller
             ];
         }
 
-        // Get category name
-        $categoryName = 'Featured';
-        if (!empty($content?->category_id)) {
-            $categoryName = ProductCategory::where('id', $content->category_id)->value('name') ?: $categoryName;
-        }
-
-        // Summary and description
-        $summaryText = $content?->summary ?? '';
-        $descriptionText = $content?->description ?? $summaryText;
-        $reviewCount = (int) ($product->reviews_count ?? 0);
-        $averageRating = $reviewCount > 0
-            ? round((float) ($product->reviews_avg_rating ?? 0), 1)
-            : 0;
-        $reviewList = $product->reviews
-            ->map(function ($review) {
-                $reviewer = $review->user;
-
-                return [
-                    'name' => $reviewer->name ?? $reviewer->username ?? 'User',
-                    'rating' => (int) ($review->rating ?? 0),
-                    'text' => (string) ($review->comment ?? ''),
-                ];
-            })
-            ->filter(function ($review) {
-                return $review['text'] !== '';
-            })
-            ->values()
-            ->all();
-
         $data['product'] = $product;
-        $data['productDetail'] = [
-            'id' => (string) $product->id,
-            'name' => $content?->title ?: ('Product #' . $product->id),
-            'category' => $categoryName,
-            'rating' => $averageRating,
-            'reviews' => $reviewCount,
-            'badge' => $isFlashSaleActive ? 'Flash Sales' : $categoryName,
-            'image' => $images[0] ?? asset('assets/admin/noimage.jpg'),
-            'images' => $images,
-            'summary' => $summaryText,
-            'description' => $descriptionText,
-            'reviewList' => $reviewList,
-            'units' => $units,
-            'isDeal' => $isFlashSaleActive || collect($units)->contains(function ($unit) {
-                return (float) ($unit['oldPrice'] ?? 0) > (float) ($unit['price'] ?? 0);
-            }),
-            'popular' => (bool) $product->is_popular,
-            'stock' => (int) ($product->stock ?? 0),
-        ];
+        $data['variants'] = $units;
 
         // You may also like products
         $data['youMayAlsoLikeProducts'] = ProductService::latestHomeProducts($languageId)
