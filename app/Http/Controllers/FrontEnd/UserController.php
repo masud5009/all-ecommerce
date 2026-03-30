@@ -38,7 +38,7 @@ class UserController extends Controller
         $completedOrders = (clone $ordersQuery)->where('order_status', 'completed')->count();
         $pendingOrders = (clone $ordersQuery)->where('order_status', 'pending')->count();
         $totalSpent = (float) ((clone $ordersQuery)->where('payment_status', 'completed')->sum('pay_amount') ?? 0);
-        $cartItems = (int) (Cart::query()->where('user_id', $user->id)->sum('quantity') ?? 0);
+        $cartItems = Cart::query()->where('user_id', $user->id)->sum('quantity') ?? 0;
 
         $latestOrders = (clone $ordersQuery)
             ->latest('id')

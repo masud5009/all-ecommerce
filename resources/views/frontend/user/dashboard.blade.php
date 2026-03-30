@@ -33,7 +33,7 @@
                     <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600">Pending</p>
                     <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">{{ $stats['pendingOrders'] }}</p>
                 </a>
-                <a href="{{ route('cart.index') }}" class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
+                <a href="" data-action="open-cart-offcanvas" class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
                     <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600">Cart Items</p>
                     <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">{{ $stats['cartItems'] }}</p>
                 </a>

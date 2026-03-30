@@ -6,8 +6,8 @@ use App\Http\Controllers\FrontEnd\CartController;
 use App\Http\Controllers\FrontEnd\HomeController;
 use App\Http\Controllers\FrontEnd\ShopController;
 use App\Http\Controllers\FrontEnd\UserController;
-use App\Http\Controllers\FrontEnd\CheckoutController;
 use App\Http\Controllers\Front\WishlistController;
+use App\Http\Controllers\FrontEnd\CheckoutController;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 /*
 |--------------------------------------------------------------------------
@@ -130,6 +130,6 @@ Route::name('frontend.')->group(function () {
     Route::get('/order-confirmation/{id}', [CheckoutController::class, 'confirmation'])->name('order.confirmation');
 
     // Wishlist Routes
-    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist')->middleware('customer');
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist')->middleware('auth:web');
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
 });

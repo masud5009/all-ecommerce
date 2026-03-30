@@ -35,7 +35,7 @@
                     @endif
                     <button type="submit"
                         class="absolute right-2 top-2 rounded-full bg-green-600 px-6 py-2 text-sm font-semibold text-white transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400">
-                        Search
+                         {{ __('Search') }}
                     </button>
                 </div>
             </form>
@@ -51,12 +51,12 @@
                     <div class="sticky top-24 space-y-8">
                         <!-- Categories -->
                         <div class="rounded-2xl border border-green-100 bg-white p-6 shadow-sm">
-                            <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-900">Categories</h3>
+                            <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-900"> {{ __('Categories') }}</h3>
                             <ul class="mt-4 space-y-2">
                                 <li>
                                     <a href="{{ route('frontend.shop', array_merge($filters, ['category' => null])) }}"
                                         class="flex items-center justify-between rounded-xl px-3 py-2 text-sm transition {{ empty($filters['category']) ? 'bg-green-100 text-green-700 font-medium' : 'text-slate-600 hover:bg-green-50 hover:text-green-700' }}">
-                                        All Products
+                                         {{ __('All Products') }}
                                         <span class="text-xs text-slate-400">{{ $products->total() }}</span>
                                     </a>
                                 </li>
@@ -74,7 +74,7 @@
 
                         <!-- Price Filter -->
                         <div class="rounded-2xl border border-green-100 bg-white p-6 shadow-sm">
-                            <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-900">Price Range</h3>
+                            <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-900"> {{ __('Price Range') }}</h3>
                             <form action="{{ route('frontend.shop') }}" method="GET" class="mt-4 space-y-4">
                                 @if(!empty($filters['category']))
                                     <input type="hidden" name="category" value="{{ $filters['category'] }}">
@@ -89,19 +89,19 @@
                                     <div class="flex-1">
                                         <label class="sr-only">Min Price</label>
                                         <input type="number" name="min_price" value="{{ $filters['min_price'] ?? '' }}"
-                                            placeholder="Min"
+                                            placeholder="{{ __('Min') }}"
                                             class="w-full rounded-lg border border-green-100 px-3 py-2 text-sm outline-none focus:border-green-400 focus:ring-2 focus:ring-green-200">
                                     </div>
                                     <div class="flex-1">
-                                        <label class="sr-only">Max Price</label>
+                                        <label class="sr-only"> {{ __('Max Price') }}</label>
                                         <input type="number" name="max_price" value="{{ $filters['max_price'] ?? '' }}"
-                                            placeholder="Max"
+                                            placeholder="{{ __('Max') }}"
                                             class="w-full rounded-lg border border-green-100 px-3 py-2 text-sm outline-none focus:border-green-400 focus:ring-2 focus:ring-green-200">
                                     </div>
                                 </div>
                                 <button type="submit"
                                     class="w-full rounded-lg bg-green-600 py-2 text-sm font-medium text-white transition hover:bg-green-700">
-                                    Apply Filter
+                                     {{ __('Apply Filter') }}
                                 </button>
                             </form>
                         </div>
@@ -113,7 +113,7 @@
                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M18 6L6 18M6 6l12 12"></path>
                                 </svg>
-                                Clear All Filters
+                                {{ __('Clear All Filters') }}
                             </a>
                         @endif
                     </div>
@@ -129,11 +129,11 @@
                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M4 6h16M4 12h16M4 18h7"></path>
                                 </svg>
-                                Filters
+                                 {{ __('Filters') }}
                             </button>
                             <p class="text-sm text-slate-600">
-                                Showing <span class="font-medium text-slate-900">{{ $products->count() }}</span> of
-                                <span class="font-medium text-slate-900">{{ $products->total() }}</span> products
+                                 {{ __('Showing') }} <span class="font-medium text-slate-900">{{ $products->count() }}</span> of
+                                <span class="font-medium text-slate-900">{{ $products->total() }}</span>  {{ __('products') }}
                             </p>
                         </div>
 

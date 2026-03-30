@@ -28,7 +28,7 @@ class ShopController extends Controller
     /**
      * shop page load
      */
-    public function shop(Request $request)
+    public function index(Request $request)
     {
         $languageId = $this->currentLang->id;
 

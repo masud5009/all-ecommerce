@@ -51,7 +51,8 @@
     $reviewCount = (int) ($product->reviews_count ?? 0);
     $averageRating = $reviewCount > 0 ? round((float) ($product->reviews_avg_rating ?? 0), 1) : 0;
 
-    $inWishlist = Auth::guard('web')->check() && Auth::guard('web')->user()->wishlist->contains('product_id', $product->id);
+    $authUser = Auth::guard('web')->user();
+    $inWishlist = $authUser?->wishlist?->contains('product_id', $product->id) ?? false;
 @endphp
 
 <article

@@ -90,7 +90,7 @@
                             <circle cx="20" cy="21" r="1"></circle>
                             <path d="M1 1h4l2.7 12.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.5l1.6-7.5H6"></path>
                         </svg>
-                        Cart
+                         {{ __('Cart') }}
                         <span
                             class="absolute -right-2 -top-2 hidden min-w-[1.5rem] rounded-full bg-green-600 px-1.5 py-0.5 text-center text-xs font-semibold text-white tabular-nums"
                             data-cart-count>0</span>
