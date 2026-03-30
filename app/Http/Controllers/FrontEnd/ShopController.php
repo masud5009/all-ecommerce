@@ -281,9 +281,6 @@ class ShopController extends Controller
             'images' => $images,
             'summary' => $summaryText,
             'units' => $units,
-            'isDeal' => $isFlashSaleActive || collect($units)->contains(function ($unit) {
-                return (float) ($unit['oldPrice'] ?? 0) > (float) ($unit['price'] ?? 0);
-            }),
             'stock' => (int) ($product->stock ?? 0),
             'url' => route('frontend.shop.details', ['id' => $product->id]),
         ];

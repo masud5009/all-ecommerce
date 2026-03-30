@@ -10,7 +10,6 @@
     $productRating = $p['rating'] ?? 0;
     $productReviews = $p['reviews'] ?? 0;
     $productUnits = $p['units'] ?? [];
-    $isDeal = $p['isDeal'] ?? false;
     $productStock = $p['stock'] ?? 0;
     $productUrl = $p['url'] ?? '#';
     $isFlashSaleBadge = in_array(strtolower(trim((string) $productBadge)), ['flash sale', 'flash sales'], true);
@@ -28,8 +27,8 @@
     {{-- Left: Product Image --}}
     <div class="space-y-4">
         <div data-magnify class="magnify overflow-hidden rounded-2xl border border-green-100 bg-green-50">
-            <img src="{{ $productImage }}" alt="{{ $productName }}"
-                class="h-64 w-full object-cover sm:h-80" id="quickviewMainImage" data-magnify-image>
+            <img src="{{ $productImage }}" alt="{{ $productName }}" class="h-64 w-full object-cover sm:h-80"
+                id="quickviewMainImage" data-magnify-image>
         </div>
 
         {{-- Thumbnails --}}
@@ -57,8 +56,12 @@
                 {{ $productCategory }}
             </span>
             @if ($isFlashSaleBadge)
-                <span class="rounded-full bg-red-100 px-3 py-1 font-semibold text-red-700">
-                    Flash Sales
+                <span
+                    class="inline-flex items-center gap-1 rounded-full bg-red-100 px-3 py-1 font-semibold text-red-700">
+                    <svg class="h-3 w-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M13 2L4 14h7l-1 8 10-14h-7l0-6z" />
+                    </svg>
+                    {{ __('Flash Sales') }}
                 </span>
             @endif
         </div>
@@ -74,12 +77,14 @@
                 @for ($i = 1; $i <= 5; $i++)
                     <svg class="h-4 w-4 {{ $i <= floor($productRating) ? 'text-amber-400' : 'text-slate-200' }}"
                         viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
+                        <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
+                        </path>
                     </svg>
                 @endfor
             </div>
             <span class="text-slate-600">{{ $productRating }}</span>
-            <span class="text-slate-400">({{ $productReviews }} {{ \Illuminate\Support\Str::plural('review', $productReviews) }})</span>
+            <span class="text-slate-400">({{ $productReviews }}
+                {{ \Illuminate\Support\Str::plural('review', $productReviews) }})</span>
         </div>
 
         {{-- Price Display --}}
@@ -88,7 +93,8 @@
             <p class="text-2xl font-semibold text-slate-900" data-quickview-price>
                 {{ currency_symbol($firstUnit['price']) }}
             </p>
-            <p class="text-sm text-slate-400 line-through {{ !empty($firstUnit['oldPrice']) && $firstUnit['oldPrice'] > $firstUnit['price'] ? '' : 'hidden' }}" data-quickview-oldprice>
+            <p class="text-sm text-slate-400 line-through {{ !empty($firstUnit['oldPrice']) && $firstUnit['oldPrice'] > $firstUnit['price'] ? '' : 'hidden' }}"
+                data-quickview-oldprice>
                 {{ currency_symbol($firstUnit['oldPrice'] ?? 0) }}
             </p>
         </div>
@@ -107,13 +113,11 @@
                 <div class="mt-2 grid gap-2 max-h-40 overflow-y-auto">
                     @foreach ($productUnits as $index => $unit)
                         <label class="group relative flex cursor-pointer items-center gap-3">
-                            <input class="peer sr-only" type="radio" name="quickviewUnit"
-                                value="{{ $index }}"
-                                data-variant-id="{{ $unit['variant_id'] ?? '' }}"
-                                data-price="{{ $unit['price'] }}"
-                                data-old-price="{{ $unit['oldPrice'] ?? '' }}"
-                                {{ $index === 0 ? 'checked' : '' }}>
-                            <div class="flex w-full items-center justify-between rounded-xl border border-green-100 bg-white px-4 py-3 text-sm shadow-sm transition hover:border-green-300 peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:ring-2 peer-checked:ring-green-200">
+                            <input class="peer sr-only" type="radio" name="quickviewUnit" value="{{ $index }}"
+                                data-variant-id="{{ $unit['variant_id'] ?? '' }}" data-price="{{ $unit['price'] }}"
+                                data-old-price="{{ $unit['oldPrice'] ?? '' }}" {{ $index === 0 ? 'checked' : '' }}>
+                            <div
+                                class="flex w-full items-center justify-between rounded-xl border border-green-100 bg-white px-4 py-3 text-sm shadow-sm transition hover:border-green-300 peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:ring-2 peer-checked:ring-green-200">
                                 <p class="font-medium text-slate-900">{{ $unit['label'] }}</p>
                                 <p class="font-semibold text-slate-900">{{ currency_symbol($unit['price']) }}</p>
                             </div>
@@ -130,8 +134,7 @@
                 <div class="inline-flex items-center rounded-xl border border-green-200 bg-white">
                     <button type="button"
                         class="flex h-10 w-10 items-center justify-center rounded-l-xl text-slate-600 transition hover:bg-green-50 hover:text-green-700 focus:outline-none"
-                        data-quickview-qty-dec
-                        aria-label="Decrease quantity">
+                        data-quickview-qty-dec aria-label="Decrease quantity">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path d="M5 12h14"></path>
                         </svg>
@@ -141,8 +144,7 @@
                         readonly>
                     <button type="button"
                         class="flex h-10 w-10 items-center justify-center rounded-r-xl text-slate-600 transition hover:bg-green-50 hover:text-green-700 focus:outline-none"
-                        data-quickview-qty-inc
-                        aria-label="Increase quantity">
+                        data-quickview-qty-inc aria-label="Increase quantity">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path d="M12 5v14M5 12h14"></path>
                         </svg>

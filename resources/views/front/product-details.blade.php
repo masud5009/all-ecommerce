@@ -286,6 +286,8 @@
 @endsection
 @section('script')
     <script>
+        window.serverProductDetail = @json($productDetail);
+
         (function() {
             const container = document.querySelector('[data-magnify]');
             if (!container) return;
@@ -385,9 +387,4 @@
             updateDisplayedPricing();
         })();
     </script>
-    @if (!empty($productDetail))
-        <script>
-            window.serverProductDetail = @json($productDetail);
-        </script>
-    @endif
 @endsection
