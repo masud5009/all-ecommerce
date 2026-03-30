@@ -11,48 +11,61 @@
                     <div>
                         <p class="text-sm font-medium text-emerald-700"> {{ __('Welcome back') }}</p>
                         <h1 class="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
-                             {{ __('Hello') }}, {{ $user->username ?? 'Customer' }}
+                            {{ $user->name ?? $user->username }}
                         </h1>
                         <p class="mt-2 text-sm text-slate-600">
-                             {{ __('Manage your profile, track orders, and continue shopping from your dashboard.') }}
+                            {{ __('Manage your profile, track orders, and continue shopping from your dashboard.') }}
                         </p>
                     </div>
                 </div>
             </div>
 
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-                <a href="{{ route('user.orders') }}" class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600"> {{ __('Total Orders') }}</p>
-                    <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">{{ $stats['totalOrders'] }}</p>
+                <a href="{{ route('user.orders') }}"
+                    class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600">
+                        {{ __('Total Orders') }}</p>
+                    <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">
+                        {{ $stats['totalOrders'] }}</p>
                 </a>
-                <a href="{{ route('user.orders', ['status' => 'completed']) }}" class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600"> {{ __('Completed') }}</p>
-                    <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">{{ $stats['completedOrders'] }}</p>
+                <a href="{{ route('user.orders', ['status' => 'completed']) }}"
+                    class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600">
+                        {{ __('Completed') }}</p>
+                    <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">
+                        {{ $stats['completedOrders'] }}</p>
                 </a>
-                <a href="{{ route('user.orders', ['status' => 'pending']) }}" class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600"> {{ __('Pending') }}</p>
-                    <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">{{ $stats['pendingOrders'] }}</p>
+                <a href="{{ route('user.orders', ['status' => 'pending']) }}"
+                    class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600">
+                        {{ __('Pending') }}</p>
+                    <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">
+                        {{ $stats['pendingOrders'] }}</p>
                 </a>
-                <a href="" data-action="open-cart-offcanvas" class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600"> {{ __('Cart Items') }}</p>
-                    <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">{{ $stats['cartItems'] }}</p>
+                <a href="" data-action="open-cart-offcanvas"
+                    class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600">
+                        {{ __('Cart Items') }}</p>
+                    <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">
+                        {{ $stats['cartItems'] }}</p>
                 </a>
                 <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                     <p class="text-xs font-semibold uppercase tracking-wide text-slate-500"> {{ __('Total Spent') }}</p>
-                    <p class="mt-2 text-lg font-semibold text-slate-900">{{ number_format($stats['totalSpent'], 2) }}</p>
+                    <p class="mt-2 text-lg font-semibold text-slate-900">
+                        {{ currency_symbol($stats['totalSpent']) }}
+                    </p>
                 </div>
             </div>
 
             <div class="mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
                 <div class="mb-4 flex items-center justify-between">
                     <h2 class="text-lg font-semibold text-slate-900"> {{ __('Recent Orders') }}</h2>
-                    <span class="text-xs font-medium uppercase tracking-wide text-slate-500">Last {{ count($latestOrders) }} orders</span>
                 </div>
 
                 @if ($latestOrders->isEmpty())
                     <div
                         class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center text-sm text-slate-600">
-                         {{ __('You have no orders yet. Start shopping to see your orders here.') }}
+                        {{ __('You have no orders yet. Start shopping to see your orders here.') }}
                     </div>
                 @else
                     <div class="overflow-x-auto">
@@ -70,18 +83,26 @@
                             <tbody>
                                 @foreach ($latestOrders as $order)
                                     <tr class="border-b border-slate-100 last:border-none">
-                                        <td class="py-3 pr-4 font-medium text-slate-800">{{ $order->order_number ?? 'N/A' }}</td>
-                                        <td class="py-3 pr-4 text-slate-700">{{ number_format((float) ($order->pay_amount ?? 0), 2) }}</td>
+                                        <td class="py-3 pr-4 font-medium text-slate-800">
+                                            {{ $order->order_number ?? 'N/A' }}</td>
+                                        <td class="py-3 pr-4 text-slate-700">
+                                            {{ currency_symbol_order($order->pay_amount, $order->currency_symbol, $order->currency_symbol_position) }}
+                                        </td>
                                         <td class="py-3 pr-4">
-                                            <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ strtolower((string) $order->order_status) === 'completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">
-                                                {{ ucfirst((string) ($order->order_status ?? 'pending')) }}
+                                            <span
+                                                class="inline-flex rounded-full px-2.5 py-1 text-xs font-medium {{ strtolower((string) $order->order_status) === 'completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">
+                                                {{ $order->order_status ?? 'pending' }}
                                             </span>
                                         </td>
-                                        <td class="py-3 pr-4 text-slate-700">{{ ucfirst((string) ($order->payment_status ?? 'pending')) }}</td>
-                                        <td class="py-3 pr-4 text-slate-700">{{ optional($order->created_at)->format('d M Y, h:i A') }}</td>
+                                        <td class="py-3 pr-4 text-slate-700">{{ $order->payment_status ?? 'pending' }}
+                                        </td>
+                                        <td class="py-3 pr-4 text-slate-700">
+                                            {{ optional($order->created_at)->format('d M Y, h:i A') }}</td>
                                         <td class="py-3">
-                                            <a href="{{ route('user.order.details', ['id' => $order->id]) }}" class="inline-flex items-center gap-1 rounded-md bg-green-100 px-3 py-1.5 text-xs font-medium text-green-700 transition hover:bg-green-200">
-                                                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <a href="{{ route('user.order.details', ['id' => $order->id]) }}"
+                                                class="inline-flex items-center gap-1 rounded-md bg-green-100 px-3 py-1.5 text-xs font-medium text-green-700 transition hover:bg-green-200">
+                                                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2">
                                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                     <circle cx="12" cy="12" r="3"></circle>
                                                 </svg>

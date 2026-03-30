@@ -6,10 +6,10 @@ use App\Models\Cart;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Wishlist;
-use App\Models\Admin\Language;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Rules\MatchEmailRule;
+use App\Models\Admin\Language;
 use App\Http\Helpers\MailConfig;
 use App\Models\Admin\MailTemplate;
 use App\Http\Controllers\Controller;
@@ -39,8 +39,11 @@ class UserController extends Controller
         $totalOrders = (clone $ordersQuery)->count();
         $completedOrders = (clone $ordersQuery)->where('order_status', 'completed')->count();
         $pendingOrders = (clone $ordersQuery)->where('order_status', 'pending')->count();
-        $totalSpent = (float) ((clone $ordersQuery)->where('payment_status', 'completed')->sum('pay_amount') ?? 0);
-        $cartItems = Cart::query()->where('user_id', $user->id)->sum('quantity') ?? 0;
+        $totalSpent = (clone $ordersQuery)->where('payment_status', 'completed')->sum('pay_amount') ?? 0;
+
+        // Get cart items count from session
+        $cart_session = session()->get('cart_session_id');
+        $cartItems = Cart::where('session_id', $cart_session)->sum('quantity') ?? 0;
 
         $latestOrders = (clone $ordersQuery)
             ->latest('id')

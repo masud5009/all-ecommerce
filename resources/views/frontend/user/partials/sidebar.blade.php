@@ -33,8 +33,8 @@
 <div class="flex h-full flex-col border-r border-slate-200 bg-white">
     <!-- Sidebar Header -->
     <div class="border-b border-slate-200 px-6 py-4">
-        <h2 class="text-lg font-bold text-slate-900">{{ $user->username ?? 'Account' }}</h2>
-        <p class="text-xs text-slate-500">Manage your account</p>
+        <h2 class="text-lg font-bold text-slate-900">{{ $user->name ?? $user->username }}</h2>
+        <p class="text-xs text-slate-500"> {{ __('Manage your account') }}</p>
     </div>
 
     <!-- Navigation Menu -->
