@@ -15,6 +15,9 @@
         'id' => $productId,
         'units' => $variants,
     ];
+
+    $authUser = Auth::guard('web')->user();
+    $inWishlist = $authUser?->wishlist?->contains('product_id', $productId) ?? false;
 @endphp
 
 @section('title', $productName . ' | FreshCart')
@@ -213,6 +216,17 @@
                                 </svg>
                                 Add to cart
                             </button>
+
+                            <button type="button" data-action="toggle-wishlist" data-product-id="{{ $productId }}"
+                                class="inline-flex items-center justify-center gap-2 rounded-2xl border border-green-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:border-green-300 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200 {{ $inWishlist ? 'text-red-500' : 'text-slate-700' }}"
+                                aria-label="Add to wishlist" aria-pressed="{{ $inWishlist ? 'true' : 'false' }}">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path
+                                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                </svg>
+                                Wishlist
+                            </button>
+
                             <a href="{{ route('frontend.shop') }}"
                                 class="inline-flex items-center justify-center rounded-2xl border border-green-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:border-green-300 hover:text-green-700">
                                 Continue Shopping
