@@ -9,12 +9,12 @@
             <div class="mb-8 rounded-3xl border border-emerald-100 bg-white/90 p-6 shadow-xl shadow-emerald-100/40 sm:p-8">
                 <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <p class="text-sm font-medium text-emerald-700">Welcome back</p>
+                        <p class="text-sm font-medium text-emerald-700"> {{ __('Welcome back') }}</p>
                         <h1 class="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
-                            Hello, {{ $user->username ?? 'Customer' }}
+                             {{ __('Hello') }}, {{ $user->username ?? 'Customer' }}
                         </h1>
                         <p class="mt-2 text-sm text-slate-600">
-                            Manage your profile, track orders, and continue shopping from your dashboard.
+                             {{ __('Manage your profile, track orders, and continue shopping from your dashboard.') }}
                         </p>
                     </div>
                 </div>
@@ -22,49 +22,49 @@
 
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
                 <a href="{{ route('user.orders') }}" class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600">Total Orders</p>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600"> {{ __('Total Orders') }}</p>
                     <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">{{ $stats['totalOrders'] }}</p>
                 </a>
                 <a href="{{ route('user.orders', ['status' => 'completed']) }}" class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600">Completed</p>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600"> {{ __('Completed') }}</p>
                     <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">{{ $stats['completedOrders'] }}</p>
                 </a>
                 <a href="{{ route('user.orders', ['status' => 'pending']) }}" class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600">Pending</p>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600"> {{ __('Pending') }}</p>
                     <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">{{ $stats['pendingOrders'] }}</p>
                 </a>
                 <a href="" data-action="open-cart-offcanvas" class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-green-200 hover:shadow-md">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600">Cart Items</p>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-green-600"> {{ __('Cart Items') }}</p>
                     <p class="mt-2 text-lg font-semibold text-slate-900 group-hover:text-green-700">{{ $stats['cartItems'] }}</p>
                 </a>
                 <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Total Spent</p>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500"> {{ __('Total Spent') }}</p>
                     <p class="mt-2 text-lg font-semibold text-slate-900">{{ number_format($stats['totalSpent'], 2) }}</p>
                 </div>
             </div>
 
             <div class="mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
                 <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-slate-900">Recent Orders</h2>
-                    <span class="text-xs font-medium uppercase tracking-wide text-slate-500">Last 5 orders</span>
+                    <h2 class="text-lg font-semibold text-slate-900"> {{ __('Recent Orders') }}</h2>
+                    <span class="text-xs font-medium uppercase tracking-wide text-slate-500">Last {{ count($latestOrders) }} orders</span>
                 </div>
 
                 @if ($latestOrders->isEmpty())
                     <div
                         class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center text-sm text-slate-600">
-                        You have no orders yet. Start shopping to see your orders here.
+                         {{ __('You have no orders yet. Start shopping to see your orders here.') }}
                     </div>
                 @else
                     <div class="overflow-x-auto">
                         <table class="min-w-full text-left text-sm">
                             <thead>
                                 <tr class="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
-                                    <th class="py-3 pr-4">Order #</th>
-                                    <th class="py-3 pr-4">Amount</th>
-                                    <th class="py-3 pr-4">Order Status</th>
-                                    <th class="py-3 pr-4">Payment</th>
-                                    <th class="py-3 pr-4">Date</th>
-                                    <th class="py-3">Action</th>
+                                    <th class="py-3 pr-4"> {{ __('Order') }} #</th>
+                                    <th class="py-3 pr-4"> {{ __('Amount') }}</th>
+                                    <th class="py-3 pr-4"> {{ __('Order Status') }}</th>
+                                    <th class="py-3 pr-4"> {{ __('Payment') }}</th>
+                                    <th class="py-3 pr-4"> {{ __('Date') }}</th>
+                                    <th class="py-3"> {{ __('Action') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -85,7 +85,7 @@
                                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                     <circle cx="12" cy="12" r="3"></circle>
                                                 </svg>
-                                                View
+                                                {{ __('View') }}
                                             </a>
                                         </td>
                                     </tr>

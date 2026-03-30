@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 30, 2026 at 08:57 AM
+-- Generation Time: Mar 30, 2026 at 09:54 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.22
 
@@ -1560,8 +1560,7 @@ CREATE TABLE `wishlists` (
 --
 
 INSERT INTO `wishlists` (`id`, `user_id`, `product_id`, `created_at`, `updated_at`) VALUES
-(8, 59, 52, '2026-03-30 02:55:52', '2026-03-30 02:55:52'),
-(9, 59, 51, '2026-03-30 02:55:53', '2026-03-30 02:55:53');
+(19, 59, 51, '2026-03-30 03:46:32', '2026-03-30 03:46:32');
 
 --
 -- Indexes for dumped tables
@@ -2155,7 +2154,7 @@ ALTER TABLE `vendor_infos`
 -- AUTO_INCREMENT for table `wishlists`
 --
 ALTER TABLE `wishlists`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Constraints for dumped tables
