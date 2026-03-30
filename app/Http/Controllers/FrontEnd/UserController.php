@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FrontEnd;
 use App\Models\Cart;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Wishlist;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Rules\MatchEmailRule;
@@ -94,11 +95,11 @@ class UserController extends Controller
      */
     public function wishlist()
     {
-        $user = Auth::guard('web')->user();
+         $data['wishlistItems'] = Wishlist::with('product.content')
+            ->where('user_id', Auth::guard('web')->id())
+            ->get();
 
-        return view('frontend.user.wishlist', [
-            'user' => $user,
-        ]);
+        return view('frontend.user.wishlist',$data);
     }
 
     /**

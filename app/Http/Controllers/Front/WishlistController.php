@@ -9,15 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class WishlistController extends Controller
 {
-    public function index()
-    {
-        $wishlistItems = Wishlist::with('product.content')
-            ->where('user_id', Auth::guard('web')->id())
-            ->get();
-
-        return view('front.wishlist', compact('wishlistItems'));
-    }
-
+    /**
+     * Toggle the wishlist status of a product for the authenticated user.
+     */
     public function toggle(Request $request)
     {
         if (!Auth::guard('web')->check()) {
