@@ -142,37 +142,39 @@
                         @endif
 
                         {{-- Units/Variants Selection --}}
-                        <div class="mt-5">
-                            <div class="mt-3 grid max-h-80 gap-2 overflow-y-auto pr-1">
-                                @foreach ($variants as $index => $unit)
-                                    <label class="group relative flex cursor-pointer items-center gap-3">
-                                        <input class="peer sr-only" type="radio" name="productUnit"
-                                            value="{{ $index }}" data-detail-unit
-                                            data-variant-id="{{ $unit['variant_id'] ?? '' }}"
-                                            data-price="{{ $unit['price'] }}"
-                                            data-old-price="{{ $unit['oldPrice'] ?? '' }}"
-                                            {{ $index === 0 ? 'checked' : '' }}>
-                                        <div
-                                            class="flex w-full items-center justify-between rounded-2xl border border-green-100 bg-white px-5 py-4 text-sm shadow-sm transition hover:border-green-300 hover:shadow-md peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:ring-2 peer-checked:ring-green-200">
-                                            <div>
-                                                <p class="font-semibold text-slate-900">{{ $unit['label'] }}</p>
-                                                @if (!empty($unit['sku']))
-                                                    <p class="text-xs text-slate-400">SKU: {{ $unit['sku'] }}</p>
-                                                @endif
+                        @if (count($variants) > 1)
+                            <div class="mt-5">
+                                <div class="mt-3 grid max-h-80 gap-2 overflow-y-auto pr-1">
+                                    @foreach ($variants as $index => $unit)
+                                        <label class="group relative flex cursor-pointer items-center gap-3">
+                                            <input class="peer sr-only" type="radio" name="productUnit"
+                                                value="{{ $index }}" data-detail-unit
+                                                data-variant-id="{{ $unit['variant_id'] ?? '' }}"
+                                                data-price="{{ $unit['price'] }}"
+                                                data-old-price="{{ $unit['oldPrice'] ?? '' }}"
+                                                {{ $index === 0 ? 'checked' : '' }}>
+                                            <div
+                                                class="flex w-full items-center justify-between rounded-2xl border border-green-100 bg-white px-5 py-4 text-sm shadow-sm transition hover:border-green-300 hover:shadow-md peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:ring-2 peer-checked:ring-green-200">
+                                                <div>
+                                                    <p class="font-semibold text-slate-900">{{ $unit['label'] }}</p>
+                                                    @if (!empty($unit['sku']))
+                                                        <p class="text-xs text-slate-400">SKU: {{ $unit['sku'] }}</p>
+                                                    @endif
+                                                </div>
+                                                <div class="text-right">
+                                                    <p class="font-semibold text-slate-900">
+                                                        {{ currency_symbol($unit['price']) }}</p>
+                                                    @if (!empty($unit['oldPrice']) && $unit['oldPrice'] > $unit['price'])
+                                                        <p class="text-xs text-slate-400 line-through">
+                                                            {{ currency_symbol($unit['oldPrice']) }}</p>
+                                                    @endif
+                                                </div>
                                             </div>
-                                            <div class="text-right">
-                                                <p class="font-semibold text-slate-900">
-                                                    {{ currency_symbol($unit['price']) }}</p>
-                                                @if (!empty($unit['oldPrice']) && $unit['oldPrice'] > $unit['price'])
-                                                    <p class="text-xs text-slate-400 line-through">
-                                                        {{ currency_symbol($unit['oldPrice']) }}</p>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </label>
-                                @endforeach
+                                        </label>
+                                    @endforeach
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         {{-- Add to Cart & Actions --}}
                         <div class="mt-6 flex flex-wrap items-center gap-3">
@@ -351,9 +353,9 @@
             const updateDisplayedPricing = () => {
                 const selectedRadio = document.querySelector('input[name="productUnit"]:checked');
                 const index = selectedRadio ? parseInt(selectedRadio.value, 10) : 0;
-                const selectedUnit = Number.isInteger(index)
-                    ? (productData.units[index] || productData.units[0])
-                    : productData.units[0];
+                const selectedUnit = Number.isInteger(index) ?
+                    (productData.units[index] || productData.units[0]) :
+                    productData.units[0];
 
                 if (!selectedUnit) return;
 
