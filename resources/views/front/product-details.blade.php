@@ -9,6 +9,8 @@
         $variants = [['label' => '1 unit', 'price' => 0, 'oldPrice' => 0]];
     }
 
+    $firstUnit = $variants[0] ?? ['price' => 0, 'oldPrice' => 0];
+
     $productDetail = [
         'id' => $productId,
         'units' => $variants,
@@ -119,6 +121,17 @@
                             <span class="text-slate-500">{{ number_format($averageRating, 1) }}
                                 ({{ $reviewCount }}
                                 {{ \Illuminate\Support\Str::plural('review', $reviewCount) }})</span>
+                        </div>
+
+                        {{-- Price Display (quick-view style) --}}
+                        <div class="mt-4">
+                            <p class="text-3xl font-semibold leading-none text-slate-900" data-detail-price>
+                                {{ currency_symbol($firstUnit['price'] ?? 0) }}
+                            </p>
+                            <p class="mt-2 text-lg text-slate-400 line-through {{ !empty($firstUnit['oldPrice']) && $firstUnit['oldPrice'] > ($firstUnit['price'] ?? 0) ? '' : 'hidden' }}"
+                                data-detail-oldprice>
+                                {{ currency_symbol($firstUnit['oldPrice'] ?? 0) }}
+                            </p>
                         </div>
 
                         {{-- Summary --}}
@@ -310,6 +323,64 @@
             img.addEventListener('load', () => {
                 if (container.classList.contains('is-magnifying')) setBackground();
             });
+        })();
+
+        (function() {
+            const priceEl = document.querySelector('[data-detail-price]');
+            const oldPriceEl = document.querySelector('[data-detail-oldprice]');
+            const unitRadios = document.querySelectorAll('input[name="productUnit"]');
+            const productData = window.serverProductDetail;
+
+            if (!priceEl || !productData || !Array.isArray(productData.units) || !productData.units.length) {
+                return;
+            }
+
+            const formatPriceLikeTemplate = (amount, template = '') => {
+                const numeric = Number(amount) || 0;
+                const formatted = numeric.toFixed(2);
+                const sample = String(template || '').trim();
+                const numberPattern = /-?[\d,.]+/;
+
+                if (numberPattern.test(sample)) {
+                    return sample.replace(numberPattern, formatted);
+                }
+
+                return `৳${formatted}`;
+            };
+
+            const updateDisplayedPricing = () => {
+                const selectedRadio = document.querySelector('input[name="productUnit"]:checked');
+                const index = selectedRadio ? parseInt(selectedRadio.value, 10) : 0;
+                const selectedUnit = Number.isInteger(index)
+                    ? (productData.units[index] || productData.units[0])
+                    : productData.units[0];
+
+                if (!selectedUnit) return;
+
+                const priceTemplate = priceEl.textContent || '';
+                priceEl.textContent = formatPriceLikeTemplate(selectedUnit.price, priceTemplate);
+
+                if (!oldPriceEl) return;
+
+                const hasOldPrice =
+                    selectedUnit.oldPrice !== null &&
+                    selectedUnit.oldPrice !== undefined &&
+                    Number(selectedUnit.oldPrice) > Number(selectedUnit.price);
+
+                if (hasOldPrice) {
+                    const oldPriceTemplate = oldPriceEl.textContent || priceTemplate;
+                    oldPriceEl.textContent = formatPriceLikeTemplate(selectedUnit.oldPrice, oldPriceTemplate);
+                    oldPriceEl.classList.remove('hidden');
+                } else {
+                    oldPriceEl.classList.add('hidden');
+                }
+            };
+
+            unitRadios.forEach((radio) => {
+                radio.addEventListener('change', updateDisplayedPricing);
+            });
+
+            updateDisplayedPricing();
         })();
     </script>
     @if (!empty($productDetail))

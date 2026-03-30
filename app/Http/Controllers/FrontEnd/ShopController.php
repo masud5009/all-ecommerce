@@ -192,16 +192,14 @@ class ShopController extends Controller
         }
 
         $content = $product->content->first();
+        $isFlashSaleActive = false;
         $flashDiscountPercent = (float) ($product->flash_sale_price ?? 0);
-        $isFlashSaleActive =
-            (int) ($product->flash_sale_status ?? 0) === 1 &&
-            $flashDiscountPercent > 0 &&
-            !empty($product->flash_sale_start_at) &&
-            !empty($product->flash_sale_end_at) &&
-            Carbon::now()->between(
-                Carbon::parse($product->flash_sale_start_at),
-                Carbon::parse($product->flash_sale_end_at)
-            );
+        if ($product->flash_sale_status == 1 && Carbon::now()->between(
+            Carbon::parse($product->flash_sale_start_at),
+            Carbon::parse($product->flash_sale_end_at)
+        )) {
+            $isFlashSaleActive = true;
+        }
 
         if ($isFlashSaleActive) {
             $flashDiscountPercent = min($flashDiscountPercent, 100);
@@ -239,6 +237,7 @@ class ShopController extends Controller
                         ? (float) ($variant->price ?? $product->current_price ?? 0)
                         : (float) ($product->previous_price ?? 0),
                     'stock' => (int) ($variant->stock ?? 0),
+                    'sku' => $variant->sku ?? '',
                 ];
             }
         }
@@ -255,6 +254,7 @@ class ShopController extends Controller
                     ? (float) ($product->current_price ?? 0)
                     : (float) ($product->previous_price ?? 0),
                 'stock' => (int) ($product->stock ?? 0),
+                'sku' => $product->sku ?? '',
             ];
         }
 
