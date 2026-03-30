@@ -444,7 +444,11 @@
             }
 
             // Close quick view
-            if (e.target.closest('[data-quickview-close]') || e.target === backdrop) {
+            if (
+                e.target.closest('[data-quickview-close]') ||
+                e.target === backdrop ||
+                e.target === modal
+            ) {
                 closeModal();
             }
         });

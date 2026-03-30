@@ -10,20 +10,20 @@
             <nav class="mb-8 flex flex-wrap items-center gap-2 text-xs text-slate-500" aria-label="Breadcrumb">
                 <a href="{{ route('frontend.index') }}"
                     class="rounded-full border border-green-100 bg-white px-3 py-1 transition hover:border-green-300 hover:text-green-700">
-                    Home
+                    {{ __('Home') }}
                 </a>
                 <span>/</span>
                 <a href="{{ route('frontend.shop') }}"
                     class="rounded-full border border-green-100 bg-white px-3 py-1 transition hover:border-green-300 hover:text-green-700">
-                    Shop
+                    {{ __('Shop') }}
                 </a>
                 <span>/</span>
                 <span class="rounded-full bg-green-100 px-3 py-1 font-semibold text-green-700">
-                    Checkout
+                    {{ __('Checkout') }}
                 </span>
             </nav>
 
-            <h1 class="text-2xl font-semibold text-slate-900 sm:text-3xl">Checkout</h1>
+            <h1 class="text-2xl font-semibold text-slate-900 sm:text-3xl">{{ __('Checkout') }}</h1>
 
             <div class="mt-8 grid gap-8 lg:grid-cols-[1fr_400px]">
                 {{-- Left: Checkout Form --}}
@@ -32,26 +32,30 @@
                         @csrf
                         {{-- Contact Information --}}
                         <div class="rounded-2xl border border-green-100 bg-white p-6 shadow-sm">
-                            <h2 class="text-lg font-semibold text-slate-900">Contact Information</h2>
+                            <h2 class="text-lg font-semibold text-slate-900">{{ __('Contact Information') }}</h2>
                             <div class="mt-4 grid gap-4 sm:grid-cols-2">
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-700" for="name">Full Name
-                                        *</label>
+                                    <label class="block text-sm font-medium text-slate-700" for="name">
+                                        {{ __('Full Name') }}
+                                        <span class="text-danger">**</span></label>
                                     <input type="text" id="name" name="name" required
                                         class="mt-1 w-full rounded-xl border border-green-200 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-200"
                                         placeholder="Your full name">
                                     <p class="text-sm text-red-500" id="err_name"></p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-700" for="email">Email *</label>
+                                    <label class="block text-sm font-medium text-slate-700" for="email">
+                                        {{ __('Email') }}
+                                        <span class="text-danger">**</span></label>
                                     <input type="email" id="email" name="email" required
                                         class="mt-1 w-full rounded-xl border border-green-200 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-200"
                                         placeholder="your@email.com">
                                     <p class="text-sm text-red-500" id="err_email"></p>
                                 </div>
                                 <div class="sm:col-span-2">
-                                    <label class="block text-sm font-medium text-slate-700" for="phone">Phone Number
-                                        *</label>
+                                    <label class="block text-sm font-medium text-slate-700" for="phone">
+                                        {{ __('Phone Number') }}
+                                        <span class="text-danger">**</span></label>
                                     <input type="tel" id="phone" name="phone" required
                                         class="mt-1 w-full rounded-xl border border-green-200 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-200"
                                         placeholder="+880 1XXX-XXXXXX">
@@ -62,11 +66,12 @@
 
                         {{-- Shipping Address --}}
                         <div class="rounded-2xl border border-green-100 bg-white p-6 shadow-sm">
-                            <h2 class="text-lg font-semibold text-slate-900">Shipping Address</h2>
+                            <h2 class="text-lg font-semibold text-slate-900">{{ __('Shipping Address') }}</h2>
                             <div class="mt-4 grid gap-4 sm:grid-cols-2">
                                 <div class="sm:col-span-2">
-                                    <label class="block text-sm font-medium text-slate-700"
-                                        for="shipping_charge_id">Shipping Charge *</label>
+                                    <label class="block text-sm font-medium text-slate-700" for="shipping_charge_id">
+                                        {{ __('Shipping Charge') }}
+                                        <span class="text-danger">**</span></label>
                                     <select id="shipping_charge_id" name="shipping_charge_id"
                                         @if ($shippingOptions->isNotEmpty()) required @else disabled @endif
                                         class="mt-1 w-full rounded-xl border border-green-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-200 disabled:cursor-not-allowed disabled:bg-slate-100">
@@ -88,22 +93,27 @@
                                     <p class="text-sm text-red-500" id="err_shipping_charge_id"></p>
                                 </div>
                                 <div class="sm:col-span-2">
-                                    <label class="block text-sm font-medium text-slate-700" for="address">Address *</label>
+                                    <label class="block text-sm font-medium text-slate-700" for="address">
+                                        {{ __('Address') }}
+                                        <span class="text-danger">**</span></label>
                                     <textarea id="address" name="address" rows="2" required
                                         class="mt-1 w-full rounded-xl border border-green-200 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-200"
                                         placeholder="House/Street/Area"></textarea>
                                     <p class="text-sm text-red-500" id="err_address"></p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-700" for="city">City *</label>
+                                    <label class="block text-sm font-medium text-slate-700" for="city">
+                                        {{ __('City') }}
+                                        <span class="text-danger">**</span></label>
                                     <input type="text" id="city" name="city" required
                                         class="mt-1 w-full rounded-xl border border-green-200 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-200"
                                         placeholder="Dhaka">
                                     <p class="text-sm text-red-500" id="err_city"></p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-700" for="zip">Zip/Postal
-                                        Code</label>
+                                    <label class="block text-sm font-medium text-slate-700" for="zip">
+                                        {{ __('Zip/Postal Code') }}
+                                        <span class="text-danger">**</span></label>
                                     <input type="text" id="zip" name="zip"
                                         class="mt-1 w-full rounded-xl border border-green-200 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-200"
                                         placeholder="1205">
@@ -114,15 +124,15 @@
 
                         {{-- Payment Method --}}
                         <div class="rounded-2xl border border-green-100 bg-white p-6 shadow-sm">
-                            <h2 class="text-lg font-semibold text-slate-900">Payment Method</h2>
+                            <h2 class="text-lg font-semibold text-slate-900">{{ __('Payment Method') }}</h2>
                             <div class="mt-4 space-y-3">
                                 <label
                                     class="group flex cursor-pointer items-center gap-4 rounded-xl border border-green-100 bg-white p-4 transition hover:border-green-300">
                                     <input type="radio" name="payment_method" value="cod" checked
                                         class="h-5 w-5 border-2 border-green-300 text-green-600 focus:ring-green-500">
                                     <div class="flex-1">
-                                        <p class="font-semibold text-slate-900">Cash on Delivery</p>
-                                        <p class="text-xs text-slate-500">Pay when you receive your order</p>
+                                        <p class="font-semibold text-slate-900">{{ __('Cash on Delivery') }}</p>
+                                        <p class="text-xs text-slate-500">{{ __('Pay when you receive your order') }}</p>
                                     </div>
                                     <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor"
                                         stroke-width="1.5" viewBox="0 0 24 24">
@@ -136,8 +146,9 @@
                                     <input type="radio" name="payment_method" value="online"
                                         class="h-5 w-5 border-2 border-green-300 text-green-600 focus:ring-green-500">
                                     <div class="flex-1">
-                                        <p class="font-semibold text-slate-900">Online Payment</p>
-                                        <p class="text-xs text-slate-500">Pay securely via bKash, Nagad, or Card</p>
+                                        <p class="font-semibold text-slate-900">{{ __('Online Payment') }}</p>
+                                        <p class="text-xs text-slate-500">
+                                            {{ __('Pay securely via bKash, Nagad, or Card') }}</p>
                                     </div>
                                     <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor"
                                         stroke-width="1.5" viewBox="0 0 24 24">
@@ -154,7 +165,7 @@
                 {{-- Right: Order Summary --}}
                 <div class="lg:sticky lg:top-24 h-fit">
                     <div class="rounded-2xl border border-green-100 bg-white p-6 shadow-sm">
-                        <h2 class="text-lg font-semibold text-slate-900">Order Summary</h2>
+                        <h2 class="text-lg font-semibold text-slate-900">{{ __('Order Summary') }}</h2>
 
                         {{-- Cart Items --}}
                         <div class="mt-4 max-h-80 space-y-4 overflow-y-auto">
@@ -183,16 +194,16 @@
                         {{-- Totals --}}
                         <div class="mt-6 space-y-3 border-t border-green-100 pt-4">
                             <div class="flex items-center justify-between text-sm">
-                                <span class="text-slate-600">Subtotal</span>
+                                <span class="text-slate-600">{{ __('Subtotal') }}</span>
                                 <span class="font-medium text-slate-900">{{ currency_symbol($subtotal) }}</span>
                             </div>
                             <div class="flex items-center justify-between text-sm">
-                                <span class="text-slate-600">Shipping</span>
+                                <span class="text-slate-600">{{ __('Shipping') }}</span>
                                 <span id="shippingAmount"
                                     class="font-medium text-slate-900">{{ currency_symbol($shipping) }}</span>
                             </div>
                             <div class="flex items-center justify-between border-t border-green-100 pt-3">
-                                <span class="text-base font-semibold text-slate-900">Total</span>
+                                <span class="text-base font-semibold text-slate-900">{{ __('Total') }}</span>
                                 <span id="totalAmount"
                                     class="text-xl font-semibold text-green-700">{{ currency_symbol($total) }}</span>
                             </div>
@@ -205,7 +216,7 @@
                                 viewBox="0 0 24 24">
                                 <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            <span id="btnText">Place Order</span>
+                            <span id="btnText">{{ __('Place Order') }}</span>
                         </button>
                     </div>
                 </div>
