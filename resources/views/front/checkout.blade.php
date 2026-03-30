@@ -37,7 +37,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-slate-700" for="name">
                                         {{ __('Full Name') }}
-                                        <span class="text-danger">**</span></label>
+                                        <span class="text-red-500">**</span></label>
                                     <input type="text" id="name" name="name" required
                                         class="mt-1 w-full rounded-xl border border-green-200 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-200"
                                         placeholder="Your full name">
@@ -46,7 +46,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-slate-700" for="email">
                                         {{ __('Email') }}
-                                        <span class="text-danger">**</span></label>
+                                        <span class="text-red-500">**</span></label>
                                     <input type="email" id="email" name="email" required
                                         class="mt-1 w-full rounded-xl border border-green-200 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-200"
                                         placeholder="your@email.com">
@@ -55,7 +55,7 @@
                                 <div class="sm:col-span-2">
                                     <label class="block text-sm font-medium text-slate-700" for="phone">
                                         {{ __('Phone Number') }}
-                                        <span class="text-danger">**</span></label>
+                                        <span class="text-red-500">**</span></label>
                                     <input type="tel" id="phone" name="phone" required
                                         class="mt-1 w-full rounded-xl border border-green-200 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-200"
                                         placeholder="+880 1XXX-XXXXXX">
@@ -71,7 +71,7 @@
                                 <div class="sm:col-span-2">
                                     <label class="block text-sm font-medium text-slate-700" for="shipping_charge_id">
                                         {{ __('Shipping Charge') }}
-                                        <span class="text-danger">**</span></label>
+                                        <span class="text-red-500">**</span></label>
                                     <select id="shipping_charge_id" name="shipping_charge_id"
                                         @if ($shippingOptions->isNotEmpty()) required @else disabled @endif
                                         class="mt-1 w-full rounded-xl border border-green-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-200 disabled:cursor-not-allowed disabled:bg-slate-100">
@@ -95,7 +95,7 @@
                                 <div class="sm:col-span-2">
                                     <label class="block text-sm font-medium text-slate-700" for="address">
                                         {{ __('Address') }}
-                                        <span class="text-danger">**</span></label>
+                                        <span class="text-red-500">**</span></label>
                                     <textarea id="address" name="address" rows="2" required
                                         class="mt-1 w-full rounded-xl border border-green-200 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-200"
                                         placeholder="House/Street/Area"></textarea>
@@ -104,7 +104,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-slate-700" for="city">
                                         {{ __('City') }}
-                                        <span class="text-danger">**</span></label>
+                                        <span class="text-red-500">**</span></label>
                                     <input type="text" id="city" name="city" required
                                         class="mt-1 w-full rounded-xl border border-green-200 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-200"
                                         placeholder="Dhaka">
@@ -113,7 +113,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-slate-700" for="zip">
                                         {{ __('Zip/Postal Code') }}
-                                        <span class="text-danger">**</span></label>
+                                        <span class="text-red-500">**</span></label>
                                     <input type="text" id="zip" name="zip"
                                         class="mt-1 w-full rounded-xl border border-green-200 px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-200"
                                         placeholder="1205">

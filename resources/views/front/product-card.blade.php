@@ -50,6 +50,8 @@
 
     $reviewCount = (int) ($product->reviews_count ?? 0);
     $averageRating = $reviewCount > 0 ? round((float) ($product->reviews_avg_rating ?? 0), 1) : 0;
+
+    $inWishlist = Auth::guard('web')->check() && Auth::guard('web')->user()->wishlist->contains('product_id', $product->id);
 @endphp
 
 <article
@@ -69,6 +71,17 @@
                 class="h-40 w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy"
                 decoding="async">
         </a>
+
+        <button type="button" data-action="toggle-wishlist" data-product-id="{{ $product->id }}"
+            class="absolute bottom-3 left-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-500 shadow-lg transition duration-300 hover:bg-slate-100 @if($inWishlist) text-red-500 @endif"
+            aria-label="Add to wishlist">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"
+                aria-hidden="true">
+                <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z">
+                </path>
+            </svg>
+        </button>
 
         <button type="button" data-action="quick-view" data-product-id="{{ $product->id }}"
             class="absolute bottom-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition duration-300 hover:bg-green-700"

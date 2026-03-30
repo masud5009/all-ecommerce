@@ -7,6 +7,7 @@ use App\Http\Controllers\FrontEnd\HomeController;
 use App\Http\Controllers\FrontEnd\ShopController;
 use App\Http\Controllers\FrontEnd\UserController;
 use App\Http\Controllers\FrontEnd\CheckoutController;
+use App\Http\Controllers\Front\WishlistController;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 /*
 |--------------------------------------------------------------------------
@@ -112,7 +113,23 @@ Route::prefix('user')->middleware('auth:web')->controller(UserController::class)
     Route::get('/logout', 'logout')->name('user.logout');
 });
 
+Route::name('frontend.')->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('index');
+    Route::get('/shop', [ShopController::class, 'index'])->name('shop');
+    Route::get('/shop/product/{id}', [ShopController::class, 'details'])->name('shop.details');
 
-    // Route::middleware('web')->group(function(){
-    //     Route::get('registration/final-step');
-    // });
+    // Cart Routes
+    Route::get('/cart', [CartController::class, 'index'])->name('cart');
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+    Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+
+    // Checkout & Order
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::post('/cart/place-order', [CartController::class, 'placeOrder'])->name('cart.place.order');
+    Route::get('/order-confirmation/{id}', [CheckoutController::class, 'confirmation'])->name('order.confirmation');
+
+    // Wishlist Routes
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist')->middleware('customer');
+    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+});

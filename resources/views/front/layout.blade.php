@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'FreshCart | Premium Grocery')</title>
+
+    <script>
+        window.routes = {
+            wishlistToggle: '{{ route('frontend.wishlist.toggle') }}',
+            login: '{{ route('user.login') }}'
+        };
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -115,6 +123,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('assets/front/js/cart.js') }}"></script>
     <script src="{{ asset('assets/front/js/app.js') }}"></script>
+    <script src="{{ asset('assets/front/js/checkout.js') }}"></script>
+    <script src="{{ asset('assets/front/js/wishlist.js') }}"></script>
 
     @yield('script')
 </body>
