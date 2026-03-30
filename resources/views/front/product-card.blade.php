@@ -52,7 +52,9 @@
     $averageRating = $reviewCount > 0 ? round((float) ($product->reviews_avg_rating ?? 0), 1) : 0;
 
     $authUser = Auth::guard('web')->user();
-    $inWishlist = $authUser?->wishlist?->contains('product_id', $product->id) ?? false;
+    $inWishlist = isset($forceInWishlist)
+        ? (bool) $forceInWishlist
+        : ($authUser?->wishlist?->contains('product_id', $product->id) ?? false);
 @endphp
 
 <article
@@ -74,8 +76,8 @@
         </a>
 
         <button type="button" data-action="toggle-wishlist" data-product-id="{{ $product->id }}"
-            class="absolute bottom-3 left-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-500 shadow-lg transition duration-300 hover:bg-slate-100 @if($inWishlist) text-red-500 @endif"
-            aria-label="Add to wishlist">
+            class="absolute bottom-3 left-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg transition duration-300 hover:bg-slate-100 {{ $inWishlist ? 'text-red-500' : 'text-slate-500' }}"
+            aria-label="Add to wishlist" aria-pressed="{{ $inWishlist ? 'true' : 'false' }}">
             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"
                 aria-hidden="true">
                 <path

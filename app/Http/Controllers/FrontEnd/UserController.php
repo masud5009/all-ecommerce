@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Wishlist;
+use App\Models\Admin\Language;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Rules\MatchEmailRule;
@@ -95,11 +96,35 @@ class UserController extends Controller
      */
     public function wishlist()
     {
-         $data['wishlistItems'] = Wishlist::with('product.content')
+        $languageId = session()->has('lang')
+            ? Language::query()->where('code', session()->get('lang'))->value('id')
+            : Language::query()->where('is_default', 1)->value('id');
+
+        $data['wishlistItems'] = Wishlist::query()
             ->where('user_id', Auth::guard('web')->id())
+            ->whereHas('product.content', function ($query) use ($languageId) {
+                if ($languageId) {
+                    $query->where('language_id', $languageId);
+                }
+            })
+            ->with([
+                'product' => function ($query) use ($languageId) {
+                    $query->with([
+                        'content' => function ($contentQuery) use ($languageId) {
+                            if ($languageId) {
+                                $contentQuery->where('language_id', $languageId);
+                            }
+                        },
+                        'variations.variantValues.optionValue.option',
+                    ])
+                        ->withCount('reviews')
+                        ->withAvg('reviews', 'rating');
+                },
+            ])
+            ->latest('id')
             ->get();
 
-        return view('frontend.user.wishlist',$data);
+        return view('frontend.user.wishlist', $data);
     }
 
     /**

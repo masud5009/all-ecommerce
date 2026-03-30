@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class WishlistController extends Controller
 {
+    public function index()
+    {
+        return redirect()->route('user.wishlist');
+    }
+
     /**
      * Toggle the wishlist status of a product for the authenticated user.
      */

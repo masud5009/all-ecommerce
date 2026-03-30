@@ -56,8 +56,13 @@ function toggleWishlist(productId, button) {
             if (data.success) {
                 if (data.in_wishlist) {
                     button.classList.add('text-red-500');
+                    button.classList.remove('text-slate-500');
+                    button.setAttribute('aria-pressed', 'true');
                 } else {
                     button.classList.remove('text-red-500');
+                    button.classList.add('text-slate-500');
+                    button.setAttribute('aria-pressed', 'false');
+                    syncWishlistPageState(button);
                 }
             } else if (data.message) {
                 alert(data.message);
@@ -70,4 +75,38 @@ function toggleWishlist(productId, button) {
         .finally(() => {
             button.disabled = false;
         });
+}
+
+function syncWishlistPageState(button) {
+    if (document.body.dataset.page !== 'user-wishlist') {
+        return;
+    }
+
+    const wishlistItem = button.closest('[data-wishlist-item]');
+
+    if (wishlistItem) {
+        wishlistItem.remove();
+    }
+
+    const wishlistGrid = document.getElementById('wishlist-grid');
+    const wishlistCount = document.getElementById('wishlist-count');
+    const wishlistCountLabel = document.getElementById('wishlist-count-label');
+    const emptyState = document.getElementById('wishlist-empty-state');
+    const remainingItems = wishlistGrid ? wishlistGrid.querySelectorAll('[data-wishlist-item]').length : 0;
+
+    if (wishlistCount) {
+        wishlistCount.textContent = remainingItems;
+    }
+
+    if (wishlistCountLabel) {
+        wishlistCountLabel.textContent = remainingItems === 1 ? 'product' : 'products';
+    }
+
+    if (wishlistGrid && remainingItems === 0) {
+        wishlistGrid.classList.add('hidden');
+    }
+
+    if (emptyState && remainingItems === 0) {
+        emptyState.classList.remove('hidden');
+    }
 }
