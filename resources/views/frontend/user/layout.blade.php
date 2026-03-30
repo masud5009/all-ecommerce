@@ -4,16 +4,16 @@
 @section('page', 'user-dashboard')
 
 @section('content')
-<section class="min-h-[calc(100vh-160px)] bg-slate-50">
-    <div class="flex h-full">
+<section class="bg-slate-50">
+    <div class="flex flex-col lg:flex-row">
         <!-- Sidebar -->
-        <aside class="hidden w-64 flex-shrink-0 overflow-y-auto border-r border-slate-200 bg-white lg:block">
+        <aside class="hidden w-64 flex-shrink-0 border-r border-slate-200 bg-white lg:block">
             @include('frontend.user.partials.sidebar')
         </aside>
 
         <!-- Mobile Sidebar Toggle -->
-        <div class="lg:hidden">
-            <button id="sidebarToggle" class="p-4">
+        <div class="border-b border-slate-200 bg-white lg:hidden">
+            <button id="sidebarToggle" class="p-4 text-slate-700">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
@@ -21,7 +21,7 @@
         </div>
 
         <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto">
+        <main class="min-w-0 flex-1">
             @yield('dashboard-content')
         </main>
     </div>

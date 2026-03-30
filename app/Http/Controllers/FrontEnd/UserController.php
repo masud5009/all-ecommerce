@@ -21,6 +21,16 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    protected $currentLang;
+    public function __construct()
+    {
+        if (session()->has('lang')) {
+            $this->currentLang = Language::where('code', session()->get('lang'))->first();
+        } else {
+            $this->currentLang = Language::where('is_default', 1)->first();
+        }
+    }
+
     /**
      * dashboard
      */
@@ -99,9 +109,7 @@ class UserController extends Controller
      */
     public function wishlist()
     {
-        $languageId = session()->has('lang')
-            ? Language::query()->where('code', session()->get('lang'))->value('id')
-            : Language::query()->where('is_default', 1)->value('id');
+        $languageId = $this->currentLang->id;
 
         $data['wishlistItems'] = Wishlist::query()
             ->where('user_id', Auth::guard('web')->id())
