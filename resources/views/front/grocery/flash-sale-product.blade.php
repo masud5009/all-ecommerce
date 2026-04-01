@@ -243,27 +243,13 @@
                             </div>
 
                             <div class="flash-sale-card__footer">
-                                <span
-                                    class="flash-sale-badge {{ $isOutOfStock ? 'flash-sale-badge--soldout' : 'flash-sale-badge--stock' }}">
-                                    {{ $stockLabel }}
-                                </span>
+                                <div class="flash-sale-card__footer-row">
+                                    <span
+                                        class="flash-sale-badge {{ $isOutOfStock ? 'flash-sale-badge--soldout' : 'flash-sale-badge--stock' }}">
+                                        {{ $stockLabel }}
+                                    </span>
 
-                                <div class="flash-sale-card__cta-row">
-                                    <button type="button" class="flash-sale-card__cta" data-add-to-cart-card
-                                        data-product-id="{{ $product->id }}" data-quantity="1"
-                                        data-price="{{ number_format($defaultCartPrice, 2, '.', '') }}"
-                                        @if (!empty($defaultVariantId)) data-variant-id="{{ $defaultVariantId }}" @endif
-                                        @if (!empty($defaultVariantLabel)) data-variant-label="{{ $defaultVariantLabel }}" @endif
-                                        {{ $isOutOfStock ? 'disabled' : '' }}>
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            aria-hidden="true">
-                                            <path d="M6 7h12l1 12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L6 7Z"></path>
-                                            <path d="M9 7V6a3 3 0 0 1 6 0v1"></path>
-                                        </svg>
-                                        <span>{{ $isOutOfStock ? __('Stock Out') : __('Add to Cart') }}</span>
-                                    </button>
-
-                                    <button type="button" class="flash-sale-icon-button flash-sale-icon-button--secondary"
+                                    <button type="button" class="flash-sale-card__details-btn"
                                         data-action="quick-view" data-product-id="{{ $product->id }}"
                                         aria-label="Quick view {{ $cardTitle }}">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -271,6 +257,7 @@
                                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                             <circle cx="12" cy="12" r="3"></circle>
                                         </svg>
+                                        <span>Quick view</span>
                                     </button>
                                 </div>
                             </div>
