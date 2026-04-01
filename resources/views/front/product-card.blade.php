@@ -58,14 +58,22 @@
 @endphp
 
 <article
-    class="group relative flex h-full flex-col rounded-2xl border border-green-100 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)]"
+    class="group relative flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.06)] transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_12px_28px_rgba(15,23,42,0.15)]"
     data-reveal-child data-featured-card data-product-id="{{ $product->id }}">
 
     @if ($isFlashSaleActive)
-        <span
-            class="absolute left-4 top-4 rounded-full bg-red-600 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-sm">
-            {{ __('Flash Sale') }}
-        </span>
+        <div class="absolute left-3 top-3 z-10">
+            <div class="flex items-center gap-2 rounded-lg bg-[#FF4D4D] px-3 py-1.5 shadow-md">
+                <svg class="h-3.5 w-3.5 flex-shrink-0 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+                </svg>
+                <span class="whitespace-nowrap text-[10px] font-bold uppercase tracking-wide text-white">
+                    @if ($flashDiscountPercent > 0)
+                        -{{ (int) $flashDiscountPercent }}% OFF
+                    @endif
+                </span>
+            </div>
+        </div>
     @endif
 
     <div class="relative overflow-hidden rounded-2xl bg-green-50">
@@ -75,32 +83,42 @@
                 decoding="async">
         </a>
 
-        <button type="button" data-action="toggle-wishlist" data-product-id="{{ $product->id }}"
-            class="absolute bottom-3 left-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg transition duration-300 hover:bg-slate-100 {{ $inWishlist ? 'text-red-500' : 'text-slate-500' }}"
-            aria-label="Add to wishlist" aria-pressed="{{ $inWishlist ? 'true' : 'false' }}">
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"
-                aria-hidden="true">
-                <path
-                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z">
-                </path>
-            </svg>
-        </button>
+        <div class="absolute inset-0 flex items-center justify-center gap-3 opacity-0 transition duration-300 group-hover:opacity-100">
+            <button type="button" data-action="toggle-wishlist" data-product-id="{{ $product->id }}"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-600 shadow-lg transition duration-300 hover:bg-rose-50 hover:text-rose-500 {{ $inWishlist ? 'text-rose-500 bg-rose-50' : '' }}"
+                aria-label="Add to wishlist" aria-pressed="{{ $inWishlist ? 'true' : 'false' }}">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"
+                    aria-hidden="true">
+                    <path
+                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z">
+                    </path>
+                </svg>
+            </button>
 
-        <button type="button" data-action="quick-view" data-product-id="{{ $product->id }}"
-            class="absolute bottom-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition duration-300 hover:bg-green-700"
-            aria-label="Quick view {{ $productTitle }}">
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                aria-hidden="true">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-        </button>
+            <button type="button" data-action="quick-view" data-product-id="{{ $product->id }}"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-600 shadow-lg transition duration-300 hover:bg-green-50 hover:text-green-600"
+                aria-label="Quick view {{ $productTitle }}">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </button>
+        </div>
+
+        @if (!empty($stockLabel))
+            <div class="absolute right-3 top-3 inline-flex">
+                <span class="rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-semibold text-slate-700 shadow-sm backdrop-blur-sm">
+                    {{ $stockLabel }}
+                </span>
+            </div>
+        @endif
     </div>
 
-    <div class="mt-4 space-y-2">
-        <div class="flex items-start justify-between gap-2">
+    <div class="mt-6 space-y-3">
+        <div class="flex flex-col">
             <a href="{{ route('frontend.shop.details', ['id' => $product->id]) }}"
-                class="text-sm font-semibold text-slate-900 transition hover:text-green-700">
+                class="text-[1.1rem] font-semibold text-slate-900 transition hover:text-green-700">
                 {{ truncateString($productTitle, 60) }}
             </a>
         </div>
@@ -122,28 +140,24 @@
 
             <span>{{ number_format($averageRating, 1) }} ({{ $reviewCount }}
                 {{ \Illuminate\Support\Str::plural('review', $reviewCount) }})</span>
-
-            <span class="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">
-                {{ $stockLabel }}
-            </span>
         </div>
 
-        <div class="flex items-end justify-between gap-3">
+        <div class="mt-4 flex flex-col gap-2">
             @if ($product->has_variants == 0 || $variations->isEmpty())
-                <div>
-                    <p class="text-lg font-semibold text-slate-900">
+                <div class="flex flex-col">
+                    <p class="text-lg font-semibold text-slate-950">
                         {{ currency_symbol($displayPrice) }}
                     </p>
 
                     @if (!empty($oldPrice) && $oldPrice > $displayPrice)
-                        <p class="text-xs text-slate-400 line-through">
+                        <p class="text-xs text-slate-600 line-through">
                             {{ currency_symbol($oldPrice) }}
                         </p>
                     @endif
                 </div>
             @else
-                <div>
-                    <p class="text-lg font-semibold text-slate-900">
+                <div class="flex flex-col">
+                    <p class="text-lg font-semibold text-slate-950">
                         {{ currency_symbol($min_variant_price) }} - {{ currency_symbol($max_variant_price) }}
                     </p>
                     @if ($isFlashSaleActive)
@@ -155,7 +169,7 @@
                                 ? (float) $variantBasePrices->max()
                                 : 0;
                         @endphp
-                        <p class="text-xs text-slate-400 line-through">
+                        <p class="text-xs text-slate-600 line-through">
                             {{ currency_symbol($oldMinVariantPrice) }} - {{ currency_symbol($oldMaxVariantPrice) }}
                         </p>
                     @endif
