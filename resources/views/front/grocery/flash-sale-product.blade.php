@@ -9,39 +9,89 @@
             </h2>
         </div>
         @if (count($flashSaleCardProducts) > 0)
-        <div class="flash-sale-head-actions flex items-center gap-3" data-reveal-child>
-            <a href="{{ route('frontend.shop') }}"
-                class="flash-sale-all-deals inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
-                {{ __('Show more products') }}
-            </a>
-        </div>
+            <div class="flash-sale-head-actions flex items-center gap-3" data-reveal-child>
+                <a href="{{ route('frontend.shop') }}"
+                    class="flash-sale-all-deals inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
+                    {{ __('Show more products') }}
+                </a>
+            </div>
         @endif
     </div>
+
     <div class="flash-sale-shell mt-8 rounded-3xl border border-green-100 bg-gradient-to-br from-green-50/80 via-white to-emerald-50/60 p-6 shadow-sm sm:p-8"
         data-reveal-child>
         @if (count($flashSaleCardProducts) > 0)
-            <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            @php
+                $authUser = Auth::guard('web')->user();
+            @endphp
+
+            <div class="flash-sale-grid grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
                 @foreach ($flashSaleCardProducts as $product)
                     @php
                         $content = $product->content->first();
-                        $cardTitle = $content->title ?? 'Product #' . $product->id;
+                        $cardTitle = trim($content->title ?? 'Product #' . $product->id);
                         $cardSummaryRaw =
                             $content->summary ?? ($content->description ?? 'Limited time offer on selected items.');
                         $cardSummary = trim(preg_replace('/\s+/', ' ', strip_tags((string) $cardSummaryRaw)));
+
                         $discountPercent = min(max((float) ($product->flash_sale_price ?? 0), 0), 100);
                         $variations = $product->variations ?? collect();
+                        $hasVariants = (int) ($product->has_variants ?? 0) === 1 && $variations->isNotEmpty();
 
-                        if ((int) ($product->has_variants ?? 0) === 1 && $variations->isNotEmpty()) {
-                            $variantPrices = $variations
-                                ->map(function ($variation) use ($product) {
-                                    return (float) ($variation->price ?? ($product->current_price ?? 0));
+                        $variantOptions = $hasVariants
+                            ? $variations
+                                ->values()
+                                ->map(function ($variation, $index) use ($product, $discountPercent) {
+                                    $variantParts = collect($variation->variantValues ?? [])
+                                        ->sortBy(function ($variantValue) {
+                                            return optional(optional($variantValue->optionValue)->option)->position ??
+                                                PHP_INT_MAX;
+                                        })
+                                        ->map(function ($variantValue) {
+                                            $option = optional($variantValue->optionValue)->option;
+                                            $value = optional($variantValue->optionValue)->value;
+
+                                            if (!$option || $value === null || $value === '') {
+                                                return null;
+                                            }
+
+                                            return $option->name . ': ' . $value;
+                                        })
+                                        ->filter()
+                                        ->values();
+
+                                    $basePrice = (float) ($variation->price ?? ($product->current_price ?? 0));
+
+                                    return [
+                                        'id' => (int) $variation->id,
+                                        'label' => $variantParts->isNotEmpty()
+                                            ? $variantParts->implode(', ')
+                                            : __('Option') . ' ' . ($index + 1),
+                                        'base_price' => $basePrice,
+                                        'sale_price' => max($basePrice * (1 - $discountPercent / 100), 0),
+                                        'stock' => (int) ($variation->stock ?? 0),
+                                    ];
                                 })
-                                ->values();
+                            : collect();
 
-                            $oldMinPrice = (float) ($variantPrices->min() ?? 0);
-                            $oldMaxPrice = (float) ($variantPrices->max() ?? 0);
-                            $saleMinPrice = max($oldMinPrice * (1 - $discountPercent / 100), 0);
-                            $saleMaxPrice = max($oldMaxPrice * (1 - $discountPercent / 100), 0);
+                        if ($hasVariants) {
+                            $purchaseUnit = $variantOptions
+                                ->filter(function ($variation) {
+                                    return (int) ($variation['stock'] ?? 0) > 0;
+                                })
+                                ->sortBy('sale_price')
+                                ->first()
+                                ?? $variantOptions->sortBy('sale_price')->first();
+
+                            $saleMinPrice = (float) ($variantOptions->min('sale_price') ?? 0);
+                            $saleMaxPrice = (float) ($variantOptions->max('sale_price') ?? 0);
+                            $oldMinPrice = (float) ($variantOptions->min('base_price') ?? 0);
+                            $oldMaxPrice = (float) ($variantOptions->max('base_price') ?? 0);
+                            $availableStock = (int) $variantOptions->sum('stock');
+                            $defaultCartPrice = (float) ($purchaseUnit['sale_price'] ?? $saleMinPrice);
+                            $defaultVariantId = $purchaseUnit['id'] ?? null;
+                            $defaultVariantLabel = $purchaseUnit['label'] ?? null;
+                            $savePercent = (int) round($discountPercent);
 
                             $salePriceLabel =
                                 $saleMinPrice === $saleMaxPrice
@@ -52,46 +102,122 @@
                                 $oldMinPrice === $oldMaxPrice
                                     ? currency_symbol($oldMinPrice)
                                     : currency_symbol($oldMinPrice) . ' - ' . currency_symbol($oldMaxPrice);
-
-                            $savePercent = round($discountPercent);
                         } else {
                             $currentPrice = (float) ($product->current_price ?? 0);
                             $salePrice = max($currentPrice * (1 - $discountPercent / 100), 0);
                             $oldPrice = $currentPrice;
+                            $availableStock = (int) ($product->stock ?? 0);
+                            $defaultCartPrice = $salePrice;
+                            $defaultVariantId = null;
+                            $defaultVariantLabel = null;
                             $saveAmount = max($oldPrice - $salePrice, 0);
-                            $savePercent = $oldPrice > 0 ? round(($saveAmount / $oldPrice) * 100) : 0;
+                            $savePercent = $oldPrice > 0 ? (int) round(($saveAmount / $oldPrice) * 100) : 0;
                             $salePriceLabel = currency_symbol($salePrice);
                             $oldPriceLabel = currency_symbol($oldPrice);
                         }
-                        $stockLabel = ($product->stock ?? 0) > 0 ? __('In Stock') : __('Stock Out');
-                        $image = !empty($product->thumbnail) ? asset('assets/img/product/' . $product->thumbnail) : '';
+
+                        $isOutOfStock = $availableStock <= 0;
+                        $stockLabel = $isOutOfStock ? __('Stock Out') : __('In Stock');
+                        $productUrl = route('frontend.shop.details', ['id' => $product->id]);
+                        $image = !empty($product->thumbnail) ? asset('assets/img/product/' . $product->thumbnail) : null;
+                        $reviewCount = (int) ($product->reviews_count ?? 0);
+                        $averageRating = $reviewCount > 0 ? round((float) ($product->reviews_avg_rating ?? 0), 1) : 0;
+                        $ratingStars = (int) floor($averageRating);
                         $countdownSeconds = 0;
+
                         if (!empty($product->flash_sale_end_at)) {
                             $countdownSeconds = max(
                                 0,
                                 now()->diffInSeconds(\Carbon\Carbon::parse($product->flash_sale_end_at), false),
                             );
                         }
-                    @endphp
-                    <a href="{{ route('frontend.shop.details', ['id' => $product->id]) }}"
-                        class="flash-sale-featured-card relative block overflow-hidden rounded-3xl border border-green-100 bg-white/90 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2"
-                        data-reveal-child>
-                        <div class="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-green-100/80 blur-2xl"
-                            aria-hidden="true"></div>
-                        <div class="pointer-events-none absolute -bottom-12 left-6 h-24 w-24 rounded-full bg-emerald-100/60 blur-2xl"
-                            aria-hidden="true"></div>
 
-                        <div class="relative flex items-center justify-between">
-                            <span
-                                class="inline-flex items-center gap-1.5 rounded-full bg-green-600 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
-                                <i class="fas fa-bolt text-[10px]" aria-hidden="true"></i>
-                                Flash
-                            </span>
-                            <div class="flex items-center gap-2">
-                                <span
-                                    class="inline-flex items-center gap-1 rounded-full border border-green-100 bg-white/70 px-2.5 py-1 text-[10px] font-medium text-slate-500 opacity-80">
-                                    <svg class="h-3.5 w-3.5 text-green-600" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                        $inWishlist = $authUser?->wishlist?->contains('product_id', $product->id) ?? false;
+                    @endphp
+
+                    <article
+                        class="flash-sale-card group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-green-100 bg-white/95 {{ $isOutOfStock ? 'is-sold-out' : '' }}"
+                        data-reveal-child data-flash-sale-card data-product-id="{{ $product->id }}">
+                        <div class="flash-sale-card__media-wrap">
+                            <a href="{{ $productUrl }}" class="flash-sale-card__media-link"
+                                aria-label="{{ $cardTitle }}">
+                                <div class="flash-sale-card__media">
+                                    @if (!empty($image))
+                                        <img src="{{ $image }}" alt="{{ $cardTitle }}"
+                                            class="flash-sale-card__image" loading="lazy" decoding="async">
+                                    @else
+                                        <div class="flash-sale-card__placeholder">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="1.8" aria-hidden="true">
+                                                <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                                                <circle cx="8.5" cy="9" r="1.5"></circle>
+                                                <path d="M21 15l-4.5-4.5L7 20"></path>
+                                            </svg>
+                                            <span>{{ __('No image available') }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+                            </a>
+
+                            <div class="flash-sale-card__badges">
+                                <span class="flash-sale-badge flash-sale-badge--deal">
+                                    <i class="fas fa-bolt text-[10px]" aria-hidden="true"></i>
+                                    {{ __('Flash Sale') }}
+                                </span>
+                                @if ($savePercent > 0)
+                                    <span class="flash-sale-badge flash-sale-badge--save">
+                                        -{{ $savePercent }}%
+                                    </span>
+                                @endif
+                            </div>
+
+                            <div class="flash-sale-card__floating-actions">
+                                <button type="button"
+                                    class="flash-sale-icon-button flash-sale-card__wishlist {{ $inWishlist ? 'text-red-500' : 'text-slate-500' }}"
+                                    data-action="toggle-wishlist" data-product-id="{{ $product->id }}"
+                                    aria-label="Add to wishlist" aria-pressed="{{ $inWishlist ? 'true' : 'false' }}">
+                                    <svg class="wishlist-icon" viewBox="0 0 24 24" fill="currentColor"
+                                        aria-hidden="true">
+                                        <path
+                                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z">
+                                        </path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            @if ($isOutOfStock)
+                                <div class="flash-sale-card__overlay" aria-hidden="true">
+                                    <span class="flash-sale-card__overlay-label">{{ __('Stock Out') }}</span>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="flash-sale-card__body">
+                            <div class="flash-sale-card__meta">
+                                <div class="flash-sale-card__rating {{ $reviewCount === 0 ? 'is-empty' : '' }}">
+                                    <span class="flash-sale-card__stars" aria-hidden="true">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <svg viewBox="0 0 24 24" fill="currentColor"
+                                                class="{{ $i <= $ratingStars ? 'is-filled' : 'is-empty' }}">
+                                                <path
+                                                    d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z">
+                                                </path>
+                                            </svg>
+                                        @endfor
+                                    </span>
+                                    <span class="flash-sale-card__rating-text">
+                                        @if ($reviewCount > 0)
+                                            {{ number_format($averageRating, 1) }}
+                                            ({{ $reviewCount }})
+                                        @else
+                                            {{ __('No reviews yet') }}
+                                        @endif
+                                    </span>
+                                </div>
+
+                                <span class="flash-sale-badge flash-sale-badge--timer">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                        aria-hidden="true">
                                         <circle cx="12" cy="12" r="9"></circle>
                                         <path d="M12 7v6l3 2"></path>
                                     </svg>
@@ -99,34 +225,57 @@
                                         class="tabular-nums whitespace-nowrap"></span>
                                 </span>
                             </div>
-                        </div>
 
-                        <h3 class="relative mt-4 text-2xl font-semibold text-slate-900">{{ $cardTitle }}</h3>
-                        <p class="relative mt-2 text-sm text-slate-600">{{ truncateString($cardSummary, 100) }}</p>
-
-                        <div class="relative mt-4 flex flex-nowrap items-end gap-2 overflow-hidden">
-                            <span class="whitespace-nowrap text-2xl font-semibold leading-none text-slate-900">{{ $salePriceLabel }}</span>
-                            @if (!empty($oldPriceLabel) && $oldPriceLabel !== $salePriceLabel)
-                                <span class="whitespace-nowrap text-sm leading-none text-slate-400 line-through">{{ $oldPriceLabel }}</span>
-                            @endif
-                        </div>
-
-                        <div class="relative mt-4 flex flex-wrap items-center gap-2 text-[10px] text-slate-500">
-                            <span class="rounded-full bg-green-100 px-1.5 py-0.5 font-medium text-green-700">
-                                {{ $savePercent > 0 ? 'Save ' . $savePercent . '%' : 'Limited offer' }}
-                            </span>
-                            <span
-                                class="rounded-full border border-green-100 px-1.5 py-0.5 text-green-700">{{ $stockLabel }}</span>
-                        </div>
-
-                        @if (!empty($image))
-                            <div class="relative mt-6 overflow-hidden rounded-2xl">
-                                <img src="{{ $image }}" alt="{{ $cardTitle }}"
-                                    class="h-48 w-full object-cover">
+                            <div class="flash-sale-card__content">
+                                <a href="{{ $productUrl }}" class="flash-sale-card__title">
+                                    {{ $cardTitle }}
+                                </a>
+                                <p class="flash-sale-card__description">
+                                    {{ $cardSummary }}
+                                </p>
                             </div>
-                        @endif
 
-                    </a>
+                            <div class="flash-sale-card__pricing">
+                                <span class="flash-sale-card__price-current">{{ $salePriceLabel }}</span>
+                                @if (!empty($oldPriceLabel) && $oldPriceLabel !== $salePriceLabel)
+                                    <span class="flash-sale-card__price-old">{{ $oldPriceLabel }}</span>
+                                @endif
+                            </div>
+
+                            <div class="flash-sale-card__footer">
+                                <span
+                                    class="flash-sale-badge {{ $isOutOfStock ? 'flash-sale-badge--soldout' : 'flash-sale-badge--stock' }}">
+                                    {{ $stockLabel }}
+                                </span>
+
+                                <div class="flash-sale-card__cta-row">
+                                    <button type="button" class="flash-sale-card__cta" data-add-to-cart-card
+                                        data-product-id="{{ $product->id }}" data-quantity="1"
+                                        data-price="{{ number_format($defaultCartPrice, 2, '.', '') }}"
+                                        @if (!empty($defaultVariantId)) data-variant-id="{{ $defaultVariantId }}" @endif
+                                        @if (!empty($defaultVariantLabel)) data-variant-label="{{ $defaultVariantLabel }}" @endif
+                                        {{ $isOutOfStock ? 'disabled' : '' }}>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            aria-hidden="true">
+                                            <path d="M6 7h12l1 12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L6 7Z"></path>
+                                            <path d="M9 7V6a3 3 0 0 1 6 0v1"></path>
+                                        </svg>
+                                        <span>{{ $isOutOfStock ? __('Stock Out') : __('Add to Cart') }}</span>
+                                    </button>
+
+                                    <button type="button" class="flash-sale-icon-button flash-sale-icon-button--secondary"
+                                        data-action="quick-view" data-product-id="{{ $product->id }}"
+                                        aria-label="Quick view {{ $cardTitle }}">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            aria-hidden="true">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
                 @endforeach
             </div>
         @else

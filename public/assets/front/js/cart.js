@@ -292,6 +292,30 @@
             }
         }
 
+        // Add to cart from listing cards
+        if (e.target.closest('[data-add-to-cart-card]')) {
+            e.preventDefault();
+            const btn = e.target.closest('[data-add-to-cart-card]');
+
+            if (btn.disabled) {
+                return;
+            }
+
+            const productId = parseInt(btn.dataset.productId, 10);
+            const quantity = parseInt(btn.dataset.quantity || '1', 10) || 1;
+            const variantLabel = btn.dataset.variantLabel || null;
+            const variantIdRaw = btn.dataset.variantId;
+            const variantId = variantIdRaw ? parseInt(variantIdRaw, 10) || null : null;
+            const price = parseFloat(btn.dataset.price || '0');
+
+            if (!productId || !Number.isFinite(price)) {
+                showToast('Unable to add this item right now', 'error');
+                return;
+            }
+
+            addToCart(productId, quantity, variantId, variantLabel, price);
+        }
+
         // Remove item from cart
         const removeBtn = e.target.closest('[data-remove-item]');
         if (removeBtn) {
