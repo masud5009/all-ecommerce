@@ -123,41 +123,41 @@
             </a>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-            <span class="flex items-center gap-1">
+        <div class="flex flex-wrap items-center gap-1 text-xs text-slate-500">
+            <span class="flex items-center gap-0.5">
                 @for ($i = 1; $i <= 5; $i++)
                     @if ($i <= $averageRating)
-                        <svg class="h-4 w-4 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <svg class="h-3.5 w-3.5 text-amber-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                             <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
                         </svg>
                     @else
-                        <svg class="h-4 w-4 text-slate-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <svg class="h-3.5 w-3.5 text-slate-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                             <path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.2l7.3-.6L12 2l2.7 6.6 7.3.6-5.5 4.7 1.7 7.1L12 17.3Z"></path>
                         </svg>
                     @endif
                 @endfor
             </span>
 
-            <span>{{ number_format($averageRating, 1) }} ({{ $reviewCount }}
+            <span class="leading-none">{{ number_format($averageRating, 1) }} ({{ $reviewCount }}
                 {{ \Illuminate\Support\Str::plural('review', $reviewCount) }})</span>
         </div>
 
         <div class="mt-4 flex flex-col gap-2">
             @if ($product->has_variants == 0 || $variations->isEmpty())
                 <div class="flex flex-col">
-                    <p class="text-lg font-semibold text-slate-950">
+                    <p class="text-xl font-bold tracking-tight text-[#0f172a]">
                         {{ currency_symbol($displayPrice) }}
                     </p>
 
                     @if (!empty($oldPrice) && $oldPrice > $displayPrice)
-                        <p class="text-xs text-slate-600 line-through">
+                        <p class="text-xs text-slate-400 line-through">
                             {{ currency_symbol($oldPrice) }}
                         </p>
                     @endif
                 </div>
             @else
                 <div class="flex flex-col">
-                    <p class="text-lg font-semibold text-slate-950">
+                    <p class="text-xl font-bold tracking-tight text-[#0f172a]">
                         {{ currency_symbol($min_variant_price) }} - {{ currency_symbol($max_variant_price) }}
                     </p>
                     @if ($isFlashSaleActive)
@@ -169,7 +169,7 @@
                                 ? (float) $variantBasePrices->max()
                                 : 0;
                         @endphp
-                        <p class="text-xs text-slate-600 line-through">
+                        <p class="text-xs text-slate-400 line-through">
                             {{ currency_symbol($oldMinVariantPrice) }} - {{ currency_symbol($oldMaxVariantPrice) }}
                         </p>
                     @endif
