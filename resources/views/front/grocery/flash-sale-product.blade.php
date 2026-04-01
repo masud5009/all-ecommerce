@@ -89,36 +89,34 @@
                             </span>
                             <div class="flex items-center gap-2">
                                 <span
-                                    class="inline-flex items-center gap-1 rounded-full border border-green-100 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-600">
+                                    class="inline-flex items-center gap-1 rounded-full border border-green-100 bg-white/70 px-2.5 py-1 text-[10px] font-medium text-slate-500 opacity-80">
                                     <svg class="h-3.5 w-3.5 text-green-600" viewBox="0 0 24 24" fill="none"
                                         stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                                         <circle cx="12" cy="12" r="9"></circle>
                                         <path d="M12 7v6l3 2"></path>
                                     </svg>
-                                    <span data-countdown
-                                        data-countdown-seconds="{{ $countdownSeconds }}">02:15:32</span>
+                                    <span data-countdown data-countdown-seconds="{{ $countdownSeconds }}"
+                                        class="tabular-nums whitespace-nowrap"></span>
                                 </span>
-                                <span class="text-xs text-slate-500">{{ $stockLabel }}</span>
                             </div>
                         </div>
 
                         <h3 class="relative mt-4 text-2xl font-semibold text-slate-900">{{ $cardTitle }}</h3>
                         <p class="relative mt-2 text-sm text-slate-600">{{ truncateString($cardSummary, 100) }}</p>
 
-                        <div class="relative mt-4 flex items-end gap-3">
-                            <span class="text-2xl font-semibold text-slate-900">{{ $salePriceLabel }}</span>
+                        <div class="relative mt-4 flex flex-nowrap items-end gap-2 overflow-hidden">
+                            <span class="whitespace-nowrap text-2xl font-semibold leading-none text-slate-900">{{ $salePriceLabel }}</span>
                             @if (!empty($oldPriceLabel) && $oldPriceLabel !== $salePriceLabel)
-                                <span class="text-sm text-slate-400 line-through">{{ $oldPriceLabel }}</span>
+                                <span class="whitespace-nowrap text-sm leading-none text-slate-400 line-through">{{ $oldPriceLabel }}</span>
                             @endif
                         </div>
 
-                        <div class="relative mt-4 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                            <span class="rounded-full bg-green-100 px-3 py-1 font-semibold text-green-700">
+                        <div class="relative mt-4 flex flex-wrap items-center gap-2 text-[10px] text-slate-500">
+                            <span class="rounded-full bg-green-100 px-1.5 py-0.5 font-medium text-green-700">
                                 {{ $savePercent > 0 ? 'Save ' . $savePercent . '%' : 'Limited offer' }}
                             </span>
-                            <span class="rounded-full border border-green-100 px-3 py-1">Free delivery</span>
                             <span
-                                class="rounded-full border border-green-100 px-3 py-1 text-green-700">{{ $stockLabel }}</span>
+                                class="rounded-full border border-green-100 px-1.5 py-0.5 text-green-700">{{ $stockLabel }}</span>
                         </div>
 
                         @if (!empty($image))

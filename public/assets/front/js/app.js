@@ -229,10 +229,40 @@
     };
     /*========================== Tabs End ===========================*/
 
+    /*========================== Countdown Start ===========================*/
+    const initCountdowns = () => {
+        const countdowns = qsa('[data-countdown]');
+        if (!countdowns.length) return;
+
+        const format = (value) => String(Math.max(0, value)).padStart(2, '0');
+
+        const getRemainingSeconds = (node) => {
+            const seconds = Number(node.dataset.countdownSeconds || 0);
+            return Number.isFinite(seconds) && seconds > 0 ? Math.floor(seconds) : 0;
+        };
+
+        const tick = () => {
+            countdowns.forEach((node) => {
+                const remaining = Number(node.dataset.countdownRemaining || getRemainingSeconds(node));
+                const hours = Math.floor(remaining / 3600);
+                const minutes = Math.floor((remaining % 3600) / 60);
+                const seconds = remaining % 60;
+
+                node.textContent = `${format(hours)}h ${format(minutes)}m ${format(seconds)}s`;
+                node.dataset.countdownRemaining = String(Math.max(0, remaining - 1));
+            });
+        };
+
+        tick();
+        window.setInterval(tick, 1000);
+    };
+    /*========================== Countdown End ===========================*/
+
 
     initHeroSlider();
     initCategoryScroll();
     initTabs();
+    initCountdowns();
 
     /*========================== Quick View Start ===========================*/
     const initQuickView = () => {
