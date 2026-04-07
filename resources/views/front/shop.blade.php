@@ -11,7 +11,7 @@
                 </h1>
             </div>
 
-            <form action="{{ route('frontend.shop') }}" method="GET" class="mt-8 flex justify-center">
+            <form id="shop-search-form" action="{{ route('frontend.shop') }}" method="GET" class="mt-8 flex justify-center">
                 <div class="relative w-full max-w-xl">
                     <input type="search" name="search" value="{{ $filters['search'] ?? '' }}"
                         placeholder="{{ __('Search products') }}..."
@@ -42,7 +42,7 @@
 
     <section class="py-10 sm:py-14">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="lg:grid lg:grid-cols-4 lg:gap-8">
+            <div id="shop-main-content" class="lg:grid lg:grid-cols-4 lg:gap-8">
                 <aside class="hidden lg:block">
                     <div class="sticky top-24 space-y-8">
                         <div class="rounded-2xl border border-green-100 bg-white p-6 shadow-sm">
@@ -144,7 +144,7 @@
                                 </svg>
                                 {{ __('Filters') }}
                             </button>
-                            <p class="text-sm text-slate-600">
+                            <p id="shop-results-meta" class="text-sm text-slate-600">
                                 {{ __('Showing') }} <span class="font-medium text-slate-900">{{ $products->count() }}</span> of <span class="font-medium text-slate-900">{{ $products->total() }}</span> {{ __('products') }}
                             </p>
                         </div>
@@ -174,26 +174,28 @@
                         </form>
                     </div>
 
-                    @if ($products->count() > 0)
-                        <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                            @foreach ($products as $product)
-                                @include('front.product-card', ['product' => $product])
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="flex flex-col items-center justify-center py-20 text-center">
-                            <div class="flex h-24 w-24 items-center justify-center rounded-full bg-green-100">
-                                <svg class="h-12 w-12 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <path d="M21 21l-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"></path>
-                                </svg>
+                    <div id="shop-products-container">
+                        @if ($products->count() > 0)
+                            <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                                @foreach ($products as $product)
+                                    @include('front.product-card', ['product' => $product])
+                                @endforeach
                             </div>
-                            <h3 class="mt-6 text-xl font-semibold text-slate-900">{{ __('No products found') }}</h3>
-                            <p class="mt-2 text-slate-600">{{ __('Try adjusting your search or filter to find what you\'re looking for.') }}</p>
-                            <a href="{{ route('frontend.shop') }}" class="mt-6 rounded-full bg-green-600 px-8 py-3 text-sm font-semibold text-white transition hover:bg-green-700">
-                                {{ __('View All Products') }}
-                            </a>
-                        </div>
-                    @endif
+                        @else
+                            <div class="flex flex-col items-center justify-center py-20 text-center">
+                                <div class="flex h-24 w-24 items-center justify-center rounded-full bg-green-100">
+                                    <svg class="h-12 w-12 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M21 21l-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="mt-6 text-xl font-semibold text-slate-900">{{ __('No products found') }}</h3>
+                                <p class="mt-2 text-slate-600">{{ __('Try adjusting your search or filter to find what you\'re looking for.') }}</p>
+                                <a href="{{ route('frontend.shop') }}" class="mt-6 rounded-full bg-green-600 px-8 py-3 text-sm font-semibold text-white transition hover:bg-green-700">
+                                    {{ __('View All Products') }}
+                                </a>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
@@ -289,6 +291,159 @@
     </div>
 
     <script>
+        let shopSearchForm = document.getElementById('shop-search-form');
+        let shopProductsContainer = document.getElementById('shop-products-container');
+        let shopResultsMeta = document.getElementById('shop-results-meta');
+        let shopMainContent = document.getElementById('shop-main-content');
+
+        const updateShopRefs = () => {
+            shopSearchForm = document.getElementById('shop-search-form');
+            shopProductsContainer = document.getElementById('shop-products-container');
+            shopResultsMeta = document.getElementById('shop-results-meta');
+            shopMainContent = document.getElementById('shop-main-content');
+        };
+
+        const getShopPath = () => {
+            if (!shopSearchForm) return null;
+            return new URL(shopSearchForm.getAttribute('action'), window.location.origin).pathname;
+        };
+
+        const isShopUrl = (url) => {
+            const shopPath = getShopPath();
+            if (!shopPath) return false;
+
+            try {
+                const parsed = new URL(url, window.location.origin);
+                return parsed.origin === window.location.origin && parsed.pathname === shopPath;
+            } catch (e) {
+                return false;
+            }
+        };
+
+        const renderShopSkeleton = () => {
+            if (!shopProductsContainer) return;
+
+            let skeletonCards = '';
+            for (let i = 0; i < 6; i++) {
+                skeletonCards += `
+                    <div class="animate-pulse rounded-2xl border border-green-100 bg-white p-4 shadow-sm">
+                        <div class="h-44 w-full rounded-xl bg-green-100"></div>
+                        <div class="mt-4 h-4 w-2/3 rounded bg-green-100"></div>
+                        <div class="mt-2 h-3 w-1/2 rounded bg-green-100"></div>
+                        <div class="mt-4 h-8 w-full rounded-lg bg-green-100"></div>
+                    </div>
+                `;
+            }
+
+            shopProductsContainer.innerHTML = `<div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">${skeletonCards}</div>`;
+        };
+
+        const fetchShopResults = async (url, pushState = true) => {
+            if (!shopProductsContainer) return;
+
+            renderShopSkeleton();
+
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                });
+
+                if (!response.ok) {
+                    window.location.href = url;
+                    return;
+                }
+
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                const nextSearchForm = doc.getElementById('shop-search-form');
+                const nextMainContent = doc.getElementById('shop-main-content');
+
+                if (!nextSearchForm || !nextMainContent) {
+                    window.location.href = url;
+                    return;
+                }
+
+                if (shopSearchForm) {
+                    shopSearchForm.outerHTML = nextSearchForm.outerHTML;
+                }
+
+                if (shopMainContent) {
+                    shopMainContent.outerHTML = nextMainContent.outerHTML;
+                }
+
+                updateShopRefs();
+                bindShopAjaxHandlers();
+
+                if (pushState) {
+                    window.history.pushState({}, '', url);
+                }
+            } catch (error) {
+                window.location.href = url;
+            }
+        };
+
+        const bindShopAjaxHandlers = () => {
+            updateShopRefs();
+
+            const forms = [];
+
+            if (shopSearchForm) {
+                forms.push(shopSearchForm);
+            }
+
+            if (shopMainContent) {
+                forms.push(...shopMainContent.querySelectorAll('form[action]'));
+            }
+
+            forms.forEach((form) => {
+                if (form.dataset.ajaxBound === '1') return;
+                if ((form.getAttribute('method') || 'GET').toUpperCase() !== 'GET') return;
+
+                const action = form.getAttribute('action') || window.location.href;
+                if (!isShopUrl(action)) return;
+
+                form.dataset.ajaxBound = '1';
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    const formData = new FormData(form);
+                    const params = new URLSearchParams(formData).toString();
+                    const baseUrl = form.getAttribute('action');
+                    const nextUrl = params ? `${baseUrl}?${params}` : baseUrl;
+                    fetchShopResults(nextUrl, true);
+                });
+            });
+        };
+
+        document.addEventListener('click', function (event) {
+            const link = event.target.closest('a[href]');
+            if (!link) return;
+
+            if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+                return;
+            }
+
+            if (link.target === '_blank' || link.hasAttribute('download')) {
+                return;
+            }
+
+            if (!isShopUrl(link.href)) {
+                return;
+            }
+
+            event.preventDefault();
+            fetchShopResults(link.href, true);
+        });
+
+        bindShopAjaxHandlers();
+
+        window.addEventListener('popstate', function () {
+            fetchShopResults(window.location.href, false);
+        });
+
         const filterBtn = document.getElementById('mobile-filter-btn');
         const filterModal = document.getElementById('mobile-filter-modal');
         const filterBackdrop = document.getElementById('mobile-filter-backdrop');

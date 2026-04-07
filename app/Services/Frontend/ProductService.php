@@ -138,7 +138,9 @@ class ProductService
                     ->where(function ($q2) use ($searchTerm) {
                         $q2->where('title', 'like', "%{$searchTerm}%")
                             ->orWhere('summary', 'like', "%{$searchTerm}%")
-                            ->orWhere('description', 'like', "%{$searchTerm}%");
+                            ->orWhere('description', 'like', "%{$searchTerm}%")
+                            ->orWhere('meta_keywords', 'like', "%{$searchTerm}%")
+                            ->orWhere('meta_description', 'like', "%{$searchTerm}%");
                     });
             });
         }
