@@ -3,9 +3,15 @@
 namespace App\Http\Controllers\Admin\Product;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\OrderItem;
 use App\Models\ProductVariant;
+use App\Models\ProductVariantSerialBatch;
+use App\Models\ProductVariantSoldSerial;
+use App\Models\ProductVariantValue;
 use App\Services\Shop\ProductService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class VariantController extends Controller
@@ -118,6 +124,45 @@ class VariantController extends Controller
             'variantLabel' => $variantLabel,
             'availableStock' => $availableStock,
         ]);
+    }
+
+    public function delete(Request $request)
+    {
+        $validated = $request->validate([
+            'variant_id' => 'required|integer|exists:product_variants,id',
+        ]);
+
+        $variant = ProductVariant::findOrFail((int)$validated['variant_id']);
+        $productId = (int)$variant->product_id;
+
+        DB::beginTransaction();
+        try {
+            $hasOrderHistory = OrderItem::where('variant_id', $variant->id)->exists();
+            $hasSoldSerialHistory = ProductVariantSoldSerial::where('variant_id', $variant->id)->exists();
+
+            if ($hasOrderHistory || $hasSoldSerialHistory) {
+                DB::rollBack();
+                return redirect()->back()->with('error', __('This variant has order history and cannot be removed.'));
+            }
+
+            if (!empty($variant->image)) {
+                @unlink(public_path('assets/img/product/variant/') . $variant->image);
+            }
+
+            Cart::where('variant_id', $variant->id)->delete();
+
+            ProductVariantSerialBatch::where('variant_id', $variant->id)->delete();
+            ProductVariantValue::where('variant_id', $variant->id)->delete();
+            $variant->delete();
+
+            DB::commit();
+            return redirect()->route('admin.product.edit', ['id' => $productId])
+                ->with('success', __('Variant removed successfully.'));
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            return redirect()->back()->with('error', $e->getMessage() ?: __('Failed to remove variant.'));
+        }
     }
 
     private function getSerialTrackedVariants(int $languageId)

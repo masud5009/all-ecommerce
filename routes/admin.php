@@ -267,6 +267,7 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
         Route::prefix('variants')->group(function () {
             Route::get('/restock', 'Admin\Product\VariantController@restockForm')->name('admin.product.variant.restock');
             Route::post('/restock', 'Admin\Product\VariantController@restock')->name('admin.product.variant.restock_store');
+            Route::post('/delete', 'Admin\Product\VariantController@delete')->name('admin.product.variant.delete');
             Route::get('/{id}', 'Admin\Product\VariantController@show')->name('admin.product.variant.details');
         });
 

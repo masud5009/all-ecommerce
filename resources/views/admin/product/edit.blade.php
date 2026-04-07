@@ -218,6 +218,17 @@
                                 @php
                                     $code = $lang->code;
                                     $content = $lang->content;
+                                    $metaKeywordValue = '';
+
+                                    if (!empty($content?->meta_keywords)) {
+                                        $decodedMetaKeywords = json_decode($content->meta_keywords, true);
+
+                                        if (is_array($decodedMetaKeywords)) {
+                                            $metaKeywordValue = implode(',', array_values(array_filter(array_map('trim', $decodedMetaKeywords))));
+                                        } else {
+                                            $metaKeywordValue = $content->meta_keywords;
+                                        }
+                                    }
                                 @endphp
                                 <div class="language-content {{ $lang->id == $defaultLang->id || $lang->id == @$content->language_id ? '' : 'd-none' }}"
                                     id="language_{{ $lang->id }}">
@@ -260,7 +271,7 @@
 
                                     <x-text-input col="12" placeholder="Enter meta keywords"
                                         name="{{ $lang->code }}_meta_keyword" type="tagsinput" label="Meta Keywords"
-                                        language="{{ $lang->code }}" value="{{ @$content->meta_keyword }}" />
+                                        language="{{ $lang->code }}" value="{{ $metaKeywordValue }}" />
 
                                     <x-text-input col="12" placeholder="Enter meta description"
                                         name="{{ $lang->code }}_meta_description" type="textarea"
@@ -345,6 +356,16 @@
                                                         class="btn btn-sm edit-button">
                                                         <span class="fas fa-plus"></span>
                                                     </a>
+                                                    <form action="{{ route('admin.product.variant.delete') }}" method="POST"
+                                                        class="d-inline"
+                                                        onsubmit="return confirm('{{ __('Are you sure you want to remove this variant?') }}');">
+                                                        @csrf
+                                                        <input type="hidden" name="variant_id"
+                                                            value="{{ $variant->id }}">
+                                                        <button type="submit" class="btn btn-sm text-danger">
+                                                            <span class="fas fa-trash-alt"></span>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>

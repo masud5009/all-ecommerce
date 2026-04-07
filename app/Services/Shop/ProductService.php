@@ -172,8 +172,6 @@ class ProductService
                 $request->filled($code . '_meta_keyword') ||
                 $request->filled($code . '_meta_description')
             ) {
-                $metaKeywords = $request->input($code . '_meta_keyword');
-
                 $content->language_id = $language->id;
                 $content->product_id = $product->id;
                 $content->category_id = $request->input($code . '_category_id');
@@ -182,7 +180,7 @@ class ProductService
                 $content->slug = createSlug($request->input($code . '_title'));
                 $content->summary = $request->input($code . '_summary');
                 $content->description = $request->input($code . '_description');
-                $content->meta_keyword = self::normalizeMetaKeywords($metaKeywords);
+                $content->meta_keywords = self::normalizeMetaKeywords($request->input($code . '_meta_keyword'));
                 $content->meta_description = $request->input($code . '_meta_description');
                 $content->save();
             }
@@ -549,7 +547,7 @@ class ProductService
             ->where(function ($q) use ($newStart, $newEnd) {
                 // (new_start <= old_end) AND (new_end >= old_start)
                 $q->whereRaw('? <= serial_end', [$newStart])
-                  ->whereRaw('? >= serial_start', [$newEnd]);
+                    ->whereRaw('? >= serial_start', [$newEnd]);
             })
             ->exists();
 
