@@ -12,6 +12,56 @@
         if (dbRemove) window.rmvDbSliderImage = dbRemove;
     }
 
+    function initSubcategoryBindings() {
+        const categorySelects = document.querySelectorAll('select[name$="_category_id"]');
+
+        function syncSubcategoryOptions(categorySelect) {
+            const selectedCategory = categorySelect.value;
+            const subcategorySelect = document.querySelector(
+                `select[name="${categorySelect.name.replace('_category_id', '_subcategory_id')}"]`
+            );
+
+            if (!subcategorySelect) return;
+
+            const options = Array.from(subcategorySelect.options);
+            let visibleCount = 0;
+
+            options.forEach((option, index) => {
+                if (index === 0) {
+                    option.hidden = false;
+                    return;
+                }
+
+                const categoryId = option.dataset.categoryId || '';
+                const shouldShow = selectedCategory && categoryId === selectedCategory;
+
+                option.hidden = !shouldShow;
+                if (shouldShow) {
+                    visibleCount++;
+                }
+            });
+
+            const selectedOption = subcategorySelect.options[subcategorySelect.selectedIndex];
+            const selectedVisible = selectedOption && !selectedOption.hidden;
+
+            if (!selectedVisible) {
+                subcategorySelect.value = '';
+            }
+
+            subcategorySelect.disabled = !selectedCategory || visibleCount === 0;
+        }
+
+        categorySelects.forEach((categorySelect) => {
+            categorySelect.addEventListener('change', function () {
+                syncSubcategoryOptions(this);
+            });
+
+            syncSubcategoryOptions(categorySelect);
+        });
+    }
+
+    initSubcategoryBindings();
+
     let existingOptions = [];
     let existingVariants = [];
 

@@ -63,6 +63,7 @@ class StoreRequest extends FormRequest
         $defaultLanguage = Language::where('is_default', 1)->first();
         $ruleArray[$defaultLanguage->code . '_title'] = 'required|max:255';
         $ruleArray[$defaultLanguage->code . '_category_id'] = 'required|exists:product_categories,id';
+        $ruleArray[$defaultLanguage->code . '_subcategory_id'] = 'nullable|exists:product_subcategories,id';
         $ruleArray[$defaultLanguage->code . '_description'] = 'required';
 
         $languages = app('languages');
@@ -84,6 +85,7 @@ class StoreRequest extends FormRequest
             ) {
                 $ruleArray[$code . '_title'] = 'required|max:255';
                 $ruleArray[$code . '_category_id'] = 'required|exists:product_categories,id';
+                $ruleArray[$code . '_subcategory_id'] = 'nullable|exists:product_subcategories,id';
                 $ruleArray[$code . '_description'] = 'required';
             }
         }

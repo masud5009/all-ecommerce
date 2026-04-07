@@ -177,6 +177,7 @@ class ProductService
                 $content->language_id = $language->id;
                 $content->product_id = $product->id;
                 $content->category_id = $request->input($code . '_category_id');
+                $content->subcategory_id = $request->input($code . '_subcategory_id');
                 $content->title = $request->input($code . '_title');
                 $content->slug = createSlug($request->input($code . '_title'));
                 $content->summary = $request->input($code . '_summary');

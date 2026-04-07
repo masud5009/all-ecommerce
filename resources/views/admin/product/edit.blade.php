@@ -231,6 +231,25 @@
                                         required="*" language="{{ $lang->code }}" :dataInfo="$lang->categories"
                                         value="{{ @$content->category_id }}" />
 
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label>{{ __('Subcategory') }}</label>
+                                            <select name="{{ $lang->code }}_subcategory_id"
+                                                class="form-select subcategory-select err_{{ $lang->code }}_subcategory_id"
+                                                data-language-code="{{ $lang->code }}">
+                                                <option value="">{{ __('Select a Subcategory') }}</option>
+                                                @foreach ($lang->subcategories as $subcategory)
+                                                    <option value="{{ $subcategory->id }}"
+                                                        data-category-id="{{ $subcategory->category_id }}"
+                                                        @selected($subcategory->id == @$content->subcategory_id)>
+                                                        {{ $subcategory->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <p id="err_{{ $lang->code }}_subcategory_id" class="text-danger em"></p>
+                                        </div>
+                                    </div>
+
                                     <x-text-input col="12" placeholder="Enter summary text"
                                         name="{{ $lang->code }}_summary" type="textarea" label="Summary"
                                         language="{{ $lang->code }}" value="{!! @$content->summary !!}" />

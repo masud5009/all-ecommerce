@@ -13,6 +13,7 @@ use App\Models\ProductSetting;
 use App\Models\ProductVariant;
 use Illuminate\Support\Carbon;
 use App\Models\ProductCategory;
+use App\Models\ProductSubcategory;
 use App\Http\Helpers\ImageUpload;
 use App\Models\ProductOptionValue;
 use Illuminate\Support\Facades\DB;
@@ -209,6 +210,9 @@ class ProductController extends Controller
             $language->categories = ProductCategory::where([['status', 1], ['language_id', $language->id]])
                 ->orderBy('serial_number', 'desc')
                 ->get();
+            $language->subcategories = ProductSubcategory::where([['status', 1], ['language_id', $language->id]])
+                ->orderBy('serial_number', 'desc')
+                ->get();
         }
         $data['languages'] = $languages;
 
@@ -323,6 +327,9 @@ class ProductController extends Controller
         $languages->map(function ($language) use ($product) {
             $language->content = $product->content->where('language_id', $language->id)->first();
             $language->categories = ProductCategory::where([['status', 1], ['language_id', $language->id]])
+                ->orderBy('serial_number', 'desc')
+                ->get();
+            $language->subcategories = ProductSubcategory::where([['status', 1], ['language_id', $language->id]])
                 ->orderBy('serial_number', 'desc')
                 ->get();
             $language->is_added = $product->content->where('language_id', $language->id)->isNotEmpty();

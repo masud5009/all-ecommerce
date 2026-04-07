@@ -53,7 +53,7 @@
                             <div class="thumb-preview mb-3">
                                 <img src="{{ asset('assets/admin/noimage.jpg') }}" alt="..." class="uploaded-img">
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -216,6 +216,24 @@
                                     <x-text-input col="12" placeholder="Select a Category"
                                         name="{{ $lang->code }}_category_id" type="select" label="Category"
                                         required="**" language="{{ $lang->code }}" :dataInfo="$lang->categories" />
+
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label>{{ __('Subcategory') }}</label>
+                                            <select name="{{ $lang->code }}_subcategory_id"
+                                                class="form-select subcategory-select err_{{ $lang->code }}_subcategory_id"
+                                                data-language-code="{{ $lang->code }}">
+                                                <option value="">{{ __('Select a Subcategory') }}</option>
+                                                @foreach ($lang->subcategories as $subcategory)
+                                                    <option value="{{ $subcategory->id }}"
+                                                        data-category-id="{{ $subcategory->category_id }}">
+                                                        {{ $subcategory->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <p id="err_{{ $lang->code }}_subcategory_id" class="text-danger em"></p>
+                                        </div>
+                                    </div>
 
                                     <x-text-input col="12" placeholder="Enter summary text"
                                         name="{{ $lang->code }}_summary" type="textarea" label="Summary"
