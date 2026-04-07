@@ -28,7 +28,7 @@
             <div class="mt-8 grid gap-8 lg:grid-cols-[1fr_400px]">
                 {{-- Left: Checkout Form --}}
                 <div class="space-y-6">
-                    <form id="paymentForm" class="space-y-6" method="POST" action="{{ route('cart.place.order') }}">
+                    <form id="paymentForm" class="space-y-6" method="POST" action="{{ route('frontend.cart.place.order') }}">
                         @csrf
                         {{-- Contact Information --}}
                         <div class="rounded-2xl border border-green-100 bg-white p-6 shadow-sm">

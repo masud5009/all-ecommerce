@@ -51,7 +51,7 @@ Route::prefix('cart')->controller(CartController::class)->group(function () {
     Route::post('/remove', 'remove')->name('cart.remove');
     Route::post('/clear', 'clear')->name('cart.clear');
     Route::get('/checkout', 'checkout')->name('cart.checkout');
-    Route::post('/place-order', 'placeOrder')->name('cart.place.order');
+    // Route::post('/place-order', 'placeOrder')->name('cart.place.order');
     Route::match(['get', 'post'], '/payment/success', 'paymentSuccess')
         ->withoutMiddleware([StartSession::class, ShareErrorsFromSession::class])
         ->name('cart.payment.success');
@@ -77,9 +77,7 @@ Route::controller(CheckoutController::class)->group(function () {
     Route::get('/payment-success', 'successPage')->name('frontend.payment_success.view');
     Route::get('/payment-cancel', 'cancelPage')->name('frontend.payment_cancel.view');
 });
-/*============================
-      user auth route
-     =============================*/
+/*============================ user authentication routes ============================*/
 Route::prefix('user')->middleware('guest:web')->controller(UserController::class)->group(function () {
     // Signup
     Route::get('/signup', 'signup')->name('user.signup');
@@ -99,6 +97,7 @@ Route::prefix('user')->middleware('guest:web')->controller(UserController::class
     Route::post('/reset-password/submit', 'resetPasswordSubmit')->name('user.reset_password');
 });
 
+/*============================user dashboard route=============================*/
 Route::prefix('user')->middleware('auth:web')->controller(UserController::class)->group(function () {
     Route::get('/dashboard', 'dashboard')->name('user.dashboard');
     Route::get('/orders', 'orders')->name('user.orders');
