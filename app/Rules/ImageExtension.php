@@ -14,7 +14,7 @@ class ImageExtension implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $allowedExtensions = array('jpg', 'jpeg', 'png', 'svg', 'gif');
+        $allowedExtensions = array('jpg', 'jpeg', 'png', 'svg', 'gif','webp');
         $fileExtension = $value->getClientOriginalExtension();
 
         if (!in_array($fileExtension, $allowedExtensions)) {

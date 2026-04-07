@@ -2,7 +2,7 @@
 "use strict";
 
 Dropzone.options.myDropzone = {
-    acceptedFiles: '.png, .jpg, .jpeg',
+    acceptedFiles: '.png, .jpg, .jpeg, .webp',
     url: uploadSliderImage,
     success: function (file, response) {
         $("#sliders").append(`<input type="hidden" name="slider_image[]" id="slider${response.file_id}" value="${response.file_id}">`);
