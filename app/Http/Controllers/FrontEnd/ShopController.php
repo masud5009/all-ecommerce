@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\ProductReview;
 use App\Models\Admin\Language;
 use App\Models\ProductCategory;
+use App\Models\ProductSubcategory;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\ProductService;
@@ -33,9 +34,16 @@ class ShopController extends Controller
         $languageId = $this->currentLang->id;
 
         $data['categories'] = CategoryService::getHomeFeaturedCategories($languageId);
+        $data['subcategories'] = ProductSubcategory::where('language_id', $languageId)
+            ->where('status', 1)
+            ->with('category:id,name')
+            ->orderBy('serial_number', 'desc')
+            ->get();
+        $data['subcategoriesByCategory'] = $data['subcategories']->groupBy('category_id');
 
         $data['products'] = ProductService::getShopProducts($languageId, [
             'category' => $request->query('category'),
+            'subcategory' => $request->query('subcategory'),
             'search' => $request->query('search'),
             'sort' => $request->query('sort', 'latest'),
             'min_price' => $request->query('min_price'),
@@ -44,6 +52,7 @@ class ShopController extends Controller
 
         $data['filters'] = [
             'category' => $request->query('category'),
+            'subcategory' => $request->query('subcategory'),
             'search' => $request->query('search'),
             'sort' => $request->query('sort', 'latest'),
             'min_price' => $request->query('min_price'),

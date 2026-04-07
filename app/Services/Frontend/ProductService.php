@@ -122,6 +122,14 @@ class ProductService
             });
         }
 
+        // Subcategory filter
+        if (!empty($filters['subcategory'])) {
+            $query->whereHas('content', function ($q) use ($filters, $languageId) {
+                $q->where('language_id', $languageId)
+                    ->where('subcategory_id', $filters['subcategory']);
+            });
+        }
+
         // Search filter
         if (!empty($filters['search'])) {
             $searchTerm = $filters['search'];
