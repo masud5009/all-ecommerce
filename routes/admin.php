@@ -232,6 +232,15 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
             Route::post('/delete', 'Admin\Product\CategoryController@delete')->name('admin.product.category_delete');
             Route::post('/bulk_delete', 'Admin\Product\CategoryController@bulkdelete')->name('admin.product.category_bulk_delete');
         });
+
+        Route::prefix('subcategory')->group(function () {
+            Route::get('/', 'Admin\Product\SubcategoryController@index')->name('admin.product.subcategory');
+            Route::post('/store', 'Admin\Product\SubcategoryController@store')->name('admin.product.subcategory_store');
+            Route::post('/update', 'Admin\Product\SubcategoryController@update')->name('admin.product.subcategory_update');
+            Route::post('/changeStatus', 'Admin\Product\SubcategoryController@changeStatus')->name('admin.product.subcategory_status_change');
+            Route::post('/delete', 'Admin\Product\SubcategoryController@delete')->name('admin.product.subcategory_delete');
+            Route::post('/bulk_delete', 'Admin\Product\SubcategoryController@bulkdelete')->name('admin.product.subcategory_bulk_delete');
+        });
         //product route
         Route::prefix('products')->group(function () {
             Route::get('/', 'Admin\Product\ProductController@index')->name('admin.product');

@@ -87,6 +87,11 @@
                                 {{ __('Categories') }}</a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('admin.product.subcategory') }}"
+                                class="nav-link {{ request()->routeIs('admin.product.subcategory') ? 'active' : '' }}">
+                                {{ __('Subcategories') }}</a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('admin.product.coupon') }}"
                                 class="nav-link {{ request()->routeIs('admin.product.coupon') ? 'active' : '' }}">
                                 {{ __('Coupons') }}</a>
