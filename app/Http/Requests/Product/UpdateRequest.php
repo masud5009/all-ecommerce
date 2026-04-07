@@ -88,7 +88,7 @@ class UpdateRequest extends FormRequest
                 $this->filled($code . '_category_id') ||
                 $this->filled($code . '_summary') ||
                 $this->filled($code . '_description') ||
-                $this->filled($code . '_meta_keywords') ||
+                $this->filled($code . '_meta_keyword') ||
                 $this->filled($code . '_meta_description')
             ) {
                 $ruleArray[$code . '_title'] = 'required|max:255';

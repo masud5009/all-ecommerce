@@ -182,9 +182,7 @@ class ProductService
                 $content->slug = createSlug($request->input($code . '_title'));
                 $content->summary = $request->input($code . '_summary');
                 $content->description = $request->input($code . '_description');
-                $content->meta_keyword = (is_array($metaKeywords) && count(array_filter($metaKeywords)))
-                    ? json_encode(array_values(array_filter($metaKeywords)))
-                    : null;
+                $content->meta_keyword = self::normalizeMetaKeywords($metaKeywords);
                 $content->meta_description = $request->input($code . '_meta_description');
                 $content->save();
             }
@@ -229,6 +227,16 @@ class ProductService
             throw new \Exception('Variants are required. Please generate variants first.');
         }
 
+        // Build signatures before rebuilding options. Option IDs are regenerated each update.
+        $existing = ProductVariant::where('product_id', $product->id)->get();
+        $existingBySig = [];
+        foreach ($existing as $ev) {
+            $sig = self::variantSignatureFromDb($ev->id);
+            if (!array_key_exists($sig, $existingBySig)) {
+                $existingBySig[$sig] = $ev;
+            }
+        }
+
         // Rebuild options each time (safe) because they are definitions.
         ProductOptionValue::whereIn('product_option_id', ProductOption::where('product_id', $product->id)->pluck('id'))->delete();
         ProductOption::where('product_id', $product->id)->delete();
@@ -262,16 +270,6 @@ class ProductService
             }
         }
 
-        // existing variants by a stable "signature"
-        $existing = ProductVariant::where('product_id', $product->id)->get();
-
-        // We'll match variants by map signature (option_value_ids sorted)
-        $existingBySig = [];
-        foreach ($existing as $ev) {
-            $sig = self::variantSignatureFromDb($ev->id);
-            if ($sig) $existingBySig[$sig] = $ev;
-        }
-
         $seenVariantIds = [];
 
         $variantImageDir = public_path('assets/img/product/variant/');
@@ -300,9 +298,21 @@ class ProductService
             }
 
             sort($optionValueIds);
-            $sig = implode('-', $optionValueIds);
+            $sig = self::variantSignatureFromMap($map);
 
             $variant = $existingBySig[$sig] ?? null;
+
+            // Fallback for empty-map/default variants: match by SKU if possible.
+            if (!$variant && $sig === '' && $sku !== '') {
+                $variant = $existing->first(function ($ev) use ($sku, $seenVariantIds) {
+                    return (string)$ev->sku === $sku && !in_array($ev->id, $seenVariantIds, true);
+                });
+            }
+
+            if ($variant) {
+                unset($existingBySig[$sig]);
+            }
+
             $isNew = false;
 
             if (!$variant) {
@@ -550,10 +560,79 @@ class ProductService
 
     private static function variantSignatureFromDb(int $variantId): ?string
     {
-        $ids = ProductVariantValue::where('variant_id', $variantId)->pluck('option_value_id')->toArray();
-        if (!$ids) return null;
-        sort($ids);
-        return implode('-', $ids);
+        $pairs = ProductVariantValue::query()
+            ->join('product_option_values', 'product_option_values.id', '=', 'product_variant_values.option_value_id')
+            ->join('product_options', 'product_options.id', '=', 'product_option_values.product_option_id')
+            ->where('product_variant_values.variant_id', $variantId)
+            ->get([
+                'product_options.name as option_name',
+                'product_option_values.value as option_value',
+            ]);
+
+        if ($pairs->isEmpty()) {
+            return '';
+        }
+
+        $parts = $pairs
+            ->map(function ($pair) {
+                return trim((string)$pair->option_name) . '::' . trim((string)$pair->option_value);
+            })
+            ->sort()
+            ->values()
+            ->all();
+
+        return implode('|', $parts);
+    }
+
+    private static function variantSignatureFromMap(array $map): string
+    {
+        if (empty($map)) {
+            return '';
+        }
+
+        $normalized = [];
+        foreach ($map as $optName => $optValue) {
+            $name = trim((string)$optName);
+            $value = trim((string)$optValue);
+
+            if ($name === '' || $value === '') {
+                continue;
+            }
+
+            $normalized[$name] = $value;
+        }
+
+        if (empty($normalized)) {
+            return '';
+        }
+
+        ksort($normalized);
+
+        $parts = [];
+        foreach ($normalized as $name => $value) {
+            $parts[] = $name . '::' . $value;
+        }
+
+        return implode('|', $parts);
+    }
+
+    private static function normalizeMetaKeywords($metaKeywords): ?string
+    {
+        $keywords = [];
+
+        if (is_array($metaKeywords)) {
+            $keywords = $metaKeywords;
+        } elseif (is_string($metaKeywords)) {
+            $keywords = explode(',', $metaKeywords);
+        }
+
+        $keywords = array_values(array_filter(array_map(function ($keyword) {
+            return trim((string)$keyword);
+        }, $keywords), function ($keyword) {
+            return $keyword !== '';
+        }));
+
+        return !empty($keywords) ? json_encode($keywords, \JSON_UNESCAPED_UNICODE) : null;
     }
 
     private static function assertSerialRangeHasStock(string $start, string $end, int $count): void
@@ -592,7 +671,7 @@ class ProductService
     {
         $offsetStr = (string)max(0, $offset);
         $sum = self::addNumericStrings($base, $offsetStr);
-        return str_pad($sum, $width, '0', STR_PAD_LEFT);
+        return str_pad($sum, $width, '0', \STR_PAD_LEFT);
     }
 
     private static function addNumericStrings(string $a, string $b): string
