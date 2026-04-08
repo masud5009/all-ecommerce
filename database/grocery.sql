@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 07, 2026 at 05:13 PM
+-- Generation Time: Apr 08, 2026 at 03:29 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.29
 
@@ -782,7 +782,7 @@ INSERT INTO `products` (`id`, `stock`, `last_restock_qty`, `sku`, `thumbnail`, `
 (54, 0, 0, NULL, '69ac500560dd7.jpg', 0.00, NULL, 1, 30.00, '2026-03-27 16:35:00', '2026-08-12 16:35:00', 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-03-07 10:19:17', '2026-03-28 11:18:47', 0, 1),
 (55, 0, 0, NULL, '69d4dcc306d83.jpg', 0.00, NULL, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-04-07 04:30:27', '2026-04-07 09:20:40', 0, 1),
 (56, 0, 0, NULL, '69d4ea4caa7c3.jpg', 0.00, NULL, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-04-07 05:28:12', '2026-04-07 09:20:39', 0, 1),
-(57, 0, 0, NULL, '69d4edf9dd90b.jpg', 0.00, NULL, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-04-07 05:43:53', '2026-04-07 09:20:37', 0, 1);
+(57, 0, 0, NULL, '69d53d61204b7.webp', 0.00, NULL, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-04-07 05:43:53', '2026-04-07 11:22:41', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -862,7 +862,7 @@ INSERT INTO `product_contents` (`id`, `language_id`, `product_id`, `category_id`
 (71, 7, 54, 22, NULL, 'প্রিমিয়াম ঘি (Ghee)', 'প্রিমিয়াম-ঘি-(ghee)', 'খাঁটি গরুর দুধ থেকে তৈরি আমাদের ঘি, যা আপনার প্রতিদিনের রান্না ও খাবারে যোগ করবে বিশেষ স্বাদ ও পুষ্টিগুণ। আপনার নিত্যদিনের খাবারের স্বাদ বাড়ানোর জন্য হতে পারে সেরা পছন্দ।', '<p>খাঁটি গরুর দুধ থেকে তৈরি ঘি, যা আপনার প্রতিদিনের রান্না ও খাবারে যোগ করবে বিশেষ স্বাদ ও পুষ্টিগুণ। আমাদের ঘি সম্পূর্ণ প্রাকৃতিক এবং কোনো প্রকার কৃত্রিম উপাদান ছাড়া তৈরি। এটি আপনার নিত্যদিনের খাবারের স্বাদ বাড়ানোর জন্য হতে পারে সেরা পছন্দ।</p>\r\n<p>&nbsp;</p>\r\n<h2>ঘি এর উপকারিতা:</h2>\r\n<p>১.&nbsp;ঘি হজম প্রক্রিয়া উন্নত করে এবং অন্ত্রের স্বাস্থ্য ভালো রাখতে সহায়তা করে।</p>\r\n<p>২.&nbsp;ঘি ত্বকের আর্দ্রতা ধরে রাখে এবং উজ্জ্বলতা বাড়ায়।</p>\r\n<p>৩.&nbsp;ঘি শরীরকে তাৎক্ষণিক শক্তি প্রদান করে এবং দীর্ঘস্থায়ী এনার্জি ধরে রাখতে সহায়তা করে।</p>\r\n<p>৪.&nbsp;ঘি-তে থাকা ভিটামিন এ, ডি, ই, এবং কে রোগ প্রতিরোধ ক্ষমতা বাড়ায়।</p>\r\n<p>৫.&nbsp;পরিমিত পরিমাণে ঘি সেবন হার্টের জন্য উপকারী।</p>\r\n<p>৬.&nbsp;ঘি-তে থাকা স্বাস্থ্যকর ফ্যাট মস্তিষ্কের কার্যক্ষমতা বাড়াতে সাহায্য করে ।</p>\r\n<p>৭.&nbsp;ঘি শরীরের জয়েন্টের প্রদাহ কমায় এবং ব্যথা উপশমে সহায়তা করে।</p>\r\n<p>৮.&nbsp;ঘি-তে থাকা স্বাস্থ্যকর ফ্যাট মেটাবলিজম বাড়িয়ে ওজন নিয়ন্ত্রণে রাখে।</p>\r\n<p>৯.&nbsp;ঘি-তে থাকা অ্যান্টিঅক্সিডেন্ট শরীর থেকে বিষাক্ত পদার্থ বের করতে সহায়তা করে।</p>\r\n<p>১০.&nbsp;ঘি যে কোনো খাবারের স্বাদ ও গন্ধ বাড়িয়ে তোলে।</p>\r\n<p>&nbsp;</p>\r\n<h2>কেন ফালাক ফুডের ঘি অনন্য?</h2>\r\n<p>১. খাটি গরুর দুধ থেকে তৈরি।<br>২.আসল স্বাদ ও পুষ্টি ধরে রাখে ।<br>৩. খাবারে যোগ করে বাড়তি স্বাদ।<br>৪. ভিটামিন এ, ডি, ই, এবং কে সমৃদ্ধ।<br>৫.মান ও বিশুদ্ধতা নিশ্চিত করে ।<br>৬. কোনো রাসায়নিক উপাদান নেই।<br>৭. রান্না, ভাজা ও মিষ্টিতে ব্যবহার উপযোগী।</p>\r\n<p>&nbsp;</p>\r\n<p>Pure ghee from fresh cow&rsquo;s milk, is ideal for cooking or adding a rich, traditional flavor to your meals. It&rsquo;s natural, free from additives, and perfect for everyday use.</p>\r\n<p>&nbsp;</p>\r\n<h2>Benefits of Ghee:</h2>\r\n<ol>\r\n<li aria-level=\"1\">Loaded with essential vitamins A, D, E, and K for overall health.</li>\r\n<li aria-level=\"1\">It contains beneficial fats that provide energy and support brain function.</li>\r\n<li aria-level=\"1\">Packed with antioxidants to strengthen the immune system.</li>\r\n<li aria-level=\"1\">Vitamin D helps calcium absorption for stronger bones.</li>\r\n<li aria-level=\"1\">Contains butyric acid, which promotes a healthy gut.</li>\r\n<li aria-level=\"1\">Keeps skin hydrated and nourished from within.</li>\r\n<li aria-level=\"1\">Helps reduce joint pain and inflammation.</li>\r\n<li aria-level=\"1\">Stimulates metabolism and aids in fat breakdown.</li>\r\n<li aria-level=\"1\">Provides sustained energy without unhealthy additives.</li>\r\n<li aria-level=\"1\">In moderation, it may support healthy cholesterol levels.</li>\r\n</ol>\r\n<p>&nbsp;</p>\r\n<h2>Choose Pure Ghee at the Best Prices</h2>\r\n<ol>\r\n<li aria-level=\"1\">&nbsp;Made from high-quality cow&rsquo;s milk without additives or preservatives.</li>\r\n<li aria-level=\"1\">Retains authentic taste and nutritional value.</li>\r\n<li aria-level=\"1\">Enhances the taste of any dish effortlessly.</li>\r\n<li aria-level=\"1\">Packed with essential vitamins like A, D, E, and K.</li>\r\n<li aria-level=\"1\">Ensures purity and premium quality in every jar.</li>\r\n<li aria-level=\"1\">No hydrogenated oils or harmful chemicals are used.</li>\r\n<li aria-level=\"1\">Perfect for cooking, frying, baking, or adding flavor.</li>\r\n</ol>', NULL, NULL, '2026-03-07 10:19:17', '2026-03-07 10:19:17'),
 (72, 8, 55, 29, NULL, 'সুন্দরবনের খাঁটি মধু | ১০০% প্রাকৃতিক অরিজিনাল হানি | Raw Sundarbans Honey Bangladesh', 'সুন্দরবনের-খাঁটি-মধু-|-১০০%-প্রাকৃতিক-অরিজিনাল-হানি-|-raw-sundarbans-honey-bangladesh', 'সরাসরি সুন্দরবন থেকে সংগ্রহ করা ১০০% খাঁটি ও প্রাকৃতিক মধু। কোনো ভেজাল বা কেমিক্যাল নেই। স্বাস্থ্যকর, পুষ্টিকর ও ইমিউনিটি বৃদ্ধিতে সহায়ক।', '<h3 data-section-id=\"1ym1jup\" data-start=\"501\" data-end=\"552\">🌿 সুন্দরবনের খাঁটি মধু &ndash; প্রকৃতির সেরা উপহার</h3>\r\n<p data-start=\"553\" data-end=\"693\">আমাদের এই মধু সরাসরি <strong data-start=\"574\" data-end=\"615\"><span class=\"hover:entity-accent entity-underline inline cursor-pointer align-baseline\"><span class=\"whitespace-normal\">Sundarbans</span></span></strong> থেকে সংগ্রহ করা হয়, যেখানে মৌয়ালরা প্রাকৃতিক উপায়ে মৌচাক থেকে মধু সংগ্রহ করে।</p>\r\n<h3 data-section-id=\"qynqp6\" data-start=\"695\" data-end=\"723\">🍯 কেন আমাদের মধু বিশেষ?</h3>\r\n<ul data-start=\"724\" data-end=\"870\">\r\n<li data-section-id=\"drkvt7\" data-start=\"724\" data-end=\"760\">✅ ১০০% খাঁটি ও কাঁচা (Raw Honey)</li>\r\n<li data-section-id=\"vmxpb1\" data-start=\"761\" data-end=\"799\">✅ কোনো চিনি বা কেমিক্যাল মেশানো নয়</li>\r\n<li data-section-id=\"pplx5r\" data-start=\"800\" data-end=\"829\">✅ প্রাকৃতিকভাবে সংগ্রহকৃত</li>\r\n<li data-section-id=\"ow0idg\" data-start=\"830\" data-end=\"870\">✅ সম্পূর্ণ অর্গানিক ও স্বাস্থ্যসম্মত</li>\r\n</ul>\r\n<h3 data-section-id=\"ryt17d\" data-start=\"872\" data-end=\"897\">💪 স্বাস্থ্য উপকারিতা</h3>\r\n<ul data-start=\"898\" data-end=\"1011\">\r\n<li data-section-id=\"1ysrc52\" data-start=\"898\" data-end=\"929\">ইমিউন সিস্টেম শক্তিশালী করে</li>\r\n<li data-section-id=\"itufv7\" data-start=\"930\" data-end=\"962\">সর্দি-কাশি কমাতে সাহায্য করে</li>\r\n<li data-section-id=\"1w6gyqh\" data-start=\"963\" data-end=\"982\">হজম শক্তি বাড়ায়</li>\r\n<li data-section-id=\"16mneqi\" data-start=\"983\" data-end=\"1011\">শক্তি ও পুষ্টির ভালো উৎস</li>\r\n</ul>\r\n<h3 data-section-id=\"1pmx6vf\" data-start=\"1013\" data-end=\"1036\">📦 পণ্যের বৈশিষ্ট্য</h3>\r\n<ul data-start=\"1037\" data-end=\"1139\">\r\n<li data-section-id=\"vjsrdv\" data-start=\"1037\" data-end=\"1058\">উৎপত্তি: সুন্দরবন</li>\r\n<li data-section-id=\"jmt4zq\" data-start=\"1059\" data-end=\"1085\">ধরণ: Raw Natural Honey</li>\r\n<li data-section-id=\"1qc57c7\" data-start=\"1086\" data-end=\"1104\">রঙ: গাঢ় সোনালি</li>\r\n<li data-section-id=\"1nipjv3\" data-start=\"1105\" data-end=\"1139\">স্বাদ: প্রাকৃতিক ও সুগন্ধযুক্ত</li>\r\n</ul>\r\n<h3 data-section-id=\"vyhqt2\" data-start=\"1141\" data-end=\"1156\">🚚 ডেলিভারি</h3>\r\n<p data-start=\"1157\" data-end=\"1202\">বাংলাদেশের যেকোনো জায়গায় হোম ডেলিভারি সুবিধা।</p>', '[\"asdfasdf\"]', 'সুন্দরবনের খাঁটি মধু (Raw Honey) অনলাইনে কিনুন। ১০০% প্রাকৃতিক ও ভেজালমুক্ত মধু, ইমিউনিটি বাড়ায় ও স্বাস্থ্য ভালো রাখে। সারা বাংলাদেশে দ্রুত ডেলিভারি।', '2026-04-07 04:30:27', '2026-04-07 11:04:24'),
 (73, 8, 56, 29, NULL, 'শরিষা ফুলের খাঁটি মধু | ১০০% প্রাকৃতিক সরিষা হানি | ঘরের স্বাদ', 'শরিষা-ফুলের-খাঁটি-মধু-|-১০০%-প্রাকৃতিক-সরিষা-হানি-|-ঘরের-স্বাদ', 'ঘরের স্বাদের খাঁটি শরিষা ফুলের মধু – সরাসরি মৌচাক থেকে সংগ্রহ করা ১০০% বিশুদ্ধ ও প্রাকৃতিক। রোগ প্রতিরোধ ক্ষমতা বাড়াতে ও প্রতিদিনের সুস্থতায় আদর্শ।', '<p data-start=\"487\" data-end=\"698\">ঘরের স্বাদ নিয়ে এলো প্রিমিয়াম মানের <strong data-start=\"523\" data-end=\"548\">শরিষা ফুলের খাঁটি মধু</strong>, যা সংগ্রহ করা হয়েছে সরিষা ফুলের মৌসুমে মৌমাছির প্রাকৃতিক উৎস থেকে। কোনো ধরনের কেমিক্যাল, চিনি বা ভেজাল মিশ্রণ ছাড়া এই মধু সম্পূর্ণ বিশুদ্ধ ও নিরাপদ।</p>\r\n<h3 data-section-id=\"1oaym1r\" data-start=\"700\" data-end=\"739\">🌼 কেন আমাদের শরিষা মধু বেছে নিবেন?</h3>\r\n<p data-start=\"740\" data-end=\"891\">✔ ১০০% খাঁটি ও প্রাকৃতিক<br data-start=\"764\" data-end=\"767\">✔ সরিষা ফুলের ন্যাচারাল ফ্লেভার ও সুগন্ধ<br data-start=\"807\" data-end=\"810\">✔ কোনো প্রিজারভেটিভ বা কৃত্রিম উপাদান নেই<br data-start=\"851\" data-end=\"854\">✔ স্বাস্থ্যসম্মত ও পুষ্টিগুণে ভরপুর</p>\r\n<h3 data-section-id=\"2gbthb\" data-start=\"893\" data-end=\"920\">🍯 পুষ্টিগুণ ও উপকারিতা</h3>\r\n<ul data-start=\"921\" data-end=\"1063\">\r\n<li data-section-id=\"1m6mzkh\" data-start=\"921\" data-end=\"955\">রোগ প্রতিরোধ ক্ষমতা বৃদ্ধি করে</li>\r\n<li data-section-id=\"1ujbuip\" data-start=\"956\" data-end=\"990\">সর্দি-কাশি ও গলা ব্যথায় উপকারী</li>\r\n<li data-section-id=\"1s611ec\" data-start=\"991\" data-end=\"1014\">হজম শক্তি উন্নত করে</li>\r\n<li data-section-id=\"1siar0e\" data-start=\"1015\" data-end=\"1036\">শরীরে শক্তি যোগায়</li>\r\n<li data-section-id=\"e3dvux\" data-start=\"1037\" data-end=\"1063\">ত্বক ও চুলের জন্য ভালো</li>\r\n</ul>\r\n<h3 data-section-id=\"kf62fa\" data-start=\"1065\" data-end=\"1086\">📦 সংরক্ষণ পদ্ধতি</h3>\r\n<p data-start=\"1087\" data-end=\"1141\">ঠাণ্ডা ও শুকনো স্থানে রাখুন। ফ্রিজে রাখার প্রয়োজন নেই।</p>\r\n<h3 data-section-id=\"con7t3\" data-start=\"1143\" data-end=\"1157\">⚠️ সতর্কতা</h3>\r\n<p data-start=\"1158\" data-end=\"1203\">১ বছরের কম বয়সী শিশুদের জন্য মধু প্রযোজ্য নয়।</p>', NULL, 'ঘরের স্বাদের ১০০% খাঁটি শরিষা ফুলের মধু কিনুন অনলাইনে। প্রাকৃতিক, ভেজালমুক্ত ও স্বাস্থ্যকর সরিষা মধু এখন সহজেই আপনার দোরগোড়ায়।', '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
-(74, 8, 57, 29, 1, 'কালোজিরা ফুলের মধু | খাঁটি প্রাকৃতিক মধু অনলাইনে কিনুন | Ghorer Shad', 'কালোজিরা-ফুলের-মধু-|-খাঁটি-প্রাকৃতিক-মধু-অনলাইনে-কিনুন-|-ghorer-shad', 'খাঁটি কালোজিরা ফুলের মধু সরাসরি প্রাকৃতিক উৎস থেকে সংগ্রহ করা। রোগ প্রতিরোধ ক্ষমতা বাড়াতে, হজমে সহায়ক এবং দৈনন্দিন স্বাস্থ্য রক্ষায় উপকারী। এখনই অনলাইনে অর্ডার করুন ঘরের স্বাদ থেকে।', '<h3 data-section-id=\"1w289bm\" data-start=\"559\" data-end=\"610\">🟡 কালোজিরা ফুলের মধু &ndash; প্রকৃতির এক অনন্য উপহার</h3>\r\n<p data-start=\"612\" data-end=\"778\">কালোজিরা ফুলের মধু একটি অত্যন্ত পুষ্টিকর ও ঔষধি গুণসম্পন্ন প্রাকৃতিক মধু। এটি মৌমাছি দ্বারা কালোজিরা ফুল থেকে সংগ্রহ করা হয়, যা স্বাদে হালকা ঝাঁঝালো এবং ঘ্রাণে অনন্য।</p>\r\n<h3 data-section-id=\"1awfawj\" data-start=\"780\" data-end=\"816\">🌿 কেন কালোজিরা ফুলের মধু খাবেন?</h3>\r\n<p data-start=\"818\" data-end=\"987\">✔ রোগ প্রতিরোধ ক্ষমতা বৃদ্ধি করে<br data-start=\"850\" data-end=\"853\">✔ সর্দি-কাশি ও গলা ব্যথা কমাতে সাহায্য করে<br data-start=\"895\" data-end=\"898\">✔ হজম শক্তি উন্নত করে<br data-start=\"919\" data-end=\"922\">✔ শরীরকে প্রাকৃতিকভাবে শক্তি জোগায়<br data-start=\"956\" data-end=\"959\">✔ ত্বক ও চুলের জন্য উপকারী</p>\r\n<h3 data-section-id=\"kxayn7\" data-start=\"989\" data-end=\"1012\">🍯 পণ্যের বৈশিষ্ট্য</h3>\r\n<ul data-start=\"1014\" data-end=\"1143\">\r\n<li data-section-id=\"vw97lt\" data-start=\"1014\" data-end=\"1040\">১০০% খাঁটি ও প্রাকৃতিক</li>\r\n<li data-section-id=\"6ivniy\" data-start=\"1041\" data-end=\"1081\">কোনো প্রকার ভেজাল বা কেমিক্যাল মুক্ত</li>\r\n<li data-section-id=\"uxavpt\" data-start=\"1082\" data-end=\"1114\">সরাসরি গ্রাম থেকে সংগ্রহ করা</li>\r\n<li data-section-id=\"1yrlw15\" data-start=\"1115\" data-end=\"1143\">স্বাস্থ্যসম্মত প্যাকেজিং</li>\r\n</ul>\r\n<h3 data-section-id=\"1ndoabd\" data-start=\"1145\" data-end=\"1166\">📦 ব্যবহারের নিয়ম</h3>\r\n<p data-start=\"1168\" data-end=\"1278\">প্রতিদিন সকালে খালি পেটে ১-২ চামচ মধু খেলে ভালো ফল পাওয়া যায়। এছাড়া গরম পানি বা দুধের সাথে মিশিয়েও খেতে পারেন।</p>\r\n<h3 data-section-id=\"1oxvozv\" data-start=\"1280\" data-end=\"1314\">🚚 কেন ঘরের স্বাদ থেকে কিনবেন?</h3>\r\n<ul data-start=\"1316\" data-end=\"1417\">\r\n<li data-section-id=\"1ce3sqp\" data-start=\"1316\" data-end=\"1346\">বিশ্বস্ত ও মানসম্পন্ন পণ্য</li>\r\n<li data-section-id=\"1xvbzqd\" data-start=\"1347\" data-end=\"1380\">দ্রুত ডেলিভারি সারা বাংলাদেশে</li>\r\n<li data-section-id=\"1rsbu6g\" data-start=\"1381\" data-end=\"1417\">গ্রাহক সন্তুষ্টি আমাদের অঙ্গীকার</li>\r\n</ul>', '[\"chad\",\"hello\"]', 'খাঁটি কালোজিরা ফুলের মধু অনলাইনে কিনুন ঘরের স্বাদ থেকে। প্রাকৃতিক, ভেজালমুক্ত ও স্বাস্থ্য উপকারী মধু দ্রুত ডেলিভারির সুবিধাসহ।', '2026-04-07 05:43:53', '2026-04-07 11:11:09');
+(74, 8, 57, 29, 1, 'কালোজিরা ফুলের মধু | খাঁটি প্রাকৃতিক মধু অনলাইনে কিনুন | Ghorer Shad', 'কালোজিরা-ফুলের-মধু-|-খাঁটি-প্রাকৃতিক-মধু-অনলাইনে-কিনুন-|-ghorer-shad', 'খাঁটি কালোজিরা ফুলের মধু সরাসরি প্রাকৃতিক উৎস থেকে সংগ্রহ করা। রোগ প্রতিরোধ ক্ষমতা বাড়াতে, হজমে সহায়ক এবং দৈনন্দিন স্বাস্থ্য রক্ষায় উপকারী। এখনই অনলাইনে অর্ডার করুন ঘরের স্বাদ থেকে।', '<h3 data-section-id=\"1w289bm\" data-start=\"559\" data-end=\"610\">🟡 কালোজিরা ফুলের মধু &ndash; প্রকৃতির এক অনন্য উপহার</h3>\r\n<p data-start=\"612\" data-end=\"778\">কালোজিরা ফুলের মধু একটি অত্যন্ত পুষ্টিকর ও ঔষধি গুণসম্পন্ন প্রাকৃতিক মধু। এটি মৌমাছি দ্বারা কালোজিরা ফুল থেকে সংগ্রহ করা হয়, যা স্বাদে হালকা ঝাঁঝালো এবং ঘ্রাণে অনন্য।</p>\r\n<h3 data-section-id=\"1awfawj\" data-start=\"780\" data-end=\"816\">🌿 কেন কালোজিরা ফুলের মধু খাবেন?</h3>\r\n<p data-start=\"818\" data-end=\"987\">✔ রোগ প্রতিরোধ ক্ষমতা বৃদ্ধি করে<br data-start=\"850\" data-end=\"853\">✔ সর্দি-কাশি ও গলা ব্যথা কমাতে সাহায্য করে<br data-start=\"895\" data-end=\"898\">✔ হজম শক্তি উন্নত করে<br data-start=\"919\" data-end=\"922\">✔ শরীরকে প্রাকৃতিকভাবে শক্তি জোগায়<br data-start=\"956\" data-end=\"959\">✔ ত্বক ও চুলের জন্য উপকারী</p>\r\n<h3 data-section-id=\"kxayn7\" data-start=\"989\" data-end=\"1012\">🍯 পণ্যের বৈশিষ্ট্য</h3>\r\n<ul data-start=\"1014\" data-end=\"1143\">\r\n<li data-section-id=\"vw97lt\" data-start=\"1014\" data-end=\"1040\">১০০% খাঁটি ও প্রাকৃতিক</li>\r\n<li data-section-id=\"6ivniy\" data-start=\"1041\" data-end=\"1081\">কোনো প্রকার ভেজাল বা কেমিক্যাল মুক্ত</li>\r\n<li data-section-id=\"uxavpt\" data-start=\"1082\" data-end=\"1114\">সরাসরি গ্রাম থেকে সংগ্রহ করা</li>\r\n<li data-section-id=\"1yrlw15\" data-start=\"1115\" data-end=\"1143\">স্বাস্থ্যসম্মত প্যাকেজিং</li>\r\n</ul>\r\n<h3 data-section-id=\"1ndoabd\" data-start=\"1145\" data-end=\"1166\">📦 ব্যবহারের নিয়ম</h3>\r\n<p data-start=\"1168\" data-end=\"1278\">প্রতিদিন সকালে খালি পেটে ১-২ চামচ মধু খেলে ভালো ফল পাওয়া যায়। এছাড়া গরম পানি বা দুধের সাথে মিশিয়েও খেতে পারেন।</p>\r\n<h3 data-section-id=\"1oxvozv\" data-start=\"1280\" data-end=\"1314\">🚚 কেন ঘরের স্বাদ থেকে কিনবেন?</h3>\r\n<ul data-start=\"1316\" data-end=\"1417\">\r\n<li data-section-id=\"1ce3sqp\" data-start=\"1316\" data-end=\"1346\">বিশ্বস্ত ও মানসম্পন্ন পণ্য</li>\r\n<li data-section-id=\"1xvbzqd\" data-start=\"1347\" data-end=\"1380\">দ্রুত ডেলিভারি সারা বাংলাদেশে</li>\r\n<li data-section-id=\"1rsbu6g\" data-start=\"1381\" data-end=\"1417\">গ্রাহক সন্তুষ্টি আমাদের অঙ্গীকার</li>\r\n</ul>', '[\"কালোজিরা ফুলের মধু\",\"kalozira flower honey\",\"pure honey bd\",\"natural honey bangladesh\",\"organic honey online\",\"buy honey bd\",\"immunity honey\",\"ghore shad\",\"Modhu\",\"Honey\"]', 'খাঁটি কালোজিরা ফুলের মধু অনলাইনে কিনুন ঘরের স্বাদ থেকে। প্রাকৃতিক, ভেজালমুক্ত ও স্বাস্থ্য উপকারী মধু দ্রুত ডেলিভারির সুবিধাসহ।', '2026-04-07 05:43:53', '2026-04-07 11:15:28');
 
 -- --------------------------------------------------------
 
@@ -919,7 +919,7 @@ INSERT INTO `product_options` (`id`, `product_id`, `name`, `position`, `created_
 (66, 54, 'Size', 0, '2026-03-07 10:19:17', '2026-03-07 10:19:17'),
 (68, 56, 'ওজন', 0, '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (76, 55, 'ওজন', 0, '2026-04-07 11:04:24', '2026-04-07 11:04:24'),
-(79, 57, 'ওজন', 0, '2026-04-07 11:11:09', '2026-04-07 11:11:09');
+(82, 57, 'ওজন', 0, '2026-04-07 11:22:41', '2026-04-07 11:22:41');
 
 -- --------------------------------------------------------
 
@@ -961,8 +961,8 @@ INSERT INTO `product_option_values` (`id`, `product_option_id`, `value`, `positi
 (143, 68, 'এক কেজি', 1, '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (158, 76, 'হাফ কেজি', 0, '2026-04-07 11:04:24', '2026-04-07 11:04:24'),
 (159, 76, 'এক কেজি', 1, '2026-04-07 11:04:24', '2026-04-07 11:04:24'),
-(164, 79, 'হাফ কেজি', 0, '2026-04-07 11:11:09', '2026-04-07 11:11:09'),
-(165, 79, 'এক কেজি', 1, '2026-04-07 11:11:09', '2026-04-07 11:11:09');
+(170, 82, 'হাফ কেজি', 0, '2026-04-07 11:22:41', '2026-04-07 11:22:41'),
+(171, 82, 'এক কেজি', 1, '2026-04-07 11:22:41', '2026-04-07 11:22:41');
 
 -- --------------------------------------------------------
 
@@ -1084,8 +1084,8 @@ INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `image`, `price`, `st
 (130, 54, NULL, NULL, 1600.00, 5, 1, 0, NULL, NULL, '2026-03-07 10:19:17', '2026-03-07 10:19:17'),
 (133, 56, NULL, NULL, 600.00, 5, 1, 1, '1', '5', '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (134, 56, NULL, NULL, 1100.00, 5, 1, 1, '6', '10', '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
-(141, 57, NULL, NULL, 900.00, 5, 1, 1, '1', '5', '2026-04-07 09:51:03', '2026-04-07 11:11:09'),
-(142, 57, NULL, NULL, 1700.00, 5, 1, 1, '6', '10', '2026-04-07 09:51:03', '2026-04-07 11:11:09'),
+(141, 57, NULL, NULL, 900.00, 5, 1, 1, '1', '5', '2026-04-07 09:51:03', '2026-04-07 11:22:41'),
+(142, 57, NULL, NULL, 1700.00, 5, 1, 1, '6', '10', '2026-04-07 09:51:03', '2026-04-07 11:22:41'),
 (143, 55, NULL, NULL, 900.00, 5, 1, 1, '1', '5', '2026-04-07 10:29:30', '2026-04-07 11:04:24'),
 (144, 55, NULL, NULL, 1700.00, 5, 1, 1, '6', '10', '2026-04-07 10:29:30', '2026-04-07 11:04:24');
 
@@ -1148,8 +1148,8 @@ INSERT INTO `product_variant_values` (`id`, `variant_id`, `option_value_id`, `cr
 (205, 134, 143, '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (220, 143, 158, '2026-04-07 11:04:24', '2026-04-07 11:04:24'),
 (221, 144, 159, '2026-04-07 11:04:24', '2026-04-07 11:04:24'),
-(226, 141, 164, '2026-04-07 11:11:09', '2026-04-07 11:11:09'),
-(227, 142, 165, '2026-04-07 11:11:09', '2026-04-07 11:11:09');
+(232, 141, 170, '2026-04-07 11:22:41', '2026-04-07 11:22:41'),
+(233, 142, 171, '2026-04-07 11:22:41', '2026-04-07 11:22:41');
 
 -- --------------------------------------------------------
 
@@ -1318,10 +1318,10 @@ INSERT INTO `slider_images` (`id`, `item_id`, `item_type`, `image`, `created_at`
 (212, 56, 'product', '69d4e86a349f6.png', '2026-04-07 05:20:10', '2026-04-07 05:28:12'),
 (213, 56, 'product', '69d4e86ca86c6.png', '2026-04-07 05:20:12', '2026-04-07 05:28:12'),
 (214, 56, 'product', '69d4e86f65e71.png', '2026-04-07 05:20:15', '2026-04-07 05:28:12'),
-(215, 57, 'product', '69d4ed9097e7d.png', '2026-04-07 05:42:08', '2026-04-07 05:43:53'),
-(216, 57, 'product', '69d4ed9964d99.png', '2026-04-07 05:42:17', '2026-04-07 05:43:53'),
-(217, 57, 'product', '69d4ed9fce070.png', '2026-04-07 05:42:23', '2026-04-07 05:43:53'),
-(218, 57, 'product', '69d4eda25449e.png', '2026-04-07 05:42:26', '2026-04-07 05:43:53');
+(219, 57, 'product', '69d53d057d1f1.png', '2026-04-07 11:21:09', '2026-04-07 11:22:40'),
+(220, 57, 'product', '69d53d05af892.png', '2026-04-07 11:21:09', '2026-04-07 11:22:40'),
+(221, 57, 'product', '69d53d0683273.png', '2026-04-07 11:21:10', '2026-04-07 11:22:40'),
+(222, 57, 'product', '69d53d06b5ffc.png', '2026-04-07 11:21:10', '2026-04-07 11:22:40');
 
 -- --------------------------------------------------------
 
@@ -2145,13 +2145,13 @@ ALTER TABLE `product_coupons`
 -- AUTO_INCREMENT for table `product_options`
 --
 ALTER TABLE `product_options`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `product_option_values`
 --
 ALTER TABLE `product_option_values`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=172;
 
 --
 -- AUTO_INCREMENT for table `product_reviews`
@@ -2181,7 +2181,7 @@ ALTER TABLE `product_variants`
 -- AUTO_INCREMENT for table `product_variant_values`
 --
 ALTER TABLE `product_variant_values`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=228;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=234;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -2205,7 +2205,7 @@ ALTER TABLE `shipping_charges`
 -- AUTO_INCREMENT for table `slider_images`
 --
 ALTER TABLE `slider_images`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=219;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=223;
 
 --
 -- AUTO_INCREMENT for table `tables`
