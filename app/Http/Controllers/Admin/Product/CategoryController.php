@@ -66,8 +66,8 @@ class CategoryController extends Controller
             return response()->json(['errors' => $exception->errors()], 422);
         }
 
-        DB::transaction(function () use ($request, $languages, $resolvedNames) {
-            $this->syncCategoryTranslations($request, $languages, $resolvedNames, uniqid('pc_'));
+        DB::transaction(function () use ($request, $languages, $defaultLanguage, $resolvedNames) {
+            $this->syncCategoryTranslations($request, $languages, $defaultLanguage, $resolvedNames, uniqid('pc_'));
         });
 
         session()->flash('success', __('Category create successfully'));
@@ -87,12 +87,12 @@ class CategoryController extends Controller
             return response()->json(['errors' => $exception->errors()], 400);
         }
 
-        DB::transaction(function () use ($request, $languages, $resolvedNames, $category, $groupUniqueId) {
+        DB::transaction(function () use ($request, $languages, $defaultLanguage, $resolvedNames, $category, $groupUniqueId) {
             if (blank($category->unique_id)) {
                 $category->update(['unique_id' => $groupUniqueId]);
             }
 
-            $this->syncCategoryTranslations($request, $languages, $resolvedNames, $groupUniqueId);
+            $this->syncCategoryTranslations($request, $languages, $defaultLanguage, $resolvedNames, $groupUniqueId);
         });
 
         session()->flash('success', __('Category update successfully'));
@@ -103,33 +103,47 @@ class CategoryController extends Controller
     {
         $category = ProductCategory::findOrFail($request->category_id);
 
-        if (filled($category->unique_id)) {
-            ProductCategory::where('unique_id', $category->unique_id)->delete();
-        } else {
-            $category->delete();
+        if ($category->productContent()->exists()) {
+            return redirect()->back()->with('warning', __('Please delete the products under this category first.'));
         }
+
+        $category->delete();
 
         return redirect()->back()->with('success', __('Category delete successfully'));
     }
 
     public function bulkdelete(Request $request)
     {
-        $categories = ProductCategory::whereIn('id', $request->ids)->get();
-        $groupUniqueIds = $categories->pluck('unique_id')->filter()->unique()->values();
+        $categories = ProductCategory::withCount('productContent')
+            ->whereIn('id', $request->ids)
+            ->get();
 
-        if ($groupUniqueIds->isNotEmpty()) {
-            ProductCategory::whereIn('unique_id', $groupUniqueIds)->delete();
-        }
+        $blockedCategories = $categories->filter(function (ProductCategory $category) {
+            return (int) $category->product_content_count > 0;
+        });
 
         $categories
-            ->filter(function (ProductCategory $category) {
-                return blank($category->unique_id);
+            ->reject(function (ProductCategory $category) {
+                return (int) $category->product_content_count > 0;
             })
             ->each(function (ProductCategory $category) {
                 $category->delete();
             });
 
-        session()->flash('success', __('Categories delete successfully'));
+        if ($blockedCategories->isNotEmpty()) {
+            $blockedNames = $blockedCategories->pluck('name')->take(5)->implode(', ');
+            $moreText = $blockedCategories->count() > 5 ? '...' : '';
+
+            session()->flash(
+                'warning',
+                __('Please delete the products under these categories first:') . ' ' . $blockedNames . $moreText
+            );
+        }
+
+        if ($categories->count() > $blockedCategories->count()) {
+            session()->flash('success', __('Categories delete successfully'));
+        }
+
         return response()->json(['status' => 'success'], 200);
     }
 
@@ -146,7 +160,7 @@ class CategoryController extends Controller
         return 'success';
     }
 
-    private function validateCategoryRequest(Request $request, $languages, $defaultLanguage, ?string $ignoreGroupUniqueId = null): array
+    private function validateCategoryRequest(Request $request, $languages, $defaultLanguage, $ignoreGroupUniqueId = null)
     {
         $rules = [
             'icon' => 'nullable|string|max:255',
@@ -154,8 +168,6 @@ class CategoryController extends Controller
             'status' => 'required|in:1,0',
         ];
         $messages = [];
-        $defaultField = $defaultLanguage->code . '_name';
-        $defaultName = trim((string) $request->input($defaultField));
         $resolvedNames = [];
 
         foreach ($languages as $language) {
@@ -165,7 +177,7 @@ class CategoryController extends Controller
             $rules[$field] = ($language->id == $defaultLanguage->id ? 'required' : 'nullable') . '|max:255';
             $messages[$field . '.required'] = __('The name field is required for') . ' ' . $language->name . ' ' . __('language.');
             $messages[$field . '.max'] = __('The name field may not be greater than 255 characters for') . ' ' . $language->name . ' ' . __('language.');
-            $resolvedNames[$language->id] = $translatedName !== '' ? $translatedName : $defaultName;
+            $resolvedNames[$language->id] = $translatedName;
         }
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -203,7 +215,7 @@ class CategoryController extends Controller
         return $resolvedNames;
     }
 
-    private function syncCategoryTranslations(Request $request, $languages, array $resolvedNames, string $groupUniqueId): void
+    private function syncCategoryTranslations(Request $request, $languages, $defaultLanguage, $resolvedNames, $groupUniqueId)
     {
         $icon = $request->filled('icon') ? trim($request->icon) : null;
 
@@ -223,11 +235,18 @@ class CategoryController extends Controller
                     ->first();
             }
 
+            $name = trim((string) ($resolvedNames[$language->id] ?? ''));
+            $isDefaultLanguage = (int) $language->id === (int) $defaultLanguage->id;
+
+            if (!$isDefaultLanguage && $name === '') {
+                continue;
+            }
+
             $payload = [
                 'language_id' => $language->id,
                 'unique_id' => $groupUniqueId,
-                'name' => $resolvedNames[$language->id],
-                'slug' => createSlug($resolvedNames[$language->id]),
+                'name' => $name,
+                'slug' => createSlug($name),
                 'serial_number' => $request->serial_number,
                 'status' => $request->status,
                 'icon' => $icon,

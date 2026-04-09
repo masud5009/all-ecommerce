@@ -19,12 +19,15 @@
             <x-bulk-delete :url="route('admin.product.subcategory_bulk_delete')" itemTextName="subcategories" />
             <div class="card-header">
                 <div class="row">
-                    <div class="col-lg-8 col-sm-6">
+                    <div class="col-lg-3 col-sm-6">
                         <div class="card-title">
                             <h5>{{ __('Subcategories') }}</h5>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-6">
+                    <div class="col-lg-3 col-sm-6">
+                        @include('admin.partials.languages')
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
                         <div class="info-header-content">
                             <a href="#" class="btn btn-primary btn-sm float-lg-end float-left" data-bs-toggle="modal"
                                 data-bs-target="#createModal">
@@ -110,4 +113,49 @@
 
     @includeIf('admin.product.subcategory.create')
     @includeIf('admin.product.subcategory.edit')
+@endsection
+
+@section('script')
+    <script>
+        (function () {
+            const selectedLanguageId = '{{ $selectedLanguage->id }}';
+            const categoryOptionsByLanguage = @json($categoryOptionsByLanguage);
+            const selectCategoryPlaceholder = @json(__('Select a category'));
+
+            function renderCategoryOptions(languageId) {
+                const $languageSelect = $('#ajaxForm select[name="language_id"]');
+                const $categorySelect = $('#subcategoryCategorySelect');
+
+                if ($languageSelect.length === 0 || $categorySelect.length === 0) {
+                    return;
+                }
+
+                const categories = categoryOptionsByLanguage[languageId] || [];
+                const currentValue = $categorySelect.val();
+                let options = '<option value="">' + selectCategoryPlaceholder + '</option>';
+
+                categories.forEach(function (category) {
+                    const isSelected = String(category.id) === String(currentValue) ? ' selected' : '';
+                    options += '<option value="' + category.id + '"' + isSelected + '>' + category.name + '</option>';
+                });
+
+                $categorySelect.html(options);
+            }
+
+            $(document).ready(function () {
+                const $languageSelect = $('#ajaxForm select[name="language_id"]');
+
+                if ($languageSelect.length === 0) {
+                    return;
+                }
+
+                $languageSelect.val(selectedLanguageId);
+                renderCategoryOptions(selectedLanguageId);
+
+                $languageSelect.on('change', function () {
+                    renderCategoryOptions($(this).val());
+                });
+            });
+        })();
+    </script>
 @endsection

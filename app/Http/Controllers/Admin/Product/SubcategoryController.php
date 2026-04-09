@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Product;
 
 use Illuminate\Http\Request;
+use App\Models\Admin\Language;
 use App\Models\ProductCategory;
 use App\Models\ProductSubcategory;
 use App\Http\Controllers\Controller;
@@ -13,14 +14,28 @@ class SubcategoryController extends Controller
 {
     public function index()
     {
-        $defaultLanguageId = app('defaultLang')->id;
+        $requestLanguage = request('language');
+        $selectedLanguage = Language::where('code', $requestLanguage)->first() ?? app('defaultLang');
 
         $data['languages'] = app('languages');
-        $data['categories'] = ProductCategory::where('language_id', $defaultLanguageId)
+        $data['selectedLanguage'] = $selectedLanguage;
+        $data['categories'] = ProductCategory::where('language_id', $selectedLanguage->id)
             ->orderBy('serial_number', 'ASC')
             ->get();
+        $data['categoryOptionsByLanguage'] = ProductCategory::select('id', 'name', 'language_id')
+            ->orderBy('serial_number', 'ASC')
+            ->get()
+            ->groupBy('language_id')
+            ->map(function ($categories) {
+                return $categories->map(function ($category) {
+                    return [
+                        'id' => $category->id,
+                        'name' => $category->name,
+                    ];
+                })->values();
+            });
         $data['subcategories'] = ProductSubcategory::with('category:id,name')
-            ->where('language_id', $defaultLanguageId)
+            ->where('language_id', $selectedLanguage->id)
             ->orderBy('serial_number', 'ASC')
             ->get();
 
@@ -38,6 +53,19 @@ class SubcategoryController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules);
+        $validator->after(function ($validator) use ($request) {
+            if (!$request->filled('language_id') || !$request->filled('category_id')) {
+                return;
+            }
+
+            $isValidCategory = ProductCategory::where('id', $request->category_id)
+                ->where('language_id', $request->language_id)
+                ->exists();
+
+            if (!$isValidCategory) {
+                $validator->errors()->add('category_id', __('Please select a category from the selected language.'));
+            }
+        });
 
         if ($validator->fails()) {
             return Response::json([
@@ -60,6 +88,8 @@ class SubcategoryController extends Controller
 
     public function update(Request $request)
     {
+        $subcategory = ProductSubcategory::find($request->id);
+
         $rules = [
             'id' => 'required|exists:product_subcategories,id',
             'category_id' => 'required|exists:product_categories,id',
@@ -69,6 +99,19 @@ class SubcategoryController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules);
+        $validator->after(function ($validator) use ($request, $subcategory) {
+            if (!$subcategory || !$request->filled('category_id')) {
+                return;
+            }
+
+            $isValidCategory = ProductCategory::where('id', $request->category_id)
+                ->where('language_id', $subcategory->language_id)
+                ->exists();
+
+            if (!$isValidCategory) {
+                $validator->errors()->add('category_id', __('Please select a category from the subcategory language.'));
+            }
+        });
 
         if ($validator->fails()) {
             return Response::json([
@@ -76,7 +119,6 @@ class SubcategoryController extends Controller
             ], 400);
         }
 
-        $subcategory = ProductSubcategory::findOrFail($request->id);
         $subcategory->update([
             'category_id' => $request->category_id,
             'language_id' => $subcategory->language_id,

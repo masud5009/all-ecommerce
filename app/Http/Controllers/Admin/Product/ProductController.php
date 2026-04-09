@@ -32,7 +32,8 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $language_id = Language::where('code', $request->language)->pluck('id');
+        $selectedLanguage = Language::where('code', $request->language)->first() ?? app('defaultLang');
+        $language_id = $selectedLanguage->id;
         $hasFeaturedColumn = Schema::hasColumn('products', 'featured');
         $hasFlashSaleColumns = Schema::hasColumn('products', 'flash_sale_status')
             && Schema::hasColumn('products', 'flash_sale_price')
@@ -179,6 +180,7 @@ class ProductController extends Controller
         $data['search'] = $search;
         $data['hasFeaturedColumn'] = $hasFeaturedColumn;
         $data['hasFlashSaleColumns'] = $hasFlashSaleColumns;
+        $data['selectedLanguage'] = $selectedLanguage;
 
         return view('admin.product.index', $data);
     }

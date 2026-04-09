@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 08, 2026 at 03:29 AM
+-- Generation Time: Apr 09, 2026 at 06:55 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.29
 
@@ -118,23 +118,6 @@ CREATE TABLE `carts` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `carts`
---
-
-INSERT INTO `carts` (`id`, `session_id`, `user_id`, `product_id`, `variant_id`, `variant_label`, `quantity`, `price`, `created_at`, `updated_at`) VALUES
-(8, 'cart_69b6c0bed3e710.02060244', NULL, 54, 129, '500gm', 3, 900.00, '2026-03-15 09:44:43', '2026-03-15 09:44:50'),
-(9, 'cart_69b6d83e8fc6d0.26091137', NULL, 54, 129, '500gm', 1, 900.00, '2026-03-15 10:03:15', '2026-03-15 10:03:15'),
-(10, 'cart_69b6d85a406256.83261885', NULL, 54, 129, '500gm', 1, 900.00, '2026-03-15 10:03:44', '2026-03-15 10:03:44'),
-(11, 'cart_69b6d8b62d5b02.19588697', NULL, 54, 129, '500gm', 1, 900.00, '2026-03-15 10:06:55', '2026-03-15 10:06:55'),
-(12, 'cart_69b6d97f2744c8.69571657', NULL, 53, 120, '23.5 cm, Black', 1, 199.99, '2026-03-15 10:13:11', '2026-03-15 10:13:11'),
-(13, 'cart_69b6daaa7dbce0.56648714', NULL, 54, 129, '500gm', 1, 900.00, '2026-03-15 10:14:42', '2026-03-15 10:14:42'),
-(14, 'cart_69b6dbcc68cd60.15915978', NULL, 53, 120, '23.5 cm, Black', 1, 199.99, '2026-03-15 10:18:29', '2026-03-15 10:18:29'),
-(16, 'cart_69c7f61ce67821.53970039', NULL, 54, 129, '500gm', 1, 630.00, '2026-03-28 11:31:08', '2026-03-28 11:31:08'),
-(17, 'cart_69c7f61ce67821.53970039', NULL, 54, 130, '1Kg', 2, 1120.00, '2026-03-28 11:41:10', '2026-03-28 11:41:12'),
-(37, 'cart_69caa4cbc0bd16.17828338', NULL, 54, 129, '500gm', 1, 630.00, '2026-03-30 12:13:42', '2026-03-30 12:13:42'),
-(38, 'cart_69caa4cbc0bd16.17828338', NULL, 53, 120, '23.5 cm, Black', 1, 163.99, '2026-03-30 12:13:45', '2026-03-30 12:13:45');
-
 -- --------------------------------------------------------
 
 --
@@ -144,6 +127,7 @@ INSERT INTO `carts` (`id`, `session_id`, `user_id`, `product_id`, `variant_id`, 
 CREATE TABLE `categories` (
   `id` bigint UNSIGNED NOT NULL,
   `language_id` bigint NOT NULL,
+  `unique_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` tinyint NOT NULL,
@@ -156,9 +140,9 @@ CREATE TABLE `categories` (
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`id`, `language_id`, `name`, `slug`, `status`, `serial_number`, `created_at`, `updated_at`) VALUES
-(30, 1, 'Sports', 'sports', 0, 1, '2025-01-04 10:05:36', '2025-02-14 00:09:18'),
-(31, 2, 'Sports-b', 'sports-b', 1, 2, '2025-01-04 10:07:19', '2025-01-04 10:07:19');
+INSERT INTO `categories` (`id`, `language_id`, `unique_id`, `name`, `slug`, `status`, `serial_number`, `created_at`, `updated_at`) VALUES
+(30, 1, 'bc_30', 'Sports', 'sports', 0, 1, '2025-01-04 10:05:36', '2025-02-14 00:09:18'),
+(31, 2, 'bc_31', 'Sports-b', 'sports-b', 1, 2, '2025-01-04 10:07:19', '2025-01-04 10:07:19');
 
 -- --------------------------------------------------------
 
@@ -443,7 +427,7 @@ CREATE TABLE `menu_builders` (
 --
 
 INSERT INTO `menu_builders` (`id`, `language_id`, `menu`, `created_at`, `updated_at`) VALUES
-(3, 6, '[{\"title\":\"Home\",\"url\":\"\\/\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Shop\",\"url\":\"\\/shop\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Contact\",\"url\":\"\\/contact\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Wishlist\",\"url\":\"http:\\/\\/grocery.test\\/user\\/wishlist\",\"target\":\"_self\",\"type\":\"custom\"}]', '2025-11-09 13:16:55', '2026-03-30 12:15:21');
+(3, 8, '[{\"title\":\"Home\",\"url\":\"\\/\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Shop\",\"url\":\"\\/shop\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Contact\",\"url\":\"\\/contact\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Wishlist\",\"url\":\"http:\\/\\/grocery.test\\/user\\/wishlist\",\"target\":\"_self\",\"type\":\"custom\"},{\"title\":\"Contact\",\"url\":\"\\/contact\",\"target\":\"_self\",\"type\":\"prebuilt\"}]', '2025-11-09 13:16:55', '2026-04-07 22:12:08');
 
 -- --------------------------------------------------------
 
@@ -536,7 +520,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (86, '2026_03_30_053331_create_wishlists_table', 52),
 (87, '2026_03_30_090000_fix_wishlists_user_foreign_key', 53),
 (88, '2026_04_07_000001_create_product_subcategories_table', 54),
-(89, '2026_04_07_000002_add_subcategory_id_to_product_contents_table', 55);
+(89, '2026_04_07_000002_add_subcategory_id_to_product_contents_table', 55),
+(90, '2026_04_09_000003_add_unique_id_to_product_categories_table', 56),
+(91, '2026_04_09_000004_add_unique_id_to_blog_categories_table', 57);
 
 -- --------------------------------------------------------
 
@@ -775,14 +761,9 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `stock`, `last_restock_qty`, `sku`, `thumbnail`, `current_price`, `previous_price`, `flash_sale_status`, `flash_sale_price`, `flash_sale_start_at`, `flash_sale_end_at`, `type`, `file_type`, `download_link`, `download_file`, `status`, `featured`, `rating`, `created_at`, `updated_at`, `order`, `has_variants`) VALUES
-(50, 100, 100, '1111111', '69a1ced3db594.png', 99.99, 120.99, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-02-27 11:05:23', '2026-03-07 10:33:18', 0, 0),
-(51, 0, 0, NULL, '69a1cfd5bc6cc.png', 0.00, NULL, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-02-27 11:09:41', '2026-03-07 10:33:17', 0, 1),
-(52, 0, 0, NULL, '69a1d0e6b4237.png', 0.00, NULL, 1, 20.00, '2026-03-27 16:36:00', '2026-09-08 16:36:00', 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-02-27 11:14:14', '2026-03-28 11:35:27', 0, 1),
-(53, 0, 0, NULL, '69a1d1bc06f73.png', 0.00, NULL, 1, 18.00, '2026-03-27 04:00:00', '2026-09-09 04:00:00', 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-02-27 11:17:48', '2026-03-28 11:35:34', 0, 1),
-(54, 0, 0, NULL, '69ac500560dd7.jpg', 0.00, NULL, 1, 30.00, '2026-03-27 16:35:00', '2026-08-12 16:35:00', 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-03-07 10:19:17', '2026-03-28 11:18:47', 0, 1),
-(55, 0, 0, NULL, '69d4dcc306d83.jpg', 0.00, NULL, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-04-07 04:30:27', '2026-04-07 09:20:40', 0, 1),
-(56, 0, 0, NULL, '69d4ea4caa7c3.jpg', 0.00, NULL, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-04-07 05:28:12', '2026-04-07 09:20:39', 0, 1),
-(57, 0, 0, NULL, '69d53d61204b7.webp', 0.00, NULL, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 0, NULL, '2026-04-07 05:43:53', '2026-04-07 11:22:41', 0, 1);
+(55, 0, 0, NULL, '69d4dcc306d83.jpg', 0.00, NULL, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-04-07 04:30:27', '2026-04-09 11:01:50', 0, 1),
+(56, 0, 0, NULL, '69d4ea4caa7c3.jpg', 0.00, NULL, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-04-07 05:28:12', '2026-04-09 11:01:49', 0, 1),
+(57, 0, 0, NULL, '69d53d61204b7.webp', 0.00, NULL, 0, NULL, NULL, NULL, 'Physical', NULL, NULL, NULL, 1, 1, NULL, '2026-04-07 05:43:53', '2026-04-09 11:01:46', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -793,6 +774,7 @@ INSERT INTO `products` (`id`, `stock`, `last_restock_qty`, `sku`, `thumbnail`, `
 CREATE TABLE `product_categories` (
   `id` bigint UNSIGNED NOT NULL,
   `language_id` bigint DEFAULT NULL,
+  `unique_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -806,26 +788,14 @@ CREATE TABLE `product_categories` (
 -- Dumping data for table `product_categories`
 --
 
-INSERT INTO `product_categories` (`id`, `language_id`, `name`, `slug`, `icon`, `serial_number`, `status`, `created_at`, `updated_at`) VALUES
-(10, 5, 'Beverages', 'beverages', NULL, 1, 1, '2025-01-27 11:52:27', '2025-11-28 11:58:14'),
-(11, 5, 'Desserts', 'desserts', NULL, 2, 1, '2025-01-27 11:52:42', '2025-11-28 11:58:22'),
-(13, 5, 'Main Course', 'main-course', NULL, 3, 1, '2025-11-28 11:58:32', '2025-11-28 11:58:32'),
-(20, 7, 'Electronics', 'electronics-bn', NULL, 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47'),
-(21, 7, 'Fashion', 'fashion-bn', NULL, 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47'),
-(22, 7, 'Grocery', 'grocery-bn', NULL, 0, 1, '2026-02-07 11:33:47', '2026-02-07 11:33:47'),
-(23, 6, 'Tv & Audio', 'tv-&-audio', 'fas fa-tv', 1, 1, '2026-02-27 11:03:42', '2026-03-29 10:11:35'),
-(24, 6, 'Media Production', 'media-production', 'fas fa-camera', 2, 1, '2026-02-27 11:03:51', '2026-03-29 10:11:35'),
-(25, 6, 'Mobile Device', 'mobile-device', 'fas fa-mobile', 3, 1, '2026-02-27 11:04:08', '2026-03-29 10:11:36'),
-(26, 6, 'Home Appliances', 'home-appliances', 'fas fa-utensils', 4, 1, '2026-02-27 11:04:19', '2026-03-29 10:11:36'),
-(27, 6, 'Pure Spices', 'pure-spices', 'fas fa-h-square', 5, 1, '2026-02-27 11:11:59', '2026-03-29 10:11:36'),
-(28, 6, 'Sportswear', 'sportswear', 'fas fa-bolt', 6, 1, '2026-02-27 11:15:08', '2026-03-29 10:11:37'),
-(29, 8, 'প্রাকৃতিক খাবার', 'প্রাকৃতিক-খাবার', 'fas fa-seedling', 1, 1, '2026-04-06 23:14:13', '2026-04-07 04:15:02'),
-(30, 8, 'তেল ও ঘি', 'তেল-ও-ঘি', 'fas fa-balance-scale', 2, 1, '2026-04-06 23:15:52', '2026-04-07 04:15:08'),
-(31, 8, 'চাল ও ডাল', 'চাল-ও-ডাল', 'fas fa-seedling', 3, 1, '2026-04-06 23:16:18', '2026-04-07 04:15:18'),
-(32, 8, 'মসলা', 'মসলা', 'fas fa-seedling', 4, 1, '2026-04-06 23:16:43', '2026-04-07 04:15:27'),
-(33, 8, 'তাজা পণ্য', 'তাজা-পণ্য', 'fas fa-seedling', 5, 1, '2026-04-06 23:17:10', '2026-04-07 04:15:34'),
-(34, 8, 'স্বাস্থ্যকর স্ন্যাকস', 'স্বাস্থ্যকর-স্ন্যাকস', 'fas fa-seedling', 6, 1, '2026-04-06 23:17:51', '2026-04-07 04:15:46'),
-(35, 8, 'দুধ ও দুগ্ধজাত', 'দুধ-ও-দুগ্ধজাত', 'fas fa-seedling', 7, 1, '2026-04-06 23:19:05', '2026-04-07 04:16:04');
+INSERT INTO `product_categories` (`id`, `language_id`, `unique_id`, `name`, `slug`, `icon`, `serial_number`, `status`, `created_at`, `updated_at`) VALUES
+(47, 8, 'pc_69d7f0b9af0cf', 'দুধ ও দুগ্ধজাত', 'দুধ-ও-দুগ্ধজাত', 'fas fa-seedling', 1, 1, '2026-04-09 12:32:25', '2026-04-09 12:33:15'),
+(49, 8, 'pc_69d7f0c14cc74', 'স্বাস্থ্যকর স্ন্যাকস', 'স্বাস্থ্যকর-স্ন্যাকস', 'fas fa-seedling', 2, 1, '2026-04-09 12:32:33', '2026-04-09 12:32:33'),
+(51, 8, 'pc_69d7f0c93f761', 'তাজা পণ্য', 'তাজা-পণ্য', 'fas fa-seedling', 3, 1, '2026-04-09 12:32:41', '2026-04-09 12:33:15'),
+(53, 8, 'pc_69d7f0d12f484', 'মসলা', 'মসলা', 'fas fa-seedling', 4, 1, '2026-04-09 12:32:49', '2026-04-09 12:33:16'),
+(55, 8, 'pc_69d7f0d90fb59', 'চাল ও ডাল', 'চাল-ও-ডাল', 'fas fa-seedling', 5, 1, '2026-04-09 12:32:57', '2026-04-09 12:33:19'),
+(57, 8, 'pc_69d7f0e2ca050', 'তেল ও ঘি', 'তেল-ও-ঘি', 'fas fa-seedling', 6, 1, '2026-04-09 12:33:06', '2026-04-09 12:33:19'),
+(59, 8, 'pc_69d7f0ea09e1c', 'প্রাকৃতিক খাবার', 'প্রাকৃতিক-খাবার', 'fas fa-seedling', 7, 1, '2026-04-09 12:33:14', '2026-04-09 12:33:20');
 
 -- --------------------------------------------------------
 
@@ -854,15 +824,9 @@ CREATE TABLE `product_contents` (
 --
 
 INSERT INTO `product_contents` (`id`, `language_id`, `product_id`, `category_id`, `subcategory_id`, `title`, `slug`, `summary`, `description`, `meta_keywords`, `meta_description`, `created_at`, `updated_at`) VALUES
-(66, 6, 50, 23, NULL, 'UltraVision Pro 27-Inch Full HD LED Monitor with Adaptive Sync and Eye-Care Technology', 'ultravision-pro-27-inch-full-hd-led-monitor-with-adaptive-sync-and-eye-care-technology', 'Transform your viewing experience with the UltraVision Pro 27-Inch Full HD LED Monitor. Featuring stunning visuals, adaptive sync, and eye-care technology, it delivers smooth, flicker-free performance—perfect for work, gaming, and entertainment.', '<p>Immerse yourself in crystal-clear visuals with the UltraVision Pro 27-Inch Full HD LED Monitor. Designed for ultimate performance, it offers vibrant colors, sharp details, and a 75Hz refresh rate, ensuring smooth motion and reduced lag. Adaptive Sync technology eliminates screen tearing, providing a seamless experience for gamers and creatives alike.</p>\r\n<p>The monitor\'s advanced Eye-Care technology reduces blue light emissions and flickering, minimizing eye strain during extended use. Its sleek, frameless design maximizes screen space, making it a stylish addition to any workspace or gaming setup. Multiple connectivity options, including HDMI and VGA ports, ensure compatibility with various devices.</p>', NULL, NULL, '2026-02-27 11:05:23', '2026-02-27 11:05:41'),
-(67, 6, 51, 23, NULL, '55\" 4K Smart LED TV with HDR and Voice Control', '55\"-4k-smart-led-tv-with-hdr-and-voice-control', 'A sleek 55\" 4K Smart LED TV featuring HDR technology and voice control. Enjoy stunning visuals, smart apps, and seamless streaming for an ultimate viewing experience.', '<div class=\"product-single-tab pt-70\">\r\n<div class=\"tab-content radius-lg\">\r\n<div id=\"desc\" class=\"tab-pane fade active show\">\r\n<div class=\"tab-description\">\r\n<div class=\"row align-items-center\">\r\n<div class=\"col-md-12\">\r\n<div class=\"content mb-30 tinymce-content\">\r\n<div class=\"tab-pane fade active show\">\r\n<div class=\"tab-description\">\r\n<div class=\"row align-items-center\">\r\n<div class=\"col-md-12\">\r\n<div class=\"content mb-30 summernote-content\">\r\n<div class=\"tab-pane fade active show\">\r\n<div class=\"tab-description\">\r\n<div class=\"row align-items-center\">\r\n<div class=\"col-md-12\">\r\n<div class=\"content mb-30 summernote-content\">\r\n<p>Experience true-to-life picture quality with the 55\" 4K Smart LED TV. Equipped with HDR technology, this TV delivers stunning contrast, vivid colors, and sharp detail, bringing your favorite movies and shows to life. The built-in smart platform gives you access to popular streaming apps like Netflix, YouTube, and Prime Video. Integrated voice control lets you navigate effortlessly, while multiple HDMI and USB ports ensure easy connectivity with other devices. Its slim, modern design enhances any living space, providing both elegance and entertainment. Perfect for families, gamers, and movie enthusiasts.</p>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>\r\n</div>', NULL, NULL, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(68, 6, 52, 27, NULL, 'Spicy Chili Powder – Bold, Fiery Heat for Your Dishes', 'spicy-chili-powder-–-bold-fiery-heat-for-your-dishes', 'Add a fiery kick to your meals with our Chili Powder. This aromatic, hot spice is perfect for seasoning curries, soups, sauces, marinades, and more. With a rich, vibrant flavor, it\'s the ideal ingredient for anyone who loves heat and bold flavors in their cooking.', '<p>Our&nbsp;<strong>Chili Powder</strong>&nbsp;is crafted from the finest dried chili peppers, ground into a smooth powder that retains all the bold, spicy heat you crave. It&rsquo;s perfect for spicing up your curries, soups, stews, and sauces, and works wonderfully in marinades, dressings, and even for sprinkling on roasted vegetables.</p>\r\n<p>With its vibrant red color and rich, intense heat, this&nbsp;<strong>Chili Powder</strong>&nbsp;adds not only spice but depth and complexity to your dishes. Whether you\'re making a traditional chili, adding heat to a Tex-Mex dish, or giving your homemade sauces a fiery boost, this powder is a must-have for any kitchen.</p>\r\n<p><strong>Why Choose Our Chili Powder?</strong></p>\r\n<ul>\r\n<li><strong>Rich, Fiery Heat:</strong>&nbsp;Made from carefully selected chili peppers, it brings bold and intense heat to your meals.</li>\r\n<li><strong>Versatile Spice:</strong>&nbsp;Perfect for a variety of dishes, from curries to marinades, sauces, and more.</li>\r\n<li><strong>No Artificial Additives:</strong>&nbsp;Free from preservatives and artificial colors&mdash;just pure, natural chili flavor.</li>\r\n<li><strong>Easy to Use:</strong>&nbsp;The finely ground powder easily dissolves into your dishes, giving you the perfect balance of heat and flavor every time.</li>\r\n</ul>\r\n<p><strong>Key Features:</strong></p>\r\n<ul>\r\n<li><strong>Made from High-Quality Chili Peppers:</strong>&nbsp;Ground into a fine powder to preserve flavor and heat.</li>\r\n<li><strong>Versatile for Cooking:</strong>&nbsp;Ideal for curries, soups, stews, sauces, marinades, and dressings.</li>\r\n<li><strong>Natural and Pure:</strong>&nbsp;Contains no artificial preservatives or colorants.</li>\r\n<li><strong>Bold and Aromatic:</strong>&nbsp;Adds intense heat and depth to your dishes.</li>\r\n</ul>', NULL, NULL, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(69, 6, 53, 28, NULL, 'Adidas Ultraboost 22 Performance Gym Shoes', 'adidas-ultraboost-22-performance-gym-shoes', 'The Adidas Ultraboost 22 Performance Gym Shoes are engineered for maximum comfort and performance, featuring a responsive Boost midsole and breathable mesh upper. Perfect for both gym workouts and outdoor activities, these shoes provide the support and flexibility you need to stay at the top of your game.', '<p>The&nbsp;<strong>Adidas Ultraboost 22 Performance Gym Shoes</strong>&nbsp;are designed to help you perform at your best, no matter the workout. The signature Boost midsole technology offers superior cushioning and energy return with every step, providing a responsive feel that helps you power through intense sessions. The breathable mesh upper enhances airflow, keeping your feet cool and dry during even the toughest workouts.</p>\r\n<p>These shoes feature a durable rubber outsole with a grippy pattern, providing excellent traction on a variety of surfaces. Whether you\'re lifting, running, or doing agility drills, the&nbsp;<strong>Ultraboost 22</strong>&nbsp;ensures stability and support, giving you the confidence to push yourself further. The sleek, modern design with reflective details also adds a stylish touch, making these shoes perfect for both the gym and casual wear.</p>\r\n<p>Available in a range of colors, the&nbsp;<strong>Adidas Ultraboost 22 Gym Shoes</strong>&nbsp;combine performance with comfort and style, making them an essential addition to any fitness enthusiast\'s collection.</p>', NULL, NULL, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(70, 6, 54, 28, NULL, 'প্রিমিয়াম ঘি (Ghee)', 'প্রিমিয়াম-ঘি-(ghee)', 'খাঁটি গরুর দুধ থেকে তৈরি আমাদের ঘি, যা আপনার প্রতিদিনের রান্না ও খাবারে যোগ করবে বিশেষ স্বাদ ও পুষ্টিগুণ। আপনার নিত্যদিনের খাবারের স্বাদ বাড়ানোর জন্য হতে পারে সেরা পছন্দ।', '<p>খাঁটি গরুর দুধ থেকে তৈরি ঘি, যা আপনার প্রতিদিনের রান্না ও খাবারে যোগ করবে বিশেষ স্বাদ ও পুষ্টিগুণ। আমাদের ঘি সম্পূর্ণ প্রাকৃতিক এবং কোনো প্রকার কৃত্রিম উপাদান ছাড়া তৈরি। এটি আপনার নিত্যদিনের খাবারের স্বাদ বাড়ানোর জন্য হতে পারে সেরা পছন্দ।</p>\r\n<p>&nbsp;</p>\r\n<h2>ঘি এর উপকারিতা:</h2>\r\n<p>১.&nbsp;ঘি হজম প্রক্রিয়া উন্নত করে এবং অন্ত্রের স্বাস্থ্য ভালো রাখতে সহায়তা করে।</p>\r\n<p>২.&nbsp;ঘি ত্বকের আর্দ্রতা ধরে রাখে এবং উজ্জ্বলতা বাড়ায়।</p>\r\n<p>৩.&nbsp;ঘি শরীরকে তাৎক্ষণিক শক্তি প্রদান করে এবং দীর্ঘস্থায়ী এনার্জি ধরে রাখতে সহায়তা করে।</p>\r\n<p>৪.&nbsp;ঘি-তে থাকা ভিটামিন এ, ডি, ই, এবং কে রোগ প্রতিরোধ ক্ষমতা বাড়ায়।</p>\r\n<p>৫.&nbsp;পরিমিত পরিমাণে ঘি সেবন হার্টের জন্য উপকারী।</p>\r\n<p>৬.&nbsp;ঘি-তে থাকা স্বাস্থ্যকর ফ্যাট মস্তিষ্কের কার্যক্ষমতা বাড়াতে সাহায্য করে ।</p>\r\n<p>৭.&nbsp;ঘি শরীরের জয়েন্টের প্রদাহ কমায় এবং ব্যথা উপশমে সহায়তা করে।</p>\r\n<p>৮.&nbsp;ঘি-তে থাকা স্বাস্থ্যকর ফ্যাট মেটাবলিজম বাড়িয়ে ওজন নিয়ন্ত্রণে রাখে।</p>\r\n<p>৯.&nbsp;ঘি-তে থাকা অ্যান্টিঅক্সিডেন্ট শরীর থেকে বিষাক্ত পদার্থ বের করতে সহায়তা করে।</p>\r\n<p>১০.&nbsp;ঘি যে কোনো খাবারের স্বাদ ও গন্ধ বাড়িয়ে তোলে।</p>\r\n<p>&nbsp;</p>\r\n<h2>কেন ফালাক ফুডের ঘি অনন্য?</h2>\r\n<p>১. খাটি গরুর দুধ থেকে তৈরি।<br>২.আসল স্বাদ ও পুষ্টি ধরে রাখে ।<br>৩. খাবারে যোগ করে বাড়তি স্বাদ।<br>৪. ভিটামিন এ, ডি, ই, এবং কে সমৃদ্ধ।<br>৫.মান ও বিশুদ্ধতা নিশ্চিত করে ।<br>৬. কোনো রাসায়নিক উপাদান নেই।<br>৭. রান্না, ভাজা ও মিষ্টিতে ব্যবহার উপযোগী।</p>\r\n<p>&nbsp;</p>\r\n<p>Pure ghee from fresh cow&rsquo;s milk, is ideal for cooking or adding a rich, traditional flavor to your meals. It&rsquo;s natural, free from additives, and perfect for everyday use.</p>\r\n<p>&nbsp;</p>\r\n<h2>Benefits of Ghee:</h2>\r\n<ol>\r\n<li aria-level=\"1\">Loaded with essential vitamins A, D, E, and K for overall health.</li>\r\n<li aria-level=\"1\">It contains beneficial fats that provide energy and support brain function.</li>\r\n<li aria-level=\"1\">Packed with antioxidants to strengthen the immune system.</li>\r\n<li aria-level=\"1\">Vitamin D helps calcium absorption for stronger bones.</li>\r\n<li aria-level=\"1\">Contains butyric acid, which promotes a healthy gut.</li>\r\n<li aria-level=\"1\">Keeps skin hydrated and nourished from within.</li>\r\n<li aria-level=\"1\">Helps reduce joint pain and inflammation.</li>\r\n<li aria-level=\"1\">Stimulates metabolism and aids in fat breakdown.</li>\r\n<li aria-level=\"1\">Provides sustained energy without unhealthy additives.</li>\r\n<li aria-level=\"1\">In moderation, it may support healthy cholesterol levels.</li>\r\n</ol>\r\n<p>&nbsp;</p>\r\n<h2>Choose Pure Ghee at the Best Prices</h2>\r\n<ol>\r\n<li aria-level=\"1\">&nbsp;Made from high-quality cow&rsquo;s milk without additives or preservatives.</li>\r\n<li aria-level=\"1\">Retains authentic taste and nutritional value.</li>\r\n<li aria-level=\"1\">Enhances the taste of any dish effortlessly.</li>\r\n<li aria-level=\"1\">Packed with essential vitamins like A, D, E, and K.</li>\r\n<li aria-level=\"1\">Ensures purity and premium quality in every jar.</li>\r\n<li aria-level=\"1\">No hydrogenated oils or harmful chemicals are used.</li>\r\n<li aria-level=\"1\">Perfect for cooking, frying, baking, or adding flavor.</li>\r\n</ol>', NULL, NULL, '2026-03-07 10:19:17', '2026-03-07 10:19:17'),
-(71, 7, 54, 22, NULL, 'প্রিমিয়াম ঘি (Ghee)', 'প্রিমিয়াম-ঘি-(ghee)', 'খাঁটি গরুর দুধ থেকে তৈরি আমাদের ঘি, যা আপনার প্রতিদিনের রান্না ও খাবারে যোগ করবে বিশেষ স্বাদ ও পুষ্টিগুণ। আপনার নিত্যদিনের খাবারের স্বাদ বাড়ানোর জন্য হতে পারে সেরা পছন্দ।', '<p>খাঁটি গরুর দুধ থেকে তৈরি ঘি, যা আপনার প্রতিদিনের রান্না ও খাবারে যোগ করবে বিশেষ স্বাদ ও পুষ্টিগুণ। আমাদের ঘি সম্পূর্ণ প্রাকৃতিক এবং কোনো প্রকার কৃত্রিম উপাদান ছাড়া তৈরি। এটি আপনার নিত্যদিনের খাবারের স্বাদ বাড়ানোর জন্য হতে পারে সেরা পছন্দ।</p>\r\n<p>&nbsp;</p>\r\n<h2>ঘি এর উপকারিতা:</h2>\r\n<p>১.&nbsp;ঘি হজম প্রক্রিয়া উন্নত করে এবং অন্ত্রের স্বাস্থ্য ভালো রাখতে সহায়তা করে।</p>\r\n<p>২.&nbsp;ঘি ত্বকের আর্দ্রতা ধরে রাখে এবং উজ্জ্বলতা বাড়ায়।</p>\r\n<p>৩.&nbsp;ঘি শরীরকে তাৎক্ষণিক শক্তি প্রদান করে এবং দীর্ঘস্থায়ী এনার্জি ধরে রাখতে সহায়তা করে।</p>\r\n<p>৪.&nbsp;ঘি-তে থাকা ভিটামিন এ, ডি, ই, এবং কে রোগ প্রতিরোধ ক্ষমতা বাড়ায়।</p>\r\n<p>৫.&nbsp;পরিমিত পরিমাণে ঘি সেবন হার্টের জন্য উপকারী।</p>\r\n<p>৬.&nbsp;ঘি-তে থাকা স্বাস্থ্যকর ফ্যাট মস্তিষ্কের কার্যক্ষমতা বাড়াতে সাহায্য করে ।</p>\r\n<p>৭.&nbsp;ঘি শরীরের জয়েন্টের প্রদাহ কমায় এবং ব্যথা উপশমে সহায়তা করে।</p>\r\n<p>৮.&nbsp;ঘি-তে থাকা স্বাস্থ্যকর ফ্যাট মেটাবলিজম বাড়িয়ে ওজন নিয়ন্ত্রণে রাখে।</p>\r\n<p>৯.&nbsp;ঘি-তে থাকা অ্যান্টিঅক্সিডেন্ট শরীর থেকে বিষাক্ত পদার্থ বের করতে সহায়তা করে।</p>\r\n<p>১০.&nbsp;ঘি যে কোনো খাবারের স্বাদ ও গন্ধ বাড়িয়ে তোলে।</p>\r\n<p>&nbsp;</p>\r\n<h2>কেন ফালাক ফুডের ঘি অনন্য?</h2>\r\n<p>১. খাটি গরুর দুধ থেকে তৈরি।<br>২.আসল স্বাদ ও পুষ্টি ধরে রাখে ।<br>৩. খাবারে যোগ করে বাড়তি স্বাদ।<br>৪. ভিটামিন এ, ডি, ই, এবং কে সমৃদ্ধ।<br>৫.মান ও বিশুদ্ধতা নিশ্চিত করে ।<br>৬. কোনো রাসায়নিক উপাদান নেই।<br>৭. রান্না, ভাজা ও মিষ্টিতে ব্যবহার উপযোগী।</p>\r\n<p>&nbsp;</p>\r\n<p>Pure ghee from fresh cow&rsquo;s milk, is ideal for cooking or adding a rich, traditional flavor to your meals. It&rsquo;s natural, free from additives, and perfect for everyday use.</p>\r\n<p>&nbsp;</p>\r\n<h2>Benefits of Ghee:</h2>\r\n<ol>\r\n<li aria-level=\"1\">Loaded with essential vitamins A, D, E, and K for overall health.</li>\r\n<li aria-level=\"1\">It contains beneficial fats that provide energy and support brain function.</li>\r\n<li aria-level=\"1\">Packed with antioxidants to strengthen the immune system.</li>\r\n<li aria-level=\"1\">Vitamin D helps calcium absorption for stronger bones.</li>\r\n<li aria-level=\"1\">Contains butyric acid, which promotes a healthy gut.</li>\r\n<li aria-level=\"1\">Keeps skin hydrated and nourished from within.</li>\r\n<li aria-level=\"1\">Helps reduce joint pain and inflammation.</li>\r\n<li aria-level=\"1\">Stimulates metabolism and aids in fat breakdown.</li>\r\n<li aria-level=\"1\">Provides sustained energy without unhealthy additives.</li>\r\n<li aria-level=\"1\">In moderation, it may support healthy cholesterol levels.</li>\r\n</ol>\r\n<p>&nbsp;</p>\r\n<h2>Choose Pure Ghee at the Best Prices</h2>\r\n<ol>\r\n<li aria-level=\"1\">&nbsp;Made from high-quality cow&rsquo;s milk without additives or preservatives.</li>\r\n<li aria-level=\"1\">Retains authentic taste and nutritional value.</li>\r\n<li aria-level=\"1\">Enhances the taste of any dish effortlessly.</li>\r\n<li aria-level=\"1\">Packed with essential vitamins like A, D, E, and K.</li>\r\n<li aria-level=\"1\">Ensures purity and premium quality in every jar.</li>\r\n<li aria-level=\"1\">No hydrogenated oils or harmful chemicals are used.</li>\r\n<li aria-level=\"1\">Perfect for cooking, frying, baking, or adding flavor.</li>\r\n</ol>', NULL, NULL, '2026-03-07 10:19:17', '2026-03-07 10:19:17'),
-(72, 8, 55, 29, NULL, 'সুন্দরবনের খাঁটি মধু | ১০০% প্রাকৃতিক অরিজিনাল হানি | Raw Sundarbans Honey Bangladesh', 'সুন্দরবনের-খাঁটি-মধু-|-১০০%-প্রাকৃতিক-অরিজিনাল-হানি-|-raw-sundarbans-honey-bangladesh', 'সরাসরি সুন্দরবন থেকে সংগ্রহ করা ১০০% খাঁটি ও প্রাকৃতিক মধু। কোনো ভেজাল বা কেমিক্যাল নেই। স্বাস্থ্যকর, পুষ্টিকর ও ইমিউনিটি বৃদ্ধিতে সহায়ক।', '<h3 data-section-id=\"1ym1jup\" data-start=\"501\" data-end=\"552\">🌿 সুন্দরবনের খাঁটি মধু &ndash; প্রকৃতির সেরা উপহার</h3>\r\n<p data-start=\"553\" data-end=\"693\">আমাদের এই মধু সরাসরি <strong data-start=\"574\" data-end=\"615\"><span class=\"hover:entity-accent entity-underline inline cursor-pointer align-baseline\"><span class=\"whitespace-normal\">Sundarbans</span></span></strong> থেকে সংগ্রহ করা হয়, যেখানে মৌয়ালরা প্রাকৃতিক উপায়ে মৌচাক থেকে মধু সংগ্রহ করে।</p>\r\n<h3 data-section-id=\"qynqp6\" data-start=\"695\" data-end=\"723\">🍯 কেন আমাদের মধু বিশেষ?</h3>\r\n<ul data-start=\"724\" data-end=\"870\">\r\n<li data-section-id=\"drkvt7\" data-start=\"724\" data-end=\"760\">✅ ১০০% খাঁটি ও কাঁচা (Raw Honey)</li>\r\n<li data-section-id=\"vmxpb1\" data-start=\"761\" data-end=\"799\">✅ কোনো চিনি বা কেমিক্যাল মেশানো নয়</li>\r\n<li data-section-id=\"pplx5r\" data-start=\"800\" data-end=\"829\">✅ প্রাকৃতিকভাবে সংগ্রহকৃত</li>\r\n<li data-section-id=\"ow0idg\" data-start=\"830\" data-end=\"870\">✅ সম্পূর্ণ অর্গানিক ও স্বাস্থ্যসম্মত</li>\r\n</ul>\r\n<h3 data-section-id=\"ryt17d\" data-start=\"872\" data-end=\"897\">💪 স্বাস্থ্য উপকারিতা</h3>\r\n<ul data-start=\"898\" data-end=\"1011\">\r\n<li data-section-id=\"1ysrc52\" data-start=\"898\" data-end=\"929\">ইমিউন সিস্টেম শক্তিশালী করে</li>\r\n<li data-section-id=\"itufv7\" data-start=\"930\" data-end=\"962\">সর্দি-কাশি কমাতে সাহায্য করে</li>\r\n<li data-section-id=\"1w6gyqh\" data-start=\"963\" data-end=\"982\">হজম শক্তি বাড়ায়</li>\r\n<li data-section-id=\"16mneqi\" data-start=\"983\" data-end=\"1011\">শক্তি ও পুষ্টির ভালো উৎস</li>\r\n</ul>\r\n<h3 data-section-id=\"1pmx6vf\" data-start=\"1013\" data-end=\"1036\">📦 পণ্যের বৈশিষ্ট্য</h3>\r\n<ul data-start=\"1037\" data-end=\"1139\">\r\n<li data-section-id=\"vjsrdv\" data-start=\"1037\" data-end=\"1058\">উৎপত্তি: সুন্দরবন</li>\r\n<li data-section-id=\"jmt4zq\" data-start=\"1059\" data-end=\"1085\">ধরণ: Raw Natural Honey</li>\r\n<li data-section-id=\"1qc57c7\" data-start=\"1086\" data-end=\"1104\">রঙ: গাঢ় সোনালি</li>\r\n<li data-section-id=\"1nipjv3\" data-start=\"1105\" data-end=\"1139\">স্বাদ: প্রাকৃতিক ও সুগন্ধযুক্ত</li>\r\n</ul>\r\n<h3 data-section-id=\"vyhqt2\" data-start=\"1141\" data-end=\"1156\">🚚 ডেলিভারি</h3>\r\n<p data-start=\"1157\" data-end=\"1202\">বাংলাদেশের যেকোনো জায়গায় হোম ডেলিভারি সুবিধা।</p>', '[\"asdfasdf\"]', 'সুন্দরবনের খাঁটি মধু (Raw Honey) অনলাইনে কিনুন। ১০০% প্রাকৃতিক ও ভেজালমুক্ত মধু, ইমিউনিটি বাড়ায় ও স্বাস্থ্য ভালো রাখে। সারা বাংলাদেশে দ্রুত ডেলিভারি।', '2026-04-07 04:30:27', '2026-04-07 11:04:24'),
-(73, 8, 56, 29, NULL, 'শরিষা ফুলের খাঁটি মধু | ১০০% প্রাকৃতিক সরিষা হানি | ঘরের স্বাদ', 'শরিষা-ফুলের-খাঁটি-মধু-|-১০০%-প্রাকৃতিক-সরিষা-হানি-|-ঘরের-স্বাদ', 'ঘরের স্বাদের খাঁটি শরিষা ফুলের মধু – সরাসরি মৌচাক থেকে সংগ্রহ করা ১০০% বিশুদ্ধ ও প্রাকৃতিক। রোগ প্রতিরোধ ক্ষমতা বাড়াতে ও প্রতিদিনের সুস্থতায় আদর্শ।', '<p data-start=\"487\" data-end=\"698\">ঘরের স্বাদ নিয়ে এলো প্রিমিয়াম মানের <strong data-start=\"523\" data-end=\"548\">শরিষা ফুলের খাঁটি মধু</strong>, যা সংগ্রহ করা হয়েছে সরিষা ফুলের মৌসুমে মৌমাছির প্রাকৃতিক উৎস থেকে। কোনো ধরনের কেমিক্যাল, চিনি বা ভেজাল মিশ্রণ ছাড়া এই মধু সম্পূর্ণ বিশুদ্ধ ও নিরাপদ।</p>\r\n<h3 data-section-id=\"1oaym1r\" data-start=\"700\" data-end=\"739\">🌼 কেন আমাদের শরিষা মধু বেছে নিবেন?</h3>\r\n<p data-start=\"740\" data-end=\"891\">✔ ১০০% খাঁটি ও প্রাকৃতিক<br data-start=\"764\" data-end=\"767\">✔ সরিষা ফুলের ন্যাচারাল ফ্লেভার ও সুগন্ধ<br data-start=\"807\" data-end=\"810\">✔ কোনো প্রিজারভেটিভ বা কৃত্রিম উপাদান নেই<br data-start=\"851\" data-end=\"854\">✔ স্বাস্থ্যসম্মত ও পুষ্টিগুণে ভরপুর</p>\r\n<h3 data-section-id=\"2gbthb\" data-start=\"893\" data-end=\"920\">🍯 পুষ্টিগুণ ও উপকারিতা</h3>\r\n<ul data-start=\"921\" data-end=\"1063\">\r\n<li data-section-id=\"1m6mzkh\" data-start=\"921\" data-end=\"955\">রোগ প্রতিরোধ ক্ষমতা বৃদ্ধি করে</li>\r\n<li data-section-id=\"1ujbuip\" data-start=\"956\" data-end=\"990\">সর্দি-কাশি ও গলা ব্যথায় উপকারী</li>\r\n<li data-section-id=\"1s611ec\" data-start=\"991\" data-end=\"1014\">হজম শক্তি উন্নত করে</li>\r\n<li data-section-id=\"1siar0e\" data-start=\"1015\" data-end=\"1036\">শরীরে শক্তি যোগায়</li>\r\n<li data-section-id=\"e3dvux\" data-start=\"1037\" data-end=\"1063\">ত্বক ও চুলের জন্য ভালো</li>\r\n</ul>\r\n<h3 data-section-id=\"kf62fa\" data-start=\"1065\" data-end=\"1086\">📦 সংরক্ষণ পদ্ধতি</h3>\r\n<p data-start=\"1087\" data-end=\"1141\">ঠাণ্ডা ও শুকনো স্থানে রাখুন। ফ্রিজে রাখার প্রয়োজন নেই।</p>\r\n<h3 data-section-id=\"con7t3\" data-start=\"1143\" data-end=\"1157\">⚠️ সতর্কতা</h3>\r\n<p data-start=\"1158\" data-end=\"1203\">১ বছরের কম বয়সী শিশুদের জন্য মধু প্রযোজ্য নয়।</p>', NULL, 'ঘরের স্বাদের ১০০% খাঁটি শরিষা ফুলের মধু কিনুন অনলাইনে। প্রাকৃতিক, ভেজালমুক্ত ও স্বাস্থ্যকর সরিষা মধু এখন সহজেই আপনার দোরগোড়ায়।', '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
-(74, 8, 57, 29, 1, 'কালোজিরা ফুলের মধু | খাঁটি প্রাকৃতিক মধু অনলাইনে কিনুন | Ghorer Shad', 'কালোজিরা-ফুলের-মধু-|-খাঁটি-প্রাকৃতিক-মধু-অনলাইনে-কিনুন-|-ghorer-shad', 'খাঁটি কালোজিরা ফুলের মধু সরাসরি প্রাকৃতিক উৎস থেকে সংগ্রহ করা। রোগ প্রতিরোধ ক্ষমতা বাড়াতে, হজমে সহায়ক এবং দৈনন্দিন স্বাস্থ্য রক্ষায় উপকারী। এখনই অনলাইনে অর্ডার করুন ঘরের স্বাদ থেকে।', '<h3 data-section-id=\"1w289bm\" data-start=\"559\" data-end=\"610\">🟡 কালোজিরা ফুলের মধু &ndash; প্রকৃতির এক অনন্য উপহার</h3>\r\n<p data-start=\"612\" data-end=\"778\">কালোজিরা ফুলের মধু একটি অত্যন্ত পুষ্টিকর ও ঔষধি গুণসম্পন্ন প্রাকৃতিক মধু। এটি মৌমাছি দ্বারা কালোজিরা ফুল থেকে সংগ্রহ করা হয়, যা স্বাদে হালকা ঝাঁঝালো এবং ঘ্রাণে অনন্য।</p>\r\n<h3 data-section-id=\"1awfawj\" data-start=\"780\" data-end=\"816\">🌿 কেন কালোজিরা ফুলের মধু খাবেন?</h3>\r\n<p data-start=\"818\" data-end=\"987\">✔ রোগ প্রতিরোধ ক্ষমতা বৃদ্ধি করে<br data-start=\"850\" data-end=\"853\">✔ সর্দি-কাশি ও গলা ব্যথা কমাতে সাহায্য করে<br data-start=\"895\" data-end=\"898\">✔ হজম শক্তি উন্নত করে<br data-start=\"919\" data-end=\"922\">✔ শরীরকে প্রাকৃতিকভাবে শক্তি জোগায়<br data-start=\"956\" data-end=\"959\">✔ ত্বক ও চুলের জন্য উপকারী</p>\r\n<h3 data-section-id=\"kxayn7\" data-start=\"989\" data-end=\"1012\">🍯 পণ্যের বৈশিষ্ট্য</h3>\r\n<ul data-start=\"1014\" data-end=\"1143\">\r\n<li data-section-id=\"vw97lt\" data-start=\"1014\" data-end=\"1040\">১০০% খাঁটি ও প্রাকৃতিক</li>\r\n<li data-section-id=\"6ivniy\" data-start=\"1041\" data-end=\"1081\">কোনো প্রকার ভেজাল বা কেমিক্যাল মুক্ত</li>\r\n<li data-section-id=\"uxavpt\" data-start=\"1082\" data-end=\"1114\">সরাসরি গ্রাম থেকে সংগ্রহ করা</li>\r\n<li data-section-id=\"1yrlw15\" data-start=\"1115\" data-end=\"1143\">স্বাস্থ্যসম্মত প্যাকেজিং</li>\r\n</ul>\r\n<h3 data-section-id=\"1ndoabd\" data-start=\"1145\" data-end=\"1166\">📦 ব্যবহারের নিয়ম</h3>\r\n<p data-start=\"1168\" data-end=\"1278\">প্রতিদিন সকালে খালি পেটে ১-২ চামচ মধু খেলে ভালো ফল পাওয়া যায়। এছাড়া গরম পানি বা দুধের সাথে মিশিয়েও খেতে পারেন।</p>\r\n<h3 data-section-id=\"1oxvozv\" data-start=\"1280\" data-end=\"1314\">🚚 কেন ঘরের স্বাদ থেকে কিনবেন?</h3>\r\n<ul data-start=\"1316\" data-end=\"1417\">\r\n<li data-section-id=\"1ce3sqp\" data-start=\"1316\" data-end=\"1346\">বিশ্বস্ত ও মানসম্পন্ন পণ্য</li>\r\n<li data-section-id=\"1xvbzqd\" data-start=\"1347\" data-end=\"1380\">দ্রুত ডেলিভারি সারা বাংলাদেশে</li>\r\n<li data-section-id=\"1rsbu6g\" data-start=\"1381\" data-end=\"1417\">গ্রাহক সন্তুষ্টি আমাদের অঙ্গীকার</li>\r\n</ul>', '[\"কালোজিরা ফুলের মধু\",\"kalozira flower honey\",\"pure honey bd\",\"natural honey bangladesh\",\"organic honey online\",\"buy honey bd\",\"immunity honey\",\"ghore shad\",\"Modhu\",\"Honey\"]', 'খাঁটি কালোজিরা ফুলের মধু অনলাইনে কিনুন ঘরের স্বাদ থেকে। প্রাকৃতিক, ভেজালমুক্ত ও স্বাস্থ্য উপকারী মধু দ্রুত ডেলিভারির সুবিধাসহ।', '2026-04-07 05:43:53', '2026-04-07 11:15:28');
+(72, 8, 55, 59, NULL, 'সুন্দরবনের খাঁটি মধু | ১০০% প্রাকৃতিক অরিজিনাল হানি | Raw Sundarbans Honey Bangladesh', 'সুন্দরবনের-খাঁটি-মধু-|-১০০%-প্রাকৃতিক-অরিজিনাল-হানি-|-raw-sundarbans-honey-bangladesh', 'সরাসরি সুন্দরবন থেকে সংগ্রহ করা ১০০% খাঁটি ও প্রাকৃতিক মধু। কোনো ভেজাল বা কেমিক্যাল নেই। স্বাস্থ্যকর, পুষ্টিকর ও ইমিউনিটি বৃদ্ধিতে সহায়ক।', '<h3 data-section-id=\"1ym1jup\" data-start=\"501\" data-end=\"552\">🌿 সুন্দরবনের খাঁটি মধু &ndash; প্রকৃতির সেরা উপহার</h3>\r\n<p data-start=\"553\" data-end=\"693\">আমাদের এই মধু সরাসরি <strong data-start=\"574\" data-end=\"615\"><span class=\"hover:entity-accent entity-underline inline cursor-pointer align-baseline\"><span class=\"whitespace-normal\">Sundarbans</span></span></strong> থেকে সংগ্রহ করা হয়, যেখানে মৌয়ালরা প্রাকৃতিক উপায়ে মৌচাক থেকে মধু সংগ্রহ করে।</p>\r\n<h3 data-section-id=\"qynqp6\" data-start=\"695\" data-end=\"723\">🍯 কেন আমাদের মধু বিশেষ?</h3>\r\n<ul data-start=\"724\" data-end=\"870\">\r\n<li data-section-id=\"drkvt7\" data-start=\"724\" data-end=\"760\">✅ ১০০% খাঁটি ও কাঁচা (Raw Honey)</li>\r\n<li data-section-id=\"vmxpb1\" data-start=\"761\" data-end=\"799\">✅ কোনো চিনি বা কেমিক্যাল মেশানো নয়</li>\r\n<li data-section-id=\"pplx5r\" data-start=\"800\" data-end=\"829\">✅ প্রাকৃতিকভাবে সংগ্রহকৃত</li>\r\n<li data-section-id=\"ow0idg\" data-start=\"830\" data-end=\"870\">✅ সম্পূর্ণ অর্গানিক ও স্বাস্থ্যসম্মত</li>\r\n</ul>\r\n<h3 data-section-id=\"ryt17d\" data-start=\"872\" data-end=\"897\">💪 স্বাস্থ্য উপকারিতা</h3>\r\n<ul data-start=\"898\" data-end=\"1011\">\r\n<li data-section-id=\"1ysrc52\" data-start=\"898\" data-end=\"929\">ইমিউন সিস্টেম শক্তিশালী করে</li>\r\n<li data-section-id=\"itufv7\" data-start=\"930\" data-end=\"962\">সর্দি-কাশি কমাতে সাহায্য করে</li>\r\n<li data-section-id=\"1w6gyqh\" data-start=\"963\" data-end=\"982\">হজম শক্তি বাড়ায়</li>\r\n<li data-section-id=\"16mneqi\" data-start=\"983\" data-end=\"1011\">শক্তি ও পুষ্টির ভালো উৎস</li>\r\n</ul>\r\n<h3 data-section-id=\"1pmx6vf\" data-start=\"1013\" data-end=\"1036\">📦 পণ্যের বৈশিষ্ট্য</h3>\r\n<ul data-start=\"1037\" data-end=\"1139\">\r\n<li data-section-id=\"vjsrdv\" data-start=\"1037\" data-end=\"1058\">উৎপত্তি: সুন্দরবন</li>\r\n<li data-section-id=\"jmt4zq\" data-start=\"1059\" data-end=\"1085\">ধরণ: Raw Natural Honey</li>\r\n<li data-section-id=\"1qc57c7\" data-start=\"1086\" data-end=\"1104\">রঙ: গাঢ় সোনালি</li>\r\n<li data-section-id=\"1nipjv3\" data-start=\"1105\" data-end=\"1139\">স্বাদ: প্রাকৃতিক ও সুগন্ধযুক্ত</li>\r\n</ul>\r\n<h3 data-section-id=\"vyhqt2\" data-start=\"1141\" data-end=\"1156\">🚚 ডেলিভারি</h3>\r\n<p data-start=\"1157\" data-end=\"1202\">বাংলাদেশের যেকোনো জায়গায় হোম ডেলিভারি সুবিধা।</p>', '[\"asdfasdf\"]', 'সুন্দরবনের খাঁটি মধু (Raw Honey) অনলাইনে কিনুন। ১০০% প্রাকৃতিক ও ভেজালমুক্ত মধু, ইমিউনিটি বাড়ায় ও স্বাস্থ্য ভালো রাখে। সারা বাংলাদেশে দ্রুত ডেলিভারি।', '2026-04-07 04:30:27', '2026-04-07 11:04:24'),
+(73, 8, 56, 59, NULL, 'শরিষা ফুলের খাঁটি মধু | ১০০% প্রাকৃতিক সরিষা হানি | ঘরের স্বাদ', 'শরিষা-ফুলের-খাঁটি-মধু-|-১০০%-প্রাকৃতিক-সরিষা-হানি-|-ঘরের-স্বাদ', 'ঘরের স্বাদের খাঁটি শরিষা ফুলের মধু – সরাসরি মৌচাক থেকে সংগ্রহ করা ১০০% বিশুদ্ধ ও প্রাকৃতিক। রোগ প্রতিরোধ ক্ষমতা বাড়াতে ও প্রতিদিনের সুস্থতায় আদর্শ।', '<p data-start=\"487\" data-end=\"698\">ঘরের স্বাদ নিয়ে এলো প্রিমিয়াম মানের <strong data-start=\"523\" data-end=\"548\">শরিষা ফুলের খাঁটি মধু</strong>, যা সংগ্রহ করা হয়েছে সরিষা ফুলের মৌসুমে মৌমাছির প্রাকৃতিক উৎস থেকে। কোনো ধরনের কেমিক্যাল, চিনি বা ভেজাল মিশ্রণ ছাড়া এই মধু সম্পূর্ণ বিশুদ্ধ ও নিরাপদ।</p>\r\n<h3 data-section-id=\"1oaym1r\" data-start=\"700\" data-end=\"739\">🌼 কেন আমাদের শরিষা মধু বেছে নিবেন?</h3>\r\n<p data-start=\"740\" data-end=\"891\">✔ ১০০% খাঁটি ও প্রাকৃতিক<br data-start=\"764\" data-end=\"767\">✔ সরিষা ফুলের ন্যাচারাল ফ্লেভার ও সুগন্ধ<br data-start=\"807\" data-end=\"810\">✔ কোনো প্রিজারভেটিভ বা কৃত্রিম উপাদান নেই<br data-start=\"851\" data-end=\"854\">✔ স্বাস্থ্যসম্মত ও পুষ্টিগুণে ভরপুর</p>\r\n<h3 data-section-id=\"2gbthb\" data-start=\"893\" data-end=\"920\">🍯 পুষ্টিগুণ ও উপকারিতা</h3>\r\n<ul data-start=\"921\" data-end=\"1063\">\r\n<li data-section-id=\"1m6mzkh\" data-start=\"921\" data-end=\"955\">রোগ প্রতিরোধ ক্ষমতা বৃদ্ধি করে</li>\r\n<li data-section-id=\"1ujbuip\" data-start=\"956\" data-end=\"990\">সর্দি-কাশি ও গলা ব্যথায় উপকারী</li>\r\n<li data-section-id=\"1s611ec\" data-start=\"991\" data-end=\"1014\">হজম শক্তি উন্নত করে</li>\r\n<li data-section-id=\"1siar0e\" data-start=\"1015\" data-end=\"1036\">শরীরে শক্তি যোগায়</li>\r\n<li data-section-id=\"e3dvux\" data-start=\"1037\" data-end=\"1063\">ত্বক ও চুলের জন্য ভালো</li>\r\n</ul>\r\n<h3 data-section-id=\"kf62fa\" data-start=\"1065\" data-end=\"1086\">📦 সংরক্ষণ পদ্ধতি</h3>\r\n<p data-start=\"1087\" data-end=\"1141\">ঠাণ্ডা ও শুকনো স্থানে রাখুন। ফ্রিজে রাখার প্রয়োজন নেই।</p>\r\n<h3 data-section-id=\"con7t3\" data-start=\"1143\" data-end=\"1157\">⚠️ সতর্কতা</h3>\r\n<p data-start=\"1158\" data-end=\"1203\">১ বছরের কম বয়সী শিশুদের জন্য মধু প্রযোজ্য নয়।</p>', NULL, 'ঘরের স্বাদের ১০০% খাঁটি শরিষা ফুলের মধু কিনুন অনলাইনে। প্রাকৃতিক, ভেজালমুক্ত ও স্বাস্থ্যকর সরিষা মধু এখন সহজেই আপনার দোরগোড়ায়।', '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
+(74, 8, 57, 59, 1, 'কালোজিরা ফুলের মধু | খাঁটি প্রাকৃতিক মধু অনলাইনে কিনুন | Ghorer Shad', 'কালোজিরা-ফুলের-মধু-|-খাঁটি-প্রাকৃতিক-মধু-অনলাইনে-কিনুন-|-ghorer-shad', 'খাঁটি কালোজিরা ফুলের মধু সরাসরি প্রাকৃতিক উৎস থেকে সংগ্রহ করা। রোগ প্রতিরোধ ক্ষমতা বাড়াতে, হজমে সহায়ক এবং দৈনন্দিন স্বাস্থ্য রক্ষায় উপকারী। এখনই অনলাইনে অর্ডার করুন ঘরের স্বাদ থেকে।', '<h3 data-section-id=\"1w289bm\" data-start=\"559\" data-end=\"610\">🟡 কালোজিরা ফুলের মধু &ndash; প্রকৃতির এক অনন্য উপহার</h3>\r\n<p data-start=\"612\" data-end=\"778\">কালোজিরা ফুলের মধু একটি অত্যন্ত পুষ্টিকর ও ঔষধি গুণসম্পন্ন প্রাকৃতিক মধু। এটি মৌমাছি দ্বারা কালোজিরা ফুল থেকে সংগ্রহ করা হয়, যা স্বাদে হালকা ঝাঁঝালো এবং ঘ্রাণে অনন্য।</p>\r\n<h3 data-section-id=\"1awfawj\" data-start=\"780\" data-end=\"816\">🌿 কেন কালোজিরা ফুলের মধু খাবেন?</h3>\r\n<p data-start=\"818\" data-end=\"987\">✔ রোগ প্রতিরোধ ক্ষমতা বৃদ্ধি করে<br data-start=\"850\" data-end=\"853\">✔ সর্দি-কাশি ও গলা ব্যথা কমাতে সাহায্য করে<br data-start=\"895\" data-end=\"898\">✔ হজম শক্তি উন্নত করে<br data-start=\"919\" data-end=\"922\">✔ শরীরকে প্রাকৃতিকভাবে শক্তি জোগায়<br data-start=\"956\" data-end=\"959\">✔ ত্বক ও চুলের জন্য উপকারী</p>\r\n<h3 data-section-id=\"kxayn7\" data-start=\"989\" data-end=\"1012\">🍯 পণ্যের বৈশিষ্ট্য</h3>\r\n<ul data-start=\"1014\" data-end=\"1143\">\r\n<li data-section-id=\"vw97lt\" data-start=\"1014\" data-end=\"1040\">১০০% খাঁটি ও প্রাকৃতিক</li>\r\n<li data-section-id=\"6ivniy\" data-start=\"1041\" data-end=\"1081\">কোনো প্রকার ভেজাল বা কেমিক্যাল মুক্ত</li>\r\n<li data-section-id=\"uxavpt\" data-start=\"1082\" data-end=\"1114\">সরাসরি গ্রাম থেকে সংগ্রহ করা</li>\r\n<li data-section-id=\"1yrlw15\" data-start=\"1115\" data-end=\"1143\">স্বাস্থ্যসম্মত প্যাকেজিং</li>\r\n</ul>\r\n<h3 data-section-id=\"1ndoabd\" data-start=\"1145\" data-end=\"1166\">📦 ব্যবহারের নিয়ম</h3>\r\n<p data-start=\"1168\" data-end=\"1278\">প্রতিদিন সকালে খালি পেটে ১-২ চামচ মধু খেলে ভালো ফল পাওয়া যায়। এছাড়া গরম পানি বা দুধের সাথে মিশিয়েও খেতে পারেন।</p>\r\n<h3 data-section-id=\"1oxvozv\" data-start=\"1280\" data-end=\"1314\">🚚 কেন ঘরের স্বাদ থেকে কিনবেন?</h3>\r\n<ul data-start=\"1316\" data-end=\"1417\">\r\n<li data-section-id=\"1ce3sqp\" data-start=\"1316\" data-end=\"1346\">বিশ্বস্ত ও মানসম্পন্ন পণ্য</li>\r\n<li data-section-id=\"1xvbzqd\" data-start=\"1347\" data-end=\"1380\">দ্রুত ডেলিভারি সারা বাংলাদেশে</li>\r\n<li data-section-id=\"1rsbu6g\" data-start=\"1381\" data-end=\"1417\">গ্রাহক সন্তুষ্টি আমাদের অঙ্গীকার</li>\r\n</ul>', '[\"কালোজিরা ফুলের মধু\",\"kalozira flower honey\",\"pure honey bd\",\"natural honey bangladesh\",\"organic honey online\",\"buy honey bd\",\"immunity honey\",\"ghore shad\",\"Modhu\",\"Honey\"]', 'খাঁটি কালোজিরা ফুলের মধু অনলাইনে কিনুন ঘরের স্বাদ থেকে। প্রাকৃতিক, ভেজালমুক্ত ও স্বাস্থ্য উপকারী মধু দ্রুত ডেলিভারির সুবিধাসহ।', '2026-04-07 05:43:53', '2026-04-07 11:15:28');
 
 -- --------------------------------------------------------
 
@@ -910,13 +874,6 @@ CREATE TABLE `product_options` (
 --
 
 INSERT INTO `product_options` (`id`, `product_id`, `name`, `position`, `created_at`, `updated_at`) VALUES
-(60, 51, 'Color', 0, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(61, 51, 'Audio Technology', 1, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(62, 52, 'Size', 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(63, 52, 'Quality', 1, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(64, 53, 'Size', 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(65, 53, 'Color', 1, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(66, 54, 'Size', 0, '2026-03-07 10:19:17', '2026-03-07 10:19:17'),
 (68, 56, 'ওজন', 0, '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (76, 55, 'ওজন', 0, '2026-04-07 11:04:24', '2026-04-07 11:04:24'),
 (82, 57, 'ওজন', 0, '2026-04-07 11:22:41', '2026-04-07 11:22:41');
@@ -941,22 +898,6 @@ CREATE TABLE `product_option_values` (
 --
 
 INSERT INTO `product_option_values` (`id`, `product_option_id`, `value`, `position`, `created_at`, `updated_at`) VALUES
-(124, 60, 'Black', 0, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(125, 60, 'Metallic Silver', 1, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(126, 61, 'Dolby Audio', 0, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(127, 61, 'Dolby Atmos', 1, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(128, 62, '500gm', 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(129, 62, '1kg', 1, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(130, 63, 'Fine Grind', 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(131, 63, 'Organic', 1, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(132, 64, '23.5 cm', 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(133, 64, '24.4 cm', 1, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(134, 64, '25.5 cm', 2, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(135, 65, 'Black', 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(136, 65, 'White', 1, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(137, 65, 'Gray', 2, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(138, 66, '500gm', 0, '2026-03-07 10:19:17', '2026-03-07 10:19:17'),
-(139, 66, '1Kg', 1, '2026-03-07 10:19:17', '2026-03-07 10:19:17'),
 (142, 68, 'হাফ কেজি', 0, '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (143, 68, 'এক কেজি', 1, '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (158, 76, 'হাফ কেজি', 0, '2026-04-07 11:04:24', '2026-04-07 11:04:24'),
@@ -1033,9 +974,9 @@ CREATE TABLE `product_subcategories` (
 --
 
 INSERT INTO `product_subcategories` (`id`, `category_id`, `language_id`, `name`, `slug`, `serial_number`, `status`, `created_at`, `updated_at`) VALUES
-(1, 29, 8, 'মধু', 'মধু', 1, 1, '2026-04-07 09:40:32', '2026-04-07 09:40:32'),
-(2, 29, 8, 'গুড়', 'গুড়', 2, 1, '2026-04-07 09:41:13', '2026-04-07 09:41:13'),
-(3, 30, 8, 'তেল', 'তেল', 3, 1, '2026-04-07 09:43:16', '2026-04-07 09:43:16');
+(1, 59, 8, 'মধু', 'মধু', 1, 1, '2026-04-07 09:40:32', '2026-04-09 12:43:32'),
+(2, 59, 8, 'গুড়', 'গুড়', 2, 1, '2026-04-07 09:41:13', '2026-04-09 12:43:38'),
+(3, 59, 8, 'তেল', 'তেল', 3, 1, '2026-04-07 09:43:16', '2026-04-09 12:43:43');
 
 -- --------------------------------------------------------
 
@@ -1063,25 +1004,6 @@ CREATE TABLE `product_variants` (
 --
 
 INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `image`, `price`, `stock`, `status`, `track_serial`, `serial_start`, `serial_end`, `created_at`, `updated_at`) VALUES
-(112, 51, 'LED-TV-1', NULL, 399.99, 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(113, 51, 'LED-TV-2', NULL, 299.99, 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(114, 51, 'LED-TV-3', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(115, 51, 'LED-TV-4', NULL, 499.99, 10, 1, 1, '1', '10', '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(116, 52, 'CHILI-4', NULL, 100.00, 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(117, 52, 'CHILI-1', NULL, 120.00, 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(118, 52, 'CHILI-3', NULL, 110.00, 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(119, 52, 'CHILI-2', NULL, 90.00, 10, 1, 1, '1', '10', '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(120, 53, 'SHOE-1', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(121, 53, 'SHOE-2', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(122, 53, 'SHOE-3', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(123, 53, 'SHOE-4', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(124, 53, 'SHOE-5', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(125, 53, 'SHOE-6', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(126, 53, 'SHOE-7', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(127, 53, 'SHOE-8', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(128, 53, 'SHOE-9', NULL, 199.99, 10, 1, 1, '1', '10', '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(129, 54, NULL, NULL, 900.00, 5, 1, 0, NULL, NULL, '2026-03-07 10:19:17', '2026-03-07 10:19:17'),
-(130, 54, NULL, NULL, 1600.00, 5, 1, 0, NULL, NULL, '2026-03-07 10:19:17', '2026-03-07 10:19:17'),
 (133, 56, NULL, NULL, 600.00, 5, 1, 1, '1', '5', '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (134, 56, NULL, NULL, 1100.00, 5, 1, 1, '6', '10', '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (141, 57, NULL, NULL, 900.00, 5, 1, 1, '1', '5', '2026-04-07 09:51:03', '2026-04-07 11:22:41'),
@@ -1108,42 +1030,6 @@ CREATE TABLE `product_variant_values` (
 --
 
 INSERT INTO `product_variant_values` (`id`, `variant_id`, `option_value_id`, `created_at`, `updated_at`) VALUES
-(166, 112, 124, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(167, 112, 126, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(168, 113, 124, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(169, 113, 127, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(170, 114, 125, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(171, 114, 126, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(172, 115, 125, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(173, 115, 127, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(174, 116, 128, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(175, 116, 130, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(176, 117, 128, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(177, 117, 131, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(178, 118, 129, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(179, 118, 130, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(180, 119, 129, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(181, 119, 131, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(182, 120, 132, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(183, 120, 135, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(184, 121, 132, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(185, 121, 136, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(186, 122, 132, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(187, 122, 137, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(188, 123, 133, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(189, 123, 135, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(190, 124, 133, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(191, 124, 136, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(192, 125, 133, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(193, 125, 137, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(194, 126, 134, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(195, 126, 135, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(196, 127, 134, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(197, 127, 136, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(198, 128, 134, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(199, 128, 137, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(200, 129, 138, '2026-03-07 10:19:17', '2026-03-07 10:19:17'),
-(201, 130, 139, '2026-03-07 10:19:17', '2026-03-07 10:19:17'),
 (204, 133, 142, '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (205, 134, 143, '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (220, 143, 158, '2026-04-07 11:04:24', '2026-04-07 11:04:24'),
@@ -1284,24 +1170,6 @@ CREATE TABLE `slider_images` (
 --
 
 INSERT INTO `slider_images` (`id`, `item_id`, `item_type`, `image`, `created_at`, `updated_at`) VALUES
-(180, 50, 'product', '69a1cea659684.png', '2026-02-27 11:04:38', '2026-02-27 11:05:23'),
-(181, 50, 'product', '69a1cea661c30.png', '2026-02-27 11:04:38', '2026-02-27 11:05:23'),
-(182, 50, 'product', '69a1cea695fdb.png', '2026-02-27 11:04:38', '2026-02-27 11:05:23'),
-(183, 50, 'product', '69a1cea6a7299.png', '2026-02-27 11:04:38', '2026-02-27 11:05:23'),
-(184, 51, 'product', '69a1cfd1d2444.png', '2026-02-27 11:09:37', '2026-02-27 11:09:41'),
-(185, 51, 'product', '69a1cfd1d7c98.png', '2026-02-27 11:09:37', '2026-02-27 11:09:41'),
-(186, 51, 'product', '69a1cfd227690.png', '2026-02-27 11:09:38', '2026-02-27 11:09:41'),
-(187, 51, 'product', '69a1cfd22f214.png', '2026-02-27 11:09:38', '2026-02-27 11:09:41'),
-(188, 52, 'product', '69a1d075d5973.png', '2026-02-27 11:12:21', '2026-02-27 11:14:14'),
-(189, 52, 'product', '69a1d075d67bc.png', '2026-02-27 11:12:21', '2026-02-27 11:14:14'),
-(190, 52, 'product', '69a1d0761d3e3.png', '2026-02-27 11:12:22', '2026-02-27 11:14:14'),
-(191, 52, 'product', '69a1d07620833.png', '2026-02-27 11:12:22', '2026-02-27 11:14:14'),
-(192, 53, 'product', '69a1d1b76ceb3.png', '2026-02-27 11:17:43', '2026-02-27 11:17:48'),
-(193, 53, 'product', '69a1d1b770ee0.png', '2026-02-27 11:17:43', '2026-02-27 11:17:48'),
-(194, 53, 'product', '69a1d1b7b18a3.png', '2026-02-27 11:17:43', '2026-02-27 11:17:48'),
-(195, 54, 'product', '69ac4d45dd512.png', '2026-03-07 10:07:33', '2026-03-07 10:19:17'),
-(196, 54, 'product', '69ac4d462577e.png', '2026-03-07 10:07:34', '2026-03-07 10:19:17'),
-(197, 54, 'product', '69ac4d46ab3f1.png', '2026-03-07 10:07:34', '2026-03-07 10:19:17'),
 (198, NULL, 'product', '69d3ce614d473.png', '2026-04-06 09:16:49', '2026-04-06 09:16:49'),
 (199, NULL, 'product', '69d4d771d51ba.png', '2026-04-07 04:07:45', '2026-04-07 04:07:45'),
 (200, NULL, 'product', '69d4d77217650.png', '2026-04-07 04:07:46', '2026-04-07 04:07:46'),
@@ -1532,23 +1400,6 @@ CREATE TABLE `variant_serial_batches` (
 --
 
 INSERT INTO `variant_serial_batches` (`id`, `variant_id`, `batch_no`, `serial_start`, `serial_end`, `qty`, `sold_qty`, `created_at`, `updated_at`) VALUES
-(7, 112, 'INIT-112-20260227170941', '1', '10', 10, 0, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(8, 113, 'INIT-113-20260227170941', '1', '10', 10, 0, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(9, 114, 'INIT-114-20260227170941', '1', '10', 10, 0, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(10, 115, 'INIT-115-20260227170941', '1', '10', 10, 0, '2026-02-27 11:09:41', '2026-02-27 11:09:41'),
-(11, 116, 'INIT-116-20260227171414', '1', '10', 10, 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(12, 117, 'INIT-117-20260227171414', '1', '10', 10, 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(13, 118, 'INIT-118-20260227171414', '1', '10', 10, 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(14, 119, 'INIT-119-20260227171414', '1', '10', 10, 0, '2026-02-27 11:14:14', '2026-02-27 11:14:14'),
-(15, 120, 'INIT-120-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(16, 121, 'INIT-121-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(17, 122, 'INIT-122-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(18, 123, 'INIT-123-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(19, 124, 'INIT-124-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(20, 125, 'INIT-125-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(21, 126, 'INIT-126-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(22, 127, 'INIT-127-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
-(23, 128, 'INIT-128-20260227171748', '1', '10', 10, 0, '2026-02-27 11:17:48', '2026-02-27 11:17:48'),
 (26, 133, 'INIT-133-20260407112812', '1', '5', 5, 0, '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (27, 134, 'INIT-134-20260407112812', '6', '10', 5, 0, '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (34, 141, 'INIT-141-20260407155103', '1', '5', 5, 0, '2026-04-07 09:51:03', '2026-04-07 09:51:03'),
@@ -1645,13 +1496,6 @@ CREATE TABLE `wishlists` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `wishlists`
---
-
-INSERT INTO `wishlists` (`id`, `user_id`, `product_id`, `created_at`, `updated_at`) VALUES
-(26, 59, 54, '2026-03-30 12:14:32', '2026-03-30 12:14:32');
-
---
 -- Indexes for dumped tables
 --
 
@@ -1686,7 +1530,8 @@ ALTER TABLE `carts`
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `categories_unique_id_index` (`unique_id`);
 
 --
 -- Indexes for table `customers`
@@ -1821,7 +1666,8 @@ ALTER TABLE `products`
 -- Indexes for table `product_categories`
 --
 ALTER TABLE `product_categories`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_categories_unique_id_index` (`unique_id`);
 
 --
 -- Indexes for table `product_contents`
@@ -2079,7 +1925,7 @@ ALTER TABLE `menu_builders`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -2127,7 +1973,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `product_categories`
 --
 ALTER TABLE `product_categories`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `product_contents`

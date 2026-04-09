@@ -13,7 +13,8 @@ class ShippingChargeController extends Controller
 {
     public function index(Request $request)
     {
-        $language = Language::where('code', $request->language)->select('code', 'id', 'name')->firstOrFail();
+        $language = Language::where('code', $request->language)->select('code', 'id', 'name')->first()
+            ?? Language::where('is_default', 1)->select('code', 'id', 'name')->firstOrFail();
         $datas = ShippingCharge::where('language_id', $language->id)->orderBy('serial_number', 'ASC')->get();
         return view('admin.shipping-charge.index', compact('datas', 'language'));
     }

@@ -17,12 +17,15 @@
             <x-bulk-delete :url="route('admin.shop.shipping_charge_bulk_delete')" itemTextName="shipping charge" />
             <div class="card-header">
                 <div class="row">
-                    <div class="col-lg-8 col-sm-6">
+                    <div class="col-lg-3 col-sm-6">
                         <div class="card-title">
                             <h5>{{ __('Shipping Charges') }}</h5>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-6">
+                    <div class="col-lg-3 col-sm-6">
+                        @include('admin.partials.languages')
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
                         <div class="info-header-content">
                             <a href="#" class="btn btn-primary btn-sm float-lg-end float-left" data-bs-toggle="modal"
                                 data-bs-target="#createModal">
