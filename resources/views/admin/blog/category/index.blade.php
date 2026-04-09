@@ -72,9 +72,12 @@
                                         <td class="action-buttons">
                                             <a href="" class="btn btn-sm editBtn edit-button" data-bs-toggle="modal"
                                                 data-bs-target="#editModal" data-id="{{ $category->id }}"
-                                                data-name="{{ $category->name }}"
                                                 data-serial_number="{{ $category->serial_number }}"
-                                                data-status="{{ $category->status }}">
+                                                data-status="{{ $category->status }}"
+                                                @foreach ($languages as $language)
+                                                    data-{{ $language->code }}_name="{{ $category->translation_names[$language->code] ?? '' }}"
+                                                    data-{{ $language->code }}_translation_id="{{ $category->translation_ids[$language->code] ?? '' }}"
+                                                @endforeach>
                                                 <span class="fas fa-edit"></span>
                                             </a>
                                             <form class="deleteForm d-inline-block"

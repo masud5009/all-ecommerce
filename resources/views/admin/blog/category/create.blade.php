@@ -8,20 +8,21 @@
             <div class="modal-body">
                 <form id="ajaxForm" action="{{ route('admin.blog.category.store') }}" method="post">
                     @csrf
-                    <x-text-input col="12" placeholder="Select a Language" name="language_id" type="select"
-                        label="Language" required="*" action="store" :dataInfo="$languages"/>
-
-                    <x-text-input col="12" placeholder="Enter category name" name="name" type="text"
-                        label="Name" required="*" action="store"/>
+                    @foreach ($languages as $language)
+                        <x-text-input col="12" placeholder="Enter category name"
+                            name="{{ $language->code }}_name" type="text"
+                            label="Name ({{ $language->name }})"
+                            required="{{ $language->is_default == 1 ? '*' : '' }}" action="store" />
+                    @endforeach
 
                     @php
                         $options = ['1' => 'Active', '0' => 'Dactive'];
                     @endphp
                     <x-text-input col="12" placeholder="Select a Status" name="status" type="custom-select"
-                        label="Status" required="*" :dataInfo="$options" action="store"/>
+                        label="Status" required="*" :dataInfo="$options" action="store" />
 
                     <x-text-input col="12" placeholder="Serial Number" name="serial_number" type="text"
-                        label="Serial Number" required="*" action="store"/>
+                        label="Serial Number" required="*" action="store" />
                 </form>
             </div>
             <div class="modal-footer">
