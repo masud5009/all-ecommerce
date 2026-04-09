@@ -9,8 +9,12 @@
                 <form id="ajaxEditForm" action="{{ route('admin.product.category_update') }}" method="post">
                     @csrf
                     <input type="hidden" id="in_id" name="id">
+                    @foreach ($languages as $language)
+                        <input type="hidden" id="in_{{ $language->code }}_translation_id"
+                            name="{{ $language->code }}_translation_id">
+                    @endforeach
 
-                                        <div class="col-lg-12">
+                    <div class="col-lg-12">
                         <div class="form-group">
                             <label>{{ __('Icon') }}</label>
                             <div class="dropdown js-iconpicker">
@@ -30,8 +34,12 @@
                         </div>
                     </div>
 
-                    <x-TextInput col="12" placeholder="Enter category name" name="name" type="text"
-                        label="Name" required="*" action="edit" />
+                    @foreach ($languages as $language)
+                        <x-TextInput col="12" placeholder="Enter category name"
+                            name="{{ $language->code }}_name" type="text"
+                            label="Name ({{ $language->name }})"
+                            required="{{ $language->is_default == 1 ? '*' : '' }}" action="edit" />
+                    @endforeach
 
                     @php
                         $options = ['1' => 'Active', '0' => 'Dactive'];

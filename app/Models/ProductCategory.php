@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class ProductCategory extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'slug', 'serial_number', 'status', 'language_id', 'icon'];
+    protected $fillable = ['name', 'slug', 'serial_number', 'status', 'language_id', 'unique_id', 'icon'];
 
     /**
      * Get the count of products in this category for a specific language.

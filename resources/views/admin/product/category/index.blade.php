@@ -48,6 +48,7 @@
                                     </th>
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
+                                    <th scope="col">{{ __('Total Products') }}</th>
                                     <th scope="col">{{ __('Serial Number') }}</th>
                                     <th scope="col">{{ __('Actions') }}</th>
                                 </thead>
@@ -69,15 +70,20 @@
                                                         data-url="{{ route('admin.product.category_status_change') }}">{{ __('Inactive') }}</span>
                                                 @endif
                                             </td>
+                                            <td>{{ $category->product_content_count }}</td>
                                             <td>{{ $category->serial_number }}</td>
                                             <td>
                                                 <div class="action-buttons product-list-actions">
                                                     <a href="" class="btn btn-sm editBtn edit-button product-action-btn"
                                                         data-bs-toggle="modal" data-bs-target="#editModal"
-                                                        data-id="{{ $category->id }}" data-name="{{ $category->name }}"
+                                                        data-id="{{ $category->id }}"
                                                         data-icon="{{ $category->icon }}"
                                                         data-serial_number="{{ $category->serial_number }}"
-                                                        data-status="{{ $category->status }}">
+                                                        data-status="{{ $category->status }}"
+                                                        @foreach ($languages as $language)
+                                                            data-{{ $language->code }}_name="{{ $category->translation_names[$language->code] ?? '' }}"
+                                                            data-{{ $language->code }}_translation_id="{{ $category->translation_ids[$language->code] ?? '' }}"
+                                                        @endforeach>
                                                         <span class="fas fa-edit"></span>
                                                         <span class="product-action-label">{{ __('Edit') }}</span>
                                                     </a>

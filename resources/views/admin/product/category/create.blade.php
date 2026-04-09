@@ -29,11 +29,12 @@
                         </div>
                     </div>
 
-                    <x-text-input col="12" placeholder="Select a Language" name="language_id" type="select"
-                        label="Language" required="*" :dataInfo="$languages" action="store" />
-
-                    <x-text-input col="12" placeholder="Enter category name" name="name" type="text"
-                        label="Name" required="*" action="store" />
+                    @foreach ($languages as $language)
+                        <x-text-input col="12" placeholder="Enter category name"
+                            name="{{ $language->code }}_name" type="text"
+                            label="Name ({{ $language->name }})"
+                            required="{{ $language->is_default == 1 ? '*' : '' }}" action="store" />
+                    @endforeach
 
                     @php
                         $options = ['1' => 'Active', '0' => 'Dactive'];
