@@ -20,12 +20,15 @@
             <x-bulk-delete :url="route('admin.product.category_bulk_delete')" itemTextName="categories" />
             <div class="card-header">
                 <div class="row">
-                    <div class="col-lg-8 col-sm-6">
+                    <div class="col-lg-3 col-sm-6">
                         <div class="card-title">
                             <h5>{{ __('Categories') }}</h5>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-6">
+                    <div class="col-lg-3 col-sm-6">
+                        @include('admin.partials.languages')
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
                         <div class="info-header-content">
                             <a href="#" class="btn btn-primary btn-sm float-lg-end float-left" data-bs-toggle="modal"
                                 data-bs-target="#createModal">

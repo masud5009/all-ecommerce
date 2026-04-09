@@ -14,7 +14,8 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $languages = app('languages');
-        $defaultLanguage = $languages->firstWhere('is_default', 1) ?? app('defaultLang');
+        $defaultLanguage = $this->getLangUsingCode($request->language);
+
         $categories = ProductCategory::withCount('productContent')
             ->where('language_id', $defaultLanguage->id)
             ->orderBy('serial_number', 'ASC')
@@ -50,6 +51,7 @@ class CategoryController extends Controller
         return view('admin.product.category.index', [
             'languages' => $languages,
             'categories' => $categories,
+            'defaultLanguage' => $defaultLanguage
         ]);
     }
 

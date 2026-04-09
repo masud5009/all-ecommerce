@@ -46,4 +46,12 @@ class Controller extends BaseController
         file_put_contents(public_path('assets/front/invoices/' . $file_name), $output);
         return $file_name;
     }
+
+    public function getLangUsingCode($code)
+    {
+
+        $language = Language::where('code', $code)->first() ?? Language::where('is_default', 1)->first();
+
+        return $language;
+    }
 }

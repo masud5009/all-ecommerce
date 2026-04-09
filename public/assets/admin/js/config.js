@@ -735,6 +735,19 @@ $('body').on('change', '#fileType', function () {
     }
 });
 
+$(document).on('change', '#languageSelect', function () {
+    const selectedLanguage = $(this).val();
+    const currentUrl = new URL(window.location.href);
+
+    if (selectedLanguage) {
+        currentUrl.searchParams.set('language', selectedLanguage);
+    } else {
+        currentUrl.searchParams.delete('language');
+    }
+
+    window.location.href = currentUrl.toString();
+});
+
 /*==============faltpciker js================*/
 flatpickr(".flatpickr", {
     //
