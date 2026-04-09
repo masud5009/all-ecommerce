@@ -6,47 +6,39 @@ use Illuminate\Http\Request;
 use App\Models\ProductCategory;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $data['languages'] = app('languages');
-        $hasUniqueIdColumn = Schema::hasColumn('product_categories', 'unique_id');
-        $data['categories'] = ProductCategory::withCount('productContent')
-            ->where('language_id', app('defaultLang')->id)
+        $languages = app('languages');
+        $defaultLanguage = $languages->firstWhere('is_default', 1) ?? app('defaultLang');
+        $categories = ProductCategory::withCount('productContent')
+            ->where('language_id', $defaultLanguage->id)
             ->orderBy('serial_number', 'ASC')
             ->get();
 
-        $translationsByUniqueId = collect();
-        if ($hasUniqueIdColumn) {
-            $uniqueIds = $data['categories']->pluck('unique_id')->filter()->unique()->values();
+        $groupedTranslations = collect();
+        $uniqueIds = $categories->pluck('unique_id')->filter()->unique()->values();
 
-            if ($uniqueIds->isNotEmpty()) {
-                $translationsByUniqueId = ProductCategory::whereIn('unique_id', $uniqueIds)
-                    ->get()
-                    ->groupBy('unique_id')
-                    ->map(function ($items) {
-                        return $items->keyBy('language_id');
-                    });
-            }
+        if ($uniqueIds->isNotEmpty()) {
+            $groupedTranslations = ProductCategory::whereIn('unique_id', $uniqueIds)
+                ->get()
+                ->groupBy('unique_id');
         }
 
-        foreach ($data['categories'] as $category) {
-            $translations = collect([$category->language_id => $category]);
-
-            if ($hasUniqueIdColumn && filled($category->unique_id)) {
-                $translations = $translationsByUniqueId->get($category->unique_id, $translations);
-            }
+        foreach ($categories as $category) {
+            $translations = filled($category->unique_id)
+                ? $groupedTranslations->get($category->unique_id, collect([$category]))
+                : collect([$category]);
 
             $translationNames = [];
             $translationIds = [];
 
-            foreach ($data['languages'] as $language) {
-                $translation = $translations->get($language->id);
+            foreach ($languages as $language) {
+                $translation = $translations->firstWhere('language_id', $language->id);
                 $translationNames[$language->code] = $translation->name ?? '';
                 $translationIds[$language->code] = $translation->id ?? '';
             }
@@ -55,93 +47,25 @@ class CategoryController extends Controller
             $category->translation_ids = $translationIds;
         }
 
-        return view('admin.product.category.index', $data);
+        return view('admin.product.category.index', [
+            'languages' => $languages,
+            'categories' => $categories,
+        ]);
     }
 
     public function store(Request $request)
     {
         $languages = app('languages');
         $defaultLanguage = $languages->firstWhere('is_default', 1) ?? app('defaultLang');
-        $hasUniqueIdColumn = Schema::hasColumn('product_categories', 'unique_id');
 
-        $rules = [
-            'icon' => 'nullable|string|max:255',
-            'serial_number' => 'required|numeric|min:0',
-            'status' => 'required|in:1,0',
-        ];
-        $messages = [];
-
-        foreach ($languages as $language) {
-            $field = $language->code . '_name';
-
-            $rules[$field] = ($language->id == $defaultLanguage->id ? 'required' : 'nullable') . '|max:255';
-            $messages[$field . '.required'] = __('The name field is required for') . ' ' . $language->name . ' ' . __('language.');
-            $messages[$field . '.max'] = __('The name field may not be greater than 255 characters for') . ' ' . $language->name . ' ' . __('language.');
+        try {
+            $resolvedNames = $this->validateCategoryRequest($request, $languages, $defaultLanguage);
+        } catch (ValidationException $exception) {
+            return response()->json(['errors' => $exception->errors()], 422);
         }
 
-        $validator = Validator::make($request->all(), $rules, $messages);
-        $validator->after(function ($validator) use ($request, $languages, $defaultLanguage) {
-            $defaultName = trim((string) $request->input($defaultLanguage->code . '_name'));
-
-            foreach ($languages as $language) {
-                $field = $language->code . '_name';
-                $name = trim((string) $request->input($field));
-                $resolvedName = $name !== '' ? $name : $defaultName;
-
-                if ($resolvedName === '') {
-                    continue;
-                }
-
-                $exists = ProductCategory::where('language_id', $language->id)
-                    ->where('name', $resolvedName)
-                    ->exists();
-
-                if ($exists) {
-                    $validator->errors()->add(
-                        $field,
-                        __('The name has already been taken for') . ' ' . $language->name . ' ' . __('language.')
-                    );
-                }
-            }
-        });
-
-        if ($validator->fails()) {
-            return Response::json([
-                'errors' => $validator->getMessageBag()->toArray()
-            ], 422);
-        }
-
-        $defaultName = trim((string) $request->input($defaultLanguage->code . '_name'));
-        $groupUniqueId = $hasUniqueIdColumn ? uniqid('pc_') : null;
-        $hasIconColumn = Schema::hasColumn('product_categories', 'icon');
-        $icon = $hasIconColumn && $request->filled('icon')
-            ? trim($request->icon)
-            : null;
-
-        DB::transaction(function () use ($languages, $request, $defaultName, $groupUniqueId, $hasIconColumn, $hasUniqueIdColumn, $icon) {
-            foreach ($languages as $language) {
-                $field = $language->code . '_name';
-                $name = trim((string) $request->input($field));
-                $resolvedName = $name !== '' ? $name : $defaultName;
-
-                $payload = [
-                    'language_id' => $language->id,
-                    'name' => $resolvedName,
-                    'slug' => createSlug($resolvedName),
-                    'serial_number' => $request->serial_number,
-                    'status' => $request->status
-                ];
-
-                if ($hasUniqueIdColumn) {
-                    $payload['unique_id'] = $groupUniqueId;
-                }
-
-                if ($hasIconColumn) {
-                    $payload['icon'] = $icon;
-                }
-
-                ProductCategory::create($payload);
-            }
+        DB::transaction(function () use ($request, $languages, $resolvedNames) {
+            $this->syncCategoryTranslations($request, $languages, $resolvedNames, uniqid('pc_'));
         });
 
         session()->flash('success', __('Category create successfully'));
@@ -153,33 +77,99 @@ class CategoryController extends Controller
         $languages = app('languages');
         $defaultLanguage = $languages->firstWhere('is_default', 1) ?? app('defaultLang');
         $category = ProductCategory::findOrFail($request->id);
-        $hasUniqueIdColumn = Schema::hasColumn('product_categories', 'unique_id');
-        $hasIconColumn = Schema::hasColumn('product_categories', 'icon');
-        $groupUniqueId = $hasUniqueIdColumn ? ($category->unique_id ?: uniqid('pc_')) : null;
+        $groupUniqueId = $category->unique_id ?: uniqid('pc_');
 
+        try {
+            $resolvedNames = $this->validateCategoryRequest($request, $languages, $defaultLanguage, $groupUniqueId);
+        } catch (ValidationException $exception) {
+            return response()->json(['errors' => $exception->errors()], 400);
+        }
+
+        DB::transaction(function () use ($request, $languages, $resolvedNames, $category, $groupUniqueId) {
+            if (blank($category->unique_id)) {
+                $category->update(['unique_id' => $groupUniqueId]);
+            }
+
+            $this->syncCategoryTranslations($request, $languages, $resolvedNames, $groupUniqueId);
+        });
+
+        session()->flash('success', __('Category update successfully'));
+        return response()->json(['status' => 'success'], 200);
+    }
+
+    public function delete(Request $request)
+    {
+        $category = ProductCategory::findOrFail($request->category_id);
+
+        if (filled($category->unique_id)) {
+            ProductCategory::where('unique_id', $category->unique_id)->delete();
+        } else {
+            $category->delete();
+        }
+
+        return redirect()->back()->with('success', __('Category delete successfully'));
+    }
+
+    public function bulkdelete(Request $request)
+    {
+        $categories = ProductCategory::whereIn('id', $request->ids)->get();
+        $groupUniqueIds = $categories->pluck('unique_id')->filter()->unique()->values();
+
+        if ($groupUniqueIds->isNotEmpty()) {
+            ProductCategory::whereIn('unique_id', $groupUniqueIds)->delete();
+        }
+
+        $categories
+            ->filter(function (ProductCategory $category) {
+                return blank($category->unique_id);
+            })
+            ->each(function (ProductCategory $category) {
+                $category->delete();
+            });
+
+        session()->flash('success', __('Categories delete successfully'));
+        return response()->json(['status' => 'success'], 200);
+    }
+
+    public function changeStatus(Request $request)
+    {
+        $category = ProductCategory::findOrFail($request->id);
+
+        if (filled($category->unique_id)) {
+            ProductCategory::where('unique_id', $category->unique_id)->update(['status' => $request->status]);
+        } else {
+            $category->update(['status' => $request->status]);
+        }
+
+        return 'success';
+    }
+
+    private function validateCategoryRequest(Request $request, $languages, $defaultLanguage, ?string $ignoreGroupUniqueId = null): array
+    {
         $rules = [
             'icon' => 'nullable|string|max:255',
             'serial_number' => 'required|numeric|min:0',
-            'status' => 'required|in:1,0'
+            'status' => 'required|in:1,0',
         ];
         $messages = [];
+        $defaultField = $defaultLanguage->code . '_name';
+        $defaultName = trim((string) $request->input($defaultField));
+        $resolvedNames = [];
 
         foreach ($languages as $language) {
             $field = $language->code . '_name';
+            $translatedName = trim((string) $request->input($field));
 
             $rules[$field] = ($language->id == $defaultLanguage->id ? 'required' : 'nullable') . '|max:255';
             $messages[$field . '.required'] = __('The name field is required for') . ' ' . $language->name . ' ' . __('language.');
             $messages[$field . '.max'] = __('The name field may not be greater than 255 characters for') . ' ' . $language->name . ' ' . __('language.');
+            $resolvedNames[$language->id] = $translatedName !== '' ? $translatedName : $defaultName;
         }
 
         $validator = Validator::make($request->all(), $rules, $messages);
-        $validator->after(function ($validator) use ($request, $languages, $defaultLanguage, $groupUniqueId, $hasUniqueIdColumn) {
-            $defaultName = trim((string) $request->input($defaultLanguage->code . '_name'));
-
+        $validator->after(function ($validator) use ($request, $languages, $resolvedNames, $ignoreGroupUniqueId) {
             foreach ($languages as $language) {
-                $field = $language->code . '_name';
-                $name = trim((string) $request->input($field));
-                $resolvedName = $name !== '' ? $name : $defaultName;
+                $resolvedName = $resolvedNames[$language->id] ?? '';
 
                 if ($resolvedName === '') {
                     continue;
@@ -191,16 +181,13 @@ class CategoryController extends Controller
                 $translationId = $request->input($language->code . '_translation_id');
                 if (filled($translationId)) {
                     $query->where('id', '!=', $translationId);
-                } elseif ($hasUniqueIdColumn && filled($groupUniqueId)) {
-                    $query->where(function ($subQuery) use ($groupUniqueId) {
-                        $subQuery->whereNull('unique_id')
-                            ->orWhere('unique_id', '!=', $groupUniqueId);
-                    });
+                } elseif ($ignoreGroupUniqueId !== null) {
+                    $query->where('unique_id', '!=', $ignoreGroupUniqueId);
                 }
 
                 if ($query->exists()) {
                     $validator->errors()->add(
-                        $field,
+                        $language->code . '_name',
                         __('The name has already been taken for') . ' ' . $language->name . ' ' . __('language.')
                     );
                 }
@@ -208,126 +195,47 @@ class CategoryController extends Controller
         });
 
         if ($validator->fails()) {
-            return Response::json([
-                'errors' => $validator->getMessageBag()->toArray()
-            ], 400);
+            throw new ValidationException($validator);
         }
 
-        $defaultName = trim((string) $request->input($defaultLanguage->code . '_name'));
-        $icon = $hasIconColumn && $request->filled('icon') ? trim($request->icon) : null;
+        return $resolvedNames;
+    }
 
-        DB::transaction(function () use (
-            $languages,
-            $request,
-            $category,
-            $defaultName,
-            $groupUniqueId,
-            $hasIconColumn,
-            $hasUniqueIdColumn,
-            $icon
-        ) {
-            if ($hasUniqueIdColumn && blank($category->unique_id)) {
-                $category->unique_id = $groupUniqueId;
-                $category->save();
+    private function syncCategoryTranslations(Request $request, $languages, array $resolvedNames, string $groupUniqueId): void
+    {
+        $icon = $request->filled('icon') ? trim($request->icon) : null;
+
+        foreach ($languages as $language) {
+            $translationId = $request->input($language->code . '_translation_id');
+            $translation = null;
+
+            if (filled($translationId)) {
+                $translation = ProductCategory::where('id', $translationId)
+                    ->where('language_id', $language->id)
+                    ->first();
             }
 
-            foreach ($languages as $language) {
-                $field = $language->code . '_name';
-                $translationIdField = $language->code . '_translation_id';
-                $name = trim((string) $request->input($field));
-                $resolvedName = $name !== '' ? $name : $defaultName;
-                $translationId = $request->input($translationIdField);
-
-                $translation = null;
-                if (filled($translationId)) {
-                    $translation = ProductCategory::where('id', $translationId)
-                        ->where('language_id', $language->id)
-                        ->first();
-                }
-
-                if (!$translation && $hasUniqueIdColumn && filled($groupUniqueId)) {
-                    $translation = ProductCategory::where('unique_id', $groupUniqueId)
-                        ->where('language_id', $language->id)
-                        ->first();
-                }
-
-                if (!$translation && $language->id == $category->language_id) {
-                    $translation = $category;
-                }
-
-                $payload = [
-                    'language_id' => $language->id,
-                    'name' => $resolvedName,
-                    'slug' => createSlug($resolvedName),
-                    'serial_number' => $request->serial_number,
-                    'status' => $request->status
-                ];
-
-                if ($hasUniqueIdColumn) {
-                    $payload['unique_id'] = $groupUniqueId;
-                }
-
-                if ($hasIconColumn) {
-                    $payload['icon'] = $icon;
-                }
-
-                if ($translation) {
-                    $translation->update($payload);
-                } else {
-                    ProductCategory::create($payload);
-                }
+            if (!$translation) {
+                $translation = ProductCategory::where('unique_id', $groupUniqueId)
+                    ->where('language_id', $language->id)
+                    ->first();
             }
-        });
 
-        session()->flash('success', __('Category update successfully'));
-        return response()->json(['status' => 'success'], 200);
-    }
-    public function delete(Request $request)
-    {
-        $categoryId = $request->category_id;
-        $category = ProductCategory::findOrFail($categoryId);
+            $payload = [
+                'language_id' => $language->id,
+                'unique_id' => $groupUniqueId,
+                'name' => $resolvedNames[$language->id],
+                'slug' => createSlug($resolvedNames[$language->id]),
+                'serial_number' => $request->serial_number,
+                'status' => $request->status,
+                'icon' => $icon,
+            ];
 
-        if (Schema::hasColumn('product_categories', 'unique_id') && filled($category->unique_id)) {
-            ProductCategory::where('unique_id', $category->unique_id)->delete();
-        } else {
-            $category->delete();
-        }
-
-        return redirect()->back()->with('success', __('Category delete successfully'));
-    }
-    public function bulkdelete(Request $request)
-    {
-        $ids = $request->ids;
-        $hasUniqueIdColumn = Schema::hasColumn('product_categories', 'unique_id');
-        $uniqueIds = [];
-
-        foreach ($ids as $id) {
-            $category = ProductCategory::findOrFail($id);
-
-            if ($hasUniqueIdColumn && filled($category->unique_id)) {
-                $uniqueIds[] = $category->unique_id;
+            if ($translation) {
+                $translation->update($payload);
             } else {
-                $category->delete();
+                ProductCategory::create($payload);
             }
         }
-
-        if (!empty($uniqueIds)) {
-            ProductCategory::whereIn('unique_id', array_unique($uniqueIds))->delete();
-        }
-
-        session()->flash('success', __('Categories delete successfully'));
-        return response()->json(['status' => 'success'], 200);
-    }
-    public function changeStatus(Request $request)
-    {
-        $category = ProductCategory::findOrFail($request->id);
-
-        if (Schema::hasColumn('product_categories', 'unique_id') && filled($category->unique_id)) {
-            ProductCategory::where('unique_id', $category->unique_id)->update(['status' => $request->status]);
-        } else {
-            $category->update(['status' => $request->status]);
-        }
-
-        return 'success';
     }
 }
