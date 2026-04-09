@@ -9,6 +9,9 @@
     <!-- Featured products -->
     @include('front.grocery.featured-product')
 
+        <!-- Features section -->
+    @include('front.grocery.features')
+
     <!-- Popular products section -->
     @include('front.grocery.popular-product')
 
@@ -17,7 +20,4 @@
 
     <!-- Rewards section -->
     {{-- @include('front.grocery.rewards') --}}
-
-    <!-- Features section -->
-    @include('front.grocery.features')
 @endsection

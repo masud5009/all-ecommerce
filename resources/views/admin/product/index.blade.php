@@ -130,7 +130,11 @@
                                                     alt="product">
                                             </td>
                                             <td>
-                                                {{ truncateString($product->title, 55) }}</td>
+                                                <a target="_blank"
+                                                    href="{{ route('frontend.shop.details', ['id' => $product->id]) }}">
+                                                    {{ truncateString($product->title, 50) }}
+                                                </a>
+                                            </td>
 
                                             <td>
                                                 {{ $product->categoryName }}
@@ -195,7 +199,7 @@
                                                         data-bs-toggle="modal" data-bs-target="#flashSaleModal"
                                                         data-product-id="{{ $product->id }}"
                                                         data-title="{{ $product->title }}"
-                                                        data-current-price="{{ $product->has_variants == 1 ? __("Variant Product") : $product->current_price }}"
+                                                        data-current-price="{{ $product->has_variants == 1 ? __('Variant Product') : $product->current_price }}"
                                                         data-flash-sale-status="{{ $product->flash_sale_status ?? 0 }}"
                                                         data-flash-sale-price="{{ $product->flash_sale_price !== null ? $product->flash_sale_price : '' }}"
                                                         data-flash-sale-start-at="{{ !empty($product->flash_sale_start_at) ? \Illuminate\Support\Carbon::parse($product->flash_sale_start_at)->format('Y-m-d\\TH:i') : '' }}"
@@ -295,4 +299,3 @@
 
     @include('admin.product.search')
 @endsection
-

@@ -86,6 +86,7 @@ class ProductService
                             ->where('status', 1);
                     });
             })
+            ->where('status', 1)
             ->orderByDesc('created_at')
             ->limit(10)
             ->get();
