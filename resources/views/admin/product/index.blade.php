@@ -27,7 +27,7 @@
         <div class="card">
             <x-bulk-delete :url="route('admin.product.bulk_delete')" itemTextName="products" />
             <div class="card-header">
-                <div class="row">
+                <div class="row align-items-center g-2">
                     <div class="col-lg-3 col-sm-6">
                         <div class="card-title">
                             <h5>{{ __('Products') }}</h5>
@@ -37,7 +37,7 @@
                         @include('admin.partials.languages')
                     </div>
                     <div class="col-lg-6 col-sm-12">
-                        <div class="info-header-content">
+                        <div class="info-header-content d-flex flex-wrap gap-2 justify-content-lg-end justify-content-start align-items-center">
                             <button class="btn btn-danger btn-sm  d-none bulk-delete"
                                 data-href="{{ route('admin.product.bulk_delete') }}">
                                 <i class="fas fa-trash"></i> {{ __('Delete') }}
