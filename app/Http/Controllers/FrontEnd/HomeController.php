@@ -20,15 +20,6 @@ use App\Services\Frontend\CategoryService;
 
 class HomeController extends Controller
 {
-    protected $currentLang;
-    public function __construct()
-    {
-        if (session()->has('lang')) {
-            $this->currentLang = Language::where('code', session()->get('lang'))->first();
-        } else {
-            $this->currentLang = Language::where('is_default', 1)->first();
-        }
-    }
 
     /**
      * Display the home page with
@@ -41,7 +32,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $languageId = $this->currentLang->id;
+
+        if (session()->has('lang')) {
+            $currentLang = Language::where('code', session()->get('lang'))->first();
+        } else {
+            $currentLang = Language::where('is_default', 1)->first();
+        }
+
+
+        $languageId = $currentLang->id;
         $data['homeCategories'] = CategoryService::getHomeFeaturedCategories($languageId);
 
         $featuredProducts = ProductService::getHomeFeaturedProducts($languageId);
@@ -56,7 +55,7 @@ class HomeController extends Controller
             ->where('language_id', $languageId)
             ->orderBy('serial_number', 'asc')
             ->get();
-            // dd($data['homeSliders']); 
+        // dd($data['homeSliders']);
         $data['sectionTitles'] = HomeSectionSetting::where('language_id', $languageId)->first();
         $data['freshnessLeftItems'] = HomeFreshnessItem::where('language_id', $languageId)
             ->where('status', 1)

@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\User\StoreRequest;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\App;
 
 class UserController extends Controller
 {
@@ -34,6 +35,9 @@ class UserController extends Controller
         } else {
             $this->currentLang = Language::where('is_default', 1)->first();
         }
+
+        // Set app locale to current language
+        App::setLocale($this->currentLang->code);
     }
 
     /**

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use App\Services\Payment\PaymentService;
 use App\Services\Payment\PaymentGatewayFactory;
+use Illuminate\Support\Facades\App;
 
 class CartController extends Controller
 {
@@ -30,6 +31,9 @@ class CartController extends Controller
         } else {
             $this->currentLang = Language::where('is_default', 1)->first();
         }
+
+        // Set app locale to current language
+        App::setLocale($this->currentLang->code);
     }
 
     /**

@@ -9,35 +9,30 @@ use App\Models\ProductReview;
 use App\Models\Admin\Language;
 use App\Models\ProductCategory;
 use App\Models\ProductSubcategory;
+use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
-use App\Services\Plugins\GoogleRecaptchaService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use App\Services\Frontend\ProductService;
+use Illuminate\Support\Facades\Validator;
 use App\Services\Frontend\CategoryService;
+use App\Services\Plugins\GoogleRecaptchaService;
 
 class ShopController extends Controller
 {
-    protected $currentLang;
     protected GoogleRecaptchaService $googleRecaptcha;
-
-    public function __construct(GoogleRecaptchaService $googleRecaptcha)
-    {
-        $this->googleRecaptcha = $googleRecaptcha;
-
-        if (session()->has('lang')) {
-            $this->currentLang = Language::where('code', session()->get('lang'))->first();
-        } else {
-            $this->currentLang = Language::where('is_default', 1)->first();
-        }
-    }
 
     /**
      * shop page load
      */
     public function index(Request $request)
     {
-        $languageId = $this->currentLang->id;
+         if (session()->has('lang')) {
+            $currentLang = Language::where('code', session()->get('lang'))->first();
+        } else {
+            $currentLang = Language::where('is_default', 1)->first();
+        }
+
+        $languageId = $currentLang->id;
 
         $data['categories'] = CategoryService::getHomeFeaturedCategories($languageId);
         $data['subcategories'] = ProductSubcategory::where('language_id', $languageId)
@@ -73,7 +68,13 @@ class ShopController extends Controller
      */
     public function details($id)
     {
-        $languageId = $this->currentLang->id;
+         if (session()->has('lang')) {
+            $currentLang = Language::where('code', session()->get('lang'))->first();
+        } else {
+            $currentLang = Language::where('is_default', 1)->first();
+        }
+
+        $languageId = $currentLang->id;
         $product = Product::with([
             'content' => function ($q) use ($languageId) {
                 $q->where('language_id', $languageId);
@@ -188,7 +189,13 @@ class ShopController extends Controller
      */
     public function quickView($id)
     {
-        $languageId = $this->currentLang->id;
+         if (session()->has('lang')) {
+            $currentLang = Language::where('code', session()->get('lang'))->first();
+        } else {
+            $currentLang = Language::where('is_default', 1)->first();
+        }
+
+        $languageId = $currentLang->id;
 
         $product = Product::with([
             'content' => function ($q) use ($languageId) {
