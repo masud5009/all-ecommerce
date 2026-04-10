@@ -1111,6 +1111,13 @@ CREATE TABLE `settings` (
   `gemini_api_key` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `gemini_image_model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `gemini_text_model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `facebook_pixel_status` tinyint NOT NULL DEFAULT '0',
+  `facebook_pixel_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `google_recaptcha_status` tinyint NOT NULL DEFAULT '0',
+  `google_recaptcha_site_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `google_recaptcha_secret_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `google_analytics_status` tinyint NOT NULL DEFAULT '0',
+  `google_analytics_measurement_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1119,8 +1126,8 @@ CREATE TABLE `settings` (
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `uniqid`, `website_logo`, `logo_two`, `footer_logo`, `favicon`, `website_title`, `email_address`, `contact_number`, `address`, `smtp_host`, `smtp_port`, `smtp_username`, `smtp_password`, `encryption`, `sender_mail`, `sender_name`, `smtp_status`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `currency_rate`, `timezone`, `website_color`, `maintenance_image`, `maintenance_status`, `maintenance_message`, `bypass_token`, `package_expire_day`, `admin_approval`, `email_verification_approval`, `admin_approval_notice`, `pusher_app_id`, `pusher_status`, `pusher_app_key`, `pusher_app_secret`, `pusher_app_cluster`, `stedfast_api_key`, `stedfast_secret_key`, `stedfast_status`, `gemini_status`, `gemini_api_key`, `gemini_image_model`, `gemini_text_model`, `created_at`, `updated_at`) VALUES
-(1, 1234, '6792620a5426d.png', NULL, '6623f11a26d49.png', '6792620a5379d.png', 'Business Validator', NULL, NULL, NULL, 'smtp.gmail.com', '587', 'airdrop446646@gmail.com', 'lwee cjer feik pdof', 'TLS', 'airdrop446646@gmail.com', 'Myapp', 1, '৳', 'left', 'TK', 'right', 1, 'Europe/Andorra', '#FF0000FF', '6706bc36b9811.jpg', 0, '<p>Maintenance MessageMaintenance Message</p>', '-1', 4, 1, 1, 'You need to permission from admin to access this panel', '1942636', 1, 'e58380d6ebb048e6feb4', '24a208922bc018ef9b37', 'ap2', 'xnwbyhhhyuycs6ckslp9v0qlylzwflps', 'dw8wwhnqcaiajhpk93lsfrms', 1, 1, 'AIzaSyBiPZPJu6xLOd5lE8H_tjCI7Ufa7Pas0YM', 'imagen-4.0-generate', 'Gemini 2.5 Pro', NULL, '2024-12-09 11:41:33');
+INSERT INTO `settings` (`id`, `uniqid`, `website_logo`, `logo_two`, `footer_logo`, `favicon`, `website_title`, `email_address`, `contact_number`, `address`, `smtp_host`, `smtp_port`, `smtp_username`, `smtp_password`, `encryption`, `sender_mail`, `sender_name`, `smtp_status`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `currency_rate`, `timezone`, `website_color`, `maintenance_image`, `maintenance_status`, `maintenance_message`, `bypass_token`, `package_expire_day`, `admin_approval`, `email_verification_approval`, `admin_approval_notice`, `pusher_app_id`, `pusher_status`, `pusher_app_key`, `pusher_app_secret`, `pusher_app_cluster`, `stedfast_api_key`, `stedfast_secret_key`, `stedfast_status`, `gemini_status`, `gemini_api_key`, `gemini_image_model`, `gemini_text_model`, `facebook_pixel_status`, `facebook_pixel_id`, `google_recaptcha_status`, `google_recaptcha_site_key`, `google_recaptcha_secret_key`, `google_analytics_status`, `google_analytics_measurement_id`, `created_at`, `updated_at`) VALUES
+(1, 1234, '6792620a5426d.png', NULL, '6623f11a26d49.png', '6792620a5379d.png', 'Business Validator', NULL, NULL, NULL, 'smtp.gmail.com', '587', 'airdrop446646@gmail.com', 'lwee cjer feik pdof', 'TLS', 'airdrop446646@gmail.com', 'Myapp', 1, '৳', 'left', 'TK', 'right', 1, 'Europe/Andorra', '#FF0000FF', '6706bc36b9811.jpg', 0, '<p>Maintenance MessageMaintenance Message</p>', '-1', 4, 1, 1, 'You need to permission from admin to access this panel', '1942636', 1, 'e58380d6ebb048e6feb4', '24a208922bc018ef9b37', 'ap2', 'xnwbyhhhyuycs6ckslp9v0qlylzwflps', 'dw8wwhnqcaiajhpk93lsfrms', 1, 1, 'AIzaSyBiPZPJu6xLOd5lE8H_tjCI7Ufa7Pas0YM', 'imagen-4.0-generate', 'Gemini 2.5 Pro', 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2024-12-09 11:41:33');
 
 -- --------------------------------------------------------
 

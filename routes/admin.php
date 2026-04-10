@@ -194,6 +194,9 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
         Route::post('/plupusher_updategins', 'Admin\PluginController@pusher_update')->name('admin.plugin.pusher_update');
         Route::post('/stedfast/update', 'Admin\PluginController@stedfast_update')->name('admin.plugin.stedfast_update');
         Route::post('/gemini_update/update', 'Admin\PluginController@gemini_update')->name('admin.plugin.gemini_update');
+        Route::post('/facebook-pixel/update', 'Admin\PluginController@facebook_pixel_update')->name('admin.plugin.facebook_pixel_update');
+        Route::post('/google-recaptcha/update', 'Admin\PluginController@google_recaptcha_update')->name('admin.plugin.google_recaptcha_update');
+        Route::post('/google-analytics/update', 'Admin\PluginController@google_analytics_update')->name('admin.plugin.google_analytics_update');
     });
 
     //blog managment route

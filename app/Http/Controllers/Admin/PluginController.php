@@ -22,8 +22,16 @@ class PluginController extends Controller
             'gemini_status',
             'gemini_api_key',
             'gemini_image_model',
-            'gemini_text_model'
-        )->first();
+            'gemini_text_model',
+            'facebook_pixel_status',
+            'facebook_pixel_id',
+            'google_recaptcha_status',
+            'google_recaptcha_site_key',
+            'google_recaptcha_secret_key',
+            'google_analytics_status',
+            'google_analytics_measurement_id'
+        )->first() ?? new Setting();
+
         return view('admin.settings.plugin', compact('data'));
     }
 
@@ -101,5 +109,73 @@ class PluginController extends Controller
 
         session()->flash('success', __('Gemini update successfully'));
         return back()->with('active_plugin', 'gemini');
+    }
+
+    /**
+     * facebook_pixel_update
+     */
+    public function facebook_pixel_update(Request $request)
+    {
+        $request->validate([
+            'facebook_pixel_status' => 'required|in:0,1',
+            'facebook_pixel_id' => 'nullable|required_if:facebook_pixel_status,1|string|max:255',
+        ]);
+
+        Setting::updateOrInsert(
+            ['uniqid' => 1234],
+            [
+                'facebook_pixel_status' => $request->facebook_pixel_status,
+                'facebook_pixel_id' => $request->facebook_pixel_id,
+            ]
+        );
+
+        session()->flash('success', __('Facebook Pixel update successfully'));
+        return back()->with('active_plugin', 'facebook_pixel');
+    }
+
+    /**
+     * google_recaptcha_update
+     */
+    public function google_recaptcha_update(Request $request)
+    {
+        $request->validate([
+            'google_recaptcha_status' => 'required|in:0,1',
+            'google_recaptcha_site_key' => 'nullable|required_if:google_recaptcha_status,1|string|max:255',
+            'google_recaptcha_secret_key' => 'nullable|required_if:google_recaptcha_status,1|string|max:255',
+        ]);
+
+        Setting::updateOrInsert(
+            ['uniqid' => 1234],
+            [
+                'google_recaptcha_status' => $request->google_recaptcha_status,
+                'google_recaptcha_site_key' => $request->google_recaptcha_site_key,
+                'google_recaptcha_secret_key' => $request->google_recaptcha_secret_key,
+            ]
+        );
+
+        session()->flash('success', __('Google Recaptcha update successfully'));
+        return back()->with('active_plugin', 'google_recaptcha');
+    }
+
+    /**
+     * google_analytics_update
+     */
+    public function google_analytics_update(Request $request)
+    {
+        $request->validate([
+            'google_analytics_status' => 'required|in:0,1',
+            'google_analytics_measurement_id' => 'nullable|required_if:google_analytics_status,1|string|max:255',
+        ]);
+
+        Setting::updateOrInsert(
+            ['uniqid' => 1234],
+            [
+                'google_analytics_status' => $request->google_analytics_status,
+                'google_analytics_measurement_id' => $request->google_analytics_measurement_id,
+            ]
+        );
+
+        session()->flash('success', __('Google Analytics update successfully'));
+        return back()->with('active_plugin', 'google_analytics');
     }
 }
