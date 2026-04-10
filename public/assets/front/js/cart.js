@@ -87,7 +87,7 @@
     };
 
     // Add to cart
-    const addToCart = async (productId, quantity, variantId, variantLabel, price) => {
+    const addToCart = async (productId, quantity, variantId, variantLabel, price, meta = {}) => {
         try {
             const response = await fetch(CART_ROUTES.add, {
                 method: 'POST',
@@ -111,6 +111,17 @@
             if (data.success) {
                 updateCartBadges(data.totalQty);
                 showToast('Added to cart!', 'success');
+                window.dispatchEvent(new CustomEvent('freshcart:add_to_cart', {
+                    detail: {
+                        productId: productId,
+                        quantity: quantity,
+                        variantId: variantId,
+                        variantLabel: variantLabel,
+                        price: price,
+                        value: Number(price || 0) * Number(quantity || 1),
+                        name: meta.name || null,
+                    },
+                }));
                 // Refresh cart items
                 fetchAndRenderCart();
                 // Open cart offcanvas
@@ -288,7 +299,9 @@
                     }
                 }
 
-                addToCart(productId, quantity, variantId, variantLabel, price);
+                addToCart(productId, quantity, variantId, variantLabel, price, {
+                    name: window.serverProductDetail.name || null,
+                });
             }
         }
 
@@ -313,7 +326,9 @@
                 return;
             }
 
-            addToCart(productId, quantity, variantId, variantLabel, price);
+            addToCart(productId, quantity, variantId, variantLabel, price, {
+                name: btn.dataset.productName || null,
+            });
         }
 
         // Remove item from cart

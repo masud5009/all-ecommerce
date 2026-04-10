@@ -34,13 +34,20 @@
                     placeholder="Share your experience...">{{ old('comment') }}</textarea>
             </div>
 
+            @include('front.partials.google-recaptcha', [
+                'wrapperClass' => 'mt-3',
+            ])
+
             <div data-review-errors
-                class="{{ $errors->has('rating') || $errors->has('comment') ? '' : 'hidden' }} mt-3 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                class="{{ $errors->has('rating') || $errors->has('comment') || $errors->has('g-recaptcha-response') ? '' : 'hidden' }} mt-3 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
                 @if ($errors->has('rating'))
                     <p>{{ $errors->first('rating') }}</p>
                 @endif
                 @if ($errors->has('comment'))
                     <p>{{ $errors->first('comment') }}</p>
+                @endif
+                @if ($errors->has('g-recaptcha-response'))
+                    <p>{{ $errors->first('g-recaptcha-response') }}</p>
                 @endif
             </div>
 

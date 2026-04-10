@@ -93,6 +93,10 @@
                     <label for="remember" class="text-sm text-slate-600 cursor-pointer">Remember me for 30 days</label>
                 </div>
 
+                @include('front.partials.google-recaptcha', [
+                    'wrapperClass' => 'mb-6',
+                ])
+
                 {{-- Submit --}}
                 <button type="submit" id="login-btn"
                     class="w-full flex items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:translate-y-0">

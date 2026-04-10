@@ -42,7 +42,14 @@ class AppServiceProvider extends ServiceProvider
                 'currency_symbol_position',
                 'currency_rate',
                 'package_expire_day',
-                'email_verification_approval'
+                'email_verification_approval',
+                'facebook_pixel_status',
+                'facebook_pixel_id',
+                'google_recaptcha_status',
+                'google_recaptcha_site_key',
+                'google_recaptcha_secret_key',
+                'google_analytics_status',
+                'google_analytics_measurement_id'
             )->first();
         });
 
@@ -80,7 +87,20 @@ class AppServiceProvider extends ServiceProvider
              * frontend blade view
              */
             View::composer('front.*', function ($view) {
-                $websiteSettings = Setting::select('website_logo', 'favicon', 'website_title', 'website_color')->first();
+                $websiteSettings = Setting::select(
+                    'website_logo',
+                    'favicon',
+                    'website_title',
+                    'website_color',
+                    'facebook_pixel_status',
+                    'facebook_pixel_id',
+                    'google_recaptcha_status',
+                    'google_recaptcha_site_key',
+                    'google_recaptcha_secret_key',
+                    'google_analytics_status',
+                    'google_analytics_measurement_id',
+                    'currency_text'
+                )->first();
 
                 if (session()->has('lang')) {
                     $currentLang = Language::where('code', session()->get('lang'))->first();

@@ -13,6 +13,7 @@ use App\Models\Admin\Language;
 use App\Http\Helpers\MailConfig;
 use App\Models\Admin\MailTemplate;
 use App\Http\Controllers\Controller;
+use App\Services\Plugins\GoogleRecaptchaService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -22,8 +23,12 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     protected $currentLang;
-    public function __construct()
+    protected GoogleRecaptchaService $googleRecaptcha;
+
+    public function __construct(GoogleRecaptchaService $googleRecaptcha)
     {
+        $this->googleRecaptcha = $googleRecaptcha;
+
         if (session()->has('lang')) {
             $this->currentLang = Language::where('code', session()->get('lang'))->first();
         } else {
@@ -332,7 +337,12 @@ class UserController extends Controller
             'password' => 'required'
         ];
 
+        if ($this->googleRecaptcha->isEnabled()) {
+            $rules['g-recaptcha-response'] = 'required|string';
+        }
+
         $validator = Validator::make($request->all(), $rules);
+        $this->appendRecaptchaValidation($request, $validator);
 
         if ($validator->fails()) {
             return response()->json([
@@ -422,13 +432,19 @@ class UserController extends Controller
                 'new_password_confirmation' => 'required|string'
             ];
 
+            if ($this->googleRecaptcha->isEnabled()) {
+                $rules['g-recaptcha-response'] = ['required', 'string'];
+            }
+
             $messages = [
                 'new_password.confirmed' => 'Password confirmation failed.',
                 'new_password.regex' => 'Password must include uppercase, lowercase, number and special character.',
-                'new_password_confirmation.required' => 'The confirm new password field is required.'
+                'new_password_confirmation.required' => 'The confirm new password field is required.',
+                'g-recaptcha-response.required' => __('Please complete the Google Recaptcha verification.'),
             ];
 
             $validator = Validator::make($request->all(), $rules, $messages);
+            $this->appendRecaptchaValidation($request, $validator);
 
             if ($validator->fails()) {
                 if ($request->expectsJson()) {
@@ -486,7 +502,12 @@ class UserController extends Controller
             ]
         ];
 
+        if ($this->googleRecaptcha->isEnabled()) {
+            $rules['g-recaptcha-response'] = ['required', 'string'];
+        }
+
         $validator = Validator::make($request->all(), $rules);
+        $this->appendRecaptchaValidation($request, $validator);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator->errors())->withInput();
@@ -573,5 +594,22 @@ class UserController extends Controller
         Session::forget('secret_login');
 
         return redirect()->route('user.login');
+    }
+
+    private function appendRecaptchaValidation(Request $request, $validator): void
+    {
+        if (!$this->googleRecaptcha->isEnabled()) {
+            return;
+        }
+
+        $validator->after(function ($validator) use ($request) {
+            if ($validator->errors()->has('g-recaptcha-response')) {
+                return;
+            }
+
+            if (!$this->googleRecaptcha->verify($request->input('g-recaptcha-response'), $request->ip())) {
+                $validator->errors()->add('g-recaptcha-response', __('Google Recaptcha verification failed. Please try again.'));
+            }
+        });
     }
 }

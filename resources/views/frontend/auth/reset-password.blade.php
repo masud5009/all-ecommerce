@@ -118,6 +118,10 @@
                     <p class="mt-1.5 text-xs hidden" id="match-indicator"></p>
                 </div>
 
+                @include('front.partials.google-recaptcha', [
+                    'wrapperClass' => 'mb-6',
+                ])
+
                 {{-- Submit --}}
                 <button type="submit" id="reset-submit-btn"
                     class="w-full rounded-xl bg-green-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 active:translate-y-0">

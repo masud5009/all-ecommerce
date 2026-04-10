@@ -10,15 +10,21 @@ use App\Models\Admin\Language;
 use App\Models\ProductCategory;
 use App\Models\ProductSubcategory;
 use App\Http\Controllers\Controller;
+use App\Services\Plugins\GoogleRecaptchaService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use App\Services\Frontend\ProductService;
 use App\Services\Frontend\CategoryService;
 
 class ShopController extends Controller
 {
     protected $currentLang;
-    public function __construct()
+    protected GoogleRecaptchaService $googleRecaptcha;
+
+    public function __construct(GoogleRecaptchaService $googleRecaptcha)
     {
+        $this->googleRecaptcha = $googleRecaptcha;
+
         if (session()->has('lang')) {
             $this->currentLang = Language::where('code', session()->get('lang'))->first();
         } else {
@@ -307,10 +313,44 @@ class ShopController extends Controller
     {
         $product = Product::query()->findOrFail($id);
 
-        $validated = $request->validate([
+        $rules = [
             'rating' => ['required', 'integer', 'min:1', 'max:5'],
             'comment' => ['required', 'string', 'min:5', 'max:1000'],
+        ];
+
+        if ($this->googleRecaptcha->isEnabled()) {
+            $rules['g-recaptcha-response'] = ['required', 'string'];
+        }
+
+        $validator = Validator::make($request->all(), $rules, [
+            'g-recaptcha-response.required' => __('Please complete the Google Recaptcha verification.'),
         ]);
+
+        if ($this->googleRecaptcha->isEnabled()) {
+            $validator->after(function ($validator) use ($request) {
+                if ($validator->errors()->has('g-recaptcha-response')) {
+                    return;
+                }
+
+                if (!$this->googleRecaptcha->verify($request->input('g-recaptcha-response'), $request->ip())) {
+                    $validator->errors()->add('g-recaptcha-response', __('Google Recaptcha verification failed. Please try again.'));
+                }
+            });
+        }
+
+        if ($validator->fails()) {
+            if ($request->ajax() || $request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $validated = $validator->validated();
 
         $user = Auth::guard('web')->user();
 

@@ -13,6 +13,7 @@
 
     $productDetail = [
         'id' => $productId,
+        'name' => $productName,
         'units' => $variants,
     ];
 

@@ -12,7 +12,55 @@
             wishlistToggle: '{{ route('frontend.wishlist.toggle') }}',
             login: '{{ route('user.login') }}'
         };
+        window.websitePlugins = {
+            facebookPixelEnabled: {{ !empty($websiteInfo->facebook_pixel_status) && !empty($websiteInfo->facebook_pixel_id) ? 'true' : 'false' }},
+            facebookPixelId: @json($websiteInfo->facebook_pixel_id ?? null),
+            googleAnalyticsEnabled: {{ !empty($websiteInfo->google_analytics_status) && !empty($websiteInfo->google_analytics_measurement_id) ? 'true' : 'false' }},
+            googleAnalyticsMeasurementId: @json($websiteInfo->google_analytics_measurement_id ?? null),
+            googleRecaptchaEnabled: {{ !empty($websiteInfo->google_recaptcha_status) && !empty($websiteInfo->google_recaptcha_site_key) ? 'true' : 'false' }},
+            googleRecaptchaSiteKey: @json($websiteInfo->google_recaptcha_site_key ?? null),
+            currencyCode: @json($websiteInfo->currency_text ?? 'BDT')
+        };
     </script>
+
+    @if (!empty($websiteInfo->google_analytics_status) && !empty($websiteInfo->google_analytics_measurement_id))
+        <script async
+            src="https://www.googletagmanager.com/gtag/js?id={{ urlencode($websiteInfo->google_analytics_measurement_id) }}">
+        </script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = window.gtag || function() {
+                dataLayer.push(arguments);
+            };
+            gtag('js', new Date());
+            gtag('config', @json($websiteInfo->google_analytics_measurement_id), {
+                send_page_view: true
+            });
+        </script>
+    @endif
+
+    @if (!empty($websiteInfo->facebook_pixel_status) && !empty($websiteInfo->facebook_pixel_id))
+        <script>
+            !function(f, b, e, v, n, t, s) {
+                if (f.fbq) return;
+                n = f.fbq = function() {
+                    n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+                };
+                if (!f._fbq) f._fbq = n;
+                n.push = n;
+                n.loaded = true;
+                n.version = '2.0';
+                n.queue = [];
+                t = b.createElement(e);
+                t.async = true;
+                t.src = v;
+                s = b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t, s);
+            }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', @json($websiteInfo->facebook_pixel_id));
+            fbq('track', 'PageView');
+        </script>
+    @endif
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,6 +110,13 @@
 </head>
 
 <body class="bg-white text-slate-900" data-page="@yield('page', 'home')">
+    @if (!empty($websiteInfo->facebook_pixel_status) && !empty($websiteInfo->facebook_pixel_id))
+        <noscript>
+            <img height="1" width="1" style="display:none"
+                src="https://www.facebook.com/tr?id={{ urlencode($websiteInfo->facebook_pixel_id) }}&ev=PageView&noscript=1" />
+        </noscript>
+    @endif
+
     @include('front.partials.navbar')
     @include('front.partials.cart-offcanvas')
     @include('front.partials.quickview-modal')
@@ -125,6 +180,12 @@
     <script src="{{ asset('assets/front/js/app.js') }}"></script>
     <script src="{{ asset('assets/front/js/checkout.js') }}"></script>
     <script src="{{ asset('assets/front/js/wishlist.js') }}"></script>
+    <script src="{{ asset('assets/front/js/plugin-integrations.js') }}"></script>
+
+    @if (!empty($websiteInfo->google_recaptcha_status) && !empty($websiteInfo->google_recaptcha_site_key))
+        <script src="https://www.google.com/recaptcha/api.js?onload=onGoogleRecaptchaLoaded&render=explicit" async
+            defer></script>
+    @endif
 
     @yield('script')
 </body>

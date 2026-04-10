@@ -225,5 +225,26 @@
     </div>
 @endsection
 @section('script')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            window.dispatchEvent(new CustomEvent('freshcart:begin_checkout', {
+                detail: {
+                    value: @json((float) $total),
+                    currency: @json($websiteInfo->currency_text ?? 'BDT'),
+                    items: @json(
+                        collect($cartItems)->map(function ($item) {
+                            return [
+                                'item_id' => (string) ($item['product_id'] ?? ''),
+                                'item_name' => $item['name'] ?? 'Product',
+                                'item_variant' => $item['variant_label'] ?? null,
+                                'price' => (float) ($item['price'] ?? 0),
+                                'quantity' => (int) ($item['quantity'] ?? 1),
+                            ];
+                        })->values()->all(),
+                    ),
+                }
+            }));
+        });
+    </script>
     <script src="{{ asset('assets/front/js/checkout.js') }}"></script>
 @endsection

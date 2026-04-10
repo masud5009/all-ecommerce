@@ -102,6 +102,12 @@
             el.remove();
         });
 
+        const recaptchaError = form.querySelector('[data-recaptcha-error]');
+        if (recaptchaError) {
+            recaptchaError.textContent = '';
+            recaptchaError.classList.add('hidden');
+        }
+
         form.querySelectorAll('input, textarea, select').forEach(function (input) {
             input.classList.remove('border-red-400', 'bg-red-50');
             if (!input.classList.contains('border-slate-200')) {
@@ -116,6 +122,16 @@
     function renderFieldErrors(form, errors) {
         Object.keys(errors || {}).forEach(function (field) {
             const input = form.querySelector('[name="' + field + '"]');
+            const message = Array.isArray(errors[field]) ? errors[field][0] : errors[field];
+
+            if (field === 'g-recaptcha-response') {
+                const recaptchaError = form.querySelector('[data-recaptcha-error]');
+                if (recaptchaError) {
+                    recaptchaError.textContent = message;
+                    recaptchaError.classList.remove('hidden');
+                }
+                return;
+            }
 
             if (!input) {
                 return;
@@ -124,7 +140,6 @@
             input.classList.remove('border-slate-200', 'bg-slate-50');
             input.classList.add('border-red-400', 'bg-red-50');
 
-            const message = Array.isArray(errors[field]) ? errors[field][0] : errors[field];
             const errorEl = document.createElement('p');
             errorEl.className = 'mt-1.5 text-xs text-red-600';
             errorEl.setAttribute('data-error-for', field);
@@ -275,6 +290,10 @@
                     showMessage(errorBox, config.networkErrorMessage);
                 }
             } finally {
+                if (typeof window.resetGoogleRecaptcha === 'function') {
+                    window.resetGoogleRecaptcha(form);
+                }
+
                 setLoadingState(config, false);
             }
         });

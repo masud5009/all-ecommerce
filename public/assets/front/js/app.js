@@ -449,7 +449,9 @@
 
                     // Use cart.js add function
                     if (window.FreshCart && window.FreshCart.cart && window.FreshCart.cart.add) {
-                        window.FreshCart.cart.add(productData.id, quantity, variantId, variantLabel, price);
+                        window.FreshCart.cart.add(productData.id, quantity, variantId, variantLabel, price, {
+                            name: productData.name || null,
+                        });
                         closeModal();
                     }
                 });
@@ -561,10 +563,17 @@
                 const reviewsTab = form.closest('[data-tab="reviews"]');
                 if (reviewsTab && data.html) {
                     reviewsTab.innerHTML = data.html;
+                    if (typeof window.initGoogleRecaptchaWidgets === 'function') {
+                        window.initGoogleRecaptchaWidgets(reviewsTab);
+                    }
                 }
             } catch (error) {
                 renderErrors(form, { general: ['Something went wrong. Please try again.'] });
             } finally {
+                if (typeof window.resetGoogleRecaptcha === 'function') {
+                    window.resetGoogleRecaptcha(form);
+                }
+
                 if (submitBtn) {
                     submitBtn.disabled = false;
                     submitBtn.textContent = originalBtnText || 'Submit Review';
