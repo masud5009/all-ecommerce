@@ -2,8 +2,15 @@
     color: #183153;
 }
 
-.form-control {
+/* .form-control {
     padding: .5rem .75rem !important;
+} */
+.form-control {
+    min-height: 50px;
+    padding-left: .95rem !important;
+    padding-right: .95rem !important;
+    border-radius: 15px;
+    box-shadow: none;
 }
 
 input:disabled,
@@ -200,6 +207,7 @@ button:focus:not(:focus-visible) {
 }
 
 @media (max-width: 767.98px) {
+
     .jq-toast-wrap,
     .jq-toast-wrap.top-right,
     .jq-toast-wrap.top-left,
@@ -349,8 +357,15 @@ div.dt-container.dt-empty-footer tbody>tr:last-child>* {
     font-weight: 500;
 }
 
-.form-select {
+/* .form-select {
     cursor: pointer;
+} */
+.form-select {
+    min-height: 50px;
+    padding-left: .95rem !important;
+    padding-right: .95rem !important;
+    border-radius: 15px;
+    box-shadow: none;
 }
 
 select.status-select {
@@ -1696,7 +1711,7 @@ div.dt-container .dt-paging .dt-paging-button {
     padding: 0.65rem 0.75rem;
 }
 
-.variants-grid .variants-table.table-bordered > :not(caption) > * > * {
+.variants-grid .variants-table.table-bordered> :not(caption)>*>* {
     border-color: rgba(255, 255, 255, 0.08);
 }
 
