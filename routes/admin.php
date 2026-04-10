@@ -23,7 +23,7 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
 
     Route::prefix('menu-builder')->controller(MenuBuilderController::class)->group(function () {
         Route::get('/', 'index')->name('admin.menu_builder');
-        Route::post('/store', 'store')->name('admin.menu_builder.update');
+        Route::post('/store/{language_id}', 'store')->name('admin.menu_builder.update');
     });
 
     /*============================

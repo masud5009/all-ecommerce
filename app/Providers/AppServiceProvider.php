@@ -75,9 +75,14 @@ class AppServiceProvider extends ServiceProvider
             View::composer('admin.*', function ($view) {
                 $time_zones_json_format = json_decode(file_get_contents(base_path('database/time_zone.json')), true);
                 $timeZones = $time_zones_json_format['timezones'];
+
+                // Set app locale to dashboard default language for admin
+                $defaultLang = app('defaultLang');
+                \Illuminate\Support\Facades\App::setLocale($defaultLang->code);
+
                 $view->with([
                     'footerContent' => app('footerText'),
-                    'defaultLang' => app('defaultLang'),
+                    'defaultLang' => $defaultLang,
                     'timeZones' => $timeZones,
                     'languages' => app('languages'),
                 ]);
@@ -102,16 +107,19 @@ class AppServiceProvider extends ServiceProvider
                     'currency_text'
                 )->first();
 
+
                 if (session()->has('lang')) {
                     $currentLang = Language::where('code', session()->get('lang'))->first();
                 } else {
                     $currentLang = Language::where('is_default', 1)->first();
                 }
 
+                // Set app locale dynamically based on selected language
+                \Illuminate\Support\Facades\App::setLocale($currentLang->code);
+
                 $menus = [];
                 $menu = MenuBuilder::where('language_id', $currentLang->id)->value('menu');
                 $menus = json_decode($menu, true);
-
 
                 $view->with([
                     'menus' => $menus,

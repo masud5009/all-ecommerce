@@ -56,6 +56,7 @@ class HomeController extends Controller
             ->where('language_id', $languageId)
             ->orderBy('serial_number', 'asc')
             ->get();
+            // dd($data['homeSliders']); 
         $data['sectionTitles'] = HomeSectionSetting::where('language_id', $languageId)->first();
         $data['freshnessLeftItems'] = HomeFreshnessItem::where('language_id', $languageId)
             ->where('status', 1)

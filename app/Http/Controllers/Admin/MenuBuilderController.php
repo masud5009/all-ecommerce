@@ -2,39 +2,32 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Admin\MenuBuilder;
 use Illuminate\Http\Request;
+use App\Models\Admin\MenuBuilder;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 
 class MenuBuilderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $menus = MenuBuilder::first();
+        $language = $this->getLangUsingCode($request->language);
+        $menus = MenuBuilder::where('language_id', $language->id)->first();
         $menus = $menus ? json_decode($menus->menu, true) : [];
 
-        return view('admin.menu-builder.index', compact('menus'));
+        return view('admin.menu-builder.index', compact('menus', 'language'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $language_id)
     {
         $request->validate([
             'menu' => 'required|array',
         ]);
 
-        $menu = MenuBuilder::first();
-
-        if ($menu) {
-            $menu->language_id  =  app('defaultLang')->id;
-            $menu->menu = json_encode($request->menu);
-            $menu->save();
-        } else {
-            MenuBuilder::create([
-                'menu' => json_encode($request->menu),
-                'language_id'  =>  app('defaultLang')->id
-            ]);
-        }
+        MenuBuilder::updateOrCreate(
+            ['language_id' => $language_id],
+            ['menu' => json_encode($request->menu)]
+        );
 
         Session::flash('success', __("Menu saved successfully"));
         return response(['status' => 'success'], 200);

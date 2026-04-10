@@ -15,6 +15,7 @@
         <div class="card">
             <div class="card-header">
                 <h5>{{ __('Menu Builder') }}</h5>
+                @include('admin.partials.languages')
             </div>
             <div class="card-body">
                 <div class="container-fluid mt-4">
@@ -62,7 +63,7 @@
 @endsection
 @section('script')
     <script>
-        const updateUrl = "{{ route('admin.menu_builder.update') }}";
+        const updateUrl = "{{ route('admin.menu_builder.update', ['language_id' => $language->id]) }}";
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script src="{{ asset('assets/admin/js/menu-builder.js') }}"></script>
