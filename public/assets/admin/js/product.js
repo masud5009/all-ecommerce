@@ -122,6 +122,25 @@
         return 'If Show is selected, this price will appear on the product card.';
     }
 
+    function normalizeVariantMap(map = {}) {
+        return Object.keys(map)
+            .sort()
+            .reduce((acc, key) => {
+                const normalizedKey = String(key || '').trim();
+                const normalizedValue = String(map[key] || '').trim();
+
+                if (normalizedKey && normalizedValue) {
+                    acc[normalizedKey] = normalizedValue;
+                }
+
+                return acc;
+            }, {});
+    }
+
+    function buildVariantSignature(map = {}) {
+        return JSON.stringify(normalizeVariantMap(map));
+    }
+
     const hasVariantsEl = document.getElementById('has_variants');
     const variationsWrap = document.getElementById('variationsWrap');
 
@@ -238,6 +257,109 @@
                 </select>
             </td>
         `;
+    }
+
+    function getPersistableImageUrl(row) {
+        const img = row?.querySelector('.variant-image-preview');
+        if (!img || img.classList.contains('d-none')) {
+            return null;
+        }
+
+        const src = img.getAttribute('src') || '';
+        if (!src || src.startsWith('data:')) {
+            return null;
+        }
+
+        return src;
+    }
+
+    function collectCurrentVariantsBySignature() {
+        const rows = Array.from(variantsTbody.querySelectorAll('tr'));
+        const hiddenMaps = Array.from(variantsHiddenInputs.querySelectorAll('input[name$="[map]"]'));
+        const variantsBySignature = new Map();
+
+        rows.forEach((row, index) => {
+            const hiddenInput = hiddenMaps[index];
+            if (!hiddenInput) {
+                return;
+            }
+
+            let map = {};
+
+            try {
+                map = JSON.parse(hiddenInput.value || '{}');
+            } catch (error) {
+                map = {};
+            }
+
+            const signature = buildVariantSignature(map);
+            if (!signature) {
+                return;
+            }
+
+            variantsBySignature.set(signature, {
+                sku: row.querySelector('input[name$="[sku]"]')?.value ?? '',
+                price: row.querySelector('input[name$="[price]"]')?.value ?? '',
+                stock: row.querySelector('input[name$="[stock]"]')?.value ?? '0',
+                status: row.querySelector('select[name$="[status]"]')?.value ?? '1',
+                show_on_card_price: row.querySelector('select[name$="[show_on_card_price]"]')?.value ?? '0',
+                serial_start: row.querySelector('input[name$="[serial_start]"]')?.value ?? '',
+                serial_end: row.querySelector('input[name$="[serial_end]"]')?.value ?? '',
+                image_url: getPersistableImageUrl(row)
+            });
+        });
+
+        return variantsBySignature;
+    }
+
+    function buildVariantRow(index, label, data = {}) {
+        const sku = data.sku ?? '';
+        const imageUrl = data.image_url ?? '';
+        const price = data.price ?? '';
+        const stock = data.stock ?? 0;
+        const status = typeof data.status === 'undefined' ? 1 : data.status;
+        const showOnCardPrice = typeof data.show_on_card_price === 'undefined' ? 0 : data.show_on_card_price;
+        const serialStart = data.serial_start ?? '';
+        const serialEnd = data.serial_end ?? '';
+        const imagePreview = `
+            <img class="variant-image-preview ${imageUrl ? '' : 'd-none'}"
+                src="${imageUrl || ''}" alt="Variant"
+                style="width:40px;height:40px;object-fit:cover;border-radius:4px;">
+            <span class="variant-image-placeholder text-muted ${imageUrl ? 'd-none' : ''}">No image</span>
+        `;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><strong>${label}</strong></td>
+            <td>
+                <div class="variant-image-cell d-flex align-items-center gap-2">
+                    ${imagePreview}
+                    <input type="file" class="form-control form-control-sm variant-image-input" name="variants[${index}][image]" accept="image/*">
+                </div>
+            </td>
+            <td><input type="text" class="form-control form-control-sm" name="variants[${index}][sku]" value="${sku}" placeholder="SKU (optional)"></td>
+            <td><input type="text" class="form-control form-control-sm" name="variants[${index}][serial_start]" value="${serialStart}" placeholder="Serial start"></td>
+            <td><input type="text" class="form-control form-control-sm" name="variants[${index}][serial_end]" value="${serialEnd}" placeholder="Serial end"></td>
+            <td><input type="text" class="form-control form-control-sm" name="variants[${index}][price]" value="${price}" placeholder="Price (optional)"></td>
+            ${buildCardPriceSelect(index, showOnCardPrice)}
+            <td><input type="number" class="form-control form-control-sm" name="variants[${index}][stock]" min="0" value="${stock}" required></td>
+            <td>
+                <select class="form-select form-select-sm" name="variants[${index}][status]">
+                    <option value="1" ${status == 1 ? 'selected' : ''}>Active</option>
+                    <option value="0" ${status == 0 ? 'selected' : ''}>Inactive</option>
+                </select>
+            </td>
+        `;
+
+        return tr;
+    }
+
+    function appendVariantHiddenMap(index, map) {
+        const hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.name = `variants[${index}][map]`;
+        hidden.value = JSON.stringify(map);
+        variantsHiddenInputs.appendChild(hidden);
     }
 
     function refreshCardPriceSelectState(preferredSelect = null) {
@@ -450,51 +572,8 @@
                 options.map(opt => map[opt.name]).filter(Boolean) :
                 Object.values(map);
             const label = labelParts.length ? labelParts.join(' / ') : '-';
-
-            const sku = variant.sku ?? '';
-            const imageUrl = variant.image_url ?? '';
-            const price = variant.price ?? '';
-            const stock = variant.stock ?? 0;
-            const status = typeof variant.status === 'undefined' ? 1 : variant.status;
-            const showOnCardPrice = typeof variant.show_on_card_price === 'undefined' ? 0 : variant.show_on_card_price;
-            const serialStart = variant.serial_start ?? '';
-            const serialEnd = variant.serial_end ?? '';
-            const imagePreview = `
-                <img class="variant-image-preview ${imageUrl ? '' : 'd-none'}"
-                    src="${imageUrl || ''}" alt="Variant"
-                    style="width:40px;height:40px;object-fit:cover;border-radius:4px;">
-                <span class="variant-image-placeholder text-muted ${imageUrl ? 'd-none' : ''}">No image</span>
-            `;
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><strong>${label}</strong></td>
-                <td>
-                    <div class="variant-image-cell d-flex align-items-center gap-2">
-                        ${imagePreview}
-                        <input type="file" class="form-control form-control-sm variant-image-input" name="variants[${i}][image]" accept="image/*">
-                    </div>
-                </td>
-                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][sku]" value="${sku}" placeholder="SKU (optional)"></td>
-                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][serial_start]" value="${serialStart}" placeholder="Serial start"></td>
-                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][serial_end]" value="${serialEnd}" placeholder="Serial end"></td>
-                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][price]" value="${price}" placeholder="Price (optional)"></td>
-                ${buildCardPriceSelect(i, showOnCardPrice)}
-                <td><input type="number" class="form-control form-control-sm" name="variants[${i}][stock]" min="0" value="${stock}" required></td>
-                <td>
-                    <select class="form-select form-select-sm" name="variants[${i}][status]">
-                        <option value="1" ${status == 1 ? 'selected' : ''}>Active</option>
-                        <option value="0" ${status == 0 ? 'selected' : ''}>Inactive</option>
-                    </select>
-                </td>
-            `;
-            variantsTbody.appendChild(tr);
-
-            const hidden = document.createElement('input');
-            hidden.type = 'hidden';
-            hidden.name = `variants[${i}][map]`;
-            hidden.value = JSON.stringify(map);
-            variantsHiddenInputs.appendChild(hidden);
+            variantsTbody.appendChild(buildVariantRow(i, label, variant));
+            appendVariantHiddenMap(i, map);
         });
 
         if (variants.length) {
@@ -553,6 +632,7 @@
         }
 
         const combos = cartesian(options.map(o => o.values));
+        const existingVariantsBySignature = collectCurrentVariantsBySignature();
 
         variantsTbody.innerHTML = '';
         variantsHiddenInputs.innerHTML = '';
@@ -562,38 +642,10 @@
 
             const map = {};
             options.forEach((opt, idx) => map[opt.name] = combo[idx]);
+            const previousVariantState = existingVariantsBySignature.get(buildVariantSignature(map)) || {};
 
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><strong>${label}</strong></td>
-                <td>
-                    <div class="variant-image-cell d-flex align-items-center gap-2">
-                        <img class="variant-image-preview d-none" src="" alt="Variant"
-                            style="width:40px;height:40px;object-fit:cover;border-radius:4px;">
-                        <span class="variant-image-placeholder text-muted">No image</span>
-                        <input type="file" class="form-control form-control-sm variant-image-input" name="variants[${i}][image]" accept="image/*">
-                    </div>
-                </td>
-                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][sku]" placeholder="SKU (optional)"></td>
-                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][serial_start]" placeholder="Serial start"></td>
-                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][serial_end]" placeholder="Serial end"></td>
-                <td><input type="text" class="form-control form-control-sm" name="variants[${i}][price]" placeholder="Price (optional)"></td>
-                ${buildCardPriceSelect(i, 0)}
-                <td><input type="number" class="form-control form-control-sm" name="variants[${i}][stock]" min="0" value="0" required></td>
-                <td>
-                    <select class="form-select form-select-sm" name="variants[${i}][status]">
-                        <option value="1" selected>Active</option>
-                        <option value="0">Inactive</option>
-                    </select>
-                </td>
-            `;
-            variantsTbody.appendChild(tr);
-
-            const hidden = document.createElement('input');
-            hidden.type = 'hidden';
-            hidden.name = `variants[${i}][map]`;
-            hidden.value = JSON.stringify(map);
-            variantsHiddenInputs.appendChild(hidden);
+            variantsTbody.appendChild(buildVariantRow(i, label, previousVariantState));
+            appendVariantHiddenMap(i, map);
         });
 
         variantsGridWrap.classList.remove('d-none');
