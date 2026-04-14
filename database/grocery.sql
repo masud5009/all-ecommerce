@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 09, 2026 at 06:55 PM
+-- Generation Time: Apr 14, 2026 at 08:49 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.29
 
@@ -301,8 +301,8 @@ CREATE TABLE `home_sliders` (
 --
 
 INSERT INTO `home_sliders` (`id`, `language_id`, `image`, `image_left_badge_title`, `image_left_badge_sub_title`, `image_right_badge_title`, `image_right_badge_sub_title`, `title`, `sub_title`, `description`, `button_text_1`, `button_url_1`, `button_text_2`, `button_url_2`, `status`, `serial_number`, `created_at`, `updated_at`) VALUES
-(1, 6, '69aef3839bf3c.avif', 'Curated Daily', 'Market fresh produce', 'Next Slot', '7:30 PM delivery', 'Exclusive launch week', 'Groceries That Feel <span>Premium</span> Every Day', 'Chef grade produce, artisanal pantry staples, and dairy delivered with white-glove care in under 90 minutes.', 'Start Shopping', '/shop', 'View Deals', '/shop', 1, 1, '2026-03-09 10:21:23', '2026-03-29 09:57:29'),
-(2, 6, '69aef3f30f351.avif', 'Transport Quality', 'Temperature controlled', 'Delivery ETA', 'Expected in 42 minutes', 'Fast lane delivery', 'Farm to Fridge With <span>Live Tracking</span>', 'Keep your schedule smooth with precise ETA updates, temperature-safe transport, and dedicated rider support.', 'Shop Fresh', '/shop', 'Explore Weekly Deals', '/shop', 1, 2, '2026-03-09 10:23:15', '2026-03-29 09:57:28');
+(1, 8, '69aef3839bf3c.avif', 'Curated Daily', 'Market fresh produce', 'Next Slot', '7:30 PM delivery', 'Exclusive launch week', 'Groceries That Feel <span>Premium</span> Every Day', 'Chef grade produce, artisanal pantry staples, and dairy delivered with white-glove care in under 90 minutes.', 'Start Shopping', '/shop', 'View Deals', '/shop', 1, 1, '2026-03-09 10:21:23', '2026-03-29 09:57:29'),
+(2, 8, '69aef3f30f351.avif', 'Transport Quality', 'Temperature controlled', 'Delivery ETA', 'Expected in 42 minutes', 'Fast lane delivery', 'Farm to Fridge With <span>Live Tracking</span>', 'Keep your schedule smooth with precise ETA updates, temperature-safe transport, and dedicated rider support.', 'Shop Fresh', '/shop', 'Explore Weekly Deals', '/shop', 1, 2, '2026-03-09 10:23:15', '2026-03-29 09:57:28');
 
 -- --------------------------------------------------------
 
@@ -342,8 +342,8 @@ CREATE TABLE `languages` (
 --
 
 INSERT INTO `languages` (`id`, `name`, `code`, `is_default`, `dashboard_default`, `direction`, `created_at`, `updated_at`) VALUES
-(6, 'English', 'en', 0, 0, 'ltr', '2026-01-26 17:23:11', '2026-04-07 10:03:44'),
-(8, 'Bangla', 'bn', 1, 1, 'LTR', '2026-03-28 09:52:00', '2026-04-07 10:03:44');
+(6, 'English', 'en', 0, 0, 'ltr', '2026-01-26 17:23:11', '2026-04-10 08:50:16'),
+(8, 'Bangla', 'bn', 1, 1, 'LTR', '2026-03-28 09:52:00', '2026-04-14 00:13:53');
 
 -- --------------------------------------------------------
 
@@ -427,7 +427,8 @@ CREATE TABLE `menu_builders` (
 --
 
 INSERT INTO `menu_builders` (`id`, `language_id`, `menu`, `created_at`, `updated_at`) VALUES
-(3, 8, '[{\"title\":\"Home\",\"url\":\"\\/\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Shop\",\"url\":\"\\/shop\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Contact\",\"url\":\"\\/contact\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Wishlist\",\"url\":\"http:\\/\\/grocery.test\\/user\\/wishlist\",\"target\":\"_self\",\"type\":\"custom\"},{\"title\":\"Contact\",\"url\":\"\\/contact\",\"target\":\"_self\",\"type\":\"prebuilt\"}]', '2025-11-09 13:16:55', '2026-04-07 22:12:08');
+(3, 6, '[{\"title\":\"Home\",\"url\":\"\\/\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Shop\",\"url\":\"\\/shop\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Contact\",\"url\":\"\\/contact\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Contact\",\"url\":\"\\/contact\",\"target\":\"_self\",\"type\":\"prebuilt\"}]', '2025-11-09 13:16:55', '2026-04-10 08:55:17'),
+(4, 8, '[{\"title\":\"Home\",\"url\":\"\\/\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Shop\",\"url\":\"\\/shop\",\"target\":\"_self\",\"type\":\"prebuilt\"},{\"title\":\"Contact\",\"url\":\"\\/contact\",\"target\":\"_self\",\"type\":\"prebuilt\"}]', '2026-04-10 08:55:11', '2026-04-10 08:55:11');
 
 -- --------------------------------------------------------
 
@@ -522,7 +523,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (88, '2026_04_07_000001_create_product_subcategories_table', 54),
 (89, '2026_04_07_000002_add_subcategory_id_to_product_contents_table', 55),
 (90, '2026_04_09_000003_add_unique_id_to_product_categories_table', 56),
-(91, '2026_04_09_000004_add_unique_id_to_blog_categories_table', 57);
+(91, '2026_04_09_000004_add_unique_id_to_blog_categories_table', 57),
+(92, '2026_04_10_000005_add_tracking_and_recaptcha_fields_to_settings_table', 58),
+(93, '2026_04_14_000001_add_show_on_card_price_to_product_variants_table', 59);
 
 -- --------------------------------------------------------
 
@@ -876,7 +879,7 @@ CREATE TABLE `product_options` (
 INSERT INTO `product_options` (`id`, `product_id`, `name`, `position`, `created_at`, `updated_at`) VALUES
 (68, 56, 'ওজন', 0, '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (76, 55, 'ওজন', 0, '2026-04-07 11:04:24', '2026-04-07 11:04:24'),
-(82, 57, 'ওজন', 0, '2026-04-07 11:22:41', '2026-04-07 11:22:41');
+(85, 57, 'ওজন', 0, '2026-04-14 00:58:18', '2026-04-14 00:58:18');
 
 -- --------------------------------------------------------
 
@@ -902,8 +905,8 @@ INSERT INTO `product_option_values` (`id`, `product_option_id`, `value`, `positi
 (143, 68, 'এক কেজি', 1, '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (158, 76, 'হাফ কেজি', 0, '2026-04-07 11:04:24', '2026-04-07 11:04:24'),
 (159, 76, 'এক কেজি', 1, '2026-04-07 11:04:24', '2026-04-07 11:04:24'),
-(170, 82, 'হাফ কেজি', 0, '2026-04-07 11:22:41', '2026-04-07 11:22:41'),
-(171, 82, 'এক কেজি', 1, '2026-04-07 11:22:41', '2026-04-07 11:22:41');
+(176, 85, 'হাফ কেজি', 0, '2026-04-14 00:58:18', '2026-04-14 00:58:18'),
+(177, 85, 'এক কেজি', 1, '2026-04-14 00:58:18', '2026-04-14 00:58:18');
 
 -- --------------------------------------------------------
 
@@ -992,6 +995,7 @@ CREATE TABLE `product_variants` (
   `price` decimal(8,2) DEFAULT NULL,
   `stock` int NOT NULL DEFAULT '0',
   `status` tinyint NOT NULL DEFAULT '1',
+  `show_on_card_price` tinyint(1) NOT NULL DEFAULT '0',
   `track_serial` tinyint(1) NOT NULL DEFAULT '0',
   `serial_start` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `serial_end` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1003,13 +1007,13 @@ CREATE TABLE `product_variants` (
 -- Dumping data for table `product_variants`
 --
 
-INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `image`, `price`, `stock`, `status`, `track_serial`, `serial_start`, `serial_end`, `created_at`, `updated_at`) VALUES
-(133, 56, NULL, NULL, 600.00, 5, 1, 1, '1', '5', '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
-(134, 56, NULL, NULL, 1100.00, 5, 1, 1, '6', '10', '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
-(141, 57, NULL, NULL, 900.00, 5, 1, 1, '1', '5', '2026-04-07 09:51:03', '2026-04-07 11:22:41'),
-(142, 57, NULL, NULL, 1700.00, 5, 1, 1, '6', '10', '2026-04-07 09:51:03', '2026-04-07 11:22:41'),
-(143, 55, NULL, NULL, 900.00, 5, 1, 1, '1', '5', '2026-04-07 10:29:30', '2026-04-07 11:04:24'),
-(144, 55, NULL, NULL, 1700.00, 5, 1, 1, '6', '10', '2026-04-07 10:29:30', '2026-04-07 11:04:24');
+INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `image`, `price`, `stock`, `status`, `show_on_card_price`, `track_serial`, `serial_start`, `serial_end`, `created_at`, `updated_at`) VALUES
+(133, 56, NULL, NULL, 600.00, 5, 1, 0, 1, '1', '5', '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
+(134, 56, NULL, NULL, 1100.00, 5, 1, 0, 1, '6', '10', '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
+(141, 57, NULL, NULL, 900.00, 5, 1, 0, 1, '1', '5', '2026-04-07 09:51:03', '2026-04-14 00:58:18'),
+(142, 57, NULL, NULL, 1700.00, 5, 1, 0, 1, '6', '10', '2026-04-07 09:51:03', '2026-04-14 00:58:18'),
+(143, 55, NULL, NULL, 900.00, 5, 1, 0, 1, '1', '5', '2026-04-07 10:29:30', '2026-04-07 11:04:24'),
+(144, 55, NULL, NULL, 1700.00, 5, 1, 0, 1, '6', '10', '2026-04-07 10:29:30', '2026-04-07 11:04:24');
 
 -- --------------------------------------------------------
 
@@ -1034,8 +1038,8 @@ INSERT INTO `product_variant_values` (`id`, `variant_id`, `option_value_id`, `cr
 (205, 134, 143, '2026-04-07 05:28:12', '2026-04-07 05:28:12'),
 (220, 143, 158, '2026-04-07 11:04:24', '2026-04-07 11:04:24'),
 (221, 144, 159, '2026-04-07 11:04:24', '2026-04-07 11:04:24'),
-(232, 141, 170, '2026-04-07 11:22:41', '2026-04-07 11:22:41'),
-(233, 142, 171, '2026-04-07 11:22:41', '2026-04-07 11:22:41');
+(238, 141, 176, '2026-04-14 00:58:18', '2026-04-14 00:58:18'),
+(239, 142, 177, '2026-04-14 00:58:18', '2026-04-14 00:58:18');
 
 -- --------------------------------------------------------
 
@@ -1111,23 +1115,23 @@ CREATE TABLE `settings` (
   `gemini_api_key` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `gemini_image_model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `gemini_text_model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `facebook_pixel_status` tinyint NOT NULL DEFAULT '0',
-  `facebook_pixel_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `google_recaptcha_status` tinyint NOT NULL DEFAULT '0',
-  `google_recaptcha_site_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `google_recaptcha_secret_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `google_analytics_status` tinyint NOT NULL DEFAULT '0',
-  `google_analytics_measurement_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `facebook_pixel_status` tinyint(1) NOT NULL DEFAULT '0',
+  `facebook_pixel_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `google_recaptcha_status` tinyint(1) NOT NULL DEFAULT '0',
+  `google_recaptcha_site_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `google_recaptcha_secret_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `google_analytics_status` tinyint(1) NOT NULL DEFAULT '0',
+  `google_analytics_measurement_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `uniqid`, `website_logo`, `logo_two`, `footer_logo`, `favicon`, `website_title`, `email_address`, `contact_number`, `address`, `smtp_host`, `smtp_port`, `smtp_username`, `smtp_password`, `encryption`, `sender_mail`, `sender_name`, `smtp_status`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `currency_rate`, `timezone`, `website_color`, `maintenance_image`, `maintenance_status`, `maintenance_message`, `bypass_token`, `package_expire_day`, `admin_approval`, `email_verification_approval`, `admin_approval_notice`, `pusher_app_id`, `pusher_status`, `pusher_app_key`, `pusher_app_secret`, `pusher_app_cluster`, `stedfast_api_key`, `stedfast_secret_key`, `stedfast_status`, `gemini_status`, `gemini_api_key`, `gemini_image_model`, `gemini_text_model`, `facebook_pixel_status`, `facebook_pixel_id`, `google_recaptcha_status`, `google_recaptcha_site_key`, `google_recaptcha_secret_key`, `google_analytics_status`, `google_analytics_measurement_id`, `created_at`, `updated_at`) VALUES
-(1, 1234, '6792620a5426d.png', NULL, '6623f11a26d49.png', '6792620a5379d.png', 'Business Validator', NULL, NULL, NULL, 'smtp.gmail.com', '587', 'airdrop446646@gmail.com', 'lwee cjer feik pdof', 'TLS', 'airdrop446646@gmail.com', 'Myapp', 1, '৳', 'left', 'TK', 'right', 1, 'Europe/Andorra', '#FF0000FF', '6706bc36b9811.jpg', 0, '<p>Maintenance MessageMaintenance Message</p>', '-1', 4, 1, 1, 'You need to permission from admin to access this panel', '1942636', 1, 'e58380d6ebb048e6feb4', '24a208922bc018ef9b37', 'ap2', 'xnwbyhhhyuycs6ckslp9v0qlylzwflps', 'dw8wwhnqcaiajhpk93lsfrms', 1, 1, 'AIzaSyBiPZPJu6xLOd5lE8H_tjCI7Ufa7Pas0YM', 'imagen-4.0-generate', 'Gemini 2.5 Pro', 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2024-12-09 11:41:33');
+INSERT INTO `settings` (`id`, `uniqid`, `website_logo`, `logo_two`, `footer_logo`, `favicon`, `website_title`, `email_address`, `contact_number`, `address`, `smtp_host`, `smtp_port`, `smtp_username`, `smtp_password`, `encryption`, `sender_mail`, `sender_name`, `smtp_status`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `currency_rate`, `timezone`, `website_color`, `maintenance_image`, `maintenance_status`, `maintenance_message`, `bypass_token`, `package_expire_day`, `admin_approval`, `email_verification_approval`, `admin_approval_notice`, `pusher_app_id`, `pusher_status`, `pusher_app_key`, `pusher_app_secret`, `pusher_app_cluster`, `stedfast_api_key`, `stedfast_secret_key`, `stedfast_status`, `gemini_status`, `gemini_api_key`, `gemini_image_model`, `gemini_text_model`, `created_at`, `updated_at`, `facebook_pixel_status`, `facebook_pixel_id`, `google_recaptcha_status`, `google_recaptcha_site_key`, `google_recaptcha_secret_key`, `google_analytics_status`, `google_analytics_measurement_id`) VALUES
+(1, 1234, '6792620a5426d.png', NULL, '6623f11a26d49.png', '6792620a5379d.png', 'Business Validator', NULL, NULL, NULL, 'smtp.gmail.com', '587', 'airdrop446646@gmail.com', 'lwee cjer feik pdof', 'TLS', 'airdrop446646@gmail.com', 'Myapp', 1, '৳', 'left', 'TK', 'right', 1, 'Europe/Andorra', '#FF0000FF', '6706bc36b9811.jpg', 0, '<p>Maintenance MessageMaintenance Message</p>', '-1', 4, 1, 1, 'You need to permission from admin to access this panel', '1942636', 1, 'e58380d6ebb048e6feb4', '24a208922bc018ef9b37', 'ap2', 'xnwbyhhhyuycs6ckslp9v0qlylzwflps', 'dw8wwhnqcaiajhpk93lsfrms', 1, 1, 'AIzaSyBiPZPJu6xLOd5lE8H_tjCI7Ufa7Pas0YM', 'imagen-4.0-generate', 'Gemini 2.5 Pro', NULL, '2024-12-09 11:41:33', 1, 'xxxxxxxxx', 1, 'xxx', 'xxxxxxxxxxxxxxxx', 1, 'xxxxxxx');
 
 -- --------------------------------------------------------
 
@@ -1926,13 +1930,13 @@ ALTER TABLE `memberships`
 -- AUTO_INCREMENT for table `menu_builders`
 --
 ALTER TABLE `menu_builders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -1998,13 +2002,13 @@ ALTER TABLE `product_coupons`
 -- AUTO_INCREMENT for table `product_options`
 --
 ALTER TABLE `product_options`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
 -- AUTO_INCREMENT for table `product_option_values`
 --
 ALTER TABLE `product_option_values`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=172;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=178;
 
 --
 -- AUTO_INCREMENT for table `product_reviews`
@@ -2034,7 +2038,7 @@ ALTER TABLE `product_variants`
 -- AUTO_INCREMENT for table `product_variant_values`
 --
 ALTER TABLE `product_variant_values`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=234;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=240;
 
 --
 -- AUTO_INCREMENT for table `roles`
