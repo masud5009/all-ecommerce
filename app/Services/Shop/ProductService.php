@@ -202,7 +202,10 @@ class ProductService
         if (!$hasVariants) {
             // If switched to no-variants, we should not destroy serial history.
             // Just deactivate existing variants & clear option mappings.
-            ProductVariant::where('product_id', $product->id)->update(['status' => 0]);
+            ProductVariant::where('product_id', $product->id)->update([
+                'status' => 0,
+                'show_on_card_price' => 0,
+            ]);
 
             ProductVariantValue::whereIn(
                 'variant_id',
@@ -223,6 +226,22 @@ class ProductService
         }
         if (!is_array($variantsInput) || count($variantsInput) < 1) {
             throw new \Exception('Variants are required. Please generate variants first.');
+        }
+
+        $shownVariants = collect($variantsInput)->filter(function ($variant) {
+            return (int) ($variant['show_on_card_price'] ?? 0) === 1;
+        });
+
+        if ($shownVariants->count() > 1) {
+            throw new \Exception('Only one variant can be shown on the product card.');
+        }
+
+        $hasInactiveShownVariant = $shownVariants->contains(function ($variant) {
+            return (int) ($variant['status'] ?? 1) !== 1;
+        });
+
+        if ($hasInactiveShownVariant) {
+            throw new \Exception('Only active variants can be shown on the product card.');
         }
 
         // Build signatures before rebuilding options. Option IDs are regenerated each update.
@@ -277,6 +296,7 @@ class ProductService
             $price  = $v['price'] ?? null;
             $stock  = (int)($v['stock'] ?? 0); // treat as "initial qty" on create; on update do NOT override historical stock
             $status = (int)($v['status'] ?? 1);
+            $showOnCardPrice = $status === 1 ? (int) ($v['show_on_card_price'] ?? 0) : 0;
 
             $serialStart = trim((string)($v['serial_start'] ?? ''));
             $serialEnd   = trim((string)($v['serial_end'] ?? ''));
@@ -321,6 +341,7 @@ class ProductService
                     'price'         => ($price === '' || $price === null) ? null : (float)$price,
                     'stock'         => $stock, // initial stock only
                     'status'        => $status,
+                    'show_on_card_price' => $showOnCardPrice,
                     'track_serial'  => $trackSerial ? 1 : 0,
                     'serial_start'  => $trackSerial ? $serialStart : null,
                     'serial_end'    => $trackSerial ? $serialEnd : null,
@@ -331,6 +352,7 @@ class ProductService
                 $variant->sku = ($sku === '' ? $variant->sku : $sku);
                 $variant->price = ($price === '' || $price === null) ? $variant->price : (float)$price;
                 $variant->status = $status;
+                $variant->show_on_card_price = $showOnCardPrice;
 
                 // Allow toggling track_serial ON only if no sold serial yet (safety)
                 if ($trackSerial) {
@@ -390,7 +412,10 @@ class ProductService
         // variants not present in request => deactivate
         ProductVariant::where('product_id', $product->id)
             ->whereNotIn('id', $seenVariantIds)
-            ->update(['status' => 0]);
+            ->update([
+                'status' => 0,
+                'show_on_card_price' => 0,
+            ]);
     }
 
     /**

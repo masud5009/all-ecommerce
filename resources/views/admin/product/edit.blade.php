@@ -147,11 +147,16 @@
                                 </div>
 
 
-                                <div class="col-12 {{ $product->has_variants ? '' : 'd-none' }} border"
+                                <div class="col-12 {{ $product->has_variants ? '' : 'd-none' }} variant-builder-panel"
                                     id="variationsWrap">
                                     <div class="col-lg-12">
-                                        <div class="form-group d-flex justify-content-between align-item-center">
-                                            <h6 class="pb-1">{{ __('Variations') }}</h6>
+                                        <div class="form-group variant-builder-header">
+                                            <div>
+                                                <h6 class="pb-1 mb-1">{{ __('Variations') }}</h6>
+                                                <p class="variant-builder-subtitle mb-0">
+                                                    {{ __('Build variant combinations and control which price appears on the product card.') }}
+                                                </p>
+                                            </div>
                                             <button type="button" class="btn btn-sm btn-primary float-left"
                                                 id="addOptionBtn">
                                                 + {{ __('Add Option') }}
@@ -175,6 +180,9 @@
                                                     {{ __('Clear Variants') }}
                                                 </button>
                                             </div>
+                                            <p class="variant-builder-hint mb-0">
+                                                {{ __('If every Card Price stays on Hide, the frontend product card will keep showing the min-max price range.') }}
+                                            </p>
                                         </div>
                                     </div>
 
@@ -183,7 +191,7 @@
                                     {{-- Variants grid --}}
                                     <div class="mt-2 d-none variants-grid" id="variantsGridWrap">
 
-                                        <div class="table-responsive">
+                                        <div class="table-responsive variant-table-shell">
                                             <table class="table table-bordered variants-table">
                                                 <thead>
                                                     <tr>
@@ -193,6 +201,16 @@
                                                         <th style="min-width: 140px">{{ __('Serial Start') }}</th>
                                                         <th style="min-width: 140px">{{ __('Serial End') }}</th>
                                                         <th style="min-width: 120px">{{ __('Price') }}</th>
+                                                        <th style="min-width: 170px">
+                                                            <div class="variant-table-heading">
+                                                                <span>{{ __('Card Price') }}</span>
+                                                                <span class="variant-tooltip-trigger"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                    title="If Show is selected, that variant price will appear on the product card. If all stay Hide, the frontend will keep the min-max range.">
+                                                                    <i class="fas fa-info-circle"></i>
+                                                                </span>
+                                                            </div>
+                                                        </th>
                                                         <th style="min-width: 120px">{{ __('Stock') }}</th>
                                                         <th style="min-width: 120px">{{ __('Status') }}</th>
                                                     </tr>
@@ -389,5 +407,4 @@
     <script src="{{ asset('assets/admin/js/blog.js') }}"></script>
 @endsection
 @endsection
-
 

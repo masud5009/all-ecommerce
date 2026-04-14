@@ -5,18 +5,9 @@
     $productTitle = $productContent->title;
     $now = Carbon::now();
 
-    $variations = $product->variations ?? collect();
+    $variations = \App\Support\ProductCardPrice::activeVariants($product, $product->variations ?? collect());
     $totalVariantStock = $variations->sum('stock');
     $variantStock = $totalVariantStock > 0 ? __('In Stock') : __('Stock Out');
-
-    $variantBasePrices = $variations
-        ->map(function ($variation) use ($product) {
-            return (float) ($variation->price ?? ($product->current_price ?? 0));
-        })
-        ->values();
-
-    $min_variant_price = $variantBasePrices->isNotEmpty() ? (float) $variantBasePrices->min() : 0;
-    $max_variant_price = $variantBasePrices->isNotEmpty() ? (float) $variantBasePrices->max() : 0;
 
     $flashDiscountPercent = $product->flash_sale_price ?? 0;
 
@@ -31,19 +22,7 @@
         $flashDiscountPercent = min($flashDiscountPercent, 100);
     }
 
-    if ($product->has_variants == 0 || $variations->isEmpty()) {
-        $currentPrice = (float) ($product->current_price ?? 0);
-        $displayPrice = $isFlashSaleActive ? max($currentPrice * (1 - $flashDiscountPercent / 100), 0) : $currentPrice;
-
-        $oldPrice = $isFlashSaleActive ? $currentPrice : $product->previous_price ?? null;
-    } else {
-        $displayPrice = $isFlashSaleActive
-            ? max($min_variant_price * (1 - $flashDiscountPercent / 100), 0)
-            : $min_variant_price;
-        $oldPrice = $isFlashSaleActive ? $min_variant_price : null;
-
-        $min_variant_price = $displayPrice;
-    }
+    $cardPrice = \App\Support\ProductCardPrice::build($product, $isFlashSaleActive, (float) $flashDiscountPercent, $variations);
 
     $stockLabel =
         $product->has_variants == 0 ? (($product->stock ?? 0) > 0 ? __('In Stock') : __('Stock Out')) : $variantStock;
@@ -69,7 +48,7 @@
                 </svg>
                 <span class="whitespace-nowrap text-[10px] font-bold uppercase tracking-wide text-white">
                     @if ($flashDiscountPercent > 0)
-                        -{{ (int) $flashDiscountPercent }}% OFF
+                        -{{ (int) $flashDiscountPercent }}%  {{ __('OFF') }}
                     @endif
                 </span>
             </div>
@@ -119,7 +98,7 @@
         <div class="flex flex-col">
             <a href="{{ route('frontend.shop.details', ['id' => $product->id]) }}"
                 class="text-[1.1rem] font-semibold text-slate-900 transition hover:text-green-700">
-                {{ truncateString($productTitle, 60) }}
+                {{ truncateString($productTitle, 50) }}
             </a>
         </div>
 
@@ -143,34 +122,25 @@
         </div>
 
         <div class="mt-4 flex flex-col gap-2">
-            @if ($product->has_variants == 0 || $variations->isEmpty())
+            @if (($cardPrice['mode'] ?? 'single') === 'range')
                 <div class="flex flex-col">
                     <p class="text-xl font-bold tracking-tight text-[#0f172a]">
-                        {{ currency_symbol($displayPrice) }}
+                        {{ \App\Support\ProductCardPrice::formatRange($cardPrice) }}
                     </p>
-
-                    @if (!empty($oldPrice) && $oldPrice > $displayPrice)
+                    @if (!empty($cardPrice['show_old_range']))
                         <p class="text-xs text-slate-400 line-through">
-                            {{ currency_symbol($oldPrice) }}
+                            {{ \App\Support\ProductCardPrice::formatRange($cardPrice, true) }}
                         </p>
                     @endif
                 </div>
             @else
                 <div class="flex flex-col">
                     <p class="text-xl font-bold tracking-tight text-[#0f172a]">
-                        {{ currency_symbol($min_variant_price) }} - {{ currency_symbol($max_variant_price) }}
+                        {{ \App\Support\ProductCardPrice::formatSinglePrice($cardPrice) }}
                     </p>
-                    @if ($isFlashSaleActive)
-                        @php
-                            $oldMinVariantPrice = $variantBasePrices->isNotEmpty()
-                                ? (float) $variantBasePrices->min()
-                                : 0;
-                            $oldMaxVariantPrice = $variantBasePrices->isNotEmpty()
-                                ? (float) $variantBasePrices->max()
-                                : 0;
-                        @endphp
+                    @if (!empty($cardPrice['show_old_price']))
                         <p class="text-xs text-slate-400 line-through">
-                            {{ currency_symbol($oldMinVariantPrice) }} - {{ currency_symbol($oldMaxVariantPrice) }}
+                            {{ currency_symbol($cardPrice['old_price']) }}
                         </p>
                     @endif
                 </div>

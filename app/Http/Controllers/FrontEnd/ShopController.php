@@ -11,6 +11,7 @@ use App\Models\ProductCategory;
 use App\Models\ProductSubcategory;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
+use App\Support\ProductCardPrice;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\ProductService;
 use Illuminate\Support\Facades\Validator;
@@ -132,8 +133,10 @@ class ShopController extends Controller
 
         // Build units/variants
         $units = [];
-        if ($product->variants && $product->variants->count() > 0) {
-            foreach ($product->variants as $index => $variant) {
+        $activeVariants = ProductCardPrice::activeVariants($product, $product->variants ?? collect());
+
+        if ($activeVariants->isNotEmpty()) {
+            foreach ($activeVariants as $index => $variant) {
                 $variantParts = collect($variant->variantValues ?? [])
                     ->map(fn($vv) => $vv->optionValue?->value)
                     ->filter()
@@ -169,6 +172,11 @@ class ShopController extends Controller
                 'sku' => $product->sku ?? '',
             ];
         }
+
+        $units = ProductCardPrice::prioritizeSelectedVariant(
+            $units,
+            ProductCardPrice::selectedVariantId($product, $activeVariants)
+        );
 
         $data['product'] = $product;
         $data['variants'] = $units;
@@ -242,8 +250,10 @@ class ShopController extends Controller
 
         // Build units/variants
         $units = [];
-        if ($product->variants && $product->variants->count() > 0) {
-            foreach ($product->variants as $index => $variant) {
+        $activeVariants = ProductCardPrice::activeVariants($product, $product->variants ?? collect());
+
+        if ($activeVariants->isNotEmpty()) {
+            foreach ($activeVariants as $index => $variant) {
                 $variantParts = collect($variant->variantValues ?? [])
                     ->map(fn($vv) => $vv->optionValue?->value)
                     ->filter()
@@ -279,6 +289,11 @@ class ShopController extends Controller
                 'sku' => $product->sku ?? '',
             ];
         }
+
+        $units = ProductCardPrice::prioritizeSelectedVariant(
+            $units,
+            ProductCardPrice::selectedVariantId($product, $activeVariants)
+        );
 
         // Get category name
         $categoryName = 'Featured';

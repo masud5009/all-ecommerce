@@ -51,6 +51,7 @@ class StoreRequest extends FormRequest
             $ruleArray['variants'] = 'required|array|min:1';
             $ruleArray['variants.*.stock'] = 'required|integer|min:0';
             $ruleArray['variants.*.status'] = 'required|in:0,1';
+            $ruleArray['variants.*.show_on_card_price'] = 'required|in:0,1';
             $ruleArray['variants.*.map'] = 'required|string';     // JSON string
             $ruleArray['variants.*.sku'] = 'nullable|string|max:255';
             $ruleArray['variants.*.price'] = 'nullable|numeric|min:0';
@@ -114,5 +115,32 @@ class StoreRequest extends FormRequest
         $messageArray['variants.*.stock.required'] = 'Each variant must have stock.';
 
         return $messageArray;
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if (!$this->boolean('has_variants')) {
+                return;
+            }
+
+            $variants = collect($this->input('variants', []));
+
+            $shownVariants = $variants->filter(function ($variant) {
+                return (int) ($variant['show_on_card_price'] ?? 0) === 1;
+            });
+
+            if ($shownVariants->count() > 1) {
+                $validator->errors()->add('variants', __('Only one variant can be shown on the product card.'));
+            }
+
+            $inactiveShownVariant = $shownVariants->contains(function ($variant) {
+                return (int) ($variant['status'] ?? 1) !== 1;
+            });
+
+            if ($inactiveShownVariant) {
+                $validator->errors()->add('variants', __('Only active variants can be shown on the product card.'));
+            }
+        });
     }
 }

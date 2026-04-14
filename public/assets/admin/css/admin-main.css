@@ -13,15 +13,6 @@
     box-shadow: none;
 }
 
-input:disabled,
-textarea:disabled,
-select:disabled {
-    background-color: #19232f !important;
-    color: rgba(255, 255, 255, 0.35) !important;
-    border-color: rgba(255, 255, 255, 0.04) !important;
-    cursor: not-allowed !important;
-}
-
 input[readonly],
 textarea[readonly] {
     border-color: rgba(255, 255, 255, 0.12) !important;
@@ -1693,65 +1684,194 @@ div.dt-container .dt-paging .dt-paging-button {
 }
 
 /** Variants grid (product create/edit) **/
+.variant-builder-panel {
+    margin-top: 0.35rem;
+    padding: 0.5rem 0.75rem 1rem;
+    border: 1px solid #dde5f2;
+    border-radius: 22px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.variant-builder-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.variant-builder-subtitle {
+    color: #667085;
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.variant-builder-hint {
+    margin-top: 0.8rem;
+    color: #516079;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.variant-table-shell {
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    background: #ffffff;
+    overflow: hidden;
+}
+
 .variants-grid .variants-table {
     table-layout: fixed;
+    margin-bottom: 0;
 }
 
 .variants-grid .variants-table thead th {
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: #a9b4c2;
-    background: rgba(255, 255, 255, 0.04);
+    color: #7b8799;
+    background: #f4f7fb;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .variants-grid .variants-table td,
 .variants-grid .variants-table th {
     vertical-align: middle;
-    padding: 0.65rem 0.75rem;
+    padding: 0.85rem 0.9rem;
 }
 
 .variants-grid .variants-table.table-bordered> :not(caption)>*>* {
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: #edf2f7;
 }
 
 .variants-grid .variants-table tbody tr {
-    background: rgba(255, 255, 255, 0.02);
+    background: #ffffff;
 }
 
 .variants-grid .variants-table tbody tr:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: #f8fbff;
+}
+
+.variants-grid .variants-table tbody td:first-child strong {
+    display: inline-flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    background: #eef4ff;
+    color: #274690;
+    font-weight: 700;
+    line-height: 1.35;
 }
 
 .variants-grid .variant-image-cell {
     gap: 8px;
+    align-items: center;
     flex-wrap: nowrap;
     white-space: nowrap;
 }
 
 .variants-grid .variant-image-input {
-    max-width: 150px;
+    max-width: 170px;
+    border-radius: 12px;
 }
 
 .variants-grid .variant-image-preview {
-    width: 40px;
-    height: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: #131c2a;
+    width: 48px;
+    height: 48px;
+    border: 1px solid #dbe6f3;
+    background: #ffffff;
+    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.08);
 }
 
 .variants-grid .variant-image-placeholder {
-    width: 40px;
-    height: 40px;
-    border: 1px dashed rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
+    width: 48px;
+    height: 48px;
+    border: 1px dashed #c9d5e7;
+    border-radius: 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 10px;
     line-height: 1.1;
     text-align: center;
+    color: #7f8ea3;
+    background: #f8fbff;
+}
+
+.variant-table-heading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.variant-tooltip-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #e5edff;
+    color: #3b5ccc;
+    cursor: help;
+    font-size: 0.7rem;
+}
+
+.variant-card-price-cell {
+    position: relative;
+}
+
+.variant-card-price-control {
+    min-width: 120px;
+    border-radius: 12px;
+}
+
+.variant-card-price-cell.is-locked .variant-card-price-control {
+    background-color: #f8fafc;
+    border-color: #d7dee9;
     color: #94a3b8;
+}
+
+.variant-card-price-cell.is-active .variant-card-price-control {
+    border-color: #7c9eff;
+    background: #eef4ff;
+    color: #274690;
+    font-weight: 600;
+}
+
+.variants-grid .variants-table .form-control,
+.variants-grid .variants-table .form-select {
+    min-height: 44px;
+    border-radius: 12px;
+    border-color: #d9e2ef;
+}
+
+.variants-grid .variants-table .form-control:focus,
+.variants-grid .variants-table .form-select:focus {
+    border-color: #8aa7ff;
+    box-shadow: 0 0 0 0.18rem rgba(79, 110, 233, 0.12);
+}
+
+@media (max-width: 767.98px) {
+    .variant-builder-panel {
+        padding: 0.45rem 0.35rem 0.85rem;
+        border-radius: 18px;
+    }
+
+    .variant-builder-header {
+        align-items: flex-start;
+    }
+
+    .variant-builder-header .btn {
+        width: 100%;
+    }
+
+    .variant-builder-subtitle,
+    .variant-builder-hint {
+        font-size: 0.82rem;
+    }
 }
 
 .shipping-charge-modal .modal-dialog {

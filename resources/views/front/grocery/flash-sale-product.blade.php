@@ -35,7 +35,7 @@
                         $cardSummary = trim(preg_replace('/\s+/', ' ', strip_tags((string) $cardSummaryRaw)));
 
                         $discountPercent = min(max((float) ($product->flash_sale_price ?? 0), 0), 100);
-                        $variations = $product->variations ?? collect();
+                        $variations = \App\Support\ProductCardPrice::activeVariants($product, $product->variations ?? collect());
                         $hasVariants = (int) ($product->has_variants ?? 0) === 1 && $variations->isNotEmpty();
 
                         $variantOptions = $hasVariants
@@ -92,16 +92,6 @@
                             $defaultVariantId = $purchaseUnit['id'] ?? null;
                             $defaultVariantLabel = $purchaseUnit['label'] ?? null;
                             $savePercent = (int) round($discountPercent);
-
-                            $salePriceLabel =
-                                $saleMinPrice === $saleMaxPrice
-                                    ? currency_symbol($saleMinPrice)
-                                    : currency_symbol($saleMinPrice) . ' - ' . currency_symbol($saleMaxPrice);
-
-                            $oldPriceLabel =
-                                $oldMinPrice === $oldMaxPrice
-                                    ? currency_symbol($oldMinPrice)
-                                    : currency_symbol($oldMinPrice) . ' - ' . currency_symbol($oldMaxPrice);
                         } else {
                             $currentPrice = (float) ($product->current_price ?? 0);
                             $salePrice = max($currentPrice * (1 - $discountPercent / 100), 0);
@@ -112,8 +102,20 @@
                             $defaultVariantLabel = null;
                             $saveAmount = max($oldPrice - $salePrice, 0);
                             $savePercent = $oldPrice > 0 ? (int) round(($saveAmount / $oldPrice) * 100) : 0;
-                            $salePriceLabel = currency_symbol($salePrice);
-                            $oldPriceLabel = currency_symbol($oldPrice);
+                        }
+
+                        $cardPrice = \App\Support\ProductCardPrice::build($product, true, $discountPercent, $variations);
+
+                        if (($cardPrice['mode'] ?? 'single') === 'range') {
+                            $salePriceLabel = \App\Support\ProductCardPrice::formatRange($cardPrice);
+                            $oldPriceLabel = !empty($cardPrice['show_old_range'])
+                                ? \App\Support\ProductCardPrice::formatRange($cardPrice, true)
+                                : null;
+                        } else {
+                            $salePriceLabel = \App\Support\ProductCardPrice::formatSinglePrice($cardPrice);
+                            $oldPriceLabel = !empty($cardPrice['show_old_price'])
+                                ? currency_symbol($cardPrice['old_price'])
+                                : null;
                         }
 
                         $isOutOfStock = $availableStock <= 0;

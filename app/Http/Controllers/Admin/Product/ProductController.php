@@ -320,6 +320,7 @@ class ProductController extends Controller
                     'price' => $variant->price,
                     'stock' => $variant->stock,
                     'status' => $variant->status,
+                    'show_on_card_price' => (int) ($variant->show_on_card_price ?? 0),
                     'serial_start' => $variant->serial_start,
                     'serial_end' => $variant->serial_end,
                     'map' => $map,

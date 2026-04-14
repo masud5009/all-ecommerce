@@ -12,6 +12,21 @@
         if (dbRemove) window.rmvDbSliderImage = dbRemove;
     }
 
+    function initBootstrapTooltips(scope = document) {
+        if (!window.bootstrap || !window.bootstrap.Tooltip) {
+            return;
+        }
+
+        scope.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((element) => {
+            const existingTooltip = window.bootstrap.Tooltip.getInstance(element);
+            if (existingTooltip) {
+                existingTooltip.dispose();
+            }
+
+            new window.bootstrap.Tooltip(element);
+        });
+    }
+
     function initSubcategoryBindings() {
         const categorySelects = document.querySelectorAll('select[name$="_category_id"]');
 
@@ -95,6 +110,17 @@
         }, [[]]);
     }
 
+    function getCardPriceTooltipText({ locked = false, inactive = false } = {}) {
+        if (inactive) {
+            return 'Only active variants can be shown on the product card.';
+        }
+
+        if (locked) {
+            return 'Only one variant can be set to Show at a time.';
+        }
+
+        return 'If Show is selected, this price will appear on the product card.';
+    }
 
     const hasVariantsEl = document.getElementById('has_variants');
     const variationsWrap = document.getElementById('variationsWrap');
@@ -190,6 +216,89 @@
         return input.matches('input[name$="[serial_start]"], input[name$="[serial_end]"]');
     }
 
+    function isVariantRowActive(target) {
+        const row = target?.closest ? target.closest('tr') : target;
+        if (!row) return true;
+
+        const statusSelect = row.querySelector('select[name$="[status]"]');
+        if (!statusSelect) return true;
+
+        return statusSelect.value === '1';
+    }
+
+    function buildCardPriceSelect(index, selectedValue = 0) {
+        return `
+            <td class="variant-card-price-cell">
+                <select class="form-select form-select-sm variant-card-price-control"
+                    name="variants[${index}][show_on_card_price]"
+                    data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="${getCardPriceTooltipText()}">
+                    <option value="0" ${selectedValue == 0 ? 'selected' : ''}>Hide</option>
+                    <option value="1" ${selectedValue == 1 ? 'selected' : ''}>Show</option>
+                </select>
+            </td>
+        `;
+    }
+
+    function refreshCardPriceSelectState(preferredSelect = null) {
+        const cardPriceSelects = Array.from(
+            variantsTbody.querySelectorAll('select[name$="[show_on_card_price]"]')
+        );
+
+        if (!cardPriceSelects.length) {
+            initBootstrapTooltips(document);
+            return;
+        }
+
+        cardPriceSelects.forEach((select) => {
+            if (!isVariantRowActive(select) && select.value === '1') {
+                select.value = '0';
+            }
+        });
+
+        let activeShowSelect = null;
+
+        if (preferredSelect && cardPriceSelects.includes(preferredSelect) && preferredSelect.value === '1' && isVariantRowActive(preferredSelect)) {
+            activeShowSelect = preferredSelect;
+        }
+
+        if (!activeShowSelect) {
+            activeShowSelect = cardPriceSelects.find((select) => {
+                return select.value === '1' && isVariantRowActive(select);
+            }) || null;
+        }
+
+        cardPriceSelects.forEach((select) => {
+            const cell = select.closest('.variant-card-price-cell');
+            const showOption = select.querySelector('option[value="1"]');
+            const rowIsActive = isVariantRowActive(select);
+            const isSelected = !!activeShowSelect && activeShowSelect === select;
+            const isLocked = !!activeShowSelect && activeShowSelect !== select;
+
+            if (activeShowSelect && activeShowSelect !== select && select.value === '1') {
+                select.value = '0';
+            }
+
+            if (showOption) {
+                showOption.disabled = !rowIsActive || isLocked;
+            }
+
+            if (cell) {
+                cell.classList.toggle('is-active', isSelected);
+                cell.classList.toggle('is-locked', isLocked);
+            }
+
+            const tooltipText = getCardPriceTooltipText({
+                locked: isLocked,
+                inactive: !rowIsActive
+            });
+
+            select.setAttribute('title', tooltipText);
+        });
+
+        initBootstrapTooltips(variantsGridWrap || document);
+    }
+
     function syncVariantStockFromSerialRange(row) {
         if (!row) return;
 
@@ -238,6 +347,14 @@
         const input = e.target;
         if (input && input.matches('input[type="file"][name^="variants["]')) {
             updateVariantImagePreview(input);
+        }
+
+        if (input && input.matches('select[name$="[show_on_card_price]"]')) {
+            refreshCardPriceSelectState(input);
+        }
+
+        if (input && input.matches('select[name$="[status]"]')) {
+            refreshCardPriceSelectState();
         }
     });
 
@@ -339,6 +456,7 @@
             const price = variant.price ?? '';
             const stock = variant.stock ?? 0;
             const status = typeof variant.status === 'undefined' ? 1 : variant.status;
+            const showOnCardPrice = typeof variant.show_on_card_price === 'undefined' ? 0 : variant.show_on_card_price;
             const serialStart = variant.serial_start ?? '';
             const serialEnd = variant.serial_end ?? '';
             const imagePreview = `
@@ -361,6 +479,7 @@
                 <td><input type="text" class="form-control form-control-sm" name="variants[${i}][serial_start]" value="${serialStart}" placeholder="Serial start"></td>
                 <td><input type="text" class="form-control form-control-sm" name="variants[${i}][serial_end]" value="${serialEnd}" placeholder="Serial end"></td>
                 <td><input type="text" class="form-control form-control-sm" name="variants[${i}][price]" value="${price}" placeholder="Price (optional)"></td>
+                ${buildCardPriceSelect(i, showOnCardPrice)}
                 <td><input type="number" class="form-control form-control-sm" name="variants[${i}][stock]" min="0" value="${stock}" required></td>
                 <td>
                     <select class="form-select form-select-sm" name="variants[${i}][status]">
@@ -381,6 +500,7 @@
         if (variants.length) {
             variantsGridWrap.classList.remove('d-none');
             clearVariantsBtn.classList.remove('d-none');
+            refreshCardPriceSelectState();
         }
     }
 
@@ -458,6 +578,7 @@
                 <td><input type="text" class="form-control form-control-sm" name="variants[${i}][serial_start]" placeholder="Serial start"></td>
                 <td><input type="text" class="form-control form-control-sm" name="variants[${i}][serial_end]" placeholder="Serial end"></td>
                 <td><input type="text" class="form-control form-control-sm" name="variants[${i}][price]" placeholder="Price (optional)"></td>
+                ${buildCardPriceSelect(i, 0)}
                 <td><input type="number" class="form-control form-control-sm" name="variants[${i}][stock]" min="0" value="0" required></td>
                 <td>
                     <select class="form-select form-select-sm" name="variants[${i}][status]">
@@ -477,6 +598,7 @@
 
         variantsGridWrap.classList.remove('d-none');
         clearVariantsBtn.classList.remove('d-none');
+        refreshCardPriceSelectState();
     });
 
     clearVariantsBtn.addEventListener('click', () => {
@@ -485,4 +607,6 @@
         variantsGridWrap.classList.add('d-none');
         clearVariantsBtn.classList.add('d-none');
     });
+
+    initBootstrapTooltips(document);
 })();
