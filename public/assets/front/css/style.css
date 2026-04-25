@@ -755,6 +755,7 @@ img {
   filter: blur(24px);
   transform: rotate(-7deg);
   z-index: -1;
+  display: none;
 }
 
 .hero-product-image {
@@ -762,7 +763,7 @@ img {
   aspect-ratio: 6 / 5;
   object-fit: cover;
   border-radius: 1.1rem;
-  box-shadow: 0 34px 72px rgba(2, 18, 6, 0.42);
+  box-shadow: none;
 }
 
 .hero-seal {
