@@ -7,11 +7,12 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\ProductReview;
 use App\Models\Admin\Language;
+use App\Models\ProductSetting;
 use App\Models\ProductCategory;
+use App\Support\ProductCardPrice;
 use App\Models\ProductSubcategory;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
-use App\Support\ProductCardPrice;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Frontend\ProductService;
 use Illuminate\Support\Facades\Validator;
@@ -180,6 +181,7 @@ class ShopController extends Controller
 
         $data['product'] = $product;
         $data['variants'] = $units;
+        $data['product_setting'] = ProductSetting::first();
 
         // You may also like products
         $data['youMayAlsoLikeProducts'] = ProductService::latestHomeProducts($languageId)

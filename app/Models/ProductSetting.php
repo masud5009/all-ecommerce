@@ -14,5 +14,9 @@ class ProductSetting extends Model
     protected $fillable = [
         'digital_product',
         'physical_product',
+        'contact_number',
+        'contact_number_status',
+        'whatsapp_number',
+        'whatsapp_number_status',
     ];
 }
