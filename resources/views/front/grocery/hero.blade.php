@@ -46,6 +46,9 @@
                     @php
                         $slideId = 'hero-slide-' . ($index + 1);
                         $imageUrl = asset('assets/img/home_slider/' . $slider->image);
+                        $backgroundImageUrl = !empty($slider->background_image)
+                            ? asset('assets/img/home_slider/background/' . $slider->background_image)
+                            : $imageUrl;
                         $isActive = $index === 0;
                     @endphp
 
@@ -53,7 +56,7 @@
                         id="{{ $slideId }}" role="group" aria-roledescription="slide"
                         aria-label="{{ $index + 1 }} of {{ $heroSlides->count() }}"
                         aria-hidden="{{ $isActive ? 'false' : 'true' }}">
-                        <img src="{{ $imageUrl }}" alt="" class="hero-slide-backdrop" aria-hidden="true">
+                        <img src="{{ $backgroundImageUrl }}" alt="" class="hero-slide-backdrop" aria-hidden="true">
 
                         <div class="grid min-h-[620px] items-center gap-8 py-16 lg:grid-cols-[1.02fr_0.98fr] lg:py-20">
                             <div class="hero-content">

@@ -12,20 +12,36 @@
                     <input type="hidden" id="in_id" name="id">
                     <div class="row">
                         <!-- Image Upload -->
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="">{{ __('Image') }}</label>
+                                <label class="">{{ __('Slider Image') }}</label>
                                 <br>
-                                <div class="thumb-preview2">
+                                <div class="thumb-preview2" data-image-input="#thumbnailInput2">
                                     <img src="{{ asset('assets/admin/noimage.jpg') }}" alt="..."
                                         class="uploaded-img2 in_image">
                                 </div>
-
+                                <input type="file" class="img-input2" name="image" id="thumbnailInput2"
+                                    accept=".jpg,.jpeg,.png,.webp,.svg,.avif" data-preview-target=".uploaded-img2">
+                                <p id="editErr_image" class="text-danger em mt-2"></p>
                             </div>
                         </div>
-                        <input type="file" class="img-input2" name="image" id="thumbnailInput2"
-                            accept=".jpg,.jpeg,.png,.webp,.svg">
-                        <p id="editErr_image" class="text-danger em mt-2"></p>
+
+                        <!-- Background Image Upload -->
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="">{{ __('Background Image') }}</label>
+                                <br>
+                                <div class="thumb-preview2" data-image-input="#backgroundImageInput2">
+                                    <img src="{{ asset('assets/admin/noimage.jpg') }}" alt="..."
+                                        class="uploaded-bg-img2 in_background_image">
+                                </div>
+                                <input type="file" class="img-input2" name="background_image"
+                                    id="backgroundImageInput2" accept=".jpg,.jpeg,.png,.webp,.svg,.avif"
+                                    data-preview-target=".uploaded-bg-img2">
+                                <small class="d-block mt-2 text-muted">{{ __('Recommended size') }}: 1920x900px</small>
+                                <p id="editErr_background_image" class="text-danger em mt-2"></p>
+                            </div>
+                        </div>
 
                         <!-- Main Content -->
                         <x-text-input col="12" placeholder="Enter Title" name="title" type="text"

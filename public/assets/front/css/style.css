@@ -619,24 +619,35 @@ img {
 
 .hero-slide {
   position: relative;
+  z-index: 1;
 }
 
 .hero-slide-backdrop {
   position: absolute;
-  right: -11%;
-  top: 2%;
+  inset: 0 calc(50% - 50vw);
   z-index: -1;
-  width: min(62vw, 900px);
-  height: 96%;
+  width: 100vw;
+  height: 100%;
   object-fit: cover;
-  opacity: 0.18;
-  filter: blur(18px) saturate(1.45) contrast(1.08);
-  transform: scale(1.08);
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 28%, #000 88%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, #000 28%, #000 88%, transparent 100%);
+  opacity: 0.38;
+  filter: saturate(1.25) contrast(1.08);
+  transform: none;
+}
+
+.hero-slide::before {
+  content: "";
+  position: absolute;
+  inset: 0 calc(50% - 50vw);
+  z-index: 0;
+  background:
+    linear-gradient(90deg, rgba(2, 24, 7, 0.94) 0%, rgba(7, 46, 10, 0.76) 39%, rgba(91, 110, 19, 0.42) 70%, rgba(194, 190, 46, 0.28) 100%),
+    linear-gradient(to top, rgba(10, 32, 6, 0.62), rgba(10, 32, 6, 0));
+  pointer-events: none;
 }
 
 .hero-content {
+  position: relative;
+  z-index: 2;
   max-width: 46rem;
 }
 
@@ -720,6 +731,7 @@ img {
 
 .hero-media {
   position: relative;
+  z-index: 2;
   min-height: 34rem;
   padding: 0;
 }
@@ -906,8 +918,8 @@ img {
   }
 
   .hero-slide-backdrop {
-    right: -20%;
-    width: 105%;
+    inset: 0 calc(50% - 50vw);
+    width: 100vw;
   }
 
   .hero-controls {

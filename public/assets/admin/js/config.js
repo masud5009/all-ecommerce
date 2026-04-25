@@ -29,8 +29,11 @@ window.hideActiveOverlays = hideActiveOverlays;
 /*===================  Uploaded Image Preview Start ================*/
 document.querySelectorAll('.thumb-preview, .thumb-preview2').forEach((thumb) => {
     thumb.addEventListener('click', function () {
-        const inputId = thumb.classList.contains('thumb-preview2') ? 'thumbnailInput2' : 'thumbnailInput';
-        const thumbnailInput = document.getElementById(inputId);
+        const imageInputSelector = thumb.getAttribute('data-image-input');
+        const thumbnailInput = imageInputSelector
+            ? document.querySelector(imageInputSelector)
+            : document.getElementById(thumb.classList.contains('thumb-preview2') ? 'thumbnailInput2' : 'thumbnailInput');
+
         if (thumbnailInput) {
             thumbnailInput.click();
         }
@@ -48,7 +51,7 @@ $('.img-input, .img-input2').on('change', function (event) {
     const reader = new FileReader();
 
     reader.onload = function (e) {
-        const previewSelector = input.hasClass('img-input2') ? '.uploaded-img2' : '.uploaded-img';
+        const previewSelector = input.data('preview-target') || (input.hasClass('img-input2') ? '.uploaded-img2' : '.uploaded-img');
         const preview = input.closest('form').find(previewSelector).first();
 
         if (preview.length > 0) {
@@ -522,6 +525,10 @@ $(".editBtn").on('click', function () {
 
             if ($('.in_image').length > 0) {
                 $('.in_image').attr('src', datas['image']);
+            }
+
+            if ($('.in_background_image').length > 0) {
+                $('.in_background_image').attr('src', datas['background_image']);
             }
 
             if ($('#in_icon').length > 0) {

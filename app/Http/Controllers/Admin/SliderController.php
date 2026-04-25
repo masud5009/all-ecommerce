@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 class SliderController extends Controller
 {
     private string $imageDirectory = 'assets/img/home_slider/';
+    private string $backgroundImageDirectory = 'assets/img/home_slider/background/';
 
     /**
      * slider page load
@@ -29,6 +30,7 @@ class SliderController extends Controller
     {
         $rules = [
             'image' => 'required|mimes:jpg,jpeg,png,webp,svg,avif|max:2048',
+            'background_image' => 'nullable|mimes:jpg,jpeg,png,webp,svg,avif|max:4096',
             'title' => 'required|string|max:255',
             'sub_title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -57,9 +59,16 @@ class SliderController extends Controller
             $imageName = ImageUpload::store($directory, $request->file('image'));
         }
 
+        $backgroundImageName = null;
+        if ($request->hasFile('background_image')) {
+            $directory = public_path($this->backgroundImageDirectory);
+            $backgroundImageName = ImageUpload::store($directory, $request->file('background_image'));
+        }
+
         $slider = new HomeSlider();
         $slider->language_id = $request->language_id;
         $slider->image = $imageName;
+        $slider->background_image = $backgroundImageName;
         $slider->title = $request->title;
         $slider->sub_title = $request->sub_title;
         $slider->description = $request->description;
@@ -87,6 +96,7 @@ class SliderController extends Controller
     {
         $rules = [
             'image' => 'nullable|mimes:jpg,jpeg,png,webp,svg,avif|max:2048',
+            'background_image' => 'nullable|mimes:jpg,jpeg,png,webp,svg,avif|max:4096',
             'title' => 'required|string|max:255',
             'sub_title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -118,8 +128,19 @@ class SliderController extends Controller
             $imageName = ImageUpload::update($directory, $request->file('image'), $slider->image);
         }
 
+        $backgroundImageName = $slider->background_image;
+        if ($request->hasFile('background_image')) {
+            $directory = public_path($this->backgroundImageDirectory);
+            $backgroundImageName = ImageUpload::update(
+                $directory,
+                $request->file('background_image'),
+                $slider->background_image
+            );
+        }
+
         $slider->language_id = $slider->language_id;
         $slider->image = $imageName;
+        $slider->background_image = $backgroundImageName;
         $slider->title = $request->title;
         $slider->sub_title = $request->sub_title;
         $slider->description = $request->description;
@@ -146,7 +167,8 @@ class SliderController extends Controller
     public function delete(Request $request)
     {
         $slider = HomeSlider::findOrFail($request->slider_id);
-        @unlink(public_path($this->imageDirectory) . $slider->image);
+        $this->deleteImage($this->imageDirectory, $slider->image);
+        $this->deleteImage($this->backgroundImageDirectory, $slider->background_image);
         $slider->delete();
 
         return redirect()->back()->with('success', __('Slider deleted successfully'));
@@ -161,6 +183,8 @@ class SliderController extends Controller
 
         foreach ($ids as $id) {
             $slider = HomeSlider::findOrFail($id);
+            $this->deleteImage($this->imageDirectory, $slider->image);
+            $this->deleteImage($this->backgroundImageDirectory, $slider->background_image);
             $slider->delete();
         }
         session()->flash('success', __('Sliders deleted successfully'));
@@ -175,5 +199,12 @@ class SliderController extends Controller
     {
         HomeSlider::where('id', $request->id)->update(['status' => $request->status]);
         return 'success';
+    }
+
+    private function deleteImage(string $directory, ?string $fileName): void
+    {
+        if (!empty($fileName)) {
+            @unlink(public_path($directory) . $fileName);
+        }
     }
 }

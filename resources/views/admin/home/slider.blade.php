@@ -38,7 +38,8 @@
                                     <th scope="col">
                                         <input type="checkbox" class="bulk-check" data-val="all">
                                     </th>
-                                    <th scope="col">{{ __('Image') }}</th>
+                                    <th scope="col">{{ __('Slider Image') }}</th>
+                                    <th scope="col">{{ __('Background Image') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Serial Number') }}</th>
                                     <th scope="col">{{ __('Actions') }}</th>
@@ -53,6 +54,15 @@
                                                 @if (!empty($slider->image))
                                                     <img src="{{ asset('assets/img/home_slider/' . $slider->image) }}"
                                                         alt="{{ $slider->title ?? 'Slider Image' }}" width="80">
+                                                @else
+                                                    <img src="{{ asset('assets/admin/noimage.jpg') }}" alt="No image"
+                                                        width="80">
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if (!empty($slider->background_image))
+                                                    <img src="{{ asset('assets/img/home_slider/background/' . $slider->background_image) }}"
+                                                        alt="{{ $slider->title ?? 'Background Image' }}" width="80">
                                                 @else
                                                     <img src="{{ asset('assets/admin/noimage.jpg') }}" alt="No image"
                                                         width="80">
@@ -77,6 +87,7 @@
                                                         data-bs-toggle="modal" data-bs-target="#editModal"
                                                         data-id="{{ $slider->id }}"
                                                         data-image="{{ !empty($slider->image) ? asset('assets/img/home_slider/' . $slider->image) : asset('assets/admin/noimage.jpg') }}"
+                                                        data-background_image="{{ !empty($slider->background_image) ? asset('assets/img/home_slider/background/' . $slider->background_image) : asset('assets/admin/noimage.jpg') }}"
                                                         data-title="{{ $slider->title }}"
                                                         data-sub_title="{{ $slider->sub_title }}"
                                                         data-description="{{ $slider->description }}"
