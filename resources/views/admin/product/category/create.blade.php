@@ -6,26 +6,21 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="ajaxForm" action="{{ route('admin.product.category_store') }}" method="post">
+                <form id="ajaxForm" action="{{ route('admin.product.category_store') }}" method="post"
+                    enctype="multipart/form-data">
                     @csrf
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label>{{ __('Icon') }} <span class="text-danger">**</span></label>
-                            <div class="dropdown js-iconpicker">
-                                <button class="btn btn-primary dropdown-toggle" type="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i id="create_selectedIcon" data-iconpicker-selected class="fas fa-seedling"></i>
-                                </button>
-                                <div class="dropdown-menu p-3" style="width: 300px; max-height: 300px; overflow-y: auto;">
-                                    <input type="text" class="form-control mb-2" data-iconpicker-search
-                                        placeholder="{{ __('Search icons...') }}">
-                                    <div class="d-flex flex-wrap" data-iconpicker-list>
-                                    </div>
-                                </div>
-                                <p class="mb-0 text-info">{{ __('Select an icon from the list, then click outside to close the menu.') }}</p>
+                            <label>{{ __('Image') }} <span class="text-danger">**</span></label>
+                            <br>
+                            <div class="thumb-preview">
+                                <img src="{{ asset('assets/admin/noimage.jpg') }}" alt="{{ __('Category image preview') }}"
+                                    class="uploaded-img">
                             </div>
-                            <input type="hidden" id="create_inputIcon" data-iconpicker-input name="icon" value="fas fa-seedling">
-                            <p id="err_icon" class="text-danger em"></p>
+                            <input type="file" class="img-input" name="image" id="thumbnailInput"
+                                accept=".jpg,.jpeg,.png,.webp,.svg,.avif">
+                            <small class="d-block mt-2 text-muted">{{ __('Recommended size') }}: 300x300px</small>
+                            <p id="err_image" class="text-danger em"></p>
                         </div>
                     </div>
 

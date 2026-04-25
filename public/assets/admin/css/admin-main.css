@@ -664,6 +664,27 @@ div.dt-container .dt-paging .dt-paging-button {
     max-width: 100%;
 }
 
+.category-table-image,
+.category-table-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    background: #f8fafc;
+}
+
+.category-table-image {
+    object-fit: cover;
+}
+
+.category-table-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #10b981;
+    font-size: 22px;
+}
+
 /*common css */
 .dropdown-toggle::after {
     display: none;

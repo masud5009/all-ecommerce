@@ -280,8 +280,15 @@ body[data-background-color="dark"] #my-dropzone:hover {
     background-color: rgba(0, 0, 0, .15);
 }
 
-body[data-background-color="dark"] .thumb-preview {
+body[data-background-color="dark"] .thumb-preview,
+body[data-background-color="dark"] .thumb-preview2 {
     border: dotted 2px var(--border-color);
+}
+
+body[data-background-color="dark"] .category-table-image,
+body[data-background-color="dark"] .category-table-icon {
+    border-color: var(--border-color);
+    background: #183153;
 }
 
 body[data-background-color="dark"] table td {

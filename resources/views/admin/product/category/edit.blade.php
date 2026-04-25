@@ -6,7 +6,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="ajaxEditForm" action="{{ route('admin.product.category_update') }}" method="post">
+                <form id="ajaxEditForm" action="{{ route('admin.product.category_update') }}" method="post"
+                    enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" id="in_id" name="id">
                     @foreach ($languages as $language)
@@ -16,21 +17,16 @@
 
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label>{{ __('Icon') }}</label>
-                            <div class="dropdown js-iconpicker">
-                                <button class="btn btn-primary dropdown-toggle" type="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i id="in_selectedIcon" data-iconpicker-selected class="fas fa-seedling"></i>
-                                </button>
-                                <div class="dropdown-menu p-3" style="width: 300px; max-height: 300px; overflow-y: auto;">
-                                    <input type="text" class="form-control mb-2" data-iconpicker-search
-                                        placeholder="{{ __('Search icons...') }}">
-                                    <div class="d-flex flex-wrap" data-iconpicker-list>
-                                    </div>
-                                </div>
+                            <label>{{ __('Image') }}</label>
+                            <br>
+                            <div class="thumb-preview2">
+                                <img src="{{ asset('assets/admin/noimage.jpg') }}" alt="{{ __('Category image preview') }}"
+                                    class="uploaded-img2 in_image">
                             </div>
-                            <input type="hidden" id="in_icon" data-iconpicker-input name="icon" value="fas fa-seedling">
-                            <p id="editErr_icon" class="text-danger em"></p>
+                            <input type="file" class="img-input2" name="image" id="thumbnailInput2"
+                                accept=".jpg,.jpeg,.png,.webp,.svg,.avif">
+                            <small class="d-block mt-2 text-muted">{{ __('Recommended size') }}: 300x300px</small>
+                            <p id="editErr_image" class="text-danger em"></p>
                         </div>
                     </div>
 

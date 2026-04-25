@@ -50,6 +50,7 @@
                                         <input type="checkbox" class="bulk-check" data-val="all">
                                     </th>
                                     <th scope="col">{{ __('Name') }}</th>
+                                    <th scope="col">{{ __('Image') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Total Products') }}</th>
                                     <th scope="col">{{ __('Serial Number') }}</th>
@@ -57,11 +58,32 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($categories as $key => $category)
+                                        @php
+                                            $isCategoryImage =
+                                                !empty($category->icon) &&
+                                                preg_match('/\.(jpe?g|png|webp|svg|avif|gif)$/i', $category->icon);
+                                            $categoryImageUrl = $isCategoryImage
+                                                ? asset('assets/img/product/category/' . $category->icon)
+                                                : asset('assets/admin/noimage.jpg');
+                                        @endphp
                                         <tr>
                                             <td>
                                                 <input type="checkbox" class="bulk-check" data-val="{{ $category->id }}">
                                             </td>
                                             <td>{{ $category->name }}</td>
+                                            <td>
+                                                @if ($isCategoryImage)
+                                                    <img src="{{ $categoryImageUrl }}" alt="{{ $category->name }}"
+                                                        class="category-table-image">
+                                                @elseif (!empty($category->icon))
+                                                    <span class="category-table-icon" aria-label="{{ __('Category icon') }}">
+                                                        <i class="{{ $category->icon }}" aria-hidden="true"></i>
+                                                    </span>
+                                                @else
+                                                    <img src="{{ $categoryImageUrl }}" alt="{{ __('No image') }}"
+                                                        class="category-table-image">
+                                                @endif
+                                            </td>
                                             <td>
                                                 @if ($category->status == 1)
                                                     <span class="badge bg-success changeStatusBtn"
@@ -80,7 +102,7 @@
                                                     <a href="" class="btn btn-sm editBtn edit-button product-action-btn"
                                                         data-bs-toggle="modal" data-bs-target="#editModal"
                                                         data-id="{{ $category->id }}"
-                                                        data-icon="{{ $category->icon }}"
+                                                        data-image="{{ $categoryImageUrl }}"
                                                         data-serial_number="{{ $category->serial_number }}"
                                                         data-status="{{ $category->status }}"
                                                         @foreach ($languages as $language)

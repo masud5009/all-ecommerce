@@ -41,14 +41,22 @@ document.querySelectorAll('.thumb-preview, .thumb-preview2').forEach((thumb) => 
 $('.img-input, .img-input2').on('change', function (event) {
     const input = $(this);
     const file = event.target.files[0];
+    if (!file) {
+        return;
+    }
+
     const reader = new FileReader();
 
     reader.onload = function (e) {
-        if (input.hasClass('img-input2')) {
-            $('.uploaded-img2').attr('src', e.target.result);
-        } else {
-            $('.uploaded-img').attr('src', e.target.result);
+        const previewSelector = input.hasClass('img-input2') ? '.uploaded-img2' : '.uploaded-img';
+        const preview = input.closest('form').find(previewSelector).first();
+
+        if (preview.length > 0) {
+            preview.attr('src', e.target.result);
+            return;
         }
+
+        $(previewSelector).attr('src', e.target.result);
     };
 
     reader.readAsDataURL(file);

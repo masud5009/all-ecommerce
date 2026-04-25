@@ -85,25 +85,49 @@
         .brush-ring::before {
             content: "";
             position: absolute;
-            inset: -6px;
+            inset: 0;
             border-radius: 9999px;
-            background: conic-gradient(from 110deg,
-                    rgba(16, 185, 129, 0.35),
-                    rgba(16, 185, 129, 0.12),
-                    rgba(16, 185, 129, 0.45),
-                    rgba(16, 185, 129, 0.2),
-                    rgba(16, 185, 129, 0.35));
-            -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 0);
-            mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 0);
+            background:
+                conic-gradient(from 18deg,
+                    rgb(var(--category-ring-rgb, 16 185 129) / 0.08) 0deg,
+                    rgb(var(--category-ring-rgb, 16 185 129) / 0.7) 30deg,
+                    rgb(var(--category-ring-rgb, 16 185 129) / 0.46) 76deg,
+                    transparent 94deg,
+                    rgb(var(--category-ring-rgb, 16 185 129) / 0.62) 118deg,
+                    rgb(var(--category-ring-rgb, 16 185 129) / 0.78) 174deg,
+                    transparent 202deg,
+                    rgb(var(--category-ring-rgb, 16 185 129) / 0.52) 246deg,
+                    rgb(var(--category-ring-rgb, 16 185 129) / 0.76) 318deg,
+                    rgb(var(--category-ring-rgb, 16 185 129) / 0.14) 360deg);
+            -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 17px), #000 calc(100% - 16px), #000 calc(100% - 3px), transparent calc(100% - 2px));
+            mask: radial-gradient(farthest-side, transparent calc(100% - 17px), #000 calc(100% - 16px), #000 calc(100% - 3px), transparent calc(100% - 2px));
             opacity: 0.9;
             transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .brush-ring::after {
+            content: "";
+            position: absolute;
+            inset: 10px 7px 7px 12px;
+            border-radius: 9999px;
+            background: conic-gradient(from 210deg,
+                    transparent 0deg,
+                    rgb(var(--category-ring-rgb, 16 185 129) / 0.34) 46deg,
+                    transparent 82deg,
+                    rgb(var(--category-ring-rgb, 16 185 129) / 0.22) 150deg,
+                    transparent 214deg,
+                    rgb(var(--category-ring-rgb, 16 185 129) / 0.28) 300deg,
+                    transparent 360deg);
+            -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 8px), #000 calc(100% - 7px), #000 calc(100% - 1px), transparent 100%);
+            mask: radial-gradient(farthest-side, transparent calc(100% - 8px), #000 calc(100% - 7px), #000 calc(100% - 1px), transparent 100%);
             pointer-events: none;
         }
 
         .group:hover .brush-ring::before,
         .group:focus-visible .brush-ring::before {
             transform: scale(1.06);
-            box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.12), 0 14px 28px rgba(16, 185, 129, 0.18);
+            box-shadow: 0 0 0 6px rgb(var(--category-ring-rgb, 16 185 129) / 0.1), 0 14px 28px rgb(var(--category-ring-rgb, 16 185 129) / 0.16);
             opacity: 1;
         }
     </style>
