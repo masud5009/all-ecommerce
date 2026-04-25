@@ -19,7 +19,7 @@
         data-reveal>
         <div class="flex items-center justify-between gap-4" data-reveal-child>
             <div>
-                <h2 id="category-heading" class="text-4xl font-bold tracking-normal text-slate-900 sm:text-5xl">
+                <h2 id="category-heading" class="text-2xl font-semibold text-slate-900">
                     {{ $categorySectionTitle }}
                 </h2>
             </div>
@@ -78,10 +78,10 @@
                             @endif
                         </span>
                     </div>
-                    <p class="mt-4 line-clamp-2 min-h-[2rem] text-xl font-bold leading-6 text-emerald-950 transition group-hover:text-green-800">
+                    <p class="mt-3.5 line-clamp-2 min-h-[1.8rem] text-base font-semibold leading-6 text-emerald-950 transition group-hover:text-green-800 sm:text-lg">
                         {{ $category->name }}
                     </p>
-                    <span class="mt-2 text-base font-semibold text-slate-400">
+                    <span class="mt-1 text-xs font-medium text-slate-400 sm:text-sm">
                         {{ $categoryProductsCount }} {{ $categoryProductsCount === 1 ? __('Item') : __('Items') }}
                     </span>
                 </a>

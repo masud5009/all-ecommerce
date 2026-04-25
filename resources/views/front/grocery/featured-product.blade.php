@@ -19,7 +19,7 @@
             </div>
 
             @if (count($featuredProducts) > 0)
-                <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     @foreach ($featuredProducts as $product)
                         @include('front.product-card', ['product' => $product])
                     @endforeach

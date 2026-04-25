@@ -26,6 +26,7 @@
 
     $stockLabel =
         $product->has_variants == 0 ? (($product->stock ?? 0) > 0 ? __('In Stock') : __('Stock Out')) : $variantStock;
+    $isInStock = trim((string) $stockLabel) === __('In Stock');
 
     $reviewCount = (int) ($product->reviews_count ?? 0);
     $averageRating = $reviewCount > 0 ? round((float) ($product->reviews_avg_rating ?? 0), 1) : 0;
@@ -37,7 +38,7 @@
 @endphp
 
 <article
-    class="group relative flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.06)] transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_12px_28px_rgba(15,23,42,0.15)]"
+    class="group relative flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-4 shadow-[0_2px_8px_rgba(15,23,42,0.06)] transition duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_8px_20px_rgba(15,23,42,0.12)]"
     data-reveal-child data-featured-card data-product-id="{{ $product->id }}">
 
     @if ($isFlashSaleActive)
@@ -58,11 +59,11 @@
     <div class="relative overflow-hidden rounded-2xl bg-green-50">
         <a href="{{ route('frontend.shop.details', ['id' => $product->id]) }}" class="block">
             <img src="{{ asset('assets/img/product/' . $product->thumbnail) }}" alt="{{ $productTitle }}"
-                class="h-40 w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy"
+                class="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-[1.03]" loading="lazy"
                 decoding="async">
         </a>
 
-        <div class="absolute inset-0 flex items-center justify-center gap-3 opacity-0 transition duration-300 group-hover:opacity-100">
+        <div class="absolute inset-0 flex items-end justify-end gap-3 p-3 opacity-100 transition duration-300 sm:items-center sm:justify-center sm:p-0 sm:opacity-0 sm:group-hover:opacity-100">
             <button type="button" data-action="toggle-wishlist" data-product-id="{{ $product->id }}"
                 class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-600 shadow-lg transition duration-300 hover:bg-rose-50 hover:text-rose-500 {{ $inWishlist ? 'text-rose-500 bg-rose-50' : '' }}"
                 aria-label="Add to wishlist" aria-pressed="{{ $inWishlist ? 'true' : 'false' }}">
@@ -87,7 +88,8 @@
 
         @if (!empty($stockLabel))
             <div class="absolute right-3 top-3 inline-flex">
-                <span class="rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-semibold text-slate-700 shadow-sm backdrop-blur-sm">
+                <span
+                    class="rounded-full px-2.5 py-1 text-[10px] font-semibold shadow-sm backdrop-blur-sm {{ $isInStock ? 'bg-emerald-50/95 text-emerald-700 ring-1 ring-emerald-200' : 'bg-rose-50/95 text-rose-700 ring-1 ring-rose-200' }}">
                     {{ $stockLabel }}
                 </span>
             </div>
@@ -97,8 +99,8 @@
     <div class="mt-6 space-y-3">
         <div class="flex flex-col">
             <a href="{{ route('frontend.shop.details', ['id' => $product->id]) }}"
-                class="text-[1.1rem] font-semibold text-slate-900 transition hover:text-green-700">
-                {{ truncateString($productTitle, 50) }}
+                class="line-clamp-2 min-h-[3.2rem] text-[1.1rem] font-semibold text-slate-900 transition hover:text-green-700">
+                {{ $productTitle }}
             </a>
         </div>
 
@@ -117,8 +119,12 @@
                 @endfor
             </span>
 
-            <span class="leading-none">{{ number_format($averageRating, 1) }} ({{ $reviewCount }}
-                {{ \Illuminate\Support\Str::plural('review', $reviewCount) }})</span>
+            @if ($reviewCount > 0)
+                <span class="leading-none">{{ number_format($averageRating, 1) }} ({{ $reviewCount }}
+                    {{ \Illuminate\Support\Str::plural('review', $reviewCount) }})</span>
+            @else
+                <span class="leading-none">{{ __('No reviews yet') }}</span>
+            @endif
         </div>
 
         <div class="mt-4 flex flex-col gap-2">
@@ -128,7 +134,7 @@
                         {{ \App\Support\ProductCardPrice::formatRange($cardPrice) }}
                     </p>
                     @if (!empty($cardPrice['show_old_range']))
-                        <p class="text-xs text-slate-400 line-through">
+                        <p class="mt-1 text-xs font-medium text-slate-400 line-through">
                             {{ \App\Support\ProductCardPrice::formatRange($cardPrice, true) }}
                         </p>
                     @endif
@@ -139,7 +145,7 @@
                         {{ \App\Support\ProductCardPrice::formatSinglePrice($cardPrice) }}
                     </p>
                     @if (!empty($cardPrice['show_old_price']))
-                        <p class="text-xs text-slate-400 line-through">
+                        <p class="mt-1 text-xs font-medium text-slate-400 line-through">
                             {{ currency_symbol($cardPrice['old_price']) }}
                         </p>
                     @endif
