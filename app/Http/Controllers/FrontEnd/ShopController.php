@@ -93,6 +93,8 @@ class ShopController extends Controller
 
         // Get product content for the current language
         $data['product_content'] = $product->content->first();
+        $data['productCategoryName'] = ProductCategory::where('id', $data['product_content']?->category_id)
+            ->value('name') ?? 'Category';
 
         // Check if flash sale is active
         $isFlashSaleActive = false;

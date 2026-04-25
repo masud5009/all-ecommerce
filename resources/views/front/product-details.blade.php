@@ -2,7 +2,7 @@
 
 @php
     $productName = $product_content->title ?? 'Product Name';
-    $productCategory = App\Models\ProductCategory::where('id', $product->category_id)->value('name') ?? 'Category';
+    $productCategory = $productCategoryName ?? __('Category');
     $productId = $product->id;
     // Ensure at least one unit
     if (empty($variants)) {
@@ -225,7 +225,7 @@
                                     <path d="M6 7h12l1 12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L6 7Z"></path>
                                     <path d="M9 7V6a3 3 0 0 1 6 0v1"></path>
                                 </svg>
-                                Add to cart
+                                {{ __('Add to cart') }}
                             </button>
 
                             <button type="button" data-action="toggle-wishlist" data-product-id="{{ $productId }}"
@@ -249,7 +249,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372a1.5 1.5 0 0 0-1.22-1.474l-4.423-.884a1.5 1.5 0 0 0-1.48.54l-.97 1.293a1.5 1.5 0 0 1-1.609.53 12.035 12.035 0 0 1-7.18-7.18 1.5 1.5 0 0 1 .53-1.609l1.293-.97a1.5 1.5 0 0 0 .54-1.48l-.884-4.423A1.5 1.5 0 0 0 5.872 2.25H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                                             </svg>
-                                            Call
+                                             {{ __('Call') }}
                                         </a>
                                     @endif
 
@@ -261,7 +261,7 @@
                                                 <path
                                                     d="M19.05 4.91A9.82 9.82 0 0 0 12.03 2C6.6 2 2.2 6.4 2.2 11.83c0 1.74.46 3.44 1.34 4.94L2 22l5.39-1.41a9.78 9.78 0 0 0 4.64 1.18h.01c5.43 0 9.83-4.4 9.83-9.83a9.8 9.8 0 0 0-2.82-7.03ZM12.04 20.1h-.01a8.12 8.12 0 0 1-4.13-1.13l-.3-.18-3.2.84.86-3.12-.2-.32a8.15 8.15 0 0 1-1.25-4.36c0-4.5 3.66-8.16 8.16-8.16 2.18 0 4.22.85 5.75 2.39a8.1 8.1 0 0 1 2.39 5.77c0 4.5-3.66 8.17-8.15 8.17Zm4.48-6.11c-.25-.13-1.47-.72-1.7-.8-.23-.08-.39-.12-.56.12-.17.25-.64.8-.79.97-.15.17-.29.19-.54.06-.25-.13-1.04-.38-1.98-1.21-.73-.65-1.22-1.45-1.36-1.69-.14-.24-.02-.37.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.42.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.48-.4-.41-.56-.42h-.48c-.17 0-.43.06-.66.31-.23.25-.87.85-.87 2.07 0 1.21.89 2.39 1.01 2.55.12.17 1.74 2.66 4.22 3.73.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.16-.48-.29Z" />
                                             </svg>
-                                            WhatsApp
+                                             {{ __('WhatsApp') }}
                                         </a>
                                     @endif
                                 </div>
@@ -310,7 +310,7 @@
             <section class="mt-10" data-reveal>
                 <div class="flex flex-wrap items-end justify-between gap-3" data-reveal-child>
                     <div>
-                        <h2 class="text-2xl font-semibold text-slate-900">You may also like</h2>
+                        <h2 class="text-2xl font-semibold text-slate-900"> {{ __('You may also like') }}</h2>
                     </div>
                     <a href="{{ route('frontend.shop') }}"
                         class="inline-flex items-center rounded-full border border-green-200 bg-white px-5 py-2.5 text-sm font-semibold text-green-700 shadow-sm transition hover:-translate-y-0.5 hover:border-green-600 hover:bg-green-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300 focus-visible:ring-offset-2">
