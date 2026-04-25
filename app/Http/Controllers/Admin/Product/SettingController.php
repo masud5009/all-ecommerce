@@ -22,6 +22,7 @@ class SettingController extends Controller
         }
         $product_setting->digital_product = $request->digital_product;
         $product_setting->physical_product = $request->physical_product;
+        $product_setting->guest_checkout = $request->guest_checkout;
         $product_setting->contact_number = $request->contact_number;
         $product_setting->contact_number_status = $request->contact_number_status;
         $product_setting->whatsapp_number = $request->whatsapp_number;

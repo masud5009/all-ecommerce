@@ -328,7 +328,18 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        return view('frontend.auth.login');
+        $redirectTo = (string) $request->query('redirect_to', '');
+        if ($this->isSafeInternalUrl($redirectTo)) {
+            session()->put('after_login_redirect', $redirectTo);
+        }
+
+        $guestRedirect = (string) $request->query('guest_redirect', '');
+        $guestCheckoutEnabled = (int) $request->query('guest_checkout', 0) === 1;
+
+        return view('frontend.auth.login', [
+            'guestCheckoutEnabled' => $guestCheckoutEnabled && $this->isSafeInternalUrl($guestRedirect),
+            'guestCheckoutUrl' => $guestRedirect,
+        ]);
     }
 
     /**
@@ -393,7 +404,7 @@ class UserController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Login successful!',
-                'redirect_url' => route('user.dashboard')
+                'redirect_url' => session()->pull('after_login_redirect', route('user.dashboard'))
             ]);
         } else {
             return response()->json([
@@ -402,6 +413,15 @@ class UserController extends Controller
                 'redirect_url' => null
             ], 401);
         }
+    }
+
+    private function isSafeInternalUrl(?string $url): bool
+    {
+        if (empty($url)) {
+            return false;
+        }
+
+        return str_starts_with($url, url('/'));
     }
 
     /**

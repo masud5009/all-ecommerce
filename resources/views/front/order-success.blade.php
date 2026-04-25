@@ -169,6 +169,23 @@
     </div>
 @endsection
 
+@php
+    $purchaseAnalyticsItems = collect($order->items ?? [])
+        ->map(function ($item) {
+            $variations = $item->variations ? json_decode($item->variations, true) : [];
+
+            return [
+                'item_id' => (string) ($item->product_id ?? ''),
+                'item_name' => $item->product?->content->first()?->name ?? 'Product',
+                'item_variant' => $variations[0]['label'] ?? null,
+                'price' => (float) ($item->product_price ?? 0),
+                'quantity' => (int) ($item->qty ?? 1),
+            ];
+        })
+        ->values()
+        ->all();
+@endphp
+
 @section('script')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -179,19 +196,7 @@
                     value: @json((float) ($order->pay_amount ?? 0)),
                     shipping: @json((float) ($order->shipping_charge ?? 0)),
                     currency: @json($websiteInfo->currency_text ?? 'BDT'),
-                    items: @json(
-                        collect($order->items ?? [])->map(function ($item) {
-                            $variations = $item->variations ? json_decode($item->variations, true) : [];
-
-                            return [
-                                'item_id' => (string) ($item->product_id ?? ''),
-                                'item_name' => $item->product?->content->first()?->name ?? 'Product',
-                                'item_variant' => $variations[0]['label'] ?? null,
-                                'price' => (float) ($item->product_price ?? 0),
-                                'quantity' => (int) ($item->qty ?? 1),
-                            ];
-                        })->values()->all(),
-                    ),
+                    items: @json($purchaseAnalyticsItems),
                 }
             }));
         });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Models\Cart;
+use App\Models\ProductSetting;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Admin\Language;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Session;
 use App\Services\Payment\PaymentService;
 use App\Services\Payment\PaymentGatewayFactory;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -244,6 +246,33 @@ class CartController extends Controller
      */
     public function checkout(Request $request)
     {
+        $productSetting = ProductSetting::first();
+        $guestCheckoutEnabled = (int) ($productSetting->guest_checkout ?? 0) === 1;
+        $isAuthenticated = Auth::guard('web')->check();
+
+        if (!$isAuthenticated) {
+            $loginQuery = [
+                'redirect_to' => route('cart.checkout'),
+            ];
+
+            if ($guestCheckoutEnabled) {
+                $isGuestIntent = $request->boolean('guest');
+
+                if (!$isGuestIntent) {
+                    $loginQuery['guest_checkout'] = 1;
+                    $loginQuery['guest_redirect'] = route('cart.checkout', ['guest' => 1]);
+
+                    return redirect()
+                        ->route('user.login', $loginQuery)
+                        ->with('info', __('Sign in to continue, or choose guest checkout.'));
+                }
+            } else {
+                return redirect()
+                    ->route('user.login', $loginQuery)
+                    ->with('error', __('Please login to continue checkout.'));
+            }
+        }
+
         $sessionId = $this->getSessionId();
         $languageId = $this->currentLang->id;
 

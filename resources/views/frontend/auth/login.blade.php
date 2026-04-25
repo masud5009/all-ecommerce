@@ -103,6 +103,13 @@
                     <span id="login-btn-text">Sign in</span>
                     <svg id="login-spinner" class="hidden h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/></svg>
                 </button>
+
+                @if (!empty($guestCheckoutEnabled) && !empty($guestCheckoutUrl))
+                    <a href="{{ $guestCheckoutUrl }}"
+                        class="mt-3 flex w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-green-300 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200">
+                        {{ __('Continue as Guest') }}
+                    </a>
+                @endif
             </form>
 
             {{-- Divider --}}

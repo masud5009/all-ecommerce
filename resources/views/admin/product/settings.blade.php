@@ -75,6 +75,28 @@
 
         <div class="col-lg-6">
             <div class="form-group">
+                <label for="guest_checkout">{{ __('Guest Checkout') }}</label>
+                <div class="selectgroup w-100">
+                    <label class="selectgroup-item">
+                        <input type="radio" name="guest_checkout" value="1" class="selectgroup-input"
+                            @checked(@$product_setting->guest_checkout == 1)>
+                        <span class="selectgroup-button">{{ __('Enable') }}</span>
+                    </label>
+
+                    <label class="selectgroup-item">
+                        <input type="radio" name="guest_checkout" value="0" class="selectgroup-input"
+                            @checked(@$product_setting->guest_checkout == 0)>
+                        <span class="selectgroup-button">{{ __('Disable') }}</span>
+                    </label>
+                </div>
+                <small class="form-text text-muted">
+                    {{ __('When enabled, users will see a Guest Checkout option on login page during checkout.') }}
+                </small>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="form-group">
                 <label for="contact_number">{{ __('Contact Number') }}</label>
                 <input type="text" name="contact_number" id="contact_number" class="form-control"
                     value="{{ @$product_setting->contact_number }}">

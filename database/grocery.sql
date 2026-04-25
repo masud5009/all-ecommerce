@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 14, 2026 at 08:49 AM
+-- Generation Time: Apr 25, 2026 at 05:34 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.29
 
@@ -525,7 +525,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (90, '2026_04_09_000003_add_unique_id_to_product_categories_table', 56),
 (91, '2026_04_09_000004_add_unique_id_to_blog_categories_table', 57),
 (92, '2026_04_10_000005_add_tracking_and_recaptcha_fields_to_settings_table', 58),
-(93, '2026_04_14_000001_add_show_on_card_price_to_product_variants_table', 59);
+(93, '2026_04_14_000001_add_show_on_card_price_to_product_variants_table', 59),
+(94, '2026_04_25_000001_add_contact_and_whatsapp_columns_to_product_settings_table', 60),
+(95, '2026_04_25_000002_add_guest_checkout_to_product_settings_table', 61);
 
 -- --------------------------------------------------------
 
@@ -575,7 +577,9 @@ CREATE TABLE `orders` (
 
 INSERT INTO `orders` (`id`, `user_id`, `order_number`, `billing_name`, `billing_email`, `billing_phone`, `billing_address`, `billing_city`, `shipping_address`, `payment_method`, `gateway`, `cart_total`, `pay_amount`, `discount_amount`, `tax`, `shipping_charge`, `invoice_number`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `payment_status`, `order_status`, `receipt`, `delivery_date`, `stedfast_consignment_id`, `stedfast_tracking_code`, `stedfast_status`, `stedfast_message`, `stedfast_payload`, `stedfast_response`, `created_at`, `updated_at`) VALUES
 (164, NULL, 'B06807B6', 'Masud Rana', 'ranaahmed269205@gmail.com', '+8801306084771', 'Pabna', 'pabna', 'Pabna, pabna, 6670', 'Cash Payment', 'Manual', 163.99, 234, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, 'pending', 'pending', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-03 09:21:42', '2026-04-03 09:21:42'),
-(165, NULL, 'B06807BD', 'Masud Rana', 'ranaahmed269205@gmail.com', '+8801306084771', 'Pabna', 'pabna', 'Pabna, pabna, 6670', 'Cash Payment', 'Manual', 163.99, 234, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, 'pending', 'pending', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-03 09:21:42', '2026-04-03 09:21:42');
+(165, NULL, 'B06807BD', 'Masud Rana', 'ranaahmed269205@gmail.com', '+8801306084771', 'Pabna', 'pabna', 'Pabna, pabna, 6670', 'Cash Payment', 'Manual', 163.99, 234, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, 'pending', 'pending', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-03 09:21:42', '2026-04-03 09:21:42'),
+(166, NULL, '887B2EE8', 'Masud Rana', 'ranaahmed269205@gmail.com', '+8801306084771', 'Pabna', 'pabna', 'Pabna, pabna, 6670', 'Cash Payment', 'Manual', 2300.00, 2350, NULL, NULL, 50, NULL, NULL, NULL, NULL, NULL, 'pending', 'pending', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-25 11:23:19', '2026-04-25 11:23:19'),
+(167, NULL, '887B2916', 'Masud Rana', 'ranaahmed269205@gmail.com', '+8801306084771', 'Pabna', 'pabna', 'Pabna, pabna, 6670', 'Cash Payment', 'Manual', 2300.00, 2350, NULL, NULL, 50, NULL, NULL, NULL, NULL, NULL, 'pending', 'pending', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-25 11:23:19', '2026-04-25 11:23:19');
 
 -- --------------------------------------------------------
 
@@ -607,7 +611,11 @@ CREATE TABLE `order_items` (
 INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `product_name`, `product_image`, `unit_price`, `quantity`, `product_option`, `variant_id`, `product_price`, `qty`, `variations`, `created_at`, `updated_at`) VALUES
 (176, 156, 34, NULL, NULL, NULL, NULL, NULL, 62, 50, 1, '[{\"product_id\":34,\"variation_id\":69,\"variation_name\":\"Size\",\"option_name\":\"M\",\"price\":0,\"option_key\":0,\"qty\":1}]', '2026-02-05 11:35:41', '2026-02-05 11:35:41'),
 (185, 164, 53, 'Product', '69a1d1bc06f73.png', 163.99, 1, '23.5 cm, Black', 120, 164, 1, '[{\"label\":\"23.5 cm, Black\"}]', '2026-04-03 09:21:42', '2026-04-03 09:21:42'),
-(186, 165, 53, 'Product', '69a1d1bc06f73.png', 163.99, 1, '23.5 cm, Black', 120, 164, 1, '[{\"label\":\"23.5 cm, Black\"}]', '2026-04-03 09:21:42', '2026-04-03 09:21:42');
+(186, 165, 53, 'Product', '69a1d1bc06f73.png', 163.99, 1, '23.5 cm, Black', 120, 164, 1, '[{\"label\":\"23.5 cm, Black\"}]', '2026-04-03 09:21:42', '2026-04-03 09:21:42'),
+(187, 166, 56, 'Product', '69d4ea4caa7c3.jpg', 600.00, 1, 'হাফ কেজি', 133, 600, 1, '[{\"label\":\"\\u09b9\\u09be\\u09ab \\u0995\\u09c7\\u099c\\u09bf\"}]', '2026-04-25 11:23:19', '2026-04-25 11:23:19'),
+(188, 167, 56, 'Product', '69d4ea4caa7c3.jpg', 600.00, 1, 'হাফ কেজি', 133, 600, 1, '[{\"label\":\"\\u09b9\\u09be\\u09ab \\u0995\\u09c7\\u099c\\u09bf\"}]', '2026-04-25 11:23:19', '2026-04-25 11:23:19'),
+(189, 166, 57, 'Product', '69d53d61204b7.webp', 1700.00, 1, 'এক কেজি', 142, 1700, 1, '[{\"label\":\"\\u098f\\u0995 \\u0995\\u09c7\\u099c\\u09bf\"}]', '2026-04-25 11:23:19', '2026-04-25 11:23:19'),
+(190, 167, 57, 'Product', '69d53d61204b7.webp', 1700.00, 1, 'এক কেজি', 142, 1700, 1, '[{\"label\":\"\\u098f\\u0995 \\u0995\\u09c7\\u099c\\u09bf\"}]', '2026-04-25 11:23:19', '2026-04-25 11:23:19');
 
 -- --------------------------------------------------------
 
@@ -943,6 +951,11 @@ CREATE TABLE `product_settings` (
   `id` bigint UNSIGNED NOT NULL,
   `digital_product` tinyint NOT NULL DEFAULT '0',
   `physical_product` tinyint NOT NULL DEFAULT '1',
+  `guest_checkout` tinyint(1) NOT NULL DEFAULT '0',
+  `contact_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact_number_status` tinyint(1) NOT NULL DEFAULT '0',
+  `whatsapp_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `whatsapp_number_status` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -951,8 +964,8 @@ CREATE TABLE `product_settings` (
 -- Dumping data for table `product_settings`
 --
 
-INSERT INTO `product_settings` (`id`, `digital_product`, `physical_product`, `created_at`, `updated_at`) VALUES
-(1, 0, 1, '2026-02-02 06:18:53', '2026-02-05 12:20:04');
+INSERT INTO `product_settings` (`id`, `digital_product`, `physical_product`, `guest_checkout`, `contact_number`, `contact_number_status`, `whatsapp_number`, `whatsapp_number_status`, `created_at`, `updated_at`) VALUES
+(1, 0, 1, 1, '01306084771', 1, '01306084771', 1, '2026-02-02 06:18:53', '2026-04-25 11:20:39');
 
 -- --------------------------------------------------------
 
@@ -1858,7 +1871,7 @@ ALTER TABLE `blog_contents`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -1936,19 +1949,19 @@ ALTER TABLE `menu_builders`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=168;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=187;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=191;
 
 --
 -- AUTO_INCREMENT for table `packages`
