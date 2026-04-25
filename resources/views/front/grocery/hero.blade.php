@@ -75,39 +75,16 @@
                                             <path d="M9 7h8v8"></path>
                                         </svg>
                                     </a>
-                                    <p class="hero-text">
-                                        {!! $slider->description !!}
-                                    </p>
                                 </div>
                             </div>
 
                             <div class="hero-media">
-                                <div class="hero-seal" aria-hidden="true">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M20 6 9 17l-5-5"></path>
-                                    </svg>
-                                </div>
-
                                 <div class="hero-product-wrap">
                                     <img src="{{ $imageUrl }}" srcset="{{ $imageUrl }}"
                                         sizes="(min-width: 1024px) 540px, 100vw" width="760" height="620"
                                         alt="{{ strip_tags($slider->sub_title) }}"
                                         class="hero-product-image" decoding="async" fetchpriority="{{ $isActive ? 'high' : 'auto' }}">
                                 </div>
-
-                                @if (!empty($slider->image_left_badge_title) || !empty($slider->image_left_badge_sub_title))
-                                    <div class="hero-media-badge hero-media-badge-top">
-                                        <p class="hero-media-badge-label">{{ $slider->image_left_badge_title }}</p>
-                                        <p class="hero-media-badge-value">{{ $slider->image_left_badge_sub_title }}</p>
-                                    </div>
-                                @endif
-
-                                @if (!empty($slider->image_right_badge_title) || !empty($slider->image_right_badge_sub_title))
-                                    <div class="hero-media-badge hero-media-badge-bottom">
-                                        <p class="hero-media-badge-label">{{ $slider->image_right_badge_title }}</p>
-                                        <p class="hero-media-badge-value">{{ $slider->image_right_badge_sub_title }}</p>
-                                    </div>
-                                @endif
                             </div>
                         </div>
                     </div>

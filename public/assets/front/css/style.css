@@ -684,10 +684,8 @@ img {
 
 .hero-copy-row {
   margin-top: 2.25rem;
-  display: grid;
-  grid-template-columns: auto minmax(0, 17rem);
+  display: flex;
   align-items: center;
-  gap: 1.95rem;
 }
 
 .hero-text {
