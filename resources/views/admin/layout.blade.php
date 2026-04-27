@@ -8,6 +8,9 @@
     {{-- csrf-token for ajax request --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ __('Admin') }} - {{ $websiteInfo->website_title }}</title>
+    @if (!empty($websiteInfo->favicon))
+        <link rel="shortcut icon" type="image/png" href="{{ asset('assets/front/img/' . $websiteInfo->favicon) }}">
+    @endif
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
     {{-- include all styles --}}
     @includeIf('admin.partials.styles')

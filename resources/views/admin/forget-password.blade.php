@@ -4,7 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
+    <title>{{ __('Admin Forgot Password') }} - {{ $websiteInfo->website_title ?? config('app.name') }}</title>
+    @if (!empty($websiteInfo->favicon))
+        <link rel="shortcut icon" type="image/png" href="{{ asset('assets/front/img/' . $websiteInfo->favicon) }}">
+    @endif
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- <link rel="stylesheet" href="assets/plugins/all.min.css"> -->
@@ -21,8 +24,13 @@
             <div class="login-form">
                 <div class="card">
                     <div class="card-header">
-                        <a href="">
-                            <img src="{{ asset('assets/admin/car.png') }}" alt="website-image">
+                        <a href="{{ route('frontend.index') }}" target="_blank">
+                            @if (!empty($websiteInfo->website_logo))
+                                <img src="{{ asset('assets/front/img/' . $websiteInfo->website_logo) }}"
+                                    alt="{{ $websiteInfo->website_title ?? config('app.name') }}">
+                            @else
+                                {{ $websiteInfo->website_title ?? config('app.name') }}
+                            @endif
                         </a>
                     </div>
                     <div class="card-body">

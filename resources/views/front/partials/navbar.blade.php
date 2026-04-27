@@ -2,14 +2,13 @@
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex flex-wrap items-center gap-4 py-4">
                 <a href="{{ route('frontend.index') }}" class="flex items-center gap-2 text-xl font-semibold text-green-700">
-                    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-green-100">
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            aria-hidden="true">
-                            <path d="M4 14c6-1 10-5 12-10 3 5 4 10 3 14-2 6-10 8-13 3-1-2-1-5-1-7Z" />
-                            <path d="M7 15c3-2 6-5 9-10" />
-                        </svg>
-                    </span>
-                    FreshCart
+                    @if (!empty($websiteInfo->website_logo))
+                        <img src="{{ asset('assets/front/img/' . $websiteInfo->website_logo) }}"
+                            alt="{{ $websiteInfo->website_title ?? config('app.name') }}"
+                            class="h-10 w-auto max-w-[160px] object-contain">
+                    @else
+                        {{ $websiteInfo->website_title ?? config('app.name') }}
+                    @endif
                 </a>
                 <div class="hidden lg:flex items-center gap-6">
                     @if (!empty($menus))

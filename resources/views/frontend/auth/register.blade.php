@@ -13,13 +13,13 @@
             {{-- Logo --}}
             <div class="flex flex-col items-center mb-8">
                 <a href="{{ route('frontend.index') }}" class="flex items-center gap-2 text-2xl font-bold text-green-700 mb-2">
-                    <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-green-100">
-                        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 14c6-1 10-5 12-10 3 5 4 10 3 14-2 6-10 8-13 3-1-2-1-5-1-7Z"/>
-                            <path d="M7 15c3-2 6-5 9-10"/>
-                        </svg>
-                    </span>
-                    FreshCart
+                    @if (!empty($websiteInfo->website_logo))
+                        <img src="{{ asset('assets/front/img/' . $websiteInfo->website_logo) }}"
+                            alt="{{ $websiteInfo->website_title ?? config('app.name') }}"
+                            class="h-12 w-auto max-w-[180px] object-contain">
+                    @else
+                        {{ $websiteInfo->website_title ?? config('app.name') }}
+                    @endif
                 </a>
                 <h1 class="text-xl font-semibold text-slate-800 mt-1">Create your account</h1>
                 <p class="text-sm text-slate-500 mt-1">Join thousands of happy shoppers today</p>

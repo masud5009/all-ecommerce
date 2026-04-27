@@ -10,7 +10,9 @@
     <title>{{ 'Maintenance Mode | ' . config('app.name') }}</title>
 
     {{-- fav icon --}}
-    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/img/' . $websiteInfo->favicon) }}">
+    @if (!empty($websiteInfo->favicon))
+      <link rel="shortcut icon" type="image/png" href="{{ asset('assets/front/img/' . $websiteInfo->favicon) }}">
+    @endif
 
     {{-- bootstrap css --}}
     <link rel="stylesheet" href="{{ asset('assets/admin/css/bootstrap.min.css') }}">
