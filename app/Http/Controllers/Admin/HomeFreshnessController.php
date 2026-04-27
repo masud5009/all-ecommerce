@@ -42,7 +42,7 @@ class HomeFreshnessController extends Controller
             'features_title' => 'nullable|string|max:255',
             'features_subtitle' => 'nullable|string|max:255',
             'features_text' => 'nullable|string|max:500',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg,avif|max:2048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg,avif|max:5120',
         ];
 
         $validator = Validator::make($request->all(), $rules);

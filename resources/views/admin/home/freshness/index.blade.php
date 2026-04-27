@@ -81,7 +81,7 @@
                                                 class="text-danger">**</span></label>
                                         <br>
                                         <div class="thumb-preview">
-                                            <img src="{{ $section->features_image ? asset('assets/img/home_section/' . $section->features_image) : asset('assets/admin/noimage.jpg') }}"
+                                            <img src="{{ @$section->features_image ? asset('assets/img/home_section/' . $section->features_image) : asset('assets/admin/noimage.jpg') }}"
                                                 alt="..." class="uploaded-img">
                                         </div>
 
@@ -109,12 +109,14 @@
                 <div id="freshnessItemsCollapse" class="accordion-collapse collapse" aria-labelledby="freshnessItemsHeading"
                     data-bs-parent="#freshnessAccordion">
                     <div class="accordion-body">
-                        <x-bulk-delete :url="route('admin.home.freshness.bulk_delete')" itemTextName="items" />
-                        <div class="d-flex justify-content-end mb-3">
-                            <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#createModal">
-                                <i class="fas fa-plus"></i> {{ __('Add Item') }}
-                            </a>
+                        <div class="card border-0 shadow-none bg-transparent mb-3">
+                            <x-bulk-delete :url="route('admin.home.freshness.bulk_delete')" itemTextName="items" />
+                            <div class="d-flex justify-content-end">
+                                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#createModal">
+                                    <i class="fas fa-plus"></i> {{ __('Add Item') }}
+                                </a>
+                            </div>
                         </div>
 
                         <div class="col-lg-12 mx-auto">
