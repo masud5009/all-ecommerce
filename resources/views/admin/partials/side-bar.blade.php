@@ -334,6 +334,17 @@
                     </a>
                 </li>
 
+                <!-- landing page managment -->
+                <li class="nav-item">
+                    <a href="{{ route('admin.landing_page') }}"
+                        class="nav-link
+                        @if (request()->routeIs('admin.landing_page')) active @endif
+                        ">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>{{ __('Landing Pages') }}</span>
+                    </a>
+                </li>
+
                 <!-- user managment -->
                 {{-- <li
                     class="nav-item nav-item-submenu

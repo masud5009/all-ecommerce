@@ -133,6 +133,11 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
         Route::get('/{id}', 'Admin\StedfastController@show')->name('admin.stedfast.show');
     });
 
+    // landing page management route
+    Route::prefix('landing-page')->group(function () {
+        Route::get('/', 'Admin\LandingPageController@index')->name('admin.landing_page');
+        Route::post('/store', 'Admin\LandingPageController@store')->name('admin.landing_page.store');
+    });
 
     //user managment route
     // Route::prefix('user-management')->group(function () {

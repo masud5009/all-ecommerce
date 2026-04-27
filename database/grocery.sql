@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 25, 2026 at 05:34 PM
+-- Generation Time: Apr 27, 2026 at 06:36 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.29
 
@@ -236,7 +236,15 @@ INSERT INTO `home_freshness_items` (`id`, `language_id`, `icon`, `title`, `text`
 (3, 6, 'fas fa-seedling', '150+ Organic Items', 'We stock 150+ organic food items for your pantry.', 'left', 1, 3, '2026-03-28 10:16:27', '2026-03-29 10:11:28'),
 (4, 6, 'fas fa-seedling', '100% Secure Payment', 'We make sure your payment method stays secure.', 'right', 1, 1, '2026-03-28 10:16:47', '2026-03-29 10:11:27'),
 (5, 6, 'fas fa-seedling', 'Temperature Control', 'We keep every item cool and fresh in transit.', 'right', 1, 2, '2026-03-28 10:17:04', '2026-03-29 10:11:28'),
-(6, 6, 'fas fa-seedling', 'Super Fast Delivery', 'Fast delivery services, safe and secure from damage.', 'right', 1, 3, '2026-03-28 10:17:23', '2026-03-29 10:11:29');
+(6, 6, 'fas fa-seedling', 'Super Fast Delivery', 'Fast delivery services, safe and secure from damage.', 'right', 1, 3, '2026-03-28 10:17:23', '2026-03-29 10:11:29'),
+(7, 8, 'fas fa-seedling', '১০০% খাঁটি ও প্রাকৃতিক', 'সম্পূর্ণ ভেজালমুক্ত ও প্রাকৃতিকভাবে প্রস্তুত পণ্য', 'left', 1, 1, '2026-04-27 10:38:07', '2026-04-27 10:41:08'),
+(8, 8, 'fas fa-seedling', 'খাঁটি গরুর ঘি', 'দেশি গরুর দুধ থেকে তৈরি সম্পূর্ণ বিশুদ্ধ ঘি', 'left', 1, 3, '2026-04-27 10:38:36', '2026-04-27 10:42:36'),
+(9, 8, 'fas fa-seedling', 'প্রিমিয়াম মানের খেজুর', 'বাছাইকৃত উন্নত মানের খেজুর, বিশ্বস্ত উৎস থেকে সংগ্রহ করা', 'left', 1, 2, '2026-04-27 10:39:00', '2026-04-27 10:42:30'),
+(10, 8, 'fas fa-seedling', 'কাঁচা মধু', 'প্রাকৃতিক মৌচাক থেকে সংগ্রহ করা বিশুদ্ধ মধু', 'left', 1, 4, '2026-04-27 10:39:30', '2026-04-27 10:42:41'),
+(11, 8, 'fas fa-seedling', 'কোল্ড প্রেসড সরিষার তেল', 'ঠান্ডা প্রেসিং পদ্ধতিতে তৈরি খাঁটি সরিষার তেল', 'right', 1, 1, '2026-04-27 10:38:07', '2026-04-27 10:41:08'),
+(12, 8, 'fas fa-seedling', 'কোনো কেমিক্যাল বা ভেজাল নেই', 'কোনো প্রকার কৃত্রিম উপাদান বা ভেজাল ব্যবহার করা হয় না', 'right', 1, 3, '2026-04-27 10:38:36', '2026-04-27 10:42:36'),
+(13, 8, 'fas fa-seedling', 'স্বাস্থ্যসম্মত প্রক্রিয়াজাতকরণ', 'সম্পূর্ণ স্বাস্থ্যকর পরিবেশে প্রক্রিয়াজাত ও প্যাকেজিং করা হয়', 'right', 1, 2, '2026-04-27 10:39:00', '2026-04-27 10:42:30'),
+(14, 8, 'fas fa-seedling', 'মান নিশ্চিত পণ্য', 'প্রতিটি পণ্য যাচাই করে গ্রাহকের কাছে পৌঁছে দেওয়া হয়', 'right', 1, 4, '2026-04-27 10:39:30', '2026-04-27 10:42:41');
 
 -- --------------------------------------------------------
 
@@ -267,7 +275,8 @@ CREATE TABLE `home_section_settings` (
 --
 
 INSERT INTO `home_section_settings` (`id`, `language_id`, `category_title`, `featured_product_title`, `featured_product_subtitle`, `popular_product_title`, `popular_product_subtitle`, `flash_title`, `flash_subtitle`, `features_image`, `features_title`, `features_subtitle`, `features_text`, `created_at`, `updated_at`) VALUES
-(11, 6, 'Browse By Categories', 'Featured Products', 'Handpicked picks for today', 'Popular right now', 'Most loved picks across produce, pantry, and seafood.', 'Flash sale', 'Adidas Ultraboost 22 Performance Gym Shoes', '69c7fe0488086.png', 'Why FreshCart', 'Freshness you can feel.', 'Hand-picked produce, secure payment, and fast delivery—every time.', '2026-03-09 11:07:26', '2026-03-28 10:12:52');
+(11, 6, 'Browse By Categories', 'Featured Products', 'Handpicked picks for today', 'Popular right now', 'Most loved picks across produce, pantry, and seafood.', 'Flash sale', 'Adidas Ultraboost 22 Performance Gym Shoes', '69c7fe0488086.png', 'Why FreshCart', 'Freshness you can feel.', 'Hand-picked produce, secure payment, and fast delivery—every time.', '2026-03-09 11:07:26', '2026-03-28 10:12:52'),
+(12, 8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '69ef93b1b89eb.png', 'আমাদের প্রতিশ্রুতি', 'খাঁটি ও প্রাকৃতিক খাদ্যের নির্ভরযোগ্য উৎস', 'আমরা সরাসরি বিশ্বস্ত উৎস থেকে খেজুর, ঘি, মধু ও সরিষার তেল সংগ্রহ করি, যা সম্পূর্ণ ভেজালমুক্ত ও স্বাস্থ্যসম্মত', '2026-04-27 10:45:58', '2026-04-27 10:49:53');
 
 -- --------------------------------------------------------
 
@@ -279,6 +288,7 @@ CREATE TABLE `home_sliders` (
   `id` bigint UNSIGNED NOT NULL,
   `language_id` bigint NOT NULL,
   `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `background_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image_left_badge_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image_left_badge_sub_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image_right_badge_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -300,9 +310,9 @@ CREATE TABLE `home_sliders` (
 -- Dumping data for table `home_sliders`
 --
 
-INSERT INTO `home_sliders` (`id`, `language_id`, `image`, `image_left_badge_title`, `image_left_badge_sub_title`, `image_right_badge_title`, `image_right_badge_sub_title`, `title`, `sub_title`, `description`, `button_text_1`, `button_url_1`, `button_text_2`, `button_url_2`, `status`, `serial_number`, `created_at`, `updated_at`) VALUES
-(1, 8, '69aef3839bf3c.avif', 'Curated Daily', 'Market fresh produce', 'Next Slot', '7:30 PM delivery', 'Exclusive launch week', 'Groceries That Feel <span>Premium</span> Every Day', 'Chef grade produce, artisanal pantry staples, and dairy delivered with white-glove care in under 90 minutes.', 'Start Shopping', '/shop', 'View Deals', '/shop', 1, 1, '2026-03-09 10:21:23', '2026-03-29 09:57:29'),
-(2, 8, '69aef3f30f351.avif', 'Transport Quality', 'Temperature controlled', 'Delivery ETA', 'Expected in 42 minutes', 'Fast lane delivery', 'Farm to Fridge With <span>Live Tracking</span>', 'Keep your schedule smooth with precise ETA updates, temperature-safe transport, and dedicated rider support.', 'Shop Fresh', '/shop', 'Explore Weekly Deals', '/shop', 1, 2, '2026-03-09 10:23:15', '2026-03-29 09:57:28');
+INSERT INTO `home_sliders` (`id`, `language_id`, `image`, `background_image`, `image_left_badge_title`, `image_left_badge_sub_title`, `image_right_badge_title`, `image_right_badge_sub_title`, `title`, `sub_title`, `description`, `button_text_1`, `button_url_1`, `button_text_2`, `button_url_2`, `status`, `serial_number`, `created_at`, `updated_at`) VALUES
+(1, 8, '69ed07123c245.png', '69ed073589abb.avif', 'Curated Daily', 'Market fresh produce', 'Next Slot', '7:30 PM delivery', 'Exclusive launch week', 'Groceries That Feel <span>Premium</span> Every Day', 'Chef grade produce, artisanal pantry staples, and dairy delivered with white-glove care in under 90 minutes.', 'Start Shopping', '/shop', 'View Deals', '/shop', 1, 1, '2026-03-09 10:21:23', '2026-04-25 12:25:57'),
+(2, 8, '69ed06f7cf195.png', '69ed041285b7d.avif', 'Transport Quality', 'Temperature controlled', 'Delivery ETA', 'Expected in 42 minutes', 'Fast lane delivery', 'Farm to Fridge With <span>Live Tracking</span>', 'Keep your schedule smooth with precise ETA updates, temperature-safe transport, and dedicated rider support.', 'Shop Fresh', '/shop', 'Explore Weekly Deals', '/shop', 1, 2, '2026-03-09 10:23:15', '2026-04-25 12:24:55');
 
 -- --------------------------------------------------------
 
@@ -319,6 +329,30 @@ CREATE TABLE `jobs` (
   `available_at` int UNSIGNED NOT NULL,
   `created_at` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `landing_pages`
+--
+
+CREATE TABLE `landing_pages` (
+  `id` bigint UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `template` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `content` longtext COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `landing_pages`
+--
+
+INSERT INTO `landing_pages` (`id`, `title`, `template`, `slug`, `content`, `created_at`, `updated_at`) VALUES
+(1, 'Nesciunt tempor con', 'theme_one', 'lp-oc4y2q5v0e', '{\"page_title\":\"Nesciunt tempor con\",\"brand_name\":\"Rafael Blake\",\"hero_badge\":\"Laboriosam odio con\",\"hero_title\":\"Nostrum voluptatem\",\"hero_description\":\"Nobis veritatis exer\",\"cta_primary_text\":\"Magna provident qui\",\"cta_secondary_text\":\"Magna provident qui\",\"rating_text\":\"Facilis eos in et d\",\"product_name\":\"Willa Norris\",\"price_old\":\"444\",\"price_now\":\"593\",\"save_text\":\"Adipisicing eveniet\"}', '2026-04-27 12:35:33', '2026-04-27 12:35:33'),
+(2, 'Quo dolore accusamus', 'theme_two', 'lp-kxnlstuz6z', '{\"page_title\":\"Quo dolore accusamus\",\"brand_name\":\"MacKenzie Lloyd\",\"hero_badge\":\"Adipisicing nobis se\",\"hero_title\":\"Nemo assumenda debit\",\"hero_description\":\"Omnis corrupti veli\",\"product_name\":\"Lynn Zamora\",\"product_subtitle\":\"Sapiente beatae obca\",\"price_now\":\"455\",\"price_old\":\"678\",\"discount_badge\":\"Adipisicing eos ad e\",\"primary_cta_text\":\"Ut eos voluptatem\",\"secondary_cta_text\":\"Ut eos voluptatem\",\"footer_email\":\"cuhypim@mailinator.com\",\"footer_phone\":\"+1 (775) 952-3154\",\"footer_address\":\"Fugiat quo obcaecat\",\"footer_copyright\":\"Aperiam et corporis\"}', '2026-04-27 12:35:49', '2026-04-27 12:35:49');
 
 -- --------------------------------------------------------
 
@@ -343,7 +377,7 @@ CREATE TABLE `languages` (
 
 INSERT INTO `languages` (`id`, `name`, `code`, `is_default`, `dashboard_default`, `direction`, `created_at`, `updated_at`) VALUES
 (6, 'English', 'en', 0, 0, 'ltr', '2026-01-26 17:23:11', '2026-04-10 08:50:16'),
-(8, 'Bangla', 'bn', 1, 1, 'LTR', '2026-03-28 09:52:00', '2026-04-14 00:13:53');
+(8, 'Bangla', 'bn', 1, 1, 'LTR', '2026-03-28 09:52:00', '2026-04-25 11:36:50');
 
 -- --------------------------------------------------------
 
@@ -527,7 +561,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (92, '2026_04_10_000005_add_tracking_and_recaptcha_fields_to_settings_table', 58),
 (93, '2026_04_14_000001_add_show_on_card_price_to_product_variants_table', 59),
 (94, '2026_04_25_000001_add_contact_and_whatsapp_columns_to_product_settings_table', 60),
-(95, '2026_04_25_000002_add_guest_checkout_to_product_settings_table', 61);
+(95, '2026_04_25_000002_add_guest_checkout_to_product_settings_table', 61),
+(96, '2026_04_26_000001_add_background_image_to_home_sliders_table', 62),
+(97, '2026_04_27_174459_create_landing_pages_table', 63),
+(98, '2026_04_28_000001_add_landing_page_columns', 63);
 
 -- --------------------------------------------------------
 
@@ -800,7 +837,7 @@ CREATE TABLE `product_categories` (
 --
 
 INSERT INTO `product_categories` (`id`, `language_id`, `unique_id`, `name`, `slug`, `icon`, `serial_number`, `status`, `created_at`, `updated_at`) VALUES
-(47, 8, 'pc_69d7f0b9af0cf', 'দুধ ও দুগ্ধজাত', 'দুধ-ও-দুগ্ধজাত', 'fas fa-seedling', 1, 1, '2026-04-09 12:32:25', '2026-04-09 12:33:15'),
+(47, 8, 'pc_69d7f0b9af0cf', 'দুধ ও দুগ্ধজাত', 'দুধ-ও-দুগ্ধজাত', '69ecfe9e1c6cc.jpeg', 1, 1, '2026-04-09 12:32:25', '2026-04-25 11:49:18'),
 (49, 8, 'pc_69d7f0c14cc74', 'স্বাস্থ্যকর স্ন্যাকস', 'স্বাস্থ্যকর-স্ন্যাকস', 'fas fa-seedling', 2, 1, '2026-04-09 12:32:33', '2026-04-09 12:32:33'),
 (51, 8, 'pc_69d7f0c93f761', 'তাজা পণ্য', 'তাজা-পণ্য', 'fas fa-seedling', 3, 1, '2026-04-09 12:32:41', '2026-04-09 12:33:15'),
 (53, 8, 'pc_69d7f0d12f484', 'মসলা', 'মসলা', 'fas fa-seedling', 4, 1, '2026-04-09 12:32:49', '2026-04-09 12:33:16'),
@@ -1144,7 +1181,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `uniqid`, `website_logo`, `logo_two`, `footer_logo`, `favicon`, `website_title`, `email_address`, `contact_number`, `address`, `smtp_host`, `smtp_port`, `smtp_username`, `smtp_password`, `encryption`, `sender_mail`, `sender_name`, `smtp_status`, `currency_symbol`, `currency_symbol_position`, `currency_text`, `currency_text_position`, `currency_rate`, `timezone`, `website_color`, `maintenance_image`, `maintenance_status`, `maintenance_message`, `bypass_token`, `package_expire_day`, `admin_approval`, `email_verification_approval`, `admin_approval_notice`, `pusher_app_id`, `pusher_status`, `pusher_app_key`, `pusher_app_secret`, `pusher_app_cluster`, `stedfast_api_key`, `stedfast_secret_key`, `stedfast_status`, `gemini_status`, `gemini_api_key`, `gemini_image_model`, `gemini_text_model`, `created_at`, `updated_at`, `facebook_pixel_status`, `facebook_pixel_id`, `google_recaptcha_status`, `google_recaptcha_site_key`, `google_recaptcha_secret_key`, `google_analytics_status`, `google_analytics_measurement_id`) VALUES
-(1, 1234, '6792620a5426d.png', NULL, '6623f11a26d49.png', '6792620a5379d.png', 'Business Validator', NULL, NULL, NULL, 'smtp.gmail.com', '587', 'airdrop446646@gmail.com', 'lwee cjer feik pdof', 'TLS', 'airdrop446646@gmail.com', 'Myapp', 1, '৳', 'left', 'TK', 'right', 1, 'Europe/Andorra', '#FF0000FF', '6706bc36b9811.jpg', 0, '<p>Maintenance MessageMaintenance Message</p>', '-1', 4, 1, 1, 'You need to permission from admin to access this panel', '1942636', 1, 'e58380d6ebb048e6feb4', '24a208922bc018ef9b37', 'ap2', 'xnwbyhhhyuycs6ckslp9v0qlylzwflps', 'dw8wwhnqcaiajhpk93lsfrms', 1, 1, 'AIzaSyBiPZPJu6xLOd5lE8H_tjCI7Ufa7Pas0YM', 'imagen-4.0-generate', 'Gemini 2.5 Pro', NULL, '2024-12-09 11:41:33', 1, 'xxxxxxxxx', 1, 'xxx', 'xxxxxxxxxxxxxxxx', 1, 'xxxxxxx');
+(1, 1234, '69ef9e2f9107c.png', NULL, '6623f11a26d49.png', '69efa0ef9da11.png', 'Business Validator', NULL, NULL, NULL, 'smtp.gmail.com', '587', 'airdrop446646@gmail.com', 'lwee cjer feik pdof', 'TLS', 'airdrop446646@gmail.com', 'Myapp', 1, '৳', 'left', 'TK', 'left', 1, 'Europe/Andorra', '#FF0000FF', '6706bc36b9811.jpg', 0, '<p>Maintenance MessageMaintenance Message</p>', '-1', 4, 1, 1, 'You need to permission from admin to access this panel', '1942636', 1, 'e58380d6ebb048e6feb4', '24a208922bc018ef9b37', 'ap2', 'xnwbyhhhyuycs6ckslp9v0qlylzwflps', 'dw8wwhnqcaiajhpk93lsfrms', 1, 1, 'AIzaSyBiPZPJu6xLOd5lE8H_tjCI7Ufa7Pas0YM', 'imagen-4.0-generate', 'Gemini 2.5 Pro', NULL, '2024-12-09 11:41:33', 1, 'xxxxxxxxx', 1, 'xxx', 'xxxxxxxxxxxxxxxx', 1, 'xxxxxxx');
 
 -- --------------------------------------------------------
 
@@ -1606,6 +1643,13 @@ ALTER TABLE `jobs`
   ADD KEY `jobs_queue_index` (`queue`);
 
 --
+-- Indexes for table `landing_pages`
+--
+ALTER TABLE `landing_pages`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `landing_pages_slug_unique` (`slug`);
+
+--
 -- Indexes for table `languages`
 --
 ALTER TABLE `languages`
@@ -1901,13 +1945,13 @@ ALTER TABLE `footers`
 -- AUTO_INCREMENT for table `home_freshness_items`
 --
 ALTER TABLE `home_freshness_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `home_section_settings`
 --
 ALTER TABLE `home_section_settings`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `home_sliders`
@@ -1920,6 +1964,12 @@ ALTER TABLE `home_sliders`
 --
 ALTER TABLE `jobs`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+
+--
+-- AUTO_INCREMENT for table `landing_pages`
+--
+ALTER TABLE `landing_pages`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `languages`
@@ -1949,7 +1999,7 @@ ALTER TABLE `menu_builders`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
 -- AUTO_INCREMENT for table `orders`

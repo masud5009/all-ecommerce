@@ -130,3 +130,5 @@ Route::name('frontend.')->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist')->middleware('auth:web');
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
 });
+
+Route::get('/lp/{slug}', 'FrontEnd\LandingPageController@show')->name('frontend.landing_page.show');
