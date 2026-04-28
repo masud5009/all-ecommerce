@@ -1,5 +1,5 @@
 <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">{{ __('Add Category') }}</h5>
@@ -19,7 +19,7 @@
                             </div>
                             <input type="file" class="img-input" name="image" id="thumbnailInput"
                                 accept=".jpg,.jpeg,.png,.webp,.svg,.avif">
-                            <small class="d-block mt-2 text-muted">{{ __('Recommended size') }}: 300x300px</small>
+                            <small class="d-block mt-2 text-warning">{{ __('Recommended size') }}: 300x300px</small>
                             <p id="err_image" class="text-danger em"></p>
                         </div>
                     </div>

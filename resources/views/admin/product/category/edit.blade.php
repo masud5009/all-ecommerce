@@ -1,5 +1,5 @@
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">{{ __('Edit Category') }}</h5>
@@ -25,7 +25,7 @@
                             </div>
                             <input type="file" class="img-input2" name="image" id="thumbnailInput2"
                                 accept=".jpg,.jpeg,.png,.webp,.svg,.avif">
-                            <small class="d-block mt-2 text-muted">{{ __('Recommended size') }}: 300x300px</small>
+                            <small class="d-block mt-2 text-warning">{{ __('Recommended size') }}: 300x300px</small>
                             <p id="editErr_image" class="text-danger em"></p>
                         </div>
                     </div>
