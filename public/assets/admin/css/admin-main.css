@@ -6,10 +6,8 @@
     padding: .5rem .75rem !important;
 } */
 .form-control {
-    min-height: 50px;
-    padding-left: .95rem !important;
-    padding-right: .95rem !important;
-    border-radius: 15px;
+    min-height: 45px;
+    border-radius: 5px;
     box-shadow: none;
 }
 
@@ -352,10 +350,8 @@ div.dt-container.dt-empty-footer tbody>tr:last-child>* {
     cursor: pointer;
 } */
 .form-select {
-    min-height: 50px;
-    padding-left: .95rem !important;
-    padding-right: .95rem !important;
-    border-radius: 15px;
+    min-height: 45px;
+    border-radius: 5px;
     box-shadow: none;
 }
 

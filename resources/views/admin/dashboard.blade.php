@@ -128,7 +128,7 @@
                     <form action="{{ route('admin.searchEarning') }}" class="d-flex align-items-center" id="earningForm"
                         method="get">
                         <input type="text" name="date" class="flatpickr form-control" placeholder="Select Date">
-                        <button class="btn btn-secondary ms-2" id="earningBtn">{{__('Filter')}}</button>
+                        <button class="btn btn-secondary ms-2" id="earningBtn">{{ __('Filter') }}</button>
                     </form>
                 </div>
             </div>
@@ -146,86 +146,11 @@
                     <form action="{{ route('admin.searchOrders') }}" class="d-flex align-items-center" id="orderForm"
                         method="get">
                         <input type="text" name="date" class="flatpickr form-control" placeholder="Select Date">
-                        <button class="btn btn-secondary ms-2" id="orderBtn">{{__('Filter')}}</button>
+                        <button class="btn btn-secondary ms-2" id="orderBtn">{{ __('Filter') }}</button>
                     </form>
                 </div>
             </div>
         </div>
-
-        <!-- Translation API Usage Widget -->
-<div class="col-sm-12 col-xl-6 mb-3">
-    <div class="card card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h6 class="card-title mb-0">
-                <i class="fas fa-language me-2"></i>Translation API Usage
-            </h6>
-            <small class="text-muted">Since: {{ date('M j, Y', strtotime($apiStats['installation_date'])) }}</small>
-        </div>
-
-        <!-- Total Statistics -->
-        <div class="row text-center mb-4">
-            <div class="col-4">
-                <h4 class="text-primary mb-1">{{ $apiStats['total_requests'] }}</h4>
-                <small class="text-muted">Total Calls</small>
-            </div>
-            <div class="col-4">
-                <h4 class="text-info mb-1">{{ number_format($apiStats['total_chars']) }}</h4>
-                <small class="text-muted">Characters</small>
-            </div>
-            <div class="col-4">
-                <h4 class="text-success mb-1">{{ $apiStats['success_rate'] }}%</h4>
-                <small class="text-muted">Success Rate</small>
-            </div>
-        </div>
-
-        <!-- API Usage Breakdown -->
-        <div class="mb-3">
-            <small class="text-muted d-block mb-2">API Usage Breakdown:</small>
-            <div class="row text-center">
-                <div class="col-4">
-                    <div class="border rounded p-2">
-                        <small class="fw-bold text-success d-block">Google</small>
-                        <small class="text-muted">{{ $apiStats['google_requests'] }} calls</small>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="border rounded p-2">
-                        <small class="fw-bold text-info d-block">MyMemory</small>
-                        <small class="text-muted">{{ $apiStats['mymemory_requests'] }} calls</small>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="border rounded p-2">
-                        <small class="fw-bold text-warning d-block">Libre</small>
-                        <small class="text-muted">{{ $apiStats['libre_requests'] }} calls</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- API Limits Info -->
-        <div class="mt-3 pt-3 border-top">
-            <small class="text-muted d-block mb-2">API Limits Information:</small>
-            <div class="row">
-                <div class="col-12">
-                    <small class="d-block mb-1">
-                        <span class="fw-bold">Google:</span>
-                        {{ number_format($apiStats['api_limits']['google']['monthly_chars']) }} chars/month
-                    </small>
-                    <small class="d-block mb-1">
-                        <span class="fw-bold">MyMemory:</span>
-                        {{ number_format($apiStats['api_limits']['mymemory']['daily_requests']) }} requests/day
-                    </small>
-                    <small class="d-block">
-                        <span class="fw-bold">LibreTranslate:</span>
-                        {{ number_format($apiStats['api_limits']['libre']['daily_requests']) }} requests/day
-                    </small>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
         <div class="pt-3">
             <div class="row">
                 <div class="col-lg-6 mb-4 mb-lg-0">

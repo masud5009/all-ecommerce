@@ -1,18 +1,16 @@
-// Monthly Sale Chart
+// Monthly Sale Chart (Bar)
 new Chart(document.getElementById('saleChart'), {
-    type: 'line',
+    type: 'bar',
     data: {
         labels: months,
         datasets: [{
             label: Monthly_Sale,
             data: monthlyIncome,
+            backgroundColor: 'rgba(75, 192, 192, 0.7)',
             borderColor: '#4bc0c0',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderWidth: 3,
-            pointRadius: 5,
-            pointBackgroundColor: '#4bc0c0',
-            pointBorderWidth: 2,
-            lineTension: 0.4,
+            borderWidth: 1,
+            borderRadius: 6,
+            barThickness: 30
         }]
     },
     options: {
@@ -44,7 +42,6 @@ new Chart(document.getElementById('saleChart'), {
                 max: maxMonth + 1000,
                 grid: {
                     color: '#e0e0e0',
-                    lineWidth: 1,
                 },
                 ticks: {
                     beginAtZero: true,
@@ -52,7 +49,6 @@ new Chart(document.getElementById('saleChart'), {
                     font: {
                         size: 12,
                         weight: 'bold',
-                        family: 'Arial',
                     },
                     color: themeColor == 'dark' ? '#fff' : '#333',
                 }
@@ -73,21 +69,20 @@ new Chart(document.getElementById('saleChart'), {
     }
 });
 
-// Total Orders Chart
+
+// Total Orders Chart (Bar)
 new Chart(document.getElementById('userChart'), {
-    type: 'line',
+    type: 'bar',
     data: {
         labels: months,
         datasets: [{
             label: Monthly_Orders,
             data: monthlyOrder,
+            backgroundColor: 'rgba(255, 159, 64, 0.7)',
             borderColor: '#ff9f40',
-            backgroundColor: 'rgba(255, 159, 64, 0.2)',
-            borderWidth: 3,
-            pointRadius: 5,
-            pointBackgroundColor: '#ff9f40',
-            pointBorderWidth: 2,
-            lineTension: 0.4,
+            borderWidth: 1,
+            borderRadius: 6,
+            barThickness: 30
         }]
     },
     options: {
@@ -119,7 +114,6 @@ new Chart(document.getElementById('userChart'), {
                 max: maxOrder + 10,
                 grid: {
                     color: '#e0e0e0',
-                    lineWidth: 1,
                 },
                 ticks: {
                     beginAtZero: true,
@@ -127,7 +121,6 @@ new Chart(document.getElementById('userChart'), {
                     font: {
                         size: 12,
                         weight: 'bold',
-                        family: 'Arial',
                     },
                     color: themeColor == 'dark' ? '#fff' : '#333',
                 }

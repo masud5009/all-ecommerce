@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Helpers\ImageUpload;
-use App\Models\Admin;
-use App\Models\Admin\Role;
-use App\Models\Order;
-use App\Models\Transaction;
-use App\Services\TranslateService;
 use DateTime;
-use Illuminate\Support\Facades\Response;
+use App\Models\Admin;
+use App\Models\Order;
+use App\Models\Admin\Role;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\Http\Helpers\ImageUpload;
+use App\Services\TranslateService;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -101,10 +101,6 @@ class AdminController extends Controller
         $data['maxOrder'] = max($monthlyOrder);
         $data['minOrder'] = min($monthlyOrder);
         $data['data'] = DB::table('settings')->select('website_logo')->first();
-
-  $data['apiStats'] = $translateService->getApiStatistics();
-
-
         return view('admin.dashboard', $data);
     }
 

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Product;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Helpers\ImageUpload;
 use App\Models\ProductCategory;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -14,6 +14,9 @@ class CategoryController extends Controller
 {
     private string $imageDirectory = 'assets/img/product/category/';
 
+    /**
+     * Display categories list with translations and product count for each category
+     */
     public function index(Request $request)
     {
         $languages = app('languages');
@@ -54,10 +57,13 @@ class CategoryController extends Controller
         return view('admin.product.category.index', [
             'languages' => $languages,
             'categories' => $categories,
-            'defaultLanguage' => $defaultLanguage
+            'defaultLanguage' => $defaultLanguage,
         ]);
     }
 
+    /**
+     * Store or update category based on the presence of 'id' in the request
+     */
     public function store(Request $request)
     {
         $languages = app('languages');
@@ -81,6 +87,7 @@ class CategoryController extends Controller
         }
 
         session()->flash('success', __('Category create successfully'));
+
         return response()->json(['status' => 'success'], 200);
     }
 
@@ -121,9 +128,13 @@ class CategoryController extends Controller
         }
 
         session()->flash('success', __('Category update successfully'));
+
         return response()->json(['status' => 'success'], 200);
     }
 
+    /**
+     * Single delete
+     */
     public function delete(Request $request)
     {
         $category = ProductCategory::findOrFail($request->category_id);
@@ -139,6 +150,9 @@ class CategoryController extends Controller
         return redirect()->back()->with('success', __('Category delete successfully'));
     }
 
+    /**
+     * Bulk delete
+     */
     public function bulkdelete(Request $request)
     {
         $categories = ProductCategory::withCount('productContent')
@@ -166,7 +180,7 @@ class CategoryController extends Controller
 
             session()->flash(
                 'warning',
-                __('Please delete the products under these categories first:') . ' ' . $blockedNames . $moreText
+                __('Please delete the products under these categories first:').' '.$blockedNames.$moreText
             );
         }
 
@@ -177,6 +191,9 @@ class CategoryController extends Controller
         return response()->json(['status' => 'success'], 200);
     }
 
+    /**
+     * Status change logic
+     */
     public function changeStatus(Request $request)
     {
         $category = ProductCategory::findOrFail($request->id);
@@ -190,10 +207,13 @@ class CategoryController extends Controller
         return 'success';
     }
 
+    /**
+     * Validate category request with dynamic rules for translations and image
+     */
     private function validateCategoryRequest(Request $request, $languages, $defaultLanguage, $ignoreGroupUniqueId = null, bool $imageRequired = false)
     {
         $rules = [
-            'image' => ($imageRequired ? 'required' : 'nullable') . '|file|mimes:jpg,jpeg,png,webp,svg,avif|max:2048',
+            'image' => ($imageRequired ? 'required' : 'nullable').'|file|mimes:jpg,jpeg,png,webp,svg,avif|max:2048',
             'serial_number' => 'required|numeric|min:0',
             'status' => 'required|in:1,0',
         ];
@@ -201,12 +221,12 @@ class CategoryController extends Controller
         $resolvedNames = [];
 
         foreach ($languages as $language) {
-            $field = $language->code . '_name';
+            $field = $language->code.'_name';
             $translatedName = trim((string) $request->input($field));
 
-            $rules[$field] = ($language->id == $defaultLanguage->id ? 'required' : 'nullable') . '|max:255';
-            $messages[$field . '.required'] = __('The name field is required for') . ' ' . $language->name . ' ' . __('language.');
-            $messages[$field . '.max'] = __('The name field may not be greater than 255 characters for') . ' ' . $language->name . ' ' . __('language.');
+            $rules[$field] = ($language->id == $defaultLanguage->id ? 'required' : 'nullable').'|max:255';
+            $messages[$field.'.required'] = __('The name field is required for').' '.$language->name.' '.__('language.');
+            $messages[$field.'.max'] = __('The name field may not be greater than 255 characters for').' '.$language->name.' '.__('language.');
             $resolvedNames[$language->id] = $translatedName;
         }
 
@@ -222,7 +242,7 @@ class CategoryController extends Controller
                 $query = ProductCategory::where('language_id', $language->id)
                     ->where('name', $resolvedName);
 
-                $translationId = $request->input($language->code . '_translation_id');
+                $translationId = $request->input($language->code.'_translation_id');
                 if (filled($translationId)) {
                     $query->where('id', '!=', $translationId);
                 } elseif ($ignoreGroupUniqueId !== null) {
@@ -231,8 +251,8 @@ class CategoryController extends Controller
 
                 if ($query->exists()) {
                     $validator->errors()->add(
-                        $language->code . '_name',
-                        __('The name has already been taken for') . ' ' . $language->name . ' ' . __('language.')
+                        $language->code.'_name',
+                        __('The name has already been taken for').' '.$language->name.' '.__('language.')
                     );
                 }
             }
@@ -245,10 +265,13 @@ class CategoryController extends Controller
         return $resolvedNames;
     }
 
+    /**
+     * Create or update category translations based on the request data and group unique ID
+     */
     private function syncCategoryTranslations(Request $request, $languages, $defaultLanguage, $resolvedNames, $groupUniqueId, ?string $imageName)
     {
         foreach ($languages as $language) {
-            $translationId = $request->input($language->code . '_translation_id');
+            $translationId = $request->input($language->code.'_translation_id');
             $translation = null;
 
             if (filled($translationId)) {
@@ -257,7 +280,7 @@ class CategoryController extends Controller
                     ->first();
             }
 
-            if (!$translation) {
+            if (! $translation) {
                 $translation = ProductCategory::where('unique_id', $groupUniqueId)
                     ->where('language_id', $language->id)
                     ->first();
@@ -266,7 +289,7 @@ class CategoryController extends Controller
             $name = trim((string) ($resolvedNames[$language->id] ?? ''));
             $isDefaultLanguage = (int) $language->id === (int) $defaultLanguage->id;
 
-            if (!$isDefaultLanguage && $name === '') {
+            if (! $isDefaultLanguage && $name === '') {
                 continue;
             }
 
@@ -288,18 +311,24 @@ class CategoryController extends Controller
         }
     }
 
+    /**
+     * Store category image and return the stored image name. If no new image is uploaded, return the old image name
+     */
     private function storeCategoryImage(Request $request, ?string $oldImage = null): ?string
     {
-        if (!$request->hasFile('image')) {
+        if (! $request->hasFile('image')) {
             return $oldImage;
         }
 
         return ImageUpload::store(public_path($this->imageDirectory), $request->file('image'));
     }
 
+    /**
+     * Delete category image file if it's not used by any other category
+     */
     private function deleteCategoryImageIfUnused(?string $imageName): void
     {
-        if (!$this->isStoredCategoryImage($imageName)) {
+        if (! $this->isStoredCategoryImage($imageName)) {
             return;
         }
 
@@ -310,15 +339,21 @@ class CategoryController extends Controller
         $this->deleteCategoryImageFile($imageName);
     }
 
+    /**
+     * Delete category image file from storage
+     */
     private function deleteCategoryImageFile(?string $imageName): void
     {
-        if (!$this->isStoredCategoryImage($imageName)) {
+        if (! $this->isStoredCategoryImage($imageName)) {
             return;
         }
 
-        @unlink(public_path($this->imageDirectory) . $imageName);
+        @unlink(public_path($this->imageDirectory).$imageName);
     }
 
+    /**
+     * Check if the given image name is stored
+     */
     private function isStoredCategoryImage(?string $imageName): bool
     {
         return filled($imageName) && preg_match('/\.(jpe?g|png|webp|svg|avif|gif)$/i', $imageName) === 1;
