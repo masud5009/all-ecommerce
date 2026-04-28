@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Helpers\ImageUpload;
+use App\Models\Product;
 use App\Models\LandingPage;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Models\ProductContent;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Helpers\ImageUpload;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class LandingPageController extends Controller
 {
@@ -40,7 +42,24 @@ class LandingPageController extends Controller
             abort(404);
         }
 
-        return view('admin.landing_page.create', compact('landingTemplate'));
+        $productOptions = $this->landingProductOptions();
+
+        return view('admin.landing_page.create', compact('landingTemplate', 'productOptions'));
+    }
+
+    public function edit(int $id)
+    {
+        $landingPage = LandingPage::findOrFail($id);
+        $landingTemplates = $this->landingTemplates();
+        $landingTemplate = $landingTemplates[$landingPage->template] ?? null;
+
+        if (empty($landingTemplate)) {
+            abort(404);
+        }
+
+        $productOptions = $this->landingProductOptions();
+
+        return view('admin.landing_page.create', compact('landingTemplate', 'landingPage', 'productOptions'));
     }
 
     public function store(Request $request)
@@ -55,7 +74,7 @@ class LandingPageController extends Controller
         $payload = $this->normalizePayload($template, (array) $request->input($template, []));
         $payload = $this->storeTemplateImages($request, $template, $payload);
 
-        $pageTitle = !empty($payload['page_title']) ? $payload['page_title'] : ucfirst(str_replace('_', ' ', $template));
+        $pageTitle = $this->resolvePageTitle($template, $payload);
         $slug = $this->generateUniqueSlug();
 
         $landingPage = LandingPage::create([
@@ -71,6 +90,43 @@ class LandingPageController extends Controller
             ->with('generated_url', route('frontend.landing_page.show', $landingPage->slug));
     }
 
+    public function update(Request $request, int $id)
+    {
+        $landingPage = LandingPage::findOrFail($id);
+        $request->merge(['template' => $landingPage->template]);
+
+        $validator = Validator::make($request->all(), $this->storeRules($request));
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $template = $landingPage->template;
+        $payload = $this->normalizePayload($template, (array) $request->input($template, []));
+        $payload = $this->updateTemplateImages($request, $landingPage, $payload);
+        $this->deleteRemovedTemplateImages($landingPage, $payload);
+
+        $landingPage->update([
+            'title' => $this->resolvePageTitle($template, $payload),
+            'content' => $payload,
+        ]);
+
+        return redirect()
+            ->route('admin.landing_page.edit', $landingPage->id)
+            ->with('success', __('Landing page updated successfully'))
+            ->with('generated_url', route('frontend.landing_page.show', $landingPage->slug));
+    }
+
+    public function delete(Request $request)
+    {
+        $landingPage = LandingPage::findOrFail($request->landing_page_id);
+
+        $this->deleteTemplateImages($landingPage);
+        $landingPage->delete();
+
+        return redirect()->back()->with('success', __('Landing page deleted successfully'));
+    }
+
     private function storeRules(Request $request): array
     {
         $rules = [
@@ -80,6 +136,10 @@ class LandingPageController extends Controller
         $template = $request->input('template');
         if (!array_key_exists($template, $this->templateMap)) {
             return $rules;
+        }
+
+        if ($template === 'theme_one') {
+            $rules[$template . '.product_id'] = 'required|exists:products,id';
         }
 
         foreach ($this->fileFieldNames($template) as $fieldName) {
@@ -93,6 +153,7 @@ class LandingPageController extends Controller
     {
         $allowedFields = $this->fieldNames($template);
         $fileFields = $this->fileFieldNames($template);
+        $repeaterFields = $this->repeaterFieldDefinitions($template);
         $normalizedPayload = [];
 
         foreach ($allowedFields as $fieldName) {
@@ -102,6 +163,10 @@ class LandingPageController extends Controller
 
             $value = $payload[$fieldName];
             if (is_array($value)) {
+                if (isset($repeaterFields[$fieldName])) {
+                    $normalizedPayload[$fieldName] = $this->normalizeRepeaterPayload($value, $repeaterFields[$fieldName]);
+                }
+
                 continue;
             }
 
@@ -134,6 +199,114 @@ class LandingPageController extends Controller
         return $payload;
     }
 
+    private function normalizeRepeaterPayload(array $items, array $field): array
+    {
+        $subFieldNames = collect($field['fields'] ?? [])
+            ->pluck('name')
+            ->filter()
+            ->values()
+            ->all();
+
+        $normalizedItems = [];
+
+        foreach ($items as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+
+            $normalizedItem = [];
+            $hasValue = false;
+
+            foreach ($subFieldNames as $subFieldName) {
+                $value = $item[$subFieldName] ?? '';
+
+                if (is_array($value)) {
+                    $value = '';
+                }
+
+                $value = is_string($value) ? trim($value) : $value;
+                $normalizedItem[$subFieldName] = $value;
+
+                if ($value !== null && $value !== '') {
+                    $hasValue = true;
+                }
+            }
+
+            if ($hasValue) {
+                $normalizedItems[] = $normalizedItem;
+            }
+        }
+
+        return $normalizedItems;
+    }
+
+    private function updateTemplateImages(Request $request, LandingPage $landingPage, array $payload): array
+    {
+        $template = $landingPage->template;
+        $content = is_array($landingPage->content) ? $landingPage->content : [];
+
+        foreach ($this->fileFieldNames($template) as $fieldName) {
+            if (!empty($content[$fieldName])) {
+                $payload[$fieldName] = $content[$fieldName];
+            }
+        }
+
+        foreach ($request->allFiles() as $templateKey => $files) {
+            if ($templateKey !== $template || !is_array($files)) {
+                continue;
+            }
+
+            foreach ($files as $field => $file) {
+                if (!$file || !$file->isValid() || !in_array($field, $this->fileFieldNames($template), true)) {
+                    continue;
+                }
+
+                $directory = public_path($this->imageDirectory);
+                $fileName = ImageUpload::store($directory, $file);
+                if (empty($fileName)) {
+                    continue;
+                }
+
+                $this->deleteTemplateImagePath($payload[$field] ?? null);
+                $payload[$field] = $this->imageDirectory . $fileName;
+            }
+        }
+
+        return $payload;
+    }
+
+    private function deleteTemplateImages(LandingPage $landingPage): void
+    {
+        $content = is_array($landingPage->content) ? $landingPage->content : [];
+
+        foreach ($this->allFileFieldNames($landingPage->template) as $fieldName) {
+            $this->deleteTemplateImagePath($content[$fieldName] ?? null);
+        }
+    }
+
+    private function deleteRemovedTemplateImages(LandingPage $landingPage, array $newPayload): void
+    {
+        $content = is_array($landingPage->content) ? $landingPage->content : [];
+
+        foreach ($this->allFileFieldNames($landingPage->template) as $fieldName) {
+            $oldImagePath = $content[$fieldName] ?? null;
+            $newImagePath = $newPayload[$fieldName] ?? null;
+
+            if ($oldImagePath !== $newImagePath) {
+                $this->deleteTemplateImagePath($oldImagePath);
+            }
+        }
+    }
+
+    private function deleteTemplateImagePath($imagePath): void
+    {
+        if (!is_string($imagePath) || !Str::startsWith($imagePath, $this->imageDirectory)) {
+            return;
+        }
+
+        @unlink(public_path($imagePath));
+    }
+
     private function fieldNames(string $template): array
     {
         return collect($this->landingTemplates()[$template]['sections'] ?? [])
@@ -155,6 +328,32 @@ class LandingPageController extends Controller
             ->all();
     }
 
+    private function allFileFieldNames(string $template): array
+    {
+        return array_values(array_unique(array_merge(
+            $this->fileFieldNames($template),
+            $this->legacyFileFieldNames($template)
+        )));
+    }
+
+    private function legacyFileFieldNames(string $template): array
+    {
+        if ($template === 'theme_one') {
+            return ['hero_image'];
+        }
+
+        return [];
+    }
+
+    private function repeaterFieldDefinitions(string $template): array
+    {
+        return collect($this->landingTemplates()[$template]['sections'] ?? [])
+            ->flatMap(fn ($section) => $section['fields'] ?? [])
+            ->filter(fn ($field) => ($field['type'] ?? null) === 'repeater')
+            ->keyBy('name')
+            ->all();
+    }
+
     private function landingTemplates(): array
     {
         return [
@@ -162,67 +361,57 @@ class LandingPageController extends Controller
                 'key' => 'theme_one',
                 'title' => __('Theme One'),
                 'description' => __('Smart watch style landing page with hero, features, pricing, reviews, order and FAQ sections.'),
-                'image' => 'assets/admin/noimage.jpg',
+                'image' => 'assets/img/landing-page/theme-one.png',
                 'sections' => [
                     [
                         'title' => __('Page Setup'),
-                        'description' => __('Basic browser, brand and header content.'),
                         'fields' => [
-                            $this->field('page_title', __('Page Title'), 'text', 6, __('SmartFit Watch - Product Landing Page')),
+                            $this->field('product_id', __('Product'), 'product_select', 12),
                             $this->field('brand_name', __('Brand Name'), 'text', 6, __('SmartFit Watch')),
-                            $this->field('header_cta_text', __('Header Button Text'), 'text', 6, __('Order Now')),
                             $this->field('footer_text', __('Footer Text'), 'text', 6, __('2026 SmartFit Watch. All rights reserved.')),
                         ],
                     ],
                     [
                         'title' => __('Hero Section'),
-                        'description' => __('Main headline, call to action and product visual.'),
                         'fields' => [
-                            $this->field('hero_badge', __('Hero Badge Text'), 'text', 6, __('Limited Offer - Free Delivery')),
-                            $this->field('hero_title', __('Hero Title'), 'text', 6, __('Track Your Health & Fitness Every Day')),
-                            $this->field('hero_description', __('Hero Description'), 'textarea', 12, __('Premium smart watch with heart-rate monitor, sleep tracking, step counter, long battery life, and stylish design.'), 3),
-                            $this->field('cta_primary_text', __('Primary Button Text'), 'text', 6, __('Buy Now')),
                             $this->field('cta_secondary_text', __('Secondary Button Text'), 'text', 6, __('View Features')),
                             $this->field('rating_text', __('Rating Text'), 'text', 6, __('4.9/5 from 1,250+ customers')),
-                            $this->field('product_name', __('Product Name'), 'text', 6, __('SmartFit Watch')),
-                            $this->field('hero_image', __('Hero Product Image'), 'file', 12),
                         ],
                     ],
                     [
                         'title' => __('Features Section'),
-                        'description' => __('Four benefit cards under the hero section.'),
-                        'fields' => array_merge(
-                            [$this->field('features_title', __('Section Title'), 'text', 12, __('Why Customers Love It'))],
-                            $this->repeatCardFields('feature', 4, __('Feature'))
-                        ),
+                        'fields' => [
+                            $this->field('features_title', __('Section Title'), 'text', 12, __('Why Customers Love It')),
+                            $this->repeaterField('feature_items', __('Features'), [
+                                $this->field('icon', __('Icon'), 'text', 4),
+                                $this->field('title', __('Title'), 'text', 4),
+                                $this->field('description', __('Description'), 'text', 4),
+                            ]),
+                        ],
                     ],
                     [
                         'title' => __('Daily Life & Price Section'),
-                        'description' => __('Lifestyle copy, checklist and pricing card.'),
                         'fields' => [
                             $this->field('lifestyle_title', __('Section Title'), 'text', 6, __('Perfect For Daily Life')),
                             $this->field('lifestyle_description', __('Description'), 'textarea', 12, __('Office, gym, walking, running, or casual use - SmartFit Watch helps you stay connected and active all day.'), 3),
-                            $this->field('lifestyle_bullet_1', __('Bullet 1'), 'text', 6, __('Bluetooth calling support')),
-                            $this->field('lifestyle_bullet_2', __('Bullet 2'), 'text', 6, __('7 days battery backup')),
-                            $this->field('lifestyle_bullet_3', __('Bullet 3'), 'text', 6, __('Water-resistant design')),
-                            $this->field('lifestyle_bullet_4', __('Bullet 4'), 'text', 6, __('Compatible with Android & iPhone')),
-                            $this->field('price_old', __('Old Price'), 'text', 4, __('Tk 3,990')),
-                            $this->field('price_now', __('Current Price'), 'text', 4, __('Tk 2,490')),
-                            $this->field('save_text', __('Save Text'), 'text', 4, __('Save Tk 1,500 today')),
-                            $this->field('price_cta_text', __('Price Button Text'), 'text', 6, __('Order Now')),
+                            $this->repeaterField('lifestyle_bullets', __('Bullets'), [
+                                $this->field('text', __('Bullet'), 'text', 12),
+                            ]),
                         ],
                     ],
                     [
                         'title' => __('Reviews Section'),
-                        'description' => __('Customer review cards.'),
-                        'fields' => array_merge(
-                            [$this->field('reviews_title', __('Section Title'), 'text', 12, __('Customer Reviews'))],
-                            $this->repeatReviewFields(3)
-                        ),
+                        'fields' => [
+                            $this->field('reviews_title', __('Section Title'), 'text', 12, __('Customer Reviews')),
+                            $this->repeaterField('review_items', __('Reviews'), [
+                                $this->field('rating', __('Rating'), 'text', 4),
+                                $this->field('text', __('Text'), 'textarea', 4, null, 2),
+                                $this->field('author', __('Author'), 'text', 4),
+                            ]),
+                        ],
                     ],
                     [
                         'title' => __('Order Section'),
-                        'description' => __('Order form heading and button text.'),
                         'fields' => [
                             $this->field('order_title', __('Order Title'), 'text', 6, __('Place Your Order')),
                             $this->field('order_notice', __('Order Notice'), 'text', 6, __('Cash on delivery available all over Bangladesh')),
@@ -231,19 +420,20 @@ class LandingPageController extends Controller
                     ],
                     [
                         'title' => __('FAQ Section'),
-                        'description' => __('Frequently asked questions.'),
-                        'fields' => array_merge(
-                            [$this->field('faq_title', __('Section Title'), 'text', 12, __('FAQ'))],
-                            $this->repeatFaqFields(3)
-                        ),
+                        'fields' => [
+                            $this->field('faq_title', __('Section Title'), 'text', 12, __('FAQ')),
+                            $this->repeaterField('faq_items', __('FAQs'), [
+                                $this->field('question', __('Question'), 'text', 6),
+                                $this->field('answer', __('Answer'), 'textarea', 6, null, 2),
+                            ]),
+                        ],
                     ],
                 ],
             ],
             'theme_two' => [
                 'key' => 'theme_two',
                 'title' => __('Theme Two'),
-                'description' => __('Premium supplement style landing page with long-form sections.'),
-                'image' => 'assets/admin/noimage.jpg',
+                'image' => 'assets/img/landing-page/theme-two.png',
                 'sections' => [
                     [
                         'title' => __('Page Setup'),
@@ -290,6 +480,11 @@ class LandingPageController extends Controller
     private function field(string $name, string $label, string $type = 'text', int $col = 6, ?string $placeholder = null, int $rows = 3): array
     {
         return compact('name', 'label', 'type', 'col', 'placeholder', 'rows');
+    }
+
+    private function repeaterField(string $name, string $label, array $fields, int $col = 12): array
+    {
+        return compact('name', 'label', 'fields', 'col') + ['type' => 'repeater'];
     }
 
     private function repeatCardFields(string $prefix, int $count, string $label): array
@@ -353,5 +548,64 @@ class LandingPageController extends Controller
         } while (LandingPage::where('slug', $slug)->exists());
 
         return $slug;
+    }
+
+    private function landingProductOptions()
+    {
+        $languageId = app('defaultLang')->id ?? null;
+
+        return Product::query()
+            ->leftJoin('product_contents', function ($join) use ($languageId) {
+                $join->on('product_contents.product_id', '=', 'products.id');
+
+                if (!empty($languageId)) {
+                    $join->where('product_contents.language_id', $languageId);
+                }
+            })
+            ->select('products.id', 'products.current_price', 'product_contents.title')
+            ->orderBy('product_contents.title')
+            ->get()
+            ->map(function ($product) {
+                $title = $product->title ?: __('Product') . ' #' . $product->id;
+                $price = is_numeric($product->current_price) ? ' - ' . currency_symbol($product->current_price) : '';
+
+                return [
+                    'id' => $product->id,
+                    'title' => $title . $price,
+                ];
+            });
+    }
+
+    private function resolvePageTitle(string $template, array $payload): string
+    {
+        if ($template === 'theme_one' && !empty($payload['product_id'])) {
+            $productTitle = $this->productTitle((int) $payload['product_id']);
+
+            if (!empty($productTitle)) {
+                return $productTitle;
+            }
+        }
+
+        return !empty($payload['page_title'])
+            ? $payload['page_title']
+            : ucfirst(str_replace('_', ' ', $template));
+    }
+
+    private function productTitle(int $productId): ?string
+    {
+        $languageId = app('defaultLang')->id ?? null;
+        $query = ProductContent::where('product_id', $productId);
+
+        if (!empty($languageId)) {
+            $query->where('language_id', $languageId);
+        }
+
+        $title = $query->value('title');
+
+        if (!empty($title)) {
+            return $title;
+        }
+
+        return ProductContent::where('product_id', $productId)->value('title');
     }
 }

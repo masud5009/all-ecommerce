@@ -137,7 +137,10 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
     Route::prefix('landing-page')->group(function () {
         Route::get('/', 'Admin\LandingPageController@index')->name('admin.landing_page');
         Route::get('/{template}/create', 'Admin\LandingPageController@create')->name('admin.landing_page.create');
+        Route::get('/{id}/edit', 'Admin\LandingPageController@edit')->name('admin.landing_page.edit');
         Route::post('/store', 'Admin\LandingPageController@store')->name('admin.landing_page.store');
+        Route::post('/{id}/update', 'Admin\LandingPageController@update')->name('admin.landing_page.update');
+        Route::post('/delete', 'Admin\LandingPageController@delete')->name('admin.landing_page.delete');
     });
 
     //user managment route

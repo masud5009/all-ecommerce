@@ -3,7 +3,8 @@
 @section('style')
     <style>
         .landing-template-card {
-            display: block;
+            display: flex;
+            flex-direction: column;
             height: 100%;
             overflow: hidden;
             color: inherit;
@@ -13,6 +14,11 @@
             border-radius: 10px;
             transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
         }
+
+        /* .landing-template-media {
+            padding: 12px 12px 0;
+            background: #f8f9fa;
+        } */
 
         .landing-template-card:hover {
             color: inherit;
@@ -24,13 +30,13 @@
 
         .landing-template-card img {
             width: 100%;
-            height: 150px;
-            object-fit: cover;
-            background: #f8f9fa;
+            height: auto;
+            display: block;
         }
 
         .landing-template-content {
             padding: 16px;
+            flex: 1;
         }
 
         .landing-template-description {
@@ -86,12 +92,13 @@
 
                 <div class="row g-3">
                     @foreach ($landingCards as $card)
-                        <div class="col-lg-4 col-md-6">
+                        <div class="col-lg-3 col-md-6">
                             <a href="{{ route('admin.landing_page.create', $card['key']) }}" class="landing-template-card">
-                                <img src="{{ asset($card['image']) }}" alt="{{ $card['title'] }}">
+                                <div class="landing-template-media">
+                                    <img src="{{ asset($card['image']) }}" alt="{{ $card['title'] }}">
+                                </div>
                                 <div class="landing-template-content">
                                     <h6 class="mb-2">{{ $card['title'] }}</h6>
-                                    <p class="landing-template-description mb-3">{{ $card['description'] }}</p>
                                     <span class="btn btn-sm btn-primary">{{ __('Select Theme') }}</span>
                                 </div>
                             </a>
@@ -110,6 +117,7 @@
                                 <th>{{ __('Template') }}</th>
                                 <th>{{ __('Unique URL') }}</th>
                                 <th>{{ __('Created At') }}</th>
+                                <th>{{ __('Actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -123,10 +131,29 @@
                                         </a>
                                     </td>
                                     <td>{{ optional($page->created_at)->format('d M Y h:i A') }}</td>
+                                    <td>
+                                        <div class="action-buttons product-list-actions">
+                                            <a href="{{ route('admin.landing_page.edit', $page->id) }}"
+                                                class="btn btn-sm edit-button product-action-btn">
+                                                <span class="fas fa-edit"></span>
+                                                <span class="product-action-label">{{ __('Edit') }}</span>
+                                            </a>
+                                            <form class="deleteForm d-inline-block"
+                                                action="{{ route('admin.landing_page.delete') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" value="{{ $page->id }}" name="landing_page_id">
+                                                <button class="btn btn-sm deleteBtn delete-button product-action-btn"
+                                                    type="button">
+                                                    <span class="fas fa-trash"></span>
+                                                    <span class="product-action-label">{{ __('Delete') }}</span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="text-center text-muted">{{ __('No landing page generated yet.') }}</td>
+                                    <td colspan="5" class="text-center text-muted">{{ __('No landing page generated yet.') }}</td>
                                 </tr>
                             @endforelse
                         </tbody>

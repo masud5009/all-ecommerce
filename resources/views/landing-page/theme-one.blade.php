@@ -9,35 +9,114 @@
         $value = data_get($pageData, $key);
         return filled($value) ? $value : $default;
     };
+    $hasSelectedProduct = !empty($selectedProduct);
+    $productTitle = filled($selectedProductTitle ?? null) ? $selectedProductTitle : $pageValue('product_name', 'SmartFit Watch');
+    $productDescription = filled($selectedProductSummary ?? null)
+        ? $selectedProductSummary
+        : $pageValue('hero_description', 'Premium smart watch with heart-rate monitor, sleep tracking, step counter, long battery life, and stylish design.');
+    $productImage = $hasSelectedProduct ? ($selectedProductImage ?? null) : ($pageData['hero_image'] ?? null);
+    $productCurrentPrice = $hasSelectedProduct ? $selectedProductPriceLabel : $pageValue('price_now', 'Tk 2,490');
+    $productOldPrice = $hasSelectedProduct ? $selectedProductOldPriceLabel : $pageValue('price_old', 'Tk 3,990');
+    $productSaveText = $hasSelectedProduct ? $selectedProductSaveLabel : $pageValue('save_text', 'Save Tk 1,500 today');
+    $primaryCtaText = $hasSelectedProduct ? $selectedProductCtaText : $pageValue('cta_primary_text', 'Buy Now');
+    $priceCtaText = $hasSelectedProduct ? $selectedProductCtaText : $pageValue('price_cta_text', $primaryCtaText);
+    $browserTitle = $hasSelectedProduct ? $productTitle . ' - Product Landing Page' : $pageValue('page_title', 'SmartFit Watch - Product Landing Page');
     $featureCards = [];
-    for ($i = 1; $i <= 4; $i++) {
-        $featureCards[] = [
-            'icon' => $pageValue('feature_' . $i . '_icon', ['&#9989;', '&#128666;', '&#128737;', '&#128257;'][$i - 1]),
-            'title' => $pageValue('feature_' . $i . '_title', ['Health Tracking', 'Fast Delivery', 'Premium Quality', 'Easy Return'][$i - 1]),
-            'description' => $pageValue('feature_' . $i . '_description', ['Heart rate, sleep, steps and calories.', 'Delivery within 24-72 hours.', 'Durable body with modern design.', '7-day replacement support.'][$i - 1]),
-        ];
+    $featureItems = data_get($pageData, 'feature_items');
+    if (is_array($featureItems)) {
+        foreach ($featureItems as $featureItem) {
+            if (!is_array($featureItem)) {
+                continue;
+            }
+
+            if (!filled($featureItem['icon'] ?? null) && !filled($featureItem['title'] ?? null) && !filled($featureItem['description'] ?? null)) {
+                continue;
+            }
+
+            $featureCards[] = [
+                'icon' => $featureItem['icon'] ?? '',
+                'title' => $featureItem['title'] ?? '',
+                'description' => $featureItem['description'] ?? '',
+            ];
+        }
+    } else {
+        for ($i = 1; $i <= 4; $i++) {
+            $featureCards[] = [
+                'icon' => $pageValue('feature_' . $i . '_icon', ['&#9989;', '&#128666;', '&#128737;', '&#128257;'][$i - 1]),
+                'title' => $pageValue('feature_' . $i . '_title', ['Health Tracking', 'Fast Delivery', 'Premium Quality', 'Easy Return'][$i - 1]),
+                'description' => $pageValue('feature_' . $i . '_description', ['Heart rate, sleep, steps and calories.', 'Delivery within 24-72 hours.', 'Durable body with modern design.', '7-day replacement support.'][$i - 1]),
+            ];
+        }
     }
     $lifestyleBullets = [];
-    for ($i = 1; $i <= 4; $i++) {
-        $lifestyleBullets[] = $pageValue('lifestyle_bullet_' . $i, ['Bluetooth calling support', '7 days battery backup', 'Water-resistant design', 'Compatible with Android & iPhone'][$i - 1]);
+    $lifestyleBulletItems = data_get($pageData, 'lifestyle_bullets');
+    if (is_array($lifestyleBulletItems)) {
+        foreach ($lifestyleBulletItems as $lifestyleBulletItem) {
+            if (!is_array($lifestyleBulletItem) || !filled($lifestyleBulletItem['text'] ?? null)) {
+                continue;
+            }
+
+            $lifestyleBullets[] = $lifestyleBulletItem['text'];
+        }
+    } else {
+        for ($i = 1; $i <= 4; $i++) {
+            $lifestyleBullets[] = $pageValue('lifestyle_bullet_' . $i, ['Bluetooth calling support', '7 days battery backup', 'Water-resistant design', 'Compatible with Android & iPhone'][$i - 1]);
+        }
     }
     $reviews = [];
-    for ($i = 1; $i <= 3; $i++) {
-        $reviews[] = [
-            'rating' => $pageValue('review_' . $i . '_rating', '&#9733;&#9733;&#9733;&#9733;&#9733;'),
-            'text' => $pageValue('review_' . $i . '_text', ['Battery backup khub valo. Design premium.', 'Delivery fast chilo, product exactly same.', 'Fitness tracking er jonno perfect.'][$i - 1]),
-            'author' => $pageValue('review_' . $i . '_author', 'Verified Customer'),
-        ];
+    $reviewItems = data_get($pageData, 'review_items');
+    if (is_array($reviewItems)) {
+        foreach ($reviewItems as $reviewItem) {
+            if (!is_array($reviewItem)) {
+                continue;
+            }
+
+            if (!filled($reviewItem['rating'] ?? null) && !filled($reviewItem['text'] ?? null) && !filled($reviewItem['author'] ?? null)) {
+                continue;
+            }
+
+            $reviews[] = [
+                'rating' => $reviewItem['rating'] ?? '',
+                'text' => $reviewItem['text'] ?? '',
+                'author' => $reviewItem['author'] ?? '',
+            ];
+        }
+    } else {
+        for ($i = 1; $i <= 3; $i++) {
+            $reviews[] = [
+                'rating' => $pageValue('review_' . $i . '_rating', '&#9733;&#9733;&#9733;&#9733;&#9733;'),
+                'text' => $pageValue('review_' . $i . '_text', ['Battery backup khub valo. Design premium.', 'Delivery fast chilo, product exactly same.', 'Fitness tracking er jonno perfect.'][$i - 1]),
+                'author' => $pageValue('review_' . $i . '_author', 'Verified Customer'),
+            ];
+        }
     }
     $faqs = [];
-    for ($i = 1; $i <= 3; $i++) {
-        $faqs[] = [
-            'question' => $pageValue('faq_' . $i . '_question', ['Delivery kotodin lage?', 'Cash on delivery ache?', 'Return policy ache?'][$i - 1]),
-            'answer' => $pageValue('faq_' . $i . '_answer', ['Usually 24-72 hours, location er upor depend kore.', 'Yes, all over Bangladesh cash on delivery available.', 'Yes, 7-day replacement support available.'][$i - 1]),
-        ];
+    $faqItems = data_get($pageData, 'faq_items');
+    if (is_array($faqItems)) {
+        foreach ($faqItems as $faqItem) {
+            if (!is_array($faqItem)) {
+                continue;
+            }
+
+            if (!filled($faqItem['question'] ?? null) && !filled($faqItem['answer'] ?? null)) {
+                continue;
+            }
+
+            $faqs[] = [
+                'question' => $faqItem['question'] ?? '',
+                'answer' => $faqItem['answer'] ?? '',
+            ];
+        }
+    } else {
+        for ($i = 1; $i <= 3; $i++) {
+            $faqs[] = [
+                'question' => $pageValue('faq_' . $i . '_question', ['Delivery kotodin lage?', 'Cash on delivery ache?', 'Return policy ache?'][$i - 1]),
+                'answer' => $pageValue('faq_' . $i . '_answer', ['Usually 24-72 hours, location er upor depend kore.', 'Yes, all over Bangladesh cash on delivery available.', 'Yes, 7-day replacement support available.'][$i - 1]),
+            ];
+        }
     }
   @endphp
-  <title>{{ $pageValue('page_title', 'SmartFit Watch - Product Landing Page') }}</title>
+  <title>{{ $browserTitle }}</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -45,7 +124,7 @@
     <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
       <h1 class="text-xl font-bold">{{ $pageValue('brand_name', 'SmartFit Watch') }}</h1>
       <a href="#order" class="bg-slate-900 text-white px-5 py-2 rounded-full text-sm font-semibold">
-        {{ $pageValue('header_cta_text', $pageValue('cta_primary_text', 'Order Now')) }}
+        {{ $primaryCtaText }}
       </a>
     </div>
   </header>
@@ -56,14 +135,14 @@
         {{ $pageValue('hero_badge', 'Limited Offer - Free Delivery') }}
       </p>
       <h2 class="text-4xl md:text-5xl font-extrabold leading-tight mb-5">
-        {{ $pageValue('hero_title', 'Track Your Health & Fitness Every Day') }}
+        {{ $productTitle }}
       </h2>
       <p class="text-lg text-slate-600 mb-6">
-        {{ $pageValue('hero_description', 'Premium smart watch with heart-rate monitor, sleep tracking, step counter, long battery life, and stylish design.') }}
+        {{ $productDescription }}
       </p>
       <div class="flex flex-wrap gap-3 mb-8">
         <a href="#order" class="bg-slate-900 text-white px-7 py-3 rounded-xl font-bold">
-          {{ html_entity_decode('&#128722;') }} {{ $pageValue('cta_primary_text', 'Buy Now') }}
+          {{ html_entity_decode('&#128722;') }} {{ $primaryCtaText }}
         </a>
         <a href="#features" class="bg-white border px-7 py-3 rounded-xl font-bold">
           {{ $pageValue('cta_secondary_text', 'View Features') }}
@@ -76,8 +155,8 @@
     </div>
 
     <div class="bg-white rounded-3xl shadow-xl p-8 text-center">
-      @if (!empty($pageData['hero_image']))
-        <img src="{{ asset($pageData['hero_image']) }}" alt="{{ $pageValue('product_name', 'Product image') }}" class="w-full h-80 object-cover rounded-3xl">
+      @if (!empty($productImage))
+        <img src="{{ asset($productImage) }}" alt="{{ $productTitle }}" class="w-full h-80 object-cover rounded-3xl">
       @else
         <div class="h-80 rounded-3xl bg-gradient-to-br from-slate-200 to-slate-400 flex items-center justify-center">
           <div class="w-44 h-64 bg-slate-950 rounded-[2.5rem] shadow-2xl p-4">
@@ -111,7 +190,7 @@
     <div>
       <h3 class="text-3xl font-bold mb-5">{{ $pageValue('lifestyle_title', 'Perfect For Daily Life') }}</h3>
       <p class="text-slate-600 mb-5">
-        {{ $pageValue('lifestyle_description', 'Office, gym, walking, running, or casual use - ' . $pageValue('product_name', 'SmartFit Watch') . ' helps you stay connected and active all day.') }}
+        {{ $pageValue('lifestyle_description', 'Office, gym, walking, running, or casual use - ' . $productTitle . ' helps you stay connected and active all day.') }}
       </p>
       <ul class="space-y-3 text-slate-700">
         @foreach ($lifestyleBullets as $bullet)
@@ -121,11 +200,15 @@
     </div>
 
     <div class="bg-slate-900 text-white rounded-3xl p-8">
-      <p class="text-slate-300 line-through text-xl">{{ $pageValue('price_old', 'Tk 3,990') }}</p>
-      <p class="text-5xl font-extrabold my-2">{{ $pageValue('price_now', 'Tk 2,490') }}</p>
-      <p class="text-emerald-300 font-semibold mb-6">{{ $pageValue('save_text', 'Save Tk 1,500 today') }}</p>
+      @if (!empty($productOldPrice))
+        <p class="text-slate-300 line-through text-xl">{{ $productOldPrice }}</p>
+      @endif
+      <p class="text-5xl font-extrabold my-2">{{ $productCurrentPrice }}</p>
+      @if (!empty($productSaveText))
+        <p class="text-emerald-300 font-semibold mb-6">{{ $productSaveText }}</p>
+      @endif
       <a href="#order" class="block text-center bg-white text-slate-900 py-4 rounded-xl font-extrabold">
-        {{ $pageValue('price_cta_text', $pageValue('cta_primary_text', 'Order Now')) }}
+        {{ $priceCtaText }}
       </a>
     </div>
   </section>
