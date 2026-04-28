@@ -338,7 +338,7 @@
                 <li class="nav-item">
                     <a href="{{ route('admin.landing_page') }}"
                         class="nav-link
-                        @if (request()->routeIs('admin.landing_page')) active @endif
+                        @if (request()->routeIs('admin.landing_page*')) active @endif
                         ">
                         <i class="fas fa-lightbulb"></i>
                         <span>{{ __('Landing Pages') }}</span>

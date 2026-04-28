@@ -136,6 +136,7 @@ Route::prefix('admin')->middleware(['auth:admin', 'AdminLangChange'])->group(fun
     // landing page management route
     Route::prefix('landing-page')->group(function () {
         Route::get('/', 'Admin\LandingPageController@index')->name('admin.landing_page');
+        Route::get('/{template}/create', 'Admin\LandingPageController@create')->name('admin.landing_page.create');
         Route::post('/store', 'Admin\LandingPageController@store')->name('admin.landing_page.store');
     });
 

@@ -3,77 +3,41 @@
 @section('style')
     <style>
         .landing-template-card {
-            width: 100%;
-            padding: 0;
+            display: block;
+            height: 100%;
             overflow: hidden;
-            text-align: left;
+            color: inherit;
+            text-decoration: none;
             background: #fff;
             border: 1px solid #dee2e6;
-            border-radius: 8px;
-        }
-
-        .landing-template-card.active {
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 1px rgba(13, 110, 253, .15);
+            border-radius: 10px;
+            transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
         }
 
         .landing-template-card:hover {
+            color: inherit;
+            text-decoration: none;
             border-color: #0d6efd;
+            box-shadow: 0 12px 28px rgba(13, 110, 253, .12);
+            transform: translateY(-2px);
         }
 
         .landing-template-card img {
             width: 100%;
-            height: 140px;
+            height: 150px;
             object-fit: cover;
             background: #f8f9fa;
         }
 
         .landing-template-content {
-            padding: 14px;
-        }
-
-        .landing-template-title {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 6px;
-        }
-
-        .landing-template-title h6,
-        .landing-fields-title h6 {
-            margin-bottom: 0;
+            padding: 16px;
         }
 
         .landing-template-description {
-            min-height: 40px;
-            margin-bottom: 0;
+            min-height: 44px;
             color: #6c757d;
             font-size: 13px;
             line-height: 1.5;
-        }
-
-        .landing-check-icon {
-            display: none;
-            color: #0d6efd;
-            font-size: 15px;
-        }
-
-        .landing-template-card.active .landing-check-icon {
-            display: inline-block;
-        }
-
-        .landing-fields-panel {
-            padding: 20px;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            background: #fff;
-        }
-
-        .landing-fields-title {
-            padding-bottom: 14px;
-            margin-bottom: 18px;
-            border-bottom: 1px solid #edf0f2;
         }
     </style>
 @endsection
@@ -86,7 +50,6 @@
         </ol>
     </nav>
 
-
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
@@ -98,21 +61,10 @@
                         @include('admin.partials.languages')
                     </div>
                 </div>
-
             </div>
             <div class="card-body">
                 @if (session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
-
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul class="mb-0 ps-3">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
                 @endif
 
                 @if (session('generated_url'))
@@ -125,81 +77,27 @@
                     </div>
                 @endif
 
-                <form id="landingPageForm" method="POST" action="{{ route('admin.landing_page.store') }}" enctype="multipart/form-data">
-                    @csrf
-                    <input type="hidden" name="template" id="landingTemplateInput" value="{{ $landingCards[0]['key'] ?? '' }}">
-
-                    <div class="container-fluid mt-4 px-0">
-                        <div class="row g-3">
-                            @foreach ($landingCards as $card)
-                                <div class="col-lg-4 col-md-6">
-                                    <button type="button"
-                                        class="landing-template-card {{ $loop->first ? 'active' : '' }}"
-                                        data-template-key="{{ $card['key'] }}"
-                                        aria-pressed="{{ $loop->first ? 'true' : 'false' }}">
-                                        <img src="{{ asset($card['image']) }}" alt="{{ $card['title'] }}">
-                                        <div class="landing-template-content">
-                                            <div class="landing-template-title">
-                                                <h6>{{ $card['title'] }}</h6>
-                                                <i class="fas fa-check-circle landing-check-icon"></i>
-                                            </div>
-                                            <div class="landing-template-description">
-                                                {{ $card['description'] }}
-                                            </div>
-                                        </div>
-                                    </button>
-                                </div>
-                            @endforeach
-                        </div>
-
-                        <div class="mt-4">
-                            @foreach ($landingCards as $card)
-                                @php($isActiveTemplate = $loop->first)
-
-                                <div class="landing-template-fields {{ $isActiveTemplate ? '' : 'd-none' }}"
-                                    data-template-fields="{{ $card['key'] }}">
-                                    <div class="landing-fields-panel">
-                                        <div class="landing-fields-title">
-                                            <h6>{{ $card['title'] }} {{ __('Fields') }}</h6>
-                                        </div>
-
-                                        <div class="row">
-                                            @foreach ($card['fields'] as $field)
-                                                <div class="col-lg-{{ $field['col'] ?? 6 }}">
-                                                    <div class="form-group">
-                                                        <label>{{ $field['label'] }}</label>
-
-                                                        @if ($field['type'] === 'textarea')
-                                                            <textarea name="{{ $card['key'] }}[{{ $field['name'] }}]" rows="{{ $field['rows'] ?? 3 }}"
-                                                                class="form-control" placeholder="{{ $field['placeholder'] ?? '' }}" @if (!$isActiveTemplate) disabled @endif></textarea>
-                                                        @elseif ($field['type'] === 'file')
-                                                            <input type="file" name="{{ $card['key'] }}[{{ $field['name'] }}]"
-                                                                class="form-control"
-                                                                accept=".jpg,.jpeg,.png,.webp,.svg,.avif"
-                                                                @if (!$isActiveTemplate) disabled @endif>
-                                                        @else
-                                                            <input type="{{ $field['type'] }}"
-                                                                name="{{ $card['key'] }}[{{ $field['name'] }}]"
-                                                                class="form-control"
-                                                                placeholder="{{ $field['placeholder'] ?? '' }}"
-                                                                @if (!$isActiveTemplate) disabled @endif>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-
-                        <div class="text-end mt-4">
-                            <button type="submit" class="btn btn-primary px-4">
-                                {{ __('Generate Landing Page') }}
-                            </button>
-                        </div>
+                <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-3">
+                    <div>
+                        <h6 class="mb-1">{{ __('Select Landing Page Theme') }}</h6>
+                        <p class="text-muted mb-0">{{ __('Choose a theme first. The section data form will open on the next page.') }}</p>
                     </div>
-                </form>
+                </div>
+
+                <div class="row g-3">
+                    @foreach ($landingCards as $card)
+                        <div class="col-lg-4 col-md-6">
+                            <a href="{{ route('admin.landing_page.create', $card['key']) }}" class="landing-template-card">
+                                <img src="{{ asset($card['image']) }}" alt="{{ $card['title'] }}">
+                                <div class="landing-template-content">
+                                    <h6 class="mb-2">{{ $card['title'] }}</h6>
+                                    <p class="landing-template-description mb-3">{{ $card['description'] }}</p>
+                                    <span class="btn btn-sm btn-primary">{{ __('Select Theme') }}</span>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
 
                 <hr class="my-4">
 
@@ -237,39 +135,4 @@
             </div>
         </div>
     </div>
-@endsection
-
-@section('script')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const templateInput = document.getElementById('landingTemplateInput');
-            const cards = document.querySelectorAll('.landing-template-card');
-            const fieldPanels = document.querySelectorAll('.landing-template-fields');
-
-            function togglePanelInputs(panel, enabled) {
-                panel.querySelectorAll('input, textarea, select').forEach(function (field) {
-                    field.disabled = !enabled;
-                });
-            }
-
-            cards.forEach(function (card) {
-                card.addEventListener('click', function () {
-                    const selectedKey = card.dataset.templateKey;
-                    templateInput.value = selectedKey;
-
-                    cards.forEach(function (item) {
-                        const isActive = item.dataset.templateKey === selectedKey;
-                        item.classList.toggle('active', isActive);
-                        item.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-                    });
-
-                    fieldPanels.forEach(function (panel) {
-                        const isActive = panel.dataset.templateFields === selectedKey;
-                        panel.classList.toggle('d-none', !isActive);
-                        togglePanelInputs(panel, isActive);
-                    });
-                });
-            });
-        });
-    </script>
 @endsection
